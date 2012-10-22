@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 namespace exemodel {
 
 class poller;
@@ -27,46 +29,26 @@ public:
 	template<typename ctx_t>
 	void connect(void (ctx_t::*mf)(poller &, pollee_t &, uint32_t), ctx_t * pctx)
 	{
-		class callablemf : public callable {
-		public:
-			callablemf(decltype(mf) mf, ctx_t * pctx)
-			: m_mf(mf)
-			, m_ctx(pctx)
-			{
-			}
-		public:
-			virtual void operator()(poller & mgr, pollee_t & obj, uint32_t evts)
-			{
-				(m_ctx->*m_mf)(mgr, obj, evts);
-			}
-			virtual callable * clone(void) const
-			{
-				return new callablemf(*this);
-			}
-		private:
-			callablemf(const callablemf & rhs) = default;
-			callablemf & operator=(const callablemf & rhs) = delete;
-		private:
-			decltype(mf) m_mf;
-			ctx_t * m_ctx;
-		};
-		m_cbinfo = new callablemf(mf, pctx);
+		m_cbinfo = std::bind(mf, pctx,
+				std::placeholders::_1,
+				std::placeholders::_2,
+				std::placeholders::_3);
 	}
 
 	void connect(const evt_cb<pollee_t> & other)
 	{
-		m_cbinfo = other.m_cbinfo->clone();
+		m_cbinfo = other.m_cbinfo;
 	}
 
 	void disconnect(void)
 	{
-		delete m_cbinfo;
+		m_cbinfo = nullptr;
 	}
 
 	void exe(poller & mgr, pollee_t & obj, uint32_t evts)
 	{
 		if (m_cbinfo != nullptr) {
-			(*m_cbinfo)(mgr, obj, evts);
+			m_cbinfo(mgr, obj, evts);
 		}
 	}
 
@@ -74,7 +56,7 @@ private:
 	evt_cb(const evt_cb & rhs) = delete;
 	evt_cb & operator=(const evt_cb & rhs) = delete;
 private:
-	callable * m_cbinfo;
+	std::function<void(poller &, pollee_t &, uint32_t)> m_cbinfo;
 };
 
 }
