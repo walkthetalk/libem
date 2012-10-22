@@ -2,9 +2,11 @@
 
 namespace exemodel {
 
+class poller;
+
 class IConnMgr {
 public:
-	virtual void destroy(int) = 0;
+	virtual void destroy(poller &, int) = 0;
 };
 
 }

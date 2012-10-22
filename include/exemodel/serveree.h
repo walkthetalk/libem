@@ -19,7 +19,7 @@ public:
 public:
 	virtual void dispose(poller & mgr, uint32_t evts);
 public:
-	virtual void destroy(int idx);
+	virtual void destroy(poller & mgr, int idx);
 private:
 	serveree(const serveree & rhs) = delete;
 	serveree & operator = (const serveree & rhs) = delete;

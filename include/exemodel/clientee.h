@@ -15,8 +15,8 @@ private:
 	clientee(const clientee & rhs) = delete;
 	clientee & operator = (const clientee & rhs) = delete;
 private:
-	uint32_t m_svrip;
-	uint16_t m_svrport;
+	const uint32_t m_svrip;
+	const uint16_t m_svrport;
 };
 
 }

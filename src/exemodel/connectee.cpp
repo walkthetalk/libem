@@ -15,7 +15,7 @@ connectee::connectee(IConnMgr & master, int idx, int fd)
 void connectee::dispose(poller & mgr, uint32_t evts)
 {
 	if (evts & ::EPOLLRDHUP) {
-		m_master.destroy(m_idx);
+		m_master.destroy(mgr, m_idx);
 		return;
 	} else if (evts & ::EPOLLIN) {
 		this->exe(mgr, *this, evts);

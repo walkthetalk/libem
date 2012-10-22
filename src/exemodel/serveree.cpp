@@ -40,9 +40,11 @@ serveree::~serveree()
 	delete m_connectee;
 }
 
-void serveree::destroy(int idx)
+void serveree::destroy(poller & mgr, int idx)
 {
 	assert(idx == 0);
+
+	mgr.del(*m_connectee);
 	delete m_connectee;
 	m_connectee = nullptr;
 }
@@ -61,7 +63,6 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 		m_connectee = new connectee(*this, 0, conn_sock);
 		m_connectee->connect(*this);
 		mgr.add(*m_connectee);
-		m_connectee->write("hello", 6);
 	}
 	catch (std::system_error & e) {
 		std::cout << e.code() << "-" << e.what() << std::endl;
