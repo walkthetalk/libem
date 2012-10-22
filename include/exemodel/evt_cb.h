@@ -8,19 +8,6 @@ class poller;
 
 template<typename pollee_t>
 class evt_cb {
-private:
-	class callable {
-	public:
-		callable() = default;
-		virtual ~callable() {}
-	public:
-		virtual void operator()(poller & mgr, pollee_t & obj, uint32_t evts) = 0;
-		virtual callable * clone(void) const = 0;
-	protected:
-		callable(const callable & rhs) = default;
-		callable & operator=(const callable & rhs) = delete;
-	};
-
 public:
 	evt_cb() : m_cbinfo(nullptr) {}
 	~evt_cb() {}
