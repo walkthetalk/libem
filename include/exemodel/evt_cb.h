@@ -20,40 +20,37 @@ private:
 		callable & operator=(const callable & rhs) = delete;
 	};
 
-	template<typename ctx_t>
-	class callablemf : public callable {
-	public:
-		typedef void (ctx_t::*mf_t)(poller &, pollee_t &, uint32_t);
-	public:
-		callablemf(mf_t mf, ctx_t * pctx)
-		: m_mf(mf)
-		, m_ctx(pctx)
-		{
-		}
-	public:
-		virtual void operator()(poller & mgr, pollee_t & obj, uint32_t evts)
-		{
-			(m_ctx->*m_mf)(mgr, obj, evts);
-		}
-		virtual callable * clone(void) const
-		{
-			return new callablemf(*this);
-		}
-	private:
-		callablemf(const callablemf & rhs) = default;
-		callablemf & operator=(const callablemf & rhs) = delete;
-	private:
-		mf_t m_mf;
-		ctx_t * m_ctx;
-	};
 public:
 	evt_cb() : m_cbinfo(nullptr) {}
 	~evt_cb() {}
 public:
 	template<typename ctx_t>
-	void connect(typename callablemf<ctx_t>::mf_t mf, ctx_t * pctx)
+	void connect(void (ctx_t::*mf)(poller &, pollee_t &, uint32_t), ctx_t * pctx)
 	{
-		m_cbinfo = new callablemf<ctx_t>(mf, pctx);
+		class callablemf : public callable {
+		public:
+			callablemf(decltype(mf) mf, ctx_t * pctx)
+			: m_mf(mf)
+			, m_ctx(pctx)
+			{
+			}
+		public:
+			virtual void operator()(poller & mgr, pollee_t & obj, uint32_t evts)
+			{
+				(m_ctx->*m_mf)(mgr, obj, evts);
+			}
+			virtual callable * clone(void) const
+			{
+				return new callablemf(*this);
+			}
+		private:
+			callablemf(const callablemf & rhs) = default;
+			callablemf & operator=(const callablemf & rhs) = delete;
+		private:
+			decltype(mf) m_mf;
+			ctx_t * m_ctx;
+		};
+		m_cbinfo = new callablemf(mf, pctx);
 	}
 
 	void connect(const evt_cb<pollee_t> & other)
