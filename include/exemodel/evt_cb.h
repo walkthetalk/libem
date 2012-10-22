@@ -6,7 +6,6 @@ namespace exemodel {
 
 class poller;
 
-
 template<typename pollee_t>
 class evt_cb {
 private:
