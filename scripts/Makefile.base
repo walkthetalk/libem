@@ -1,0 +1,217 @@
+# author: Ni Qingliang
+# date: 20090918
+# NOTE:
+#    1. CMD_MKDIR must support -p option
+#####################################################################
+###################user defined variables############################
+#####################################################################
+prefix=/usr
+includedir=$(prefix)/include
+libdir=$(prefix)/lib
+CMD_MKDIR := mkdir -p
+CMD_RM := rm -f
+CMD_SED := sed
+CMD_FIND := find
+CMD_SEQ := seq
+#####################################################################
+################### tool subroutin ##################################
+#####################################################################
+
+comma:= ,
+empty:=
+space:= $(empty) $(empty)
+# all the depends of `all'
+all_depends:=
+# all obj files
+obj_files:=
+# all dep files
+dep_files:=
+
+
+define VAR_DETECT_template =
+ifeq ($${$1},)
+$$(error you must define `$1')
+else
+#$$(warning $1 is $${$1})
+endif
+endef
+
+define mf_gen_dep_file
+  $(CMD_MKDIR) $(dir $1)
+  @set -e; \
+  $(CMD_RM) $1; \
+  $(COMPILE.cc) -MM  $2 > $1.$$$$; \
+  $(CMD_SED) 's,\($(basename $(notdir $2))\)\.o[ :]*,$(patsubst %.d,%.o,$1) $1 : ,g' < $1.$$$$ > $1; \
+  $(CMD_RM) $1.$$$$
+endef
+
+define OBJ_template =
+temp_var := $$(shell $(CMD_FIND) ${2} ${3} -type f -regex ".*\.\(c\|cpp\)")
+obj_files += $$(patsubst ${2}/%,${1}/%.o,$${temp_var})
+dep_files += $$(patsubst ${2}/%,${1}/%.d,$${temp_var})
+
+${1}/%.c.o:${2}/%.c
+	@echo "  [compiling] $$<"
+	@$$(COMPILE.c) $$< -o $$@
+
+${1}/%.cpp.o:${2}/%.cpp
+	@echo "  [compiling] $$<"
+	@$$(COMPILE.cpp) $$< -o $$@
+
+${1}/%.d:${2}/%
+	@echo "  [gen dep] $$<"
+	@$$(call mf_gen_dep_file, $$@, $$<)
+endef
+
+#####################################################################
+############################### config ##############################
+#####################################################################
+# 1. config
+ifeq (${config},)
+  config := release
+endif
+ifeq (${config},debug)
+  override CXXFLAGS += -ggdb
+  override CFLAGS += -ggdb
+  override CPPFLAGS += -DDEBUG
+  cfg_name := debug
+else
+ifeq (${config},release)
+  override CXXFLAGS += -O3
+  override CFLAGS += -O3
+  override CPPFLAGS += -DNDEBUG
+  cfg_name := release
+else
+  $(error I don't know the '${config}' for config, please use 'debug' or 'release'!!)
+endif
+endif
+
+$(foreach temp,dst_dir,${eval $(call VAR_DETECT_template,${temp})})
+#bin file
+bin_dir := ${dst_dir}/$(cfg_name)/bin
+#intermedia files dir
+if_dir := ${dst_dir}/$(cfg_name)/obj
+
+#####################################################################
+################### process source files ############################
+#####################################################################
+ifeq (${src_recdir_set},)
+ifeq (${src_solodir_set},)
+$(error the source directories is null, you must assgin `src_recdir_set' and/or `src_solodir_set')
+endif
+endif
+
+# rec directory sources
+ifneq (${src_recdir_set},)
+if_recdir_nums:=$(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_recdir_set}))
+$(foreach temp,${if_recdir_nums},$(eval $(call OBJ_template,${if_dir}/recdir${temp},$(word ${temp},${src_recdir_set}))))
+endif
+
+# solo directory sources
+ifneq (${src_solodir_set},)
+if_solodir_nums := $(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_solodir_set}))
+$(foreach temp,${if_solodir_nums},$(eval $(call OBJ_template,${if_dir}/solodir${temp},$(word ${temp},${src_solodir_set}),-maxdepth 1)))
+endif
+
+#####################################################################
+#############################compile option##########################
+#####################################################################
+override CXXFLAGS += -Wall -Werror -fPIC -pedantic
+override CFLAGS += -Wall -Werror -fPIC -pedantic
+override CPPFLAGS += $(foreach temp, ${inc_dir_set}, -I ${temp})
+
+#####################################################################
+########################### output type #############################
+#####################################################################
+$(foreach temp,main_name bin_dir,${eval $(call VAR_DETECT_template,${temp})})
+# if the `output' is NULL, then will generate bin by default
+ifeq ($(output),)
+output_types=bin
+else
+output_types=$(subst ${comma},${space},${output})
+endif
+## shared library
+ifneq ($(filter sharedlib,${output_types}),)
+$(foreach temp,lib_version,${eval $(call VAR_DETECT_template,${temp})})
+
+BN_PROVIDE_SHAREDLIB := lib${main_name}.so
+BN_SHAREDLIB := ${BN_PROVIDE_SHAREDLIB}.$(lib_version)
+PN_SHAREDLIB := ${bin_dir}/${BN_SHAREDLIB}
+all_depends += ${PN_SHAREDLIB}
+
+${PN_SHAREDLIB}: ${obj_files}
+	@$(CMD_MKDIR) $(dir $@)
+	@echo "  [output ] $@"
+	@$(LINK.cc) -shared -Wl,-soname,${BN_PROVIDE_SHAREDLIB} -o $@ $^
+endif
+## static library
+ifneq ($(filter staticlib,${output_types}),)
+BN_STATICLIB := lib${main_name}.a
+PN_STATICLIB := ${bin_dir}/${BN_STATICLIB}
+all_depends += ${PN_STATICLIB}
+
+${PN_STATICLIB}: ${obj_files}
+	@$(CMD_MKDIR) $(dir $@)
+	@echo "  [output ] $@"
+	@$(AR) $(ARFLAGS) $@ $^
+endif
+## binary
+ifneq ($(filter bin,${output_types}),)
+BN_BIN := ${main_name}
+PN_BIN := ${bin_dir}/${BN_BIN}
+all_depends += ${PN_BIN}
+
+${PN_BIN}:${obj_files}
+	@$(CMD_MKDIR) $(dir $@)
+	@echo "  [output ] $@"
+	@$(LINK.cc) -o $@ $^ ${LDLIBS}
+endif
+
+#####################################################################
+###############################main target###########################
+#####################################################################
+.PHONY:all
+all: ${all_depends}
+
+#####################################################################
+########################   clean   ##################################
+#####################################################################
+.PHONY:distclean clean
+distclean clean:
+	@echo "cleaning"
+	-@$(CMD_RM) $(obj_files)
+	-@$(CMD_RM) $(dep_files)
+	-@$(CMD_RM) ${all_depends}
+	@echo "clean done"
+
+#####################################################################
+########################  install  ##################################
+#####################################################################
+#TODO: fix install script
+ifneq (${install},)
+.PHONY:install
+install:
+	install -dm755 $(DESTDIR)/$(libdir)/
+	install -D -m 644 $(bin_dir)/$(staticlib_name) $(DESTDIR)/$(libdir)/
+	install -D -m 755 $(bin_dir)/$(sharedlib_name) $(DESTDIR)/$(libdir)/
+	cd $(DESTDIR)/$(libdir)/
+	ln -s ./$(sharedlib_name) $(DESTDIR)/$(libdir)/$(sharedlib_link_name)
+	ln -s ./$(sharedlib_link_name) $(DESTDIR)/$(libdir)/${provide_lib}.so
+endif
+#####################################################################
+########################dependency files#############################
+#####################################################################
+#comments
+#in sed command, the `$*' represents the `%' in the first line
+#the `$@' represents the target name
+#$(basename $(notdir $<)):	if src file is `./src/abc.cpp', then
+#result is `abc', the sed commmand will search the `abc.o' and
+#replace it with `./obj/abc.cpp.o ./obj/abc.cpp.d'
+#if you get the warning like "/bin/sh: line 3: xxx.d.23822: No such file or directory"
+#then it means, the directory of .d file is not exist, so it can't gen .d file.
+
+#####################################################################
+########################include dependency files#####################
+#####################################################################
+sinclude $(dep_files)
+
