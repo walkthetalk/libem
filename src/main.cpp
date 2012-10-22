@@ -26,11 +26,11 @@ public:
 		this->del(m_svr);
 	}
 private:
-	void __handler(poller & mgr, connectee & ctx, uint32_t evts)
+	void __handler(serveree::args_t & args)
 	{
 		char buf[100] = { '\0' };
-		ctx.read(buf, 100);
-		std::cout << "server recved from" << ctx._idx_() << ": " << buf << std::endl;
+		args.ctx.read(buf, 100);
+		std::cout << "server recved from" << args.ctx._idx_() << ": " << buf << std::endl;
 	}
 private:
 	serveree m_svr;
@@ -52,12 +52,12 @@ public:
 		this->del(m_client);
 	}
 private:
-	void __handler(poller & mgr, clientee & ctx, uint32_t evts)
+	void __handler(clientee::args_t & args)
 	{
 		char buf[100] = { '\0' };
-		ctx.read(buf, 100);
+		args.ctx.read(buf, 100);
 		std::cout << "client recved: " << buf << std::endl;
-		ctx.write("world", 6);
+		args.ctx.write("world", 6);
 	}
 private:
 	clientee m_client;

@@ -35,7 +35,8 @@ clientee::clientee(uint32_t svrip, uint16_t svrport)
 void clientee::dispose(poller & mgr, uint32_t evts)
 {
 	if (evts & EPOLLIN) {
-		this->exe(mgr, *this, evts);
+		clientee::args_t args = { mgr, *this, evts };
+		this->exe(args);
 	}
 }
 

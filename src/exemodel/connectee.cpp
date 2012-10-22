@@ -5,9 +5,9 @@
 
 namespace exemodel {
 
-connectee::connectee(IConnMgr & master, int idx, int fd)
+connectee::connectee(const destroy_cb_t & destroycb, int idx, int fd)
 : pollee(fd, (uint32_t)(::EPOLLIN | ::EPOLLET))
-, m_master(master)
+, m_destroycb(destroycb)
 , m_idx(idx)
 {
 }
@@ -15,10 +15,11 @@ connectee::connectee(IConnMgr & master, int idx, int fd)
 void connectee::dispose(poller & mgr, uint32_t evts)
 {
 	if (evts & ::EPOLLRDHUP) {
-		m_master.destroy(mgr, m_idx);
+		m_destroycb(mgr, m_idx);
 		return;
 	} else if (evts & ::EPOLLIN) {
-		this->exe(mgr, *this, evts);
+		connectee::args_t args = { mgr, *this, evts };
+		this->exe(args);
 	}
 }
 

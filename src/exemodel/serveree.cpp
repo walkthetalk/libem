@@ -2,8 +2,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#include <assert.h>
+#include <iostream>
+
 #include "exemodel/poll_tools.h"
 #include "exemodel/serveree.h"
+#include "exemodel/poller.h"
 
 namespace exemodel {
 
@@ -11,7 +15,7 @@ serveree::serveree(uint16_t port)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
 	(uint32_t)(::EPOLLIN | ::EPOLLET))
 , evt_cb<connectee>()
-, IConnMgr()
+, m_destroycb(std::bind(&serveree::destroy, this, std::placeholders::_1, std::placeholders::_2))
 , m_connectee(nullptr)
 {
 	int ret = 0;
@@ -60,7 +64,7 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 			delete m_connectee;
 		}
 
-		m_connectee = new connectee(*this, 0, conn_sock);
+		m_connectee = new connectee(m_destroycb, 0, conn_sock);
 		m_connectee->connect(*this);
 		mgr.add(*m_connectee);
 	}

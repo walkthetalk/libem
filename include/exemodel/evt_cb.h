@@ -9,16 +9,29 @@ class poller;
 template<typename pollee_t>
 class evt_cb {
 public:
+	struct args_t {
+		poller & mgr;
+		pollee_t & ctx;
+		uint32_t & evts;
+	};
+public:
 	evt_cb() : m_cbinfo(nullptr) {}
 	~evt_cb() {}
 public:
-	template<typename ctx_t>
-	void connect(void (ctx_t::*mf)(poller &, pollee_t &, uint32_t), ctx_t * pctx)
+	template<typename obj_t>
+	void connect(void (obj_t::*mf)(args_t & args), obj_t * pObj)
 	{
-		m_cbinfo = std::bind(mf, pctx,
-				std::placeholders::_1,
-				std::placeholders::_2,
-				std::placeholders::_3);
+		m_cbinfo = std::bind(mf, pObj,
+				std::placeholders::_1);
+	}
+	template<typename obj_t>
+	void connect(void (obj_t::*mf)(void), obj_t * pObj)
+	{
+		m_cbinfo = std::bind([mf, pObj](args_t &)
+				{
+					(pObj->*mf)();
+				},
+				std::placeholders::_1);
 	}
 
 	void connect(const evt_cb<pollee_t> & other)
@@ -31,10 +44,10 @@ public:
 		m_cbinfo = nullptr;
 	}
 
-	void exe(poller & mgr, pollee_t & obj, uint32_t evts)
+	void exe(args_t & args)
 	{
 		if (m_cbinfo != nullptr) {
-			m_cbinfo(mgr, obj, evts);
+			m_cbinfo(args);
 		}
 	}
 
@@ -42,7 +55,7 @@ private:
 	evt_cb(const evt_cb & rhs) = delete;
 	evt_cb & operator=(const evt_cb & rhs) = delete;
 private:
-	std::function<void(poller &, pollee_t &, uint32_t)> m_cbinfo;
+	std::function<void(args_t &)> m_cbinfo;
 };
 
 }

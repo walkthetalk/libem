@@ -1,13 +1,7 @@
 #pragma once
 
-//#include <unistd.h>	//close
-//#include <stdio.h>	//perror
-#include <stdlib.h>	//exit
-#include <assert.h>
-#include <string.h>	//strerror
 #include <errno.h>
 
-#include <iostream>
 #include <system_error>
 
 namespace exemodel {
