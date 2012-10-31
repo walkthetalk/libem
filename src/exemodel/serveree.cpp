@@ -5,9 +5,9 @@
 #include <assert.h>
 #include <iostream>
 
-#include "exemodel/poll_tools.h"
-#include "exemodel/serveree.h"
-#include "exemodel/poller.h"
+#include "exemodel/poll_tools.hpp"
+#include "exemodel/serveree.hpp"
+#include "exemodel/poller.hpp"
 
 namespace exemodel {
 
@@ -35,7 +35,7 @@ serveree::serveree(uint16_t port)
 	validate_ret(ret, "bind");
 
 	// listen
-	ret = ::listen(_fd_(), 1);
+	ret = ::listen(_fd_(), 0);
 	validate_ret(ret, "listen");
 }
 
@@ -55,25 +55,21 @@ void serveree::destroy(poller & mgr, int idx)
 
 void serveree::dispose(poller & mgr, uint32_t evts)
 {
-	try {
-		int conn_sock = ::accept(_fd_(), NULL, NULL);
-		validate_ret(conn_sock, "accept");
+	if (evts & ~::EPOLLIN) {
+		// TODO: need further process
+		return;
+	}
 
-		if (m_connectee != nullptr) {
-			// NOTE: only support single client
-			delete m_connectee;
-		}
+	int conn_sock = ::accept(_fd_(), NULL, NULL);
+	validate_ret(conn_sock, "accept");
 
-		m_connectee = new connectee(m_destroycb, 0, conn_sock);
-		m_connectee->connect(*this);
-		mgr.add(*m_connectee);
+	if (m_connectee != nullptr) {
+		destroy(mgr, 0);
 	}
-	catch (std::system_error & e) {
-		std::cout << e.code() << "-" << e.what() << std::endl;
-	}
-	catch (...) {
-		std::cout << "serveree dispose: unkown exception" << std::endl;
-	}
+
+	m_connectee = new connectee(m_destroycb, 0, conn_sock);
+	m_connectee->connect(*this);
+	mgr.add(*m_connectee);
 }
 
 }

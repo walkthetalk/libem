@@ -17,6 +17,7 @@ CMD_SEQ := seq
 ################### tool subroutin ##################################
 #####################################################################
 
+colon:=:
 comma:= ,
 empty:=
 space:= $(empty) $(empty)
@@ -103,14 +104,16 @@ endif
 
 # rec directory sources
 ifneq (${src_recdir_set},)
-if_recdir_nums:=$(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_recdir_set}))
-$(foreach temp,${if_recdir_nums},$(eval $(call OBJ_template,${if_dir}/recdir${temp},$(word ${temp},${src_recdir_set}))))
+src_recdir_set_tmp=$(subst ${colon},${space},${src_recdir_set})
+if_recdir_nums:=$(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_recdir_set_tmp}))
+$(foreach temp,${if_recdir_nums},$(eval $(call OBJ_template,${if_dir}/recdir${temp},$(word ${temp},${src_recdir_set_tmp}))))
 endif
 
 # solo directory sources
 ifneq (${src_solodir_set},)
-if_solodir_nums := $(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_solodir_set}))
-$(foreach temp,${if_solodir_nums},$(eval $(call OBJ_template,${if_dir}/solodir${temp},$(word ${temp},${src_solodir_set}),-maxdepth 1)))
+src_solodir_set_tmp=$(subst ${colon},${space},${src_solodir_set})
+if_solodir_nums := $(shell $(CMD_SEQ) -s ' ' 1 $(words ${src_solodir_set_tmp}))
+$(foreach temp,${if_solodir_nums},$(eval $(call OBJ_template,${if_dir}/solodir${temp},$(word ${temp},${src_solodir_set_tmp}),-maxdepth 1)))
 endif
 
 #####################################################################
@@ -118,7 +121,7 @@ endif
 #####################################################################
 override CXXFLAGS += -Wall -Werror -fPIC -pedantic
 override CFLAGS += -Wall -Werror -fPIC -pedantic
-override CPPFLAGS += $(foreach temp, ${inc_dir_set}, -I ${temp})
+override CPPFLAGS += $(foreach temp, $(subst ${colon},${space},${inc_dir_set}), -I ${temp})
 
 #####################################################################
 ########################### output type #############################

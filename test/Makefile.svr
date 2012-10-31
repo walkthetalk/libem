@@ -8,13 +8,13 @@ override LDLIBS += -lpthread -lmsgpack
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 
 # dst directory, all the output files will be put in it.
-dst_dir := ${dir_self}/output
+dst_dir := ${dir_self}/output-svr
 # the main name of this program
-main_name := exe-model
+main_name := emt-svr
 # include directories, use `:' as seperator
-inc_dir_set := ${dir_self}/include
+inc_dir_set := ${dir_self}/include:${dir_self}/../include
 # recursive directory, will compile files in it, and in it's subdirectories.
-src_recdir_set:=${dir_self}/src
+src_recdir_set:=${dir_self}/svr:${dir_self}/../src/exemodel
 # solo directory, will only compile the files under it directly, no recursive.
 #src_solodir_set:=${dir_self}/src
 
@@ -27,4 +27,4 @@ src_recdir_set:=${dir_self}/src
 #	staticlib:	*.a	used to link with other module to final .so or bin.
 #output_types := bin,sharedlib,staticlib
 #lib_version :=
-include ${dir_self}/scripts/Makefile.base
+include ${dir_self}/../scripts/Makefile.base
