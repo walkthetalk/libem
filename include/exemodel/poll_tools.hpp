@@ -1,13 +1,18 @@
 #pragma once
-
+/**
+ * \file	exemodel/poll_tools.hpp
+ * \author	Yi Qingliang <niqingliang2003@tom.com>
+ */
 #include <errno.h>
-
 #include <system_error>
-
 #include <iostream>
 
 namespace exemodel {
 
+/**
+ * \brief logger procedure.
+ * \param ctx	user can specify a string to log.
+ */
 inline void emlog(const char * ctx)
 {
 #if defined(NDEBUG)
@@ -16,6 +21,10 @@ inline void emlog(const char * ctx)
 #endif
 }
 
+/**
+ * \brief validate the file descriptor if it is valid.
+ * \param fd	the file descriptor need validated.
+ */
 inline int validate_fd(int fd)
 {
 	if (fd < 0) {
@@ -25,6 +34,11 @@ inline int validate_fd(int fd)
 	return fd;
 }
 
+/**
+ * \brief validate the value returned by OS call.
+ * \param ret	the value returen by OS call.
+ * \param ctx	the string used as the arguments of exception.
+ */
 inline void validate_ret(int ret, const char * ctx)
 {
 	if (ret == -1) {

@@ -6,10 +6,9 @@
 
 namespace exemodel {
 
-connectee::connectee(const destroy_cb_t & destroycb, int idx, int fd)
+connectee::connectee(const destroy_cb_t & destroycb, int fd)
 : pollee(fd, (uint32_t)(::EPOLLIN | ::EPOLLRDHUP | ::EPOLLERR | ::EPOLLET))
 , m_destroycb(destroycb)
-, m_idx(idx)
 {
 }
 
@@ -17,7 +16,7 @@ void connectee::dispose(poller & mgr, uint32_t evts)
 {
 	if ((evts & ::EPOLLRDHUP) || (evts & ::EPOLLERR)) {
 		emlog("connectee ERROR");
-		m_destroycb(mgr, m_idx);
+		m_destroycb(mgr);
 		return;
 	}
 

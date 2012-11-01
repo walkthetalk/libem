@@ -1,14 +1,24 @@
 #pragma once
-
+/**
+ * \file	exemodel/evt_cb.hpp
+ * \author	Yi Qingliang <niqingliang2003@tom.com>
+ */
 #include <functional>
 
 namespace exemodel {
 
 class poller;
 
+/**
+ * \class evt_cb
+ * \brief event callback, store the callback for specific type of \em pollee.
+ */
 template<typename pollee_t>
 class evt_cb {
 public:
+	/**
+	 * \brief the argument of callback.
+	 */
 	struct args_t {
 		poller & mgr;
 		pollee_t & ctx;
@@ -18,6 +28,9 @@ public:
 	evt_cb() : m_cbinfo(nullptr) {}
 	~evt_cb() {}
 public:
+	/**
+	 * \brief connect the callback user specified.
+	 */
 	template<typename obj_t>
 	void connect(void (obj_t::*mf)(args_t & args), obj_t * pObj)
 	{
@@ -39,11 +52,17 @@ public:
 		m_cbinfo = other.m_cbinfo;
 	}
 
+	/**
+	 * \brief disconnect the callback stored.
+	 */
 	void disconnect(void)
 	{
 		m_cbinfo = nullptr;
 	}
 
+	/**
+	 * \brief execute the callback stored.
+	 */
 	void exe(args_t & args)
 	{
 		m_cbinfo(args);

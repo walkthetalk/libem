@@ -3,7 +3,6 @@
 #include <arpa/inet.h>
 
 #include <assert.h>
-#include <iostream>
 
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/serveree.hpp"
@@ -15,7 +14,7 @@ serveree::serveree(uint16_t port)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
 	(uint32_t)(::EPOLLIN | ::EPOLLET))
 , evt_cb<connectee>()
-, m_destroycb(std::bind(&serveree::destroy, this, std::placeholders::_1, std::placeholders::_2))
+, m_destroycb(std::bind(&serveree::destroy, this, std::placeholders::_1))
 , m_connectee(nullptr)
 {
 	int ret = 0;
@@ -44,10 +43,9 @@ serveree::~serveree()
 	delete m_connectee;
 }
 
-void serveree::destroy(poller & mgr, int idx)
+void serveree::destroy(poller & mgr)
 {
-	assert(idx == 0);
-
+	assert(m_connectee != nullptr);
 	mgr.del(*m_connectee);
 	delete m_connectee;
 	m_connectee = nullptr;
@@ -64,10 +62,10 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 	validate_ret(conn_sock, "accept");
 
 	if (m_connectee != nullptr) {
-		destroy(mgr, 0);
+		destroy(mgr);
 	}
 
-	m_connectee = new connectee(m_destroycb, 0, conn_sock);
+	m_connectee = new connectee(m_destroycb, conn_sock);
 	m_connectee->connect(*this);
 	mgr.add(*m_connectee);
 }
