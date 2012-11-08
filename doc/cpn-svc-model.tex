@@ -1,0 +1,111 @@
+%
+% author:	Ni Qingliang
+% date:		2012-11-07
+%
+\startcomponent cpn-svc-model
+\product wm-sw-arch
+
+\chapter{业务模型}
+
+业务模型有两方面内容，一是如何驱动业务运转，二是业务间如何通信。
+
+\section{事件驱动}
+
+在我们的软件中，以【事件】来驱动程序运转，
+事件驱动的好处就是在有外部事件输入的情况下才需要处理，空闲状态下什么都不需要做。
+也就是说没有事件输入的情况下，程序处于暂停状态，不占用 CPU。
+这样做的好处是显而易见的，避免程序空转消耗 CPU。
+这个事件驱动模型中还用到了 Linux 的 epoll 机制，
+同时它的可行性还得益于 Linux 中视一切为文件的思想
+（比如， timer、 signal、 message queue、 socket、 pipe 等等在 Linux 中都是文件，
+当然设备文件也是文件）。
+
+其基本流程为：
+\startigNum
+\item 一个进程（线程）会等在一系列文件上；
+\item 其中任何一个文件有变化，比如 socket 收包， timer 超时，
+都会以事件的形式唤醒此进程继续执行；
+\item 而此进程则会根据事件源（哪个文件）、事件类型来确定如何处理；
+\item 处理完毕后则进行下一次等待。
+\stopigNum
+
+一般而言一个进程（线程）可能有多种状态，不同状态下接受（可以处理）不同的事件，
+这样就需要用到状态机，对于熔接机而言，为简化问题，暂时不引入状态机，进程只有一个基本状态：等待。
+处理事件是一个过程，不是状态，一般处理完事件就会改变程序的状态，
+但由于我们的程序只有一个状态，因此处理完事件后状态不变。
+如果日后发现确实需要状态机，可以引入 C++ 的 boost 库，其中有两套状态机，择一而用。
+
+\placefigure[here][fig:wm_evt_drv]
+{事件驱动}
+{\externalfigure[mp/umls-1.pdf]}
+
+\reffig{wm_evt_drv} 中列出了业务执行模型中的主要 class。
+其中 \ccmm{poller} 相当于轮询器，负责等待新事件的到来。
+而 \ccmm{pollee} 为接受轮询者，为接口类，定义了一个接口 \ccmm{dispose}。
+\ccmm{poller} 所提供的入口函数 \ccmm{run} 中会等待新事件的到来，
+然后调用 \ccmm{pollee} 的 \ccmm{dispose} 接口来处理事件。
+ \ccmm{serveree}、 \ccmm{connectee}、 \ccmm{clientee}、 \ccmm{timeree} 等均继承自
+接口 \ccmm{pollee}，并实现了 \ccmm{pollee} 所定义的接口 \ccmm{dispose}。
+其中前三个都与 socket 有关，目前以 TCP 实现。
+后面视具体需求逐步添加对 message queue、 signal、 device file 等的支持。
+
+\section{消息通信}
+
+既然有多进程、多线程的存在，就必须为其制定通信方式，上一节中已经介绍了几种 \ccmm{pollee}，
+可以优先选用 socket 方式以避免进程、线程的选择所带来的影响。
+通信机制确立以后，还有一个问题就是消息格式，或者说数据序列化、反序列化的方式。
+目前应用较广的是 msgpack 和 protobuf，通过对比测试，基于性能和复杂性方面的考虑，
+最终选用 msgpack 作为数据打包、解包的工具，
+为了简化其使用，对其进行了进一步封装，主要有三个（模板）类：
+\startigNum
+\item \ccmm{msg<mid_t id>}，即消息，其模板参数为消息 ID （枚举类型），
+我们需要为每一个消息 ID 对此模板进行特化；
+\startitem
+\ccmm{recver}，即消息接收器，它提供了几个接口，使用示例：
+\startCPP
+msg::recver pac;
+pac.fill_from(obj);			// 1. 由 obj 接收消息
+switch (pac.id()) {			// 2. 取得消息 ID
+	case msg::mid_t::test1: {
+		msg::msg<msg::mid_t::test1> msg;
+		pac.convert(msg);	// 3. 消息的反序列化
+		...
+\stopCPP
+\stopitem
+\startitem
+\ccmm{sender}，即消息发送器，示例如下：
+\startCPP
+msg::sender pac;
+msg::msg<msg::mid_t::test1> msg;
+...				// 1. 填充消息
+pac.fill_to(msg, obj);		// 2. 将消息序列化并由 obj 发送消息
+\stopCPP
+\stopitem
+\stopigNum
+其中 \ccmm{fill_from} 和 \ccmm{fill_to} 是两个模板成员函数，
+会分别调用各自参数 \ccmm{obj} 的 \ccmm{recv} 和 \ccmm{send} 成员函数来接收和发送消息，
+你也可以使用所重载的另外一个版本来自己指定 \ccmm{obj} 的成员函数。
+\startnotepar
+\ccmm{fill_to} 会将消息 ID 和消息内容全部打包。
+\stopnotepar
+
+\subsection{定义消息}
+示例代码如下：
+\startCPP
+template<>
+class msg<mid_t::test1> {
+public:
+	msg() : a(0), b(0) {}
+public:
+	uint8_t a;
+	uint32_t b;
+public:
+	MSGPACK_DEFINE(a, b)
+};
+\stopCPP
+其中 \ccmm{MSGPACK_DEFINE} 是一个宏，用来定义要（反）序列化哪些成员变量及其（反）序列化的顺序。
+
+%\color[red]{\bfa\textbackslash\textbackslash TODO： 请添加相关内容。}
+
+\stopcomponent
+

@@ -1,0 +1,65 @@
+
+\startreusableMPgraphic{wmModelArch}
+vardef itemGlobalCfg =
+	txtFrame(26u,v, btex \mplabel{全局配置数据} etex)
+enddef;
+
+vardef itemController =
+	txtFrame(27u,2v, btex \mplabel{\itc 控制器} etex)
+enddef;
+
+vardef itemSvc(expr lbl) =
+image(
+	draw txtFrame(6u,7v, btex \mplabel{} etex);
+	label.lrt(lbl, (-3u,3.5v));
+	draw txtFrame(1.5u, v, btex \mplabel{SPC} etex) shifted (0.5u, 2v);
+	draw txtFrame(1.5u, 2v, btex \mplabel{状态\\数据} etex) shifted (-1u, -1.5v);
+	draw txtFrame(1.5u, 2v, btex \mplabel{配置\\数据} etex) shifted (2u, -1.5v);
+
+	draw itemArrowRO((1u,1.5v), (1.5u,-0.5v));
+	draw itemArrowRW((0u,1.5v), (-0.5u,-0.5v));
+
+	% external arrow
+	draw itemArrow((0.5u,6v), (0.5u,2.5v));
+	draw itemArrowRW((2u,6v), (2u,-0.5v));
+	draw itemArrowRO((-1u,6v), (-1u,-0.5v));
+
+	draw itemArrowRO((0.5u,1.5v), (0.5u,-4.5v));
+)
+enddef;
+
+% Model
+draw blankFrame(27u,12v);
+
+draw itemSvc(btex \mplabel{业\\务\\流\\1} etex) shifted (-8u, v);
+draw itemSvc(btex \mplabel{业\\务\\流\\2} etex) shifted (-1u, v);
+label(btex \mplabel{\cdots} etex, (0,0))       shifted (3.5u,v);
+draw itemSvc(btex \mplabel{业\\务\\流\\N} etex) shifted (8u,v);
+
+draw itemGlobalCfg shifted (0,-4v);
+draw itemArrowRW((-12u, 7v), (-12u,-3.5v));
+
+label.llft(btex \mplabel{\itc 模\\型} etex, (0,0)) shifted (13.5u,6v);
+
+% Controller
+draw itemController shifted (0,8v);
+
+% legend
+vardef itemLengend =
+image(
+	label.rt(btex \mplabel{图例：} etex, (0,0)) shifted(-13u,0);
+
+	draw itemArrowRO((-10u, 0), (-9u,0));
+	label.rt(btex \mplabel{只读} etex, (0,0)) shifted (-9u, 0);
+
+	draw itemArrowRW((-6u, 0), (-5u,0));
+	label.rt(btex \mplabel{读写} etex, (0,0)) shifted (-5u, 0);
+
+	draw itemArrow((-2u, 0), (-1u,0));
+	label.rt(btex \mplabel{控制} etex, (0,0)) shifted (-1u, 0);
+)
+enddef;
+
+draw itemLengend shifted (0, -7v);
+
+\stopreusableMPgraphic

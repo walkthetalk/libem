@@ -1,0 +1,71 @@
+
+
+\startreusableMPgraphic{wmSwArch}
+%picture picMain;
+%pair pairUR, pairLL, pairC;
+%pen penCmm;
+%color memColor;
+
+%ahangle := 30;
+%ahlength := .5v;
+%penCmm := pencircle scaled 2;
+%memColor := (1,0.93,0.98);
+
+vardef itemApp =
+	txtFrame(6u,4v, btex \mplabel{应用} etex)
+enddef;
+
+vardef itemView =
+	txtFrame(6u,2v, btex \mplabel{视图} etex)
+enddef;
+
+vardef itemCtrl =
+	txtFrame(4u,v, btex \mplabel{控制器} etex)
+enddef;
+
+vardef itemModel =
+	txtFrame(6u,2v, btex \mplabel{模型} etex)
+enddef;
+
+vardef itemApp =
+image(
+	draw txtFrame(7u,11v,btex \mplabel{} etex);
+
+	draw itemView shifted (0,4v);
+	draw itemCtrl;
+	draw itemModel shifted (0,-4v);
+
+	draw itemArrow((0,0.5v), (0,3v)) shifted(-u,0);
+	draw itemArrow((0,3v), (0,0.5v)) shifted(u,0);
+
+	draw itemArrow((0,-3v), (0,-0.5v)) shifted(-u,0);
+	draw itemArrow((0,-0.5v), (0,-3v)) shifted(u,0);
+)
+enddef;
+
+vardef itemDRV(expr lblA, lblD) =
+image(
+	draw txtFrame(2.5u,6v,btex \mplabel{} etex);
+
+	draw txtFrame(2u,v, lblA) shifted (0,2v);
+	draw txtFrame(2u,v, lblD) shifted (0,-2v);
+
+	draw itemArrow((0,1.5v), (0,-1.5v));
+)
+enddef;
+
+draw itemApp shifted (0, 5v);
+
+draw itemDRV(btex \mplabel{Agent1} etex, btex \mplabel{Driver1} etex) shifted(-4.5u, -5v);
+draw itemDRV(btex \mplabel{Agent2} etex, btex \mplabel{Driver2} etex) shifted(-1.5u, -5v);
+label(btex \mplabel{\cdots} etex,(0,0))                               shifted( 1.5u, -3v);
+label(btex \mplabel{\cdots} etex,(0,0))                               shifted( 1.5u, -7v);
+draw itemDRV(btex \mplabel{Agent3} etex, btex \mplabel{Driver3} etex) shifted( 4.5u, -5v);
+
+
+draw itemArrow((-3u,0), (-4.5u,-2.5v));
+draw itemArrow((3u,0), (4.5u,-2.5v));
+draw itemArrow((-u,0), (-1.5u,-2.5v));
+
+\stopreusableMPgraphic
+

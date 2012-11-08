@@ -1,0 +1,39 @@
+\startcomponent cpn-frontcover
+\product wm-sw-arch
+
+%\setupbackgrounds [page][background=]
+\startmakeup[frontCover]
+  \blank[2cm]
+  %\input{fig/logo.tex}
+  %\hfil\reuseMPgraphic{openclLogo}\hfil
+  \blank[1cm]
+
+  \startframedtext[middle][frame=off,background={frontcoverBG},width=.8\textwidth]
+    \dontleavehmode
+    \blank[.5cm]
+    \hfil\bfd 关于下一代熔接机软件的一些想法\hfil
+    \blank[.5cm]
+    \hfil\ita 版本： 0.1 \hfil
+    \blank[.5cm]
+    \hfil\bfb 南京吉隆光纤通信有限公司 \hfil
+    \blank[.5cm]
+    \dontleavehmode
+  \stopframedtext
+  \blank[3cm]
+
+  \rightaligned{
+  \bTABLE
+  \setupTABLE[frame=off,style={\rm\ita},align={middle,lohi}]
+  \setupTABLE[column][1][align=flushright]
+  \setupTABLE[column][3][align=flushleft]
+  \bTR\bTD 编辑 \eTD\bTD ： \eTD\bTD 倪庆亮 \eTD\eTR
+  \bTR\bTD 編譯日期 \eTD\bTD ： \eTD\bTD \COMPILEDATE \eTD\eTR
+  %\bTR\bTD E-Mail \eTD\bTD ： \eTD\bTD \from[authorEmail] \eTD\eTR
+  %\bTR\bTD 博客 \eTD\bTD ： \eTD\bTD \from[authorBlog] \eTD\eTR
+  %\bTR\bTD github \eTD\bTD ： \eTD\bTD \from[authorGithub] \eTD\eTR
+  \eTABLE
+  }
+\stopmakeup
+%\setupbackgrounds [page][background=]
+
+\stopcomponent
