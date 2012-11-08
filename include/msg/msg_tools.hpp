@@ -1,11 +1,27 @@
 #pragma once 
-
+/**
+ * \file	msg/msg_tools.hpp
+ * \author	Yi Qingliang <niqingliang2003@tom.com>
+ */
 #include <type_traits>
 
 #include "msg/msg_cmm.hpp"
 
 namespace msg {
 
+/**
+ * \class recver
+ * \brief used to receive message.
+ * \example
+ * \code
+ * msg::recver pac;
+ * pac.fill_from(obj);		// 1. receive message from obj
+ * switch (pac.id()) {		// 2. get message id
+ * case msg::mid_t::test1: {
+ * 	msg::msg<msg::mid_t::test1> msg;
+ * 	pac.convert(msg);	// 3. unpack message body
+ * \endcode
+ */
 class recver {
 public:
 	recver(size_t init_buf_size = MSGPACK_UNPACKER_INIT_BUFFER_SIZE)
@@ -47,6 +63,17 @@ private:
 	msgpack::unpacked m_result;
 };
 
+/**
+ * \class sender
+ * \brief used to send message.
+ * \example
+ * \code
+ * msg::msg<msg::mid_t::test1> msg;
+ * ...				// 1. fill message body
+ * msg::sender pac;
+ * pac.fill_to(msg, obj);	// 2. send message by obj
+ * \endcode
+ */
 class sender {
 public:
 	sender() : m_buf(), m_packer(m_buf) {}

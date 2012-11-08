@@ -4,6 +4,9 @@
 
 namespace msg {
 
+/**
+ * \brief specialize msg for \em mid_t::test1.
+ */
 template<>
 class msg<mid_t::test1> {
 public:
