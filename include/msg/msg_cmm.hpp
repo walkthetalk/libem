@@ -14,6 +14,7 @@ enum class mid_t : uint8_t {
 	nil,	/// occupy symbol, correspond to \em NULL.
 	test1,
 	test2,
+	/// \todo add new message id
 };
 
 /**
