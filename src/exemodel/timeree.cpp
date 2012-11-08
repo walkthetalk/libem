@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <sys/epoll.h>
+#include <unistd.h>
 
 #include "exemodel/timeree.hpp"
 #include "exemodel/poll_tools.hpp"
@@ -46,7 +47,14 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 	      printf("timer error occurd fd %d\n",_fd_());
 	      return;
 	}
-	
+
+	uint64_t buf = 0;
+	ssize_t ret = ::read(_fd_(), &buf, sizeof(buf));
+	if(ret != sizeof(buf)){
+		printf("read error!\n");
+		return;
+		}
+
 	if(evts & EPOLLIN){
 		timeree::args_t args = { mgr, *this, evts };
 		this->exe(args);
