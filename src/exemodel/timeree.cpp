@@ -27,7 +27,6 @@ void timeree::start(void)
 	};
 	int ret = timerfd_settime(_fd_(), 0, &tmpTime, NULL);
 	validate_ret(ret,"start timer error!\n");
-	
 }
 
 void timeree::stop(void)
@@ -42,7 +41,7 @@ void timeree::stop(void)
 }
 
 void timeree::dispose(poller & mgr, uint32_t evts)
-{	
+{
 	if(evts & EPOLLERR){
 	      printf("timer error occurd fd %d\n",_fd_());
 	      return;
@@ -57,5 +56,5 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 		}
 	}
 }
-  
+
 }

@@ -41,5 +41,5 @@ private:
 	struct timespec m_interval;
 	bool m_reuse;
 };
-  
+
 }
