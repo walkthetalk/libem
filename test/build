@@ -1,0 +1,18 @@
+#!/bin/bash
+
+make_bin="make"
+usage()
+{
+echo "Usage: `basename $0` [options] [target] ..."
+echo "Options:"
+echo "  config=[release|debug]      Used to control the type of output binary."
+echo "`${make_bin} --help | tail -n +3`"
+}
+
+if [ "$*" = "--help" ]; then
+usage
+exit 0
+fi
+
+${make_bin} -f Makefile.client $*
+${make_bin} -f Makefile.svr $*
