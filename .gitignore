@@ -1,3 +1,11 @@
 output/*
 test/output*
-
+*.log
+*.tuc
+*.pdf
+*.aux
+*.bbl
+*.blg
+*.top
+doc/mp/*
+!doc/mp/*.mp
