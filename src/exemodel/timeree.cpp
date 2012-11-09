@@ -47,7 +47,7 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 	      printf("timer error occurd fd %d\n",_fd_());
 	      return;
 	}
-
+	//read the timeout information
 	uint64_t buf = 0;
 	ssize_t ret = ::read(_fd_(), &buf, sizeof(buf));
 	if(ret != sizeof(buf)){
