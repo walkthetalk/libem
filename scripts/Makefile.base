@@ -8,6 +8,8 @@
 prefix=/usr
 includedir=$(prefix)/include
 libdir=$(prefix)/lib
+bindir=$(prefix)/bin
+sbindir=$(prefix)/sbin
 CMD_MKDIR := mkdir -p
 CMD_RM := rm -f
 CMD_SED := sed
@@ -87,11 +89,11 @@ else
 endif
 endif
 
-$(foreach temp,dst_dir,${eval $(call VAR_DETECT_template,${temp})})
+$(foreach temp,output_dir,${eval $(call VAR_DETECT_template,${temp})})
 #bin file
-bin_dir := ${dst_dir}/$(cfg_name)/bin
+output_bin_dir := ${output_dir}/$(cfg_name)/bin
 #intermedia files dir
-if_dir := ${dst_dir}/$(cfg_name)/obj
+if_dir := ${output_dir}/$(cfg_name)/obj
 
 #####################################################################
 ################### process source files ############################
@@ -126,55 +128,93 @@ override CPPFLAGS += $(foreach temp, $(subst ${colon},${space},${inc_dir_set}), 
 #####################################################################
 ########################### output type #############################
 #####################################################################
-$(foreach temp,main_name bin_dir,${eval $(call VAR_DETECT_template,${temp})})
-# if the `output' is NULL, then will generate bin by default
-ifeq ($(output),)
-output_types=bin
+$(foreach temp,main_name output_bin_dir,${eval $(call VAR_DETECT_template,${temp})})
+# if the `output_types' is NULL, then will generate bin by default
+ifeq ($(output_types),)
+output_types := bin
 else
-output_types=$(subst ${comma},${space},${output})
+output_types_tmp := $(subst ${comma},${space},${output_types})
+output_types := ${output_types_tmp}
 endif
-## shared library
+######################## shared library #############################
 ifneq ($(filter sharedlib,${output_types}),)
 $(foreach temp,lib_version,${eval $(call VAR_DETECT_template,${temp})})
-
 BN_PROVIDE_SHAREDLIB := lib${main_name}.so
 BN_SHAREDLIB := ${BN_PROVIDE_SHAREDLIB}.$(lib_version)
-PN_SHAREDLIB := ${bin_dir}/${BN_SHAREDLIB}
-all_depends += ${PN_SHAREDLIB}
+PN_SHAREDLIB := ${output_bin_dir}/${BN_SHAREDLIB}
+#all_depends += ${PN_SHAREDLIB}
+.PHONY:all
+all: ${PN_SHAREDLIB}
 
+# compile
 ${PN_SHAREDLIB}: ${obj_files}
 	@$(CMD_MKDIR) $(dir $@)
 	@echo "  [output ] $@"
 	@$(LINK.cc) -shared -Wl,-soname,${BN_PROVIDE_SHAREDLIB} -o $@ $^
-endif
-## static library
-ifneq ($(filter staticlib,${output_types}),)
-BN_STATICLIB := lib${main_name}.a
-PN_STATICLIB := ${bin_dir}/${BN_STATICLIB}
-all_depends += ${PN_STATICLIB}
 
+# install
+INSTALL_SHAREDLIB := install_sharedlib
+install_depends += ${INSTALL_SHAREDLIB}
+.PHONY:${INSTALL_SHAREDLIB}
+${INSTALL_SHAREDLIB}:
+	install -dm755 $(DESTDIR)/$(libdir)/
+	install -D -m 755 $(PN_SHAREDLIB) $(DESTDIR)/$(libdir)/
+	cd $(DESTDIR)/$(libdir)/
+	ln -s ./$(BN_SHAREDLIB) $(DESTDIR)/$(libdir)/${BN_PROVIDE_SHAREDLIB}
+endif
+######################## static library #############################
+ifneq ($(filter staticlib,${output_types}),)
+BN_PROVIDE_STATICLIB := lib${main_name}.a
+BN_STATICLIB := ${BN_PROVIDE_STATICLIB}.${lib_version}
+PN_STATICLIB := ${output_bin_dir}/${BN_STATICLIB}
+#all_depends += ${PN_STATICLIB}
+.PHONY:all
+all: ${PN_STATICLIB}
+
+# compile
 ${PN_STATICLIB}: ${obj_files}
 	@$(CMD_MKDIR) $(dir $@)
 	@echo "  [output ] $@"
 	@$(AR) $(ARFLAGS) $@ $^
+
+# install
+INSTALL_STATICLIB := install_staticlib
+install_depends += ${INSTALL_STATICLIB}
+.PHONY:${INSTALL_STATICLIB}
+${INSTALL_STATICLIB}:
+	install -dm755 $(DESTDIR)/$(libdir)/
+	install -D -m 644 ${PN_STATICLIB} $(DESTDIR)/$(libdir)/
+	cd $(DESTDIR)/$(libdir)/
+	ln -s ./${BN_STATICLIB} $(DESTDIR)/$(libdir)/${BN_PROVIDE_STATICLIB}
 endif
-## binary
+############################ binary #################################
 ifneq ($(filter bin,${output_types}),)
 BN_BIN := ${main_name}
-PN_BIN := ${bin_dir}/${BN_BIN}
-all_depends += ${PN_BIN}
+PN_BIN := ${output_bin_dir}/${BN_BIN}
+#all_depends += ${PN_BIN}
+.PHONY:all
+all: ${PN_STATICLIB}
 
+# compile
 ${PN_BIN}:${obj_files}
 	@$(CMD_MKDIR) $(dir $@)
 	@echo "  [output ] $@"
 	@$(LINK.cc) -o $@ $^ ${LDLIBS}
+
+# install
+INSTALL_BIN := install_bin
+install_depends += ${INSTALL_BIN}
+.PHONY:${INSTALL_BIN}
+${INSTALL_BIN}:
+	install -dm755 $(DESTDIR)/$(bindir)/
+	install -D -m 755 ${PN_BIN} $(DESTDIR)/$(bindir)/
 endif
 
 #####################################################################
 ###############################main target###########################
 #####################################################################
-.PHONY:all
-all: ${all_depends}
+#.PHONY:all
+#all: ${all_depends}
 
 #####################################################################
 ########################   clean   ##################################
@@ -190,17 +230,8 @@ distclean clean:
 #####################################################################
 ########################  install  ##################################
 #####################################################################
-#TODO: fix install script
-ifneq (${install},)
 .PHONY:install
-install:
-	install -dm755 $(DESTDIR)/$(libdir)/
-	install -D -m 644 $(bin_dir)/$(staticlib_name) $(DESTDIR)/$(libdir)/
-	install -D -m 755 $(bin_dir)/$(sharedlib_name) $(DESTDIR)/$(libdir)/
-	cd $(DESTDIR)/$(libdir)/
-	ln -s ./$(sharedlib_name) $(DESTDIR)/$(libdir)/$(sharedlib_link_name)
-	ln -s ./$(sharedlib_link_name) $(DESTDIR)/$(libdir)/${provide_lib}.so
-endif
+install: ${install_depends}
 #####################################################################
 ########################dependency files#############################
 #####################################################################

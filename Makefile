@@ -7,8 +7,8 @@ override LDLIBS += -lpthread -lmsgpack
 # the aux variable, used to identify the directory this Makefile in.
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 
-# dst directory, all the output files will be put in it.
-dst_dir := ${dir_self}/output
+# output directory, all the output files will be put in it.
+output_dir := ${dir_self}/output
 # the main name of this program
 main_name := exe-model
 # include directories, use `:' as seperator
@@ -27,4 +27,6 @@ src_recdir_set:=${dir_self}/src
 #	staticlib:	*.a	used to link with other module to final .so or bin.
 #output_types := bin,sharedlib,staticlib
 #lib_version :=
+output_types := sharedlib,staticlib
+lib_version := 0.5
 include ${dir_self}/scripts/Makefile.base
