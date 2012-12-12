@@ -194,7 +194,7 @@ BN_BIN := ${main_name}
 PN_BIN := ${output_bin_dir}/${BN_BIN}
 #all_depends += ${PN_BIN}
 .PHONY:all
-all: ${PN_STATICLIB}
+all: ${PN_BIN}
 
 # compile
 ${PN_BIN}:${obj_files}
