@@ -15,6 +15,8 @@ CMD_RM := rm -f
 CMD_SED := sed
 CMD_FIND := find
 CMD_SEQ := seq
+CMD_INSTALL := install
+CMD_CP := cp
 #####################################################################
 ################### tool subroutin ##################################
 #####################################################################
@@ -157,10 +159,11 @@ INSTALL_SHAREDLIB := install_sharedlib
 install_depends += ${INSTALL_SHAREDLIB}
 .PHONY:${INSTALL_SHAREDLIB}
 ${INSTALL_SHAREDLIB}:
-	install -dm755 $(DESTDIR)/$(libdir)/
-	install -D -m 755 $(PN_SHAREDLIB) $(DESTDIR)/$(libdir)/
-	cd $(DESTDIR)/$(libdir)/
-	ln -s ./$(BN_SHAREDLIB) $(DESTDIR)/$(libdir)/${BN_PROVIDE_SHAREDLIB}
+	@echo "  [install shared library] $(libdir)/${BN_SHAREDLIB}"
+	@${CMD_INSTALL} -dm755 $(DESTDIR)/$(libdir)/
+	@${CMD_INSTALL} -D -m 755 $(PN_SHAREDLIB) $(DESTDIR)/$(libdir)/
+	@cd $(DESTDIR)/$(libdir)/
+	@ln -s ./$(BN_SHAREDLIB) $(DESTDIR)/$(libdir)/${BN_PROVIDE_SHAREDLIB}
 endif
 ######################## static library #############################
 ifneq ($(filter staticlib,${output_types}),)
@@ -181,8 +184,9 @@ INSTALL_STATICLIB := install_staticlib
 install_depends += ${INSTALL_STATICLIB}
 .PHONY:${INSTALL_STATICLIB}
 ${INSTALL_STATICLIB}:
-	install -dm755 $(DESTDIR)/$(libdir)/
-	install -D -m 644 ${PN_STATICLIB} $(DESTDIR)/$(libdir)/
+	@echo "  [install static library] $(libdir)/${BN_STATICLIB}"
+	@${CMD_INSTALL} -dm755 $(DESTDIR)/$(libdir)/
+	@${CMD_INSTALL} -D -m 644 ${PN_STATICLIB} $(DESTDIR)/$(libdir)/
 endif
 ############################ binary #################################
 ifneq ($(filter bin,${output_types}),)
@@ -203,10 +207,20 @@ INSTALL_BIN := install_bin
 install_depends += ${INSTALL_BIN}
 .PHONY:${INSTALL_BIN}
 ${INSTALL_BIN}:
-	install -dm755 $(DESTDIR)/$(bindir)/
-	install -D -m 755 ${PN_BIN} $(DESTDIR)/$(bindir)/
+	@echo "  [install binary progam] $(bindir)/$(BN_BIN)"
+	${CMD_INSTALL} -dm755 $(DESTDIR)/$(bindir)/
+	${CMD_INSTALL} -D -m 755 ${PN_BIN} $(DESTDIR)/$(bindir)/
 endif
-
+########################### header files ############################
+ifneq ($(header_dir),)
+INSTALL_HEADER := install_header
+install_depends += ${INSTALL_HEADER}
+.PHONY:${INSTALL_HEADER}
+${INSTALL_HEADER}:
+	@echo "  [install header files] $(includedir)/"
+	@${CMD_INSTALL} -dm755 $(DESTDIR)/$(includedir)/
+	@${CMD_CP} -R $(header_dir)/* $(DESTDIR)/$(includedir)/
+endif
 #####################################################################
 ###############################main target###########################
 #####################################################################

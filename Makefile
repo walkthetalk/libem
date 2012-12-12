@@ -7,6 +7,7 @@ override LDLIBS += -lpthread -lmsgpack
 # the aux variable, used to identify the directory this Makefile in.
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 
+############ compile control
 # output directory, all the output files will be put in it.
 output_dir := ${dir_self}/output
 # the main name of this program
@@ -29,4 +30,9 @@ src_recdir_set:=${dir_self}/src
 #lib_version :=
 output_types := sharedlib,staticlib
 lib_version := 0.5
+
+############ install control
+# if your output_types contain *lib, then you need it.
+header_dir := ${dir_self}/include
+
 include ${dir_self}/scripts/Makefile.base
