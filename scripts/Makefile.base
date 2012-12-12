@@ -164,8 +164,7 @@ ${INSTALL_SHAREDLIB}:
 endif
 ######################## static library #############################
 ifneq ($(filter staticlib,${output_types}),)
-BN_PROVIDE_STATICLIB := lib${main_name}.a
-BN_STATICLIB := ${BN_PROVIDE_STATICLIB}.${lib_version}
+BN_STATICLIB := lib${main_name}.a
 PN_STATICLIB := ${output_bin_dir}/${BN_STATICLIB}
 #all_depends += ${PN_STATICLIB}
 .PHONY:all
@@ -184,8 +183,6 @@ install_depends += ${INSTALL_STATICLIB}
 ${INSTALL_STATICLIB}:
 	install -dm755 $(DESTDIR)/$(libdir)/
 	install -D -m 644 ${PN_STATICLIB} $(DESTDIR)/$(libdir)/
-	cd $(DESTDIR)/$(libdir)/
-	ln -s ./${BN_STATICLIB} $(DESTDIR)/$(libdir)/${BN_PROVIDE_STATICLIB}
 endif
 ############################ binary #################################
 ifneq ($(filter bin,${output_types}),)
