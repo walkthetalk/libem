@@ -11,7 +11,7 @@ dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 # output directory, all the output files will be put in it.
 output_dir := ${dir_self}/output
 # the main name of this program
-main_name := exe-model
+main_name := exemodel
 # include directories, use `:' as seperator
 inc_dir_set := ${dir_self}/include
 # recursive directory, will compile files in it, and in it's subdirectories.
