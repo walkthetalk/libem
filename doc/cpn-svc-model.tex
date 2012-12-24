@@ -64,11 +64,14 @@
 \item \ccmm{msg<mid_t id>}，即消息，其模板参数为消息 ID （枚举类型），
 我们需要为每一个消息 ID 对此模板进行特化；
 \startitem
-\ccmm{recver}，即消息接收器，它提供了几个接口，使用示例：
+\ccmm{recver}，即消息接收器，它提供了几个接口，使用示例\footnote{%
+\useURL[wiki-table-driven][http://en.wikipedia.org/wiki/Table-driven]
+\ccmm{switch / case} 仅为示例，如果消息比较多，则改用表 Table-Driven
+\from[wiki-table-driven] 的方式来实现。}：
 \startCPP
 msg::recver pac;
-pac.fill_from(obj);			// 1. 由 obj 接收消息
-switch (pac.id()) {			// 2. 取得消息 ID
+pac.fill_from(obj);		// 1. 由 obj 接收消息
+switch (pac.id()) {		// 2. 取得消息 ID
 case msg::mid_t::test1: {
 	msg::msg<msg::mid_t::test1> msg;
 	pac.convert(msg);	// 3. 消息的反序列化
@@ -77,7 +80,8 @@ case msg::mid_t::test1: {
 \stopCPP
 \stopitem
 \startitem
-\ccmm{sender}，即消息发送器，示例如下：
+\ccmm{sender}，即消息发送器，示例如下\footnote{%
+\ccmm{fill_to} 会将消息 ID 和消息内容全部打包。}：
 \startCPP
 msg::sender pac;
 msg::msg<msg::mid_t::test1> msg;
@@ -89,9 +93,6 @@ pac.fill_to(msg, obj);		// 2. 将消息序列化并由 obj 发送消息
 其中 \ccmm{fill_from} 和 \ccmm{fill_to} 是两个模板成员函数，
 会分别调用各自参数 \ccmm{obj} 的 \ccmm{recv} 和 \ccmm{send} 成员函数来接收和发送消息，
 你也可以使用所重载的另外一个版本来自己指定 \ccmm{obj} 的成员函数。
-\startnotepar
-\ccmm{fill_to} 会将消息 ID 和消息内容全部打包。
-\stopnotepar
 
 \subsection{定义消息}
 示例代码如下：
