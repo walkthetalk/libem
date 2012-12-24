@@ -69,10 +69,11 @@
 msg::recver pac;
 pac.fill_from(obj);			// 1. 由 obj 接收消息
 switch (pac.id()) {			// 2. 取得消息 ID
-	case msg::mid_t::test1: {
-		msg::msg<msg::mid_t::test1> msg;
-		pac.convert(msg);	// 3. 消息的反序列化
-		...
+case msg::mid_t::test1: {
+	msg::msg<msg::mid_t::test1> msg;
+	pac.convert(msg);	// 3. 消息的反序列化
+	...			// 4. 处理消息
+	break;
 \stopCPP
 \stopitem
 \startitem
