@@ -1,6 +1,6 @@
 #pragma once
 /**
- * \file	exemodel/devee.hpp
+ * \file	exemodel/devicee.hpp
  * \author	justgaoyuan<gao_yuangy@126.com>
  */
 
@@ -10,30 +10,30 @@
 #include "exemodel/evt_cb.hpp"
 
 /**
- *\class devee
+ *\class devicee
  *\brief device pollee,used by \em poller
  */
 namespace exemodel{
 class poller;
     
-class devee 
+class devicee 
 : public pollee   
-, public evt_cb<devee>{
+, public evt_cb<devicee>{
 public:
 	/**
-	 * \brief ctor of devee
+	 * \brief ctor of devicee
 	 * \param path	point to a pathname to open.
 	 */
-	explicit devee(char* path);
-	virtual ~devee();
+	explicit devicee(char* path);
+	virtual ~devicee();
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
 	 */
 	virtual void dispose(poller &mgr, uint32_t evts);
 private:
-	devee(const devee &rhs ) = delete;
-	devee &operator = (devee & rhs) = delete;
+	devicee(const devicee &rhs ) = delete;
+	devicee &operator = (devicee & rhs) = delete;
 private:
 	char* m_path;
 };

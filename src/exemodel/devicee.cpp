@@ -8,25 +8,25 @@
 
 namespace exemodel{
     
-devee::devee(char* path)
+devicee::devicee(char* path)
 : pollee(::open(path, O_RDWR), uint32_t(::EPOLLIN|::EPOLLOUT|::EPOLLERR))
 , m_path(path)
 {    
 }
 
-devee::~devee()
+devicee::~devicee()
 {
 }
 
-void devee::dispose(poller& mgr, uint32_t evts)
+void devicee::dispose(poller& mgr, uint32_t evts)
 {
     //todo add body
     if ((evts & ::EPOLLERR)) {
-            emlog("devee ERROR");
+            emlog("devicee ERROR");
             return;
         }
 
-        devee::args_t args = { mgr, *this, evts };
+        devicee::args_t args = { mgr, *this, evts };
         this->exe(args);
 }
 
