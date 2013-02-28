@@ -15,16 +15,16 @@
  */
 namespace exemodel{
 class poller;
-    
-class devicee 
-: public pollee   
+
+class devicee
+: public pollee
 , public evt_cb<devicee>{
 public:
 	/**
 	 * \brief ctor of devicee
 	 * \param path	point to a pathname to open.
 	 */
-	explicit devicee(char* path);
+	explicit devicee(const char* path);
 	virtual ~devicee();
 public:
 	/**
@@ -35,7 +35,7 @@ private:
 	devicee(const devicee &rhs ) = delete;
 	devicee &operator = (devicee & rhs) = delete;
 private:
-	char* m_path;
+	const char* const m_path;
 };
 
 }

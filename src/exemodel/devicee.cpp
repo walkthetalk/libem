@@ -7,11 +7,11 @@
 #include <unistd.h>
 
 namespace exemodel{
-    
-devicee::devicee(char* path)
+
+devicee::devicee(const char* path)
 : pollee(::open(path, O_RDWR), uint32_t(::EPOLLIN|::EPOLLOUT|::EPOLLERR))
 , m_path(path)
-{    
+{
 }
 
 devicee::~devicee()
