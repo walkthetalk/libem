@@ -76,7 +76,7 @@ size_t serveree::send(const void * buffer, size_t length)
 		return m_connectee->send(buffer, length);
 	}
 	else {
-		throw std::system_error(ENOMEM, std::system_category(), "no client");
+		std::cout << "WARNING:: no client, it is needed for send msg!!" << std::endl;
 		return 0;
 	}
 }
