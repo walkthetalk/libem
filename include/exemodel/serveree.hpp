@@ -30,6 +30,12 @@ public:
 	 * \brief used for disposing the event caught by the \em poller attached.
 	 */
 	virtual void dispose(poller & mgr, uint32_t evts);
+public:
+	/**
+	 * \brief hack: for send msg though server
+	 * \todo maybe we need reconsider the arch of server/client
+	 */
+	size_t send(const void * buffer, size_t length);
 private:
 	/**
 	 * \brief used for destorying connection.

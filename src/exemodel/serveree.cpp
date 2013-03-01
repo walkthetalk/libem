@@ -70,4 +70,15 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 	mgr.add(*m_connectee);
 }
 
+size_t serveree::send(const void * buffer, size_t length)
+{
+	if (m_connectee) {
+		return m_connectee->send(buffer, length);
+	}
+	else {
+		throw std::system_error(ENOMEM, std::system_category(), "no client");
+		return 0;
+	}
+}
+
 }
