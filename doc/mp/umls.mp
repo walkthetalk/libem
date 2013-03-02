@@ -37,7 +37,6 @@ beginfig(1);
 	link(inheritance)(pathStepY(timeree.n, pollee.s, 20));
 
 	link(dashedLink)(poller.methodStack.pict[0].w -- noteMethodWithPollee.n);
-
 endfig;
 
 beginfig(2);

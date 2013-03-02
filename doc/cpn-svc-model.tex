@@ -133,11 +133,11 @@ public:
 \stopnotepar
 
 \section{业务模型的物理视图}
-每一项业务的内部结构如下图所示：
+每一项业务的内部结构如\reffig{fs_svc_phy_view}所示：
 
 \input{fig/fs_svc_arch.tex}
-\placefigure[here][fig:fs_svc_arch]
-{业务的内部结构}
+\placefigure[here][fig:fs_svc_phy_view]
+{业务模型的物理视图}
 {\reuseMPgraphic{fsSvcArch}}
 
 \subsection{控制器}
@@ -175,12 +175,13 @@ public:
 \stopigBase
 \section{业务：熔接}
 
-熔接是熔接机的核心业务，也是所有业务中涉及器件最多、最复杂的，本节主要介绍此业务的实现。
+熔接是熔接机的核心业务，也是熔接机所有业务中涉及器件最多、最复杂的，本节主要介绍此业务的实现。
 
 \subsection{消息}
 熔接业务主要与 UI 部分进行交互，所使用的消息包括：
 \startigBase
 \item fs_start：来自 UI，用于启动熔接；
+\item fs_continue：来自 UI （源自按键），继续熔接；
 \item fs_stop：来自 UI，用于停止熔接；
 \item fs_state：发往 UI，用于报告状态。
 \stopigBase
@@ -196,7 +197,7 @@ public:
 {熔接业务流程图}
 {\externalfigure[mp/umls-2.pdf]}
 
-为了简化问题，\reffig{fs_sm}中只画出了主要流程。
+为了便于理解，\reffig{fs_sm}中只画出了主要流程。
 由\reffig{fs_sm}可以看出，熔接业务主要有两大状态，一为「idle」，即空闲态；
 一为「running」，即运行态。
 
@@ -213,8 +214,9 @@ public:
 此状态下所处理的事件列表：
 \startigBase
 \item evStop：停止熔接，收到此事件后会转入「idle」态，并执行一些初始化操作，比如电机复位。
-\item evContinue：继续熔接，当子状态为「pause1」和「pause2」时接收到此事件会跳转到下一个状态。
-\item evEntryAct：此事件为状态机内部事件，由状态机进入某一个状态是自发自收，
+\item evContinue：继续熔接，由消息 fs_continue 转换而来，
+当子状态为「pause1」和「pause2」时接收到此事件会跳转到下一个状态。
+\item evEntryAct：此事件为状态机内部事件，由状态机进入某一个状态时自发自收，
 比如，进入「push1」状态后就会发送此事件，接收到此事件后会检查光纤间距是否达到了预设值，
 如果是，则跳转到下一状态，否则操控电机。
 \item evMotorStop：电机停止事件，此事件由电机中断出发，代表电机运行完成，可以继续操控电机了。
@@ -228,6 +230,12 @@ public:
 另外，「running」中的子状态发生变化时（正常流程）是否需要上报？
 如果 UI 上除图像外还要以文字的形式显示当前状态，则需要上报，暂时不上报，如有需要再添加。
 \stopnotepar
+
+\subsection{类图}
+
+\placefigure[here][fig:fs_class_diag]
+{熔接业务类图}
+{\externalfigure[mp/fs_class_diag-1.pdf]}
 
 %\color[red]{\bfa\textbackslash\textbackslash TODO： 请添加相关内容。}
 
