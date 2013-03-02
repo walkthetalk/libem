@@ -7,9 +7,15 @@
 
 \chapter{业务模型}
 
-业务模型有两方面内容，一是如何驱动业务运转，二是业务间如何通信。
+\section{业务模型的要素}
+业务模型有三个要素：
+\startigNum
+\item 如何驱动业务运转；
+\item 业务间如何通信；
+\item 业务如何运转。
+\stopigNum
 
-\section{事件驱动}
+\subsection[sec:evt_drv]{事件驱动}
 
 在我们的软件中，以【事件】来驱动程序运转，
 事件驱动的好处就是在有外部事件输入的情况下才需要处理，空闲状态下什么都不需要做。
@@ -30,13 +36,7 @@
 \stopigNum
 
 一般而言一项业务可能有多种状态（不同于 OS 中进程状态），不同状态下接受（可以处理）不同的事件，
-这样就需要用到状态机，对于熔接机而言，为简化问题，暂时不引入状态机，业务只有一个状态：等待。
-处理事件是一个过程，不是状态，一般处理完事件就会改变业务的状态，
-但由于我们的程序只有一个状态，因此处理完事件后状态并没有发生变化。
-如果日后发现确实需要状态机，可以引入 C++ 的 boost 库，其中有两套状态机，择一而用。
-\startnotepar
-目前可以通过处理事件过程中注册不同的回调函数、修改所关注的事件来实现简单的业务状态。
-\stopnotepar
+这样就需要用到状态机，关于状态机参见\refsec{state_machine}。
 
 \placefigure[here][fig:wm_evt_drv]
 {事件驱动}
@@ -52,7 +52,7 @@
 其中前三个都与 socket 有关，目前以 TCP 实现。
 后面视具体需求逐步添加对 message queue、 signal、 device file 等的支持。
 
-\section{消息通信}
+\subsection{消息通信}
 
 既然有多进程、多线程的存在，就必须为其制定通信方式，上一节中已经介绍了几种 \ccmm{pollee}，
 可以优先选用 socket 方式以避免进程、线程的选择所带来的影响。
@@ -94,7 +94,7 @@ pac.fill_to(msg, obj);		// 2. 将消息序列化并由 obj 发送消息
 会分别调用各自参数 \ccmm{obj} 的 \ccmm{recv} 和 \ccmm{send} 成员函数来接收和发送消息，
 你也可以使用所重载的另外一个版本来自己指定 \ccmm{obj} 的成员函数。
 
-\subsection{定义消息}
+\subsubsection{定义消息}
 示例代码如下：
 \startCPP
 template<>
@@ -109,6 +109,63 @@ public:
 };
 \stopCPP
 其中 \ccmm{MSGPACK_DEFINE} 是一个宏，用来定义要（反）序列化哪些成员变量及其（反）序列化的顺序。
+
+\subsection[sec:state_machine]{状态机}
+每一项业务都会有自己的流程，而流程中又会有很多状态，用状态机描述流程具有简单、直观、易维护等特点。
+而涉及到状态机的实现，我们既可以用一些比较成熟的库，也可以手工编写（handcrafted）。
+这两种方式都能达到目的，但是前者的健壮性、可扩展性、可维护性无疑更好一些，
+当然可能会有一些性能上的开销。
+目前 C++ 语言的状态机库用的较多的为 boost 中的 MSM (meta state machine) 和 statechart，
+其中 FSM 可以认为是一个简化版的 statechart，当前这两个库还有其他区别，比如对 UML 的支持。
+我们最终选用的是 statechart，主要是基于代码的可读性和可维护性考虑，
+当然是在其性能开销可以接受的情况下。
+
+\useurl[msmVSsc][http://stackoverflow.com/questions/4275602/boost-statechart-vs-meta-state-machine]
+\useurl[sc_perf][http://www.boost.org/doc/libs/1_53_0/libs/statechart/doc/performance.html]
+\startnotepar
+\noindent MSM 和 statechart 的比较：
+
+\from[msmVSsc]
+
+\noindent statechart 的性能：
+
+\from[sc_perf]
+\stopnotepar
+
+\section{业务模型的物理视图}
+每一项业务的内部结构如下图所示：
+
+\input{fig/fs_svc_arch.tex}
+\placefigure[here][fig:fs_svc_arch]
+{业务的内部结构}
+{\reuseMPgraphic{fsSvcArch}}
+
+\subsection{控制器}
+「控制器」是整个业务的核心，本质是一个 poller （参见\refsec{evt_drv}），
+主要功能就是获取外部消息，
+如 socket 消息（来自「Server」）、设备中断、定时器超时等等。
+「控制器」收到消息后，如果发现是要通知「状态机」的，
+则将消息转换成「状态机」所能识别的事件，并发送给「状态机」；否则就地处理。
+另外「控制器」也会往外发送消息（通过「Server」），比如报告状态。
+\subsection{Server}
+「Server」是整个业务与其他模块交流的主要通道，一个业务本质是要提供一个 Service，
+这里将「Server」实现为一个 TCP Server，其他模块可以给其发送消息，
+比如状态查询、参数设置、业务启停等。所有消息都由「控制器」接收处理。
+而「控制器」也可以通过「Server」给其他模块发送消息，比如报告状态，返回查询结果等。
+\subsection{上下文}
+「上下文」主要存放的是业务相关设备文件和「配置数据」，但都是引用，
+这部分内容主要是给「状态机」用。
+「上下文」的存在主要是为了限制状态机对这些数据的访问，
+比如「配置数据」，不允许「状态机」对其更改，但其原始数据可以由「控制器」（处理配置消息时）更改，
+其改动在「状态机」访问「上下文」的时候也可以体现。
+\subsection{状态机}
+「状态机」用于维护业务流的状态，接收来自「控制器」的事件，
+并根据自身的状态来操控「上下文」中的设备，比如启动电机、启动高压板等；
+然后完成自身状态的转换。
+
+\startnotepar
+「设备...」中除了「设备」还有其他「状态机」会用到的 pollee，如定时器。
+\stopnotepar
 
 %\color[red]{\bfa\textbackslash\textbackslash TODO： 请添加相关内容。}
 

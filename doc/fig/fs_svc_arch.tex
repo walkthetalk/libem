@@ -1,0 +1,50 @@
+
+
+\startreusableMPgraphic{fsSvcArch}
+
+vardef itemSvc(expr lbl) =
+image(
+	draw txtFrame(12u,16v, btex \mplabel{} etex);
+	label.lrt(lbl, (-6u,7v));
+	draw txtFrame(6u, 1.5v, btex \mplabel{Server} etex) shifted (0, 6v);
+	draw txtFrame(10u, 1.5v, btex \mplabel{控制器} etex) shifted (0, 3v);
+	draw txtFrame(4u, 1.5v, btex \mplabel{状态机} etex);
+	draw txtFrameDashed(6u, 1.5v, btex \mplabel{上下文} etex) shifted (0, -3v);
+	draw txtFrame(4u, 1.5v, btex \mplabel{设备...} etex) shifted (-3u, -6v);
+	draw txtFrame(4u, 1.5v, btex \mplabel{配置数据} etex) shifted (3u, -6v);
+
+	draw itemArrow((-4u,-5.5v), (-4u,2.5v));	% device -> controller
+	draw itemArrow((4u,2.5v), (4u,-5.5v));		% controller -> cfg
+	draw itemArrow((-2u,3.5v), (-2u,5.5v));		% controller -> server
+	draw itemArrow((2u,5.5v), (2u,3.5v));		% server -> controller
+	draw itemArrow((-u,.5v), (-u,2.5v));		% sm -> controller
+	draw itemArrow((u,2.5v), (u,.5v));		% controller -> sm
+
+	draw itemArrow((-u,-0.5v), (-2u,-5.5v));		% sm -> controller
+	draw itemArrow((u,-0.5v), (2u,-5.5v));		% controller -> sm
+)
+enddef;
+
+
+draw itemSvc(btex \mplabel{业\\务\\N} etex) shifted (-8u, v);
+
+% legend
+vardef itemLengend =
+image(
+	label.rt(btex \mplabel{图例：} etex, (0,0)) shifted(-13u,0);
+
+	draw itemArrowRO((-10u, 0), (-9u,0));
+	label.rt(btex \mplabel{只读} etex, (0,0)) shifted (-9u, 0);
+
+	draw itemArrowRW((-6u, 0), (-5u,0));
+	label.rt(btex \mplabel{读写} etex, (0,0)) shifted (-5u, 0);
+
+	draw itemArrow((-2u, 0), (-1u,0));
+	label.rt(btex \mplabel{控制} etex, (0,0)) shifted (-1u, 0);
+)
+enddef;
+
+%draw itemLengend shifted (0, -7v);
+
+\stopreusableMPgraphic
+

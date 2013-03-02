@@ -1353,6 +1353,13 @@ image(
 )
 enddef;
 
+vardef txtFrameDashed(expr xs, ys, lbl) =
+image(
+	draw randompath (0,randomFactor) (unitsquare shifted (-0.5,-0.5) xscaled xs yscaled ys) dashed evenly scaled 1;
+	label(lbl, (0,0));
+)
+enddef;
+
 vardef blankFrame(expr xs, ys) =
 image(
 	draw randompath (0,randomFactor) (unitsquare shifted (-0.5,-0.5) xscaled xs yscaled ys);
