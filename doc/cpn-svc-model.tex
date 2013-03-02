@@ -164,7 +164,69 @@ public:
 然后完成自身状态的转换。
 
 \startnotepar
-「设备...」中除了「设备」还有其他「状态机」会用到的 pollee，如定时器。
+「设备...」中除了「设备」还有「状态机」会用到的其他 pollee，如定时器。
+\stopnotepar
+
+下面介绍熔接机中一些主要业务的实现，每一种业务均从三方面进行介绍：
+\startigBase
+\item 消息，与其他模块交互用。
+\item 流程，业务的主要流程。
+\item 类图，业务的具体实现。
+\stopigBase
+\section{业务：熔接}
+
+熔接是熔接机的核心业务，也是所有业务中涉及器件最多、最复杂的，本节主要介绍此业务的实现。
+
+\subsection{消息}
+熔接业务主要与 UI 部分进行交互，所使用的消息包括：
+\startigBase
+\item fs_start：来自 UI，用于启动熔接；
+\item fs_stop：来自 UI，用于停止熔接；
+\item fs_state：发往 UI，用于报告状态。
+\stopigBase
+目前实现中业务所需的配置数据，如熔接参数、操作选项等，均来由 fs_start 消息，
+将来可以添加一个不带配置数据的 start 消息，这样只有第一次启动熔接的时候需要发送 fs_start，
+后面如果配置数据没有变化，就只需发送不带配置数据的 start 消息即可。
+
+\subsection{流程}
+
+\reffig{fs_sm}是熔接业务的主要流程图。
+
+\placefigure[here][fig:fs_sm]
+{熔接业务流程图}
+{\externalfigure[mp/umls-2.pdf]}
+
+为了简化问题，\reffig{fs_sm}中只画出了主要流程。
+由\reffig{fs_sm}可以看出，熔接业务主要有两大状态，一为「idle」，即空闲态；
+一为「running」，即运行态。
+
+「idle」是熔接业务的初始状态。目前此状态下主要处理的事件是 evStart，
+由此业务的控制器根据消息 fs_start 转换而来。
+当收到此事件后，转变为「running」状态。
+
+「running」状态中的所有子状态都可以看作是熔接的一个步骤，这些步骤在正常情况下是顺序跳转的。
+对于任何一个步骤而言，
+如果收到了 evStop 事件（由控制器根据消息 fs_stop 转换而来），
+或者出现了错误则跳转到「idle」态，
+如果是出现了错误，还要通过控制器发送消息 fs_state 上报错误讯息。
+熔接结束也会跳转到「idle」态，并上报状态。
+此状态下所处理的事件列表：
+\startigBase
+\item evStop：停止熔接，收到此事件后会转入「idle」态，并执行一些初始化操作，比如电机复位。
+\item evContinue：继续熔接，当子状态为「pause1」和「pause2」时接收到此事件会跳转到下一个状态。
+\item evEntryAct：此事件为状态机内部事件，由状态机进入某一个状态是自发自收，
+比如，进入「push1」状态后就会发送此事件，接收到此事件后会检查光纤间距是否达到了预设值，
+如果是，则跳转到下一状态，否则操控电机。
+\item evMotorStop：电机停止事件，此事件由电机中断出发，代表电机运行完成，可以继续操控电机了。
+\item evHvbTimeout：高压板放电时间已经达到了预设值，收到此事件后关闭高压板，不再放电。
+\stopigBase
+
+\startnotepar
+控制器在接收到配置数据后需要判断是否位于「running」态，如果是，则丢弃配置数据并回告错误讯息。
+即熔接业务运行时不允许修改配置数据。
+
+另外，「running」中的子状态发生变化时（正常流程）是否需要上报？
+如果 UI 上除图像外还要以文字的形式显示当前状态，则需要上报，暂时不上报，如有需要再添加。
 \stopnotepar
 
 %\color[red]{\bfa\textbackslash\textbackslash TODO： 请添加相关内容。}
