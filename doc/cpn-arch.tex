@@ -7,7 +7,7 @@
 
 \chapter{软件架构}
 \section{总体架构}
-软件总体架构如\reffig{wm_sw_arch} 所示，
+软件总体架构如\reffig{fs_sw_arch} 所示，
 共分为两大部分，一是应用（图的上半部分），一是驱动（图的下半部分）。
 应用主要实现的是 GUI 以及熔接机的主要业务逻辑，另外还包含存档、读档等功能；
 而此处的驱动为广义的驱动，不光包含驱动本身，还包含供应用使用的 Agent。
@@ -15,12 +15,15 @@
 目前考虑以多线程的方式实现，但在具体实施时可能会考虑往多进程迁移的可能，
 尽量减少业务代码对多进程、多线程的依赖。
 
-\input{fig/wm_sw_arch.tex}
-\placefigure[here][fig:wm_sw_arch]
-{熔接机软件总体架构}
-{\reuseMPgraphic{wmSwArch}}
+%\input{fig/wm_sw_arch.tex}
+%\placefigure[here][fig:wm_sw_arch]
+%{熔接机软件总体架构}
+%{\reuseMPgraphic{wmSwArch}}
+\input{fig/fs_sw_arch.tex}
+\placefigure[force][fig:fs_sw_arch]{熔接机软件总体架构}
+            {\FLOWchart[fs_sw_arch]}
 
-\reffig{wm_sw_arch}中的箭头所展示的主要是调用关系。
+\reffig{fs_sw_arch}中的箭头所展示的主要是调用关系。
 
 \section{应用部分}
 应用部分主要采用 MVC 模式，
