@@ -1,0 +1,257 @@
+\startcomponent cpn-svcHeat
+\product wm-sw-arch
+
+\chapter{业务：加热}
+
+加热是熔接机的另一项核心业务，本节主要介绍此业务的实现。
+
+\section{消息}
+加热业务主要与 UI 部分进行交互，所使用的消息包括：
+\startigBase
+\item heat_start：来自 UI，用于启动加热；
+\item heat_stop：来自 UI，用于停止加热；
+\item heat_state：发往 UI，用于报告状态。
+\stopigBase
+目前实现中业务所需的配置数据，如加热时间、加热温度等，均来由 fs_start 消息，
+将来可以添加一个不带配置数据的 start 消息，这样只有第一次启动加热的时候需要发送 heat_start，
+后面如果配置数据没有变化，就只需发送不带配置数据的 start 消息即可。
+
+\section{流程}
+
+\reffig{heat_sm}是加热业务的主要流程图。
+
+\placefigure[here][fig:heat_sm]
+{加热业务流程图}
+{\externalfigure[mp/heat_process-1.pdf]}
+
+由\reffig{heat_sm}可以看出，加热业务主要有两大状态，一为「idle」，即空闲态；
+一为「running」，即运行态。
+
+「idle」是加热业务的初始状态。目前此状态下主要处理的事件是 evStart，
+由此业务的控制器根据消息 heat_start 转换而来。
+当收到此事件后，转变为「running」状态。
+
+「running」状态中主要由三种状态：
+\startigBase[indentnext=no]
+\item ascending：温度上升态；
+\item descending：温度下降态；
+\item cooling：冷却态。
+\stopigBase
+对于以上三种状态的任一种而言，
+如果收到了 evStop 事件（由控制器根据消息 heat_stop 转换而来），
+或者出现了错误则跳转到「idle」态，
+如果是出现了错误，还要通过控制器发送消息 heat_state 上报错误讯息。
+加热结束也会跳转到「idle」态，并上报状态。
+此状态下所处理的事件列表：
+\startigBase
+\item evStop：停止加热，收到此事件后会转入「idle」态，并执行一些初始化操作，比如停止定时器。
+\item evEntryAct：此事件为状态机内部事件，由状态机进入某一个状态时自发自收，
+比如，进入「cooling」状态后就会发送此事件，接收到此事件后会检查温度是否已经低于预设值，
+如果是，则「running」状态结束，并跳转到「idle」。
+\item evHeatTimeout：加热时间已经达到了预设值，需要停止加热。
+\item evCheckTimeout：周期性定时消息，用于检查温度。
+\stopigBase
+
+\startnotepar
+控制器在接收到配置数据后需要判断是否位于「running」态，如果是，则丢弃配置数据并回告错误讯息。
+即加热业务运行时不允许修改配置数据。
+
+另外，「running」中的子状态发生变化时（正常流程）是否需要上报？
+如果 UI 上除图像外还要以文字的形式显示当前状态，则需要上报，暂时不上报，如有需要再添加。
+\stopnotepar
+
+\section{类图}
+
+\reffig{heat_class_diag} 是加热业务的类图（仅包括主要类）。
+\placefigure[here][fig:heat_class_diag]
+{加热业务类图}
+{\externalfigure[mp/heat_class_diag-1.pdf]}
+由图中可以看出，加热业务主要由三个类构成：
+\startigBase
+\item svcHeating：是此业务的核心类，继承自执行模型中的「poller」，
+相当于业务的「控制器」；
+\item heat_sm：是此业务的「状态机」；
+\item heat_ctx：是此业务的「上下文」。
+\stopigBase
+下面分别介绍这三个类（只由代码主干，其他以 \ccmm{...} 取代）。
+
+\subsection{类： svcHeating}
+
+\startCPP
+class svcHeating : public exemodel::poller {
+	...
+private:
+	/// 处理 poller 由 m_svr 收到的消息
+	void __svr_cb(exemodel::serveree::args_t & args);
+	/// 用于检查加热器温度的周期性定时器回调
+	__checkTmr_cb(timeree::args_t & args);
+	/// 用于停止加热的一次性定时器回调
+	__heatTmr_cb(timeree::args_t & args);
+
+	/// 状态机用此函数上报状态
+	__report(const std::string &);
+private:
+	exemodel::serveree m_svr;	/// server，用于与其他模块通信
+	msg::recver m_recver;		/// 消息接收器，与 m_svr 配合使用
+	msg::sender m_sender;		/// 消息发送器，与 m_svr 配合使用
+
+	timeree m_check_tmr;		/// 用于检查加热器温度的周期性定时器
+	timeree m_heat_tmr;		/// 用于停止加热的一次性定时器
+
+	heater m_heater;		/// 加热器
+	temp_sensor m_tmp_sensor;	/// 温度传感器
+
+	cfg_data_t m_cfg;		/// 配置数据
+
+	heat_ctx m_ctx;			/// 上下文
+	heat_sm m_sm;			/// 状态机
+};
+\stopCPP
+
+此类在构造函数中会将加热器、温度传感器、配置数据等的引用添加到 \cvar{m_ctx} 中，
+将 \cvar{__report} 和 \cvar{m_ctx} 都传递给 \cvar{m_sm}。
+
+\capi{__svr_cb} 中会处理收到的消息，并将其转换成事件发送给 \cvar{m_sm}。
+
+\subsection{类： heat_ctx}
+
+\startCPP
+class heat_ctx {
+	...
+public:
+	timeree & m_check_tmr;		/// 用于检查加热器温度的周期性定时器
+	timeree & m_heat_tmr;		/// 用于停止加热的一次性定时器
+
+	heater & m_heater;		/// 加热器
+	temp_sensor & m_tmp_sensor;	/// 温度传感器
+
+	const cfg_data_t & m_cfg;		/// 配置数据
+};
+\stopCPP
+
+此类中主要存储的是相关设备以及配置数据的引用，注意配置数据时 \cqlf{const} 引用，
+即状态机在使用此类时不能修改配置数据。为了方便状态机的使用，本来可以为此类添加一些接口，
+但考虑到控制的复杂性，可能要添加的接口很多，因此所有引用都做成 \ckey{public} 的，
+由状态机直接访问。
+
+\subsection{类： heat_sm}
+
+\startCPP
+struct stIdle;	/// 初始状态
+struct heat_sm : boost::statechart::state_machine< heat_sm, stIdle > {
+	...
+public:
+	heat_ctx & m_ctx;	/// 上下文的引用
+	std::function<void(const std::string & )> m_reporter;	/// 用于上报状态
+};
+\stopCPP
+
+状态机里面主要由两项内容：一是上下文的引用，一是用于上报状态的回调，均在构造时确定。
+
+\reftab{heat_state_list}中列出了加热业务状态机中的所有状态及相应的类名。
+\reftab{heat_evt_list}中列出了加热业务状态机所处理的所有事件及相应的类名。
+
+\startcolumns
+\placetable[here][tab:heat_state_list]{加热业务状态列表}{
+\input{tbl/tbl_heat_state_list.tex}
+}
+\placetable[here][tab:heat_evt_list]{加热业务事件列表}{
+\input{tbl/tbl_heat_evt_list.tex}
+}
+\stopcolumns
+
+下面是加热业务几个主要状态的具体实现：
+
+\startCPP
+/*
+ * state: running
+ */
+struct stAscending;
+struct stRunning : sc::simple_state< stRunning, heat_sm, stAscending > {
+	typedef sc::transition< evStop, stIdle > reactions;
+public:
+	stRunning(void)
+	{
+		/// \todo 进入此状态时启动两个定时器
+	}
+
+	~stRunning()
+	{
+		/// \todo 退出此状态时停止两个定时器
+	}
+};
+
+/*
+ * state: ascending
+ */
+struct stDescending;
+struct stCooling;
+struct stAscending : sc::state< stAscending, stRunning > {
+	typedef boost::mpl::list<
+		sc::transition< evHeatTimeout, stCooling >,
+		sc::custom_reaction< evCheckTimeout >
+	> reactions;
+public:
+	stAscending(my_context ctx)
+	: my_base(ctx)
+	{
+		/// \todo 进入此状态时打开加热器
+	}
+
+	~stAscending()
+	{
+		/// \todo 退出此状态时关闭加热器
+	}
+
+	sc::result react(const evCheckTimeout &)
+	{
+		if (温度超过预设值) {
+			return transit< stDescending >();
+		}
+
+		/// \todo 如果温度接近预设值可能需要调整加热策略，
+		/// 比如关闭发热量大的，打开发热量小的。
+
+		return discard_event();
+	}
+};
+
+/*
+ * state: descending
+ */
+struct stDescending : sc::state< stDescending, stRunning > {
+	typedef boost::mpl::list<
+		sc::transition< evHeatTimeout, stCooling >,
+		sc::custom_reaction< evCheckTimeout >
+	> reactions;
+public:
+	stDescending(my_context ctx)
+	: my_base(ctx)
+	{
+	}
+
+	sc::result react(const evCheckTimeout &)
+	{
+		if (温度低于预设值) {
+			return transit< stAscending >();
+		}
+
+		return discard_event();
+	}
+};
+
+/*
+ * state: cooling
+ */
+struct stCooling : sc::simple_state< stCooling, stRunning > {
+	typedef sc::custom_reaction< evCheckTimeout > reactions;
+public:
+	sc::result react(const evCheckTimeout &)
+	{
+		/// \todo check sensor tmperature
+		return transit< stIdle >();
+	}
+};s
+\stopCPP
+
+\stopcomponent

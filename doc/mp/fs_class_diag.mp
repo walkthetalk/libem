@@ -3,7 +3,7 @@ input metauml;
 
 beginfig(1);
 	pair pFSL, pFSH;
-	Class.fusionSplicer("fusion_splicer")(
+	Class.fusionSplicer("svcFusionSplicing")(
 		"-m_svr: serveree",
 		"-m_recver: recver",
 		"-m_sender: sender",
@@ -26,16 +26,16 @@ beginfig(1);
 
 	Class.poller("poller")()("+run()");
 	poller.s = fusionSplicer.n + (0, 20);
-	
+
 	Class.cfgData("cfg_data_t")()();
-	cfgData.w = fusionSplicer.e + (20,-65);
+	cfgData.w = fusionSplicer.e + (30,-65);
 
 	Class.motor("motor")()();
 	motor.w = cfgData.e + (20, 0);
-	
+
 	Class.camera("camera")()();
 	camera.w = motor.e + (20,0);
-	
+
 	Class.hvb("hvb")()();
 	hvb.w = camera.e + (20,0);
 
@@ -47,28 +47,29 @@ beginfig(1);
 
 	Class.serveree("serveree")()();
 	serveree.s = fsSm.n + (0, 20);
-	
+
 	% draw
 	drawObjects(fusionSplicer, poller, cfgData, motor, camera, hvb, fsCtx, fsSm, serveree);
-	pFSL = (fusionSplicer.right, cfgData.bottom - 20);
-	link(compositionUni)(pathManhattanY(cfgData.s, pFSL));
-	link(compositionUni)(pathManhattanY(motor.s, pFSL));
-	link(compositionUni)(pathManhattanY(camera.s, pFSL));
-	link(compositionUni)(pathManhattanY(hvb.s, pFSL));
+
+	pFSL = (fusionSplicer.right+20, fusionSplicer.midy);
+	link(compositionUni)(rpathStepY(pFSL, cfgData.s, -100)--fusionSplicer.e);
+	link(compositionUni)(rpathStepY(pFSL, motor.s, -100)--fusionSplicer.e);
+	link(compositionUni)(rpathStepY(pFSL, camera.s, -100)--fusionSplicer.e);
+	link(compositionUni)(rpathStepY(pFSL, hvb.s, -100)--fusionSplicer.e);
+
 	pFSH = fsCtx.s;
-	link(aggregationUni)(pathStepY(cfgData.n, pFSH, 20));
-	link(aggregationUni)(pathStepY(motor.n, pFSH, 20));
-	link(aggregationUni)(pathStepY(camera.n, pFSH, 20));
-	link(aggregationUni)(pathStepY(hvb.n, pFSH, 20));
+	link(aggregationUni)(rpathStepY(pFSH, cfgData.n, -20));
+	link(aggregationUni)(rpathStepY(pFSH, motor.n, -20));
+	link(aggregationUni)(rpathStepY(pFSH, camera.n, -20));
+	link(aggregationUni)(rpathStepY(pFSH, hvb.n, -20));
 
 	link(aggregationUni)(fsCtx.n -- fsSm.s);
-	link(compositionUni)(pathHorizontal(fsCtx.w, fusionSplicer.right));
 
-	link(compositionUni)(pathHorizontal(fsSm.w, fusionSplicer.right));
-
-	link(compositionUni)(pathHorizontal(serveree.w, fusionSplicer.right));
+	link(compositionUni)(rpathStepX(fusionSplicer.e, fsCtx.w, 20));
+	link(compositionUni)(rpathStepX(fusionSplicer.e, fsSm.w, 20));
+	link(compositionUni)(rpathStepX(fusionSplicer.e, serveree.w, 20));
 
 	link(inheritance)(fusionSplicer.n -- poller.s);
-endfig; 
+endfig;
 
 end;
