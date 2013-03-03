@@ -1,6 +1,3 @@
-#include <sys/timerfd.h>
-
-#include <assert.h>
 #include <sys/epoll.h>
 #include <unistd.h>
 
@@ -20,7 +17,7 @@ timeree::~timeree()
 }
 
 void timeree::start(void)
-{ 
+{
 	//start timer
 	struct itimerspec tmpTime = {
 		m_interval,
@@ -58,7 +55,7 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 	if(evts & EPOLLIN){
 		timeree::args_t args = { mgr, *this, evts };
 		this->exe(args);
-	  
+
 		if(!m_reuse){
 			stop();
 		}
