@@ -1,4 +1,4 @@
-tex_name=wm-sw-arch
+tex_name=fusion-splicer-SD
 
 tex_deps:=$(shell find . -type f -name \*.tex)
 tex_deps+=$(shell find . -type f -name \*.bib)
