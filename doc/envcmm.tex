@@ -222,29 +222,6 @@ bolditalic=texgyreherosbolditalic]
   style=\rm\bf,
 ]
 
-\def\clcmm{\dodoubleempty\doCLCMM}
-\unexpanded\def\doCLCMM[#1][#2]#3{%
-\doifsomethingelse{#2}%
-{\ccmm{#3}\ccmmsuffix{#1}\ccmm{x}\ccmmsuffix{#2}}%
-{\doifsomethingelse{#1}{\ccmm{#3}\ccmmsuffix{#1}}{\ccmm{#3}}}%
-}
-
-\def\clemp{\dodoubleempty\doCLEMP}
-\unexpanded\def\doCLEMP[#1][#2]#3{%
-\ifsecondargument
-\cemp{#3}\cempsuffix{#1}\cemp{x}\cempsuffix{#2}%
-\else
-\iffirstargument
-\cemp{#3}\cempsuffix{#1}%
-\else
-\cemp{#3}%
-\fi
-\fi
-}
-
-\def\cldt{\clcmm}
-\def\cldtemp{\clemp}
-\def\clapi{\clemp}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%layout%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \definepapersize[CD][width=20cm,height=20cm]
@@ -422,7 +399,7 @@ bolditalic=texgyreherosbolditalic]
 ]
 
 \definetyping[CPP][%option=c,
-  bodyfont=9pt,
+  bodyfont=7pt,
   %space	on off
   %page	yes no
   %option	slanted normal commands color none
@@ -1203,7 +1180,7 @@ bolditalic=texgyreherosbolditalic]
 ]
 
 \setupinteraction[
-  title={关于下一代熔接机软件的一些想法},
+  title={熔接机软件设计说明书},
   author={倪庆亮},
   subtitle={Khronos OpenCL Working Group},
   keyword={OpenCL 1.2}

@@ -233,11 +233,174 @@ public:
 
 \subsection{类图}
 
+\reffig{fs_class_diag} 是熔接业务的类图（仅包括主要类）。
 \placefigure[here][fig:fs_class_diag]
 {熔接业务类图}
 {\externalfigure[mp/fs_class_diag-1.pdf]}
+由图中可以看出，熔接业务主要由三个类构成：
+\startigBase
+\item fusion_splicer：是此业务的核心类，继承自执行模型中的「poller」，
+相当于业务的「控制器」；
+\item fs_sm：是此业务的「状态机」；
+\item fs_ctx：是此业务的「上下文」。
+\stopigBase
+下面分别介绍这三个类（只由代码主干，其他以 \ccmm{...} 取代）。
+
+\subsubsection{类： fusion_splicer}
+
+\startCPP
+class fusion_splicer : public exemodel::poller {
+	...
+private:
+	/// 处理 poller 由 m_svr 收到的消息
+	void __svr_cb(exemodel::serveree::args_t & args);
+	/// 分别处理四个电机的中断
+	void __motorLX_cb(motor::args_t & args);
+	void __motorLY_cb(motor::args_t & args);
+	void __motorRX_cb(motor::args_t & args);
+	void __motorRY_cb(motor::args_t & args);
+private:
+	/// 状态机用此函数上报状态
+	void __report(const std::string & info);
+private:
+	exemodel::serveree m_svr;	/// server，用于与其他模块通信
+	msg::recver m_recver;		/// 消息接收器，与 m_svr 配合使用
+	msg::sender m_sender;		/// 消息发送器，与 m_svr 配合使用
+
+	camera	m_camera;	/// 摄像头
+	motor	m_motorLX;	/// 左侧 X 轴电机
+	motor	m_motorLY;	/// 左侧 Y 轴电机
+	motor	m_motorRX;	/// 右侧 X 轴电机
+	motor	m_motorRY;	/// 右侧 Y 轴电机
+	hvb	m_hvb;		/// 高压板
+
+	cfg_data_t m_cfg;	/// 配置数据
+
+	svcFS::fs_ctx m_ctx;	/// 上下文
+	svcFS::fs_sm m_sm;	/// 状态机
+};
+\stopCPP
+
+此类在构造函数中会将摄像头、电机、高压板、配置数据等的引用添加到 \cvar{m_ctx} 中，
+将 \cvar{__report} 和 \cvar{m_ctx} 都传递给 \cvar{m_sm}。
+
+\capi{__svr_cb} 中会处理收到的消息，并将其转换成事件发送给 \cvar{m_sm}。
+
+\subsubsection{类： fs_ctx}
+
+\startCPP
+class fs_ctx {
+	...
+public:
+	camera	& m_camera;		/// 摄像头
+	motor	& m_motorLX;		/// 左侧 X 轴电机
+	motor	& m_motorLY;		/// 左侧 Y 轴电机
+	motor	& m_motorRX;		/// 右侧 X 轴电机
+	motor	& m_motorRY;		/// 右侧 Y 轴电机
+	hvb	& m_hvb;		/// 高压板
+	const cfg_data_t & m_cfg;	/// 配置数据
+};
+\stopCPP
+
+此类中主要存储的是相关设备以及配置数据的引用，注意配置数据时 \cqlf{const} 引用，
+即状态机在使用此类时不能修改配置数据。为了方便状态机的使用，本来可以为此类添加一些接口，
+但考虑到控制的复杂性，可能要添加的接口很多，因此所有引用都做成 \ckey{public} 的，
+由状态机直接访问。
+
+\subsubsection{类： fs_sm}
+
+\startCPP
+struct stIdle;	/// 初始状态
+struct fs_sm : boost::statechart::state_machine< fs_sm, stIdle > {
+	...
+public:
+	fs_ctx & m_ctx;		/// 上下文的引用
+	std::function<void(const std::string & )> m_reporter;	/// 用于上报状态的回调
+};
+\stopCPP
+
+状态机里面主要由两项内容：一是上下文的引用，一是用于上报状态的回调，均在构造时确定。
+
+\reftab{fs_state_list}中列出了熔接业务状态机中的所有状态及相应的类名。
+
+\placetable[here][tab:fs_state_list]{熔接业务状态列表}{
+\input{tbl/tbl_fs_list.tex}
+}
+
+下面以 \ctype{stPush1} 的代码为例介绍状态机的执行方式：
+\subsubsubsection{状态： push1}
+\startCPP
+struct stPush1 : sc::state< stPush1, stRunning > {
+	/// 此状态下可以处理下列三种事件：
+	typedef boost::mpl::list<
+		sc::custom_reaction< evEntryAct >,
+		sc::custom_reaction< evMotorStop<motorId_t::LX> >,
+		sc::custom_reaction< evMotorStop<motorId_t::RX> >
+	> reactions;
+public:
+	stPush2(my_context ctx)
+	: my_base(ctx)
+	{
+		/// 进入此状态后先自发自收事件 evEntryAct
+		post_event(evEntryAct());
+	}
+
+	sc::result react(const evEntryAct &)
+	{
+		if (两根光纤均已到位) {
+			/// 跳转到清洁放电状态
+			return transit<stClearing>();
+		}
+
+		if (左侧光纤没有到位) {
+			/// \todo 操控左侧 X 轴电机
+		}
+
+		if (右侧光纤没有到位) {
+			/// \todo 操控右侧 X 轴电机
+		}
+
+		/// 维持此状态不变
+		return discard_event();
+	}
+
+	sc::result react(const evMotorStop<motorId_t::LX> &)
+	{
+		if (左侧光纤没有到位) {
+			/// \todo 操控左侧 X 轴电机
+		}
+
+		if (右侧光纤已经到位) {
+			/// 此时两根光纤均已到位
+			/// 跳转到清洁放电状态
+			return transit<stClearing>();
+		}
+
+		/// 维持此状态不变
+		return discard_event();
+	}
+
+	sc::result react(const evMotorStop<motorId_t::RX> &)
+	{
+		if (右侧光纤没有到位) {
+			/// \todo 操控右侧 X 轴电机
+		}
+
+		if (左侧光纤已经到位) {
+			/// 此时两根光纤均已到位
+			/// 跳转到清洁放电状态
+			return transit<stClearing>();
+		}
+
+		/// 维持此状态不变
+		return discard_event();
+	}
+};
+\stopCPP
+
+\startnotepar
+可能需要添加定时器来检查电机是否已经停止运行，以避免丢中断所带来的问题。
+\stopnotepar
 
 %\color[red]{\bfa\textbackslash\textbackslash TODO： 请添加相关内容。}
-
 \stopcomponent
-
