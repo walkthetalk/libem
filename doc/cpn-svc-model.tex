@@ -322,10 +322,16 @@ public:
 状态机里面主要由两项内容：一是上下文的引用，一是用于上报状态的回调，均在构造时确定。
 
 \reftab{fs_state_list}中列出了熔接业务状态机中的所有状态及相应的类名。
+\reftab{fs_evt_list}中列出了熔接业务状态机所处理的所有事件及相应的类名。
 
+\startcolumns
 \placetable[here][tab:fs_state_list]{熔接业务状态列表}{
-\input{tbl/tbl_fs_list.tex}
+\input{tbl/tbl_fs_state_list.tex}
 }
+\placetable[here][tab:fs_evt_list]{熔接业务事件列表}{
+\input{tbl/tbl_fs_evt_list.tex}
+}
+\stopcolumns
 
 下面以 \ctype{stPush1} 的代码为例介绍状态机的执行方式：
 \subsubsubsection{状态： push1}
