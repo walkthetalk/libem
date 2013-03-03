@@ -3,11 +3,11 @@
  * \file	exemodel/timeree.hpp
  * \author	justgaoyuan<gao_yuangy@126.com>
  */
-#include "exemodel/pollee.hpp" 
+#include "exemodel/pollee.hpp"
 #include "exemodel/evt_cb.hpp"
 
 namespace exemodel {
- 
+
 /**
  *\class timeree
  *\brief timeree pollee,used by \em poller
@@ -21,7 +21,7 @@ public:
 	 * \param interval	interval for the periodic timeree
 	 * \param reuse		reuse the timer
 	 */
-	explicit timeree(struct timespec interval, bool reuse);
+	explicit timeree(struct timespec interval = { 0, 0 }, bool reuse = true);
 	virtual ~timeree();
 public:
 	/**
