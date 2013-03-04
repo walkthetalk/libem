@@ -55,7 +55,7 @@
 \subsection{消息通信}
 
 既然有多进程、多线程的存在，就必须为其制定通信方式，上一节中已经介绍了几种 \ccmm{pollee}，
-可以优先选用 socket 方式以避免进程、线程的选择所带来的影响。
+优先选用 socket 方式以避免进程、线程的选择所带来的影响。
 通信机制确立以后，还有一个问题就是消息格式，或者说数据序列化、反序列化的方式。
 目前应用较广的是 msgpack 和 protobuf 两种 SDK，通过对比测试，基于性能和复杂性方面的考虑，
 最终选用 msgpack 作为数据序列化、反序列化的工具，
@@ -66,7 +66,7 @@
 \startitem
 \ccmm{recver}，即消息接收器，它提供了几个接口，使用示例\footnote{%
 \useURL[wiki-table-driven][http://en.wikipedia.org/wiki/Table-driven]
-\ccmm{switch / case} 仅为示例，如果消息比较多，则改用表 Table-Driven
+\ccmm{switch / case} 仅为示例，如果消息比较多，则改用 Table-Driven
 \from[wiki-table-driven] 的方式来实现。}：
 \startCPP
 msg::recver pac;
