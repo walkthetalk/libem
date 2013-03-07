@@ -5,11 +5,11 @@
 #include "exemodel/poll_tools.hpp"
 
 namespace exemodel{
-timeree::timeree(struct timespec interval, bool reuse)
+timeree::timeree(bool once,struct timercycle value)
 : pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
-, m_interval(interval)
-, m_reuse(reuse)
+, m_value(value)
 {
+	setmodel(mod);
 }
 
 timeree::~timeree()
@@ -21,7 +21,7 @@ void timeree::start(void)
 	//start timer
 	struct itimerspec tmpTime = {
 		m_interval,
-		m_interval,
+		m_value,
 	};
 	int ret = timerfd_settime(_fd_(), 0, &tmpTime, NULL);
 	validate_ret(ret,"start timer error!\n");
@@ -36,6 +36,36 @@ void timeree::stop(void)
 	};
 	int ret = timerfd_settime(_fd_(), 0, &tmpTime, NULL);
 	validate_ret(ret,"stop timer error!\n");
+}
+
+bool timeree::setcycle(struct timercycle cycle)
+{
+	//reset cycle
+	if((cycle.nsec!=0)||(cycle.sec!=0))
+	{
+		m_value.tv_sec=cycle.sec;
+		m_value.tv_nsec=cycle.nsec;
+		return true;
+	}else
+	{
+		std::cout << "WARNING:: cycle cann't set zero!" << std::endl;
+		return false;
+	}
+
+}
+
+void timeree::setmodel(bool once)
+{
+	//set model
+	if(once)             //ONCE
+	{
+		m_interval.tv_nsec=0;
+		m_interval.tv_sec=0;
+	}
+	else               //LOOP
+	{
+		m_interval.tv_nsec=1;
+	}
 }
 
 void timeree::dispose(poller & mgr, uint32_t evts)
@@ -56,9 +86,6 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 		timeree::args_t args = { mgr, *this, evts };
 		this->exe(args);
 
-		if(!m_reuse){
-			stop();
-		}
 	}
 }
 

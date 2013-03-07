@@ -2,6 +2,7 @@
 /**
  * \file	exemodel/timeree.hpp
  * \author	justgaoyuan<gao_yuangy@126.com>
+ * 			linxiang<linxiang2019@163.com>
  */
 #include <sys/timerfd.h>
 
@@ -9,6 +10,14 @@
 #include "exemodel/evt_cb.hpp"
 
 namespace exemodel {
+
+/**
+ * timercycle for setting period
+ */
+struct timercycle{
+	uint32_t sec;
+	uint32_t nsec;
+};
 
 /**
  *\class timeree
@@ -23,7 +32,7 @@ public:
 	 * \param interval	interval for the periodic timeree
 	 * \param reuse		reuse the timer
 	 */
-	explicit timeree(struct timespec interval = { 0, 0 }, bool reuse = true);
+	explicit timeree(bool once, struct timercycle value={0,0});
 	virtual ~timeree();
 public:
 	/**
@@ -31,6 +40,8 @@ public:
 	 */
 	void start(void);
 	void stop(void);
+	bool setcycle(struct timercycle cycle);
+	void setmodel(bool once);       //false:loop   true:once
 public:
 	/**
 	 * \brief used for disposing the event caughted by \em poller attached
@@ -40,8 +51,8 @@ private:
 	timeree(const timeree & rhs) = delete;
 	timeree & operator = (const timeree & rhs ) = delete;
 private:
-	struct timespec m_interval;
-	bool m_reuse;
+	struct timespec m_value;                //it_value
+	struct timespec m_interval;             //it_interval
 };
 
 }
