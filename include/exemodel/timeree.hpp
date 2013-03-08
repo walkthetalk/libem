@@ -40,8 +40,8 @@ public:
 	 */
 	void start(void);
 	void stop(void);
-	bool setcycle(struct timercycle cycle);
-	void setmodel(bool once);       //false:loop   true:once
+	void setcycle(struct timercycle cycle);
+	void setmodel(bool oneshot);       //false:loop   true:once
 public:
 	/**
 	 * \brief used for disposing the event caughted by \em poller attached

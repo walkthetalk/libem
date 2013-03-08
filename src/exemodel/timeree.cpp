@@ -38,26 +38,24 @@ void timeree::stop(void)
 	validate_ret(ret,"stop timer error!\n");
 }
 
-bool timeree::setcycle(struct timercycle cycle)
+void timeree::setcycle(struct timercycle cycle)
 {
 	//reset cycle
 	if((cycle.nsec!=0)||(cycle.sec!=0))
 	{
 		m_value.tv_sec=cycle.sec;
 		m_value.tv_nsec=cycle.nsec;
-		return true;
 	}else
 	{
 		std::cout << "WARNING:: cycle cann't set zero!" << std::endl;
-		return false;
 	}
 
 }
 
-void timeree::setmodel(bool once)
+void timeree::setmodel(bool oneshot)
 {
 	//set model
-	if(once)             //ONCE
+	if(oneshot)             //ONCE
 	{
 		m_interval.tv_nsec=0;
 		m_interval.tv_sec=0;
