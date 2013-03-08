@@ -6,9 +6,9 @@
 
 namespace exemodel{
 timeree::timeree(bool oneshot,struct timercycle value)
-: pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
-, m_value(value)
+:pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
 {
+	setcycle(value);
 	setmodel(oneshot);
 }
 
