@@ -8,7 +8,8 @@ namespace exemodel{
 timeree::timeree(bool oneshot,struct timercycle value)
 :pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
 {
-	setcycle(value);
+	m_value.tv_sec=value.sec;
+	m_value.tv_nsec=value.nsec;
 	setmodel(oneshot);
 }
 
