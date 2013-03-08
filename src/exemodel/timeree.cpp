@@ -5,11 +5,11 @@
 #include "exemodel/poll_tools.hpp"
 
 namespace exemodel{
-timeree::timeree(bool once,struct timercycle value)
+timeree::timeree(bool oneshot,struct timercycle value)
 : pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
 , m_value(value)
 {
-	setmodel(once);
+	setmodel(oneshot);
 }
 
 timeree::~timeree()

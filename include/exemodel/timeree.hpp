@@ -32,7 +32,7 @@ public:
 	 * \param interval	interval for the periodic timeree
 	 * \param reuse		reuse the timer
 	 */
-	explicit timeree(bool once, struct timercycle value={0,0});
+	explicit timeree(bool oneshot, struct timercycle value={0,0});
 	virtual ~timeree();
 public:
 	/**
