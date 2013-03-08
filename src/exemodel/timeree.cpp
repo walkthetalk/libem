@@ -9,7 +9,7 @@ timeree::timeree(bool once,struct timercycle value)
 : pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
 , m_value(value)
 {
-	setmodel(mod);
+	setmodel(once);
 }
 
 timeree::~timeree()
