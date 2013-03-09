@@ -20,14 +20,13 @@ devicee::~devicee()
 
 void devicee::dispose(poller& mgr, uint32_t evts)
 {
-    //todo add body
-    if ((evts & ::EPOLLERR)) {
-            emlog("devicee ERROR");
-            return;
-        }
+	if ((evts & ::EPOLLERR)) {
+		emlog("devicee ERROR");
+		return;
+	}
 
-        devicee::args_t args = { mgr, *this, evts };
-        this->exe(args);
+	devicee::args_t args = { mgr, *this, evts };
+	this->exe(args);
 }
 
 }

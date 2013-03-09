@@ -30,9 +30,9 @@ public:
 	/**
 	 * \brief ctor of timeree
 	 * \param interval	interval for the periodic timeree
-	 * \param reuse		reuse the timer
+	 * \param oneshot	if true, oneshot, or periodic
 	 */
-	explicit timeree(bool oneshot, struct timercycle value={0,0});
+	explicit timeree(struct timercycle interval = {0,0}, bool oneshot = false);
 	virtual ~timeree();
 public:
 	/**
