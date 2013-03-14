@@ -31,20 +31,26 @@ public:
 	/**
 	 * \brief connect the callback user specified.
 	 */
+	/// \note deprecated
 	template<typename obj_t>
 	void connect(void (obj_t::*mf)(args_t & args), obj_t * pObj)
 	{
-		m_cbinfo = std::bind(mf, pObj,
-				std::placeholders::_1);
+		m_cbinfo = [mf, pObj](args_t & arg)	{
+			(pObj->*mf)(arg);
+		};
 	}
+	/// \note deprecated
 	template<typename obj_t>
 	void connect(void (obj_t::*mf)(void), obj_t * pObj)
 	{
-		m_cbinfo = std::bind([mf, pObj](args_t &)
-				{
-					(pObj->*mf)();
-				},
-				std::placeholders::_1);
+		m_cbinfo = [mf, pObj](args_t &)	{
+			(pObj->*mf)();
+		};
+	}
+
+	void connect(std::function<void(args_t &)>&& func)
+	{
+		m_cbinfo = func;
 	}
 
 	void connect(const evt_cb<pollee_t> & other)
