@@ -6,7 +6,7 @@
 
 namespace exemodel{
 timeree::timeree(struct timercycle interval, bool oneshot)
-:pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN | ::EPOLLERR))
+:pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN))
 {
 	m_value.tv_sec = interval.sec;
 	m_value.tv_nsec = interval.nsec;
@@ -24,7 +24,7 @@ void timeree::start(void)
 		m_interval,
 		m_value,
 	};
-	int ret = timerfd_settime(_fd_(), 0, &tmpTime, NULL);
+	int ret = ::timerfd_settime(_fd_(), 0, &tmpTime, NULL);
 	validate_ret(ret,"start timer error!\n");
 }
 
@@ -35,7 +35,7 @@ void timeree::stop(void)
 		 m_interval,
 		 {0,0},
 	};
-	int ret = timerfd_settime(_fd_(), 0, &tmpTime, NULL);
+	int ret = ::timerfd_settime(_fd_(), 0, &tmpTime, NULL);
 	validate_ret(ret,"stop timer error!\n");
 }
 
@@ -69,23 +69,15 @@ void timeree::setmodel(bool oneshot)
 
 void timeree::dispose(poller & mgr, uint32_t evts)
 {
-	if(evts & EPOLLERR){
-	      printf("timer error occurd fd %d\n",_fd_());
-	      return;
-	}
-	//read the timeout information
 	uint64_t buf = 0;
 	ssize_t ret = ::read(_fd_(), &buf, sizeof(buf));
 	if(ret != sizeof(buf)){
-		printf("read error!\n");
+		std::cout << "read error!" << std::endl;
 		return;
-		}
-
-	if(evts & EPOLLIN){
-		timeree::args_t args = { mgr, *this, evts };
-		this->exe(args);
-
 	}
+
+	timeree::args_t args = { mgr, *this, evts };
+	this->exe(args);
 }
 
 }
