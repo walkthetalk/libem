@@ -1,4 +1,3 @@
-#include <unistd.h>	// close
 #include <fcntl.h>	// fcntl
 
 #include "exemodel/poll_tools.hpp"

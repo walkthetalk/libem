@@ -3,6 +3,8 @@
  * \file	exemodel/pollee.hpp
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
+#include <unistd.h>
+
 #include <cstdint>
 #include <cstddef>
 
@@ -22,6 +24,11 @@ public:
 	 */
 	explicit pollee(int fd, uint32_t evts);
 	virtual ~pollee();
+public:
+	ssize_t read(void *buf, size_t nbyte)
+	{
+		return ::read(m_fd, buf, nbyte);
+	}
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
