@@ -3,6 +3,8 @@
  * \file	exemodel/devicee.hpp
  * \author	justgaoyuan<gao_yuangy@126.com>
  */
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include <cstdint>
 
