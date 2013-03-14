@@ -1,6 +1,3 @@
-#include <unistd.h>	// close
-#include <sys/epoll.h>
-
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/poller.hpp"
 #include "exemodel/pollee.hpp"

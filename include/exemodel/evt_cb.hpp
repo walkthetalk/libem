@@ -13,49 +13,26 @@ class poller;
  * \class evt_cb
  * \brief event callback, store the callback for specific type of \em pollee.
  */
-template<typename pollee_t>
+template<typename... _ArgTypes>
 class evt_cb {
+	typedef std::function<void(_ArgTypes...)> _cb_t;
 public:
-	/**
-	 * \brief the argument of callback.
-	 */
-	struct args_t {
-		poller & mgr;
-		pollee_t & ctx;
-		uint32_t & evts;
-	};
+	typedef evt_cb<_ArgTypes...> cb_t;
 public:
-	evt_cb() : m_cbinfo(nullptr) {}
-	~evt_cb() {}
+	evt_cb() : m_cb(nullptr) {}
+	virtual ~evt_cb() {}
 public:
 	/**
 	 * \brief connect the callback user specified.
 	 */
-	/// \note deprecated
-	template<typename obj_t>
-	void connect(void (obj_t::*mf)(args_t & args), obj_t * pObj)
+	void connect(_cb_t&& func)
 	{
-		m_cbinfo = [mf, pObj](args_t & arg)	{
-			(pObj->*mf)(arg);
-		};
-	}
-	/// \note deprecated
-	template<typename obj_t>
-	void connect(void (obj_t::*mf)(void), obj_t * pObj)
-	{
-		m_cbinfo = [mf, pObj](args_t &)	{
-			(pObj->*mf)();
-		};
+		m_cb = func;
 	}
 
-	void connect(std::function<void(args_t &)>&& func)
+	void connect(const cb_t & other)
 	{
-		m_cbinfo = func;
-	}
-
-	void connect(const evt_cb<pollee_t> & other)
-	{
-		m_cbinfo = other.m_cbinfo;
+		m_cb = other.m_cb;
 	}
 
 	/**
@@ -63,22 +40,21 @@ public:
 	 */
 	void disconnect(void)
 	{
-		m_cbinfo = nullptr;
+		m_cb = nullptr;
 	}
 
 	/**
 	 * \brief execute the callback stored.
 	 */
-	void exe(args_t & args)
+	void exe(_ArgTypes...args)
 	{
-		m_cbinfo(args);
+		m_cb(args...);
 	}
-
 private:
 	evt_cb(const evt_cb & rhs) = delete;
 	evt_cb & operator=(const evt_cb & rhs) = delete;
 private:
-	std::function<void(args_t &)> m_cbinfo;
+	_cb_t m_cb;
 };
 
 }

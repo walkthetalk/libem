@@ -1,4 +1,3 @@
-#include <sys/epoll.h>
 #include <sys/socket.h>
 
 #include "exemodel/poll_tools.hpp"
@@ -20,8 +19,7 @@ void connectee::dispose(poller & mgr, uint32_t evts)
 		return;
 	}
 
-	connectee::args_t args = { mgr, *this, evts };
-	this->exe(args);
+	this->exe(mgr, evts, *this);
 }
 
 size_t connectee::recv(void * buffer, size_t length)

@@ -1,6 +1,3 @@
-#include <sys/epoll.h>
-#include <unistd.h>
-
 #include "exemodel/timeree.hpp"
 #include "exemodel/poll_tools.hpp"
 
@@ -76,8 +73,7 @@ void timeree::dispose(poller & mgr, uint32_t evts)
 		return;
 	}
 
-	timeree::args_t args = { mgr, *this, evts };
-	this->exe(args);
+	this->exe(mgr, buf);
 }
 
 }

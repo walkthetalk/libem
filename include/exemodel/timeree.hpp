@@ -25,7 +25,7 @@ struct timercycle{
  */
 class timeree
 : public pollee
-, public evt_cb<timeree> {
+, public evt_cb<poller&, uint64_t> {
 public:
 	/**
 	 * \brief ctor of timeree

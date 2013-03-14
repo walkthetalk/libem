@@ -1,4 +1,3 @@
-#include <sys/epoll.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
@@ -13,7 +12,7 @@ namespace exemodel {
 serveree::serveree(uint16_t port)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
 	(uint32_t)(::EPOLLIN | ::EPOLLET))
-, evt_cb<connectee>()
+, connectee::cb_t()
 , m_destroycb(std::bind(&serveree::destroy, this, std::placeholders::_1))
 , m_connectee(nullptr)
 {

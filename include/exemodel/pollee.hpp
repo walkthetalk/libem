@@ -4,6 +4,7 @@
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
 #include <unistd.h>
+#include <sys/epoll.h>
 
 #include <cstdint>
 #include <cstddef>

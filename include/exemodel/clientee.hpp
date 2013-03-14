@@ -7,11 +7,16 @@
 #include "exemodel/evt_cb.hpp"
 
 namespace exemodel {
+
+class poller;
+
 /**
  * \class clientee
  * \brief client pollee, used by \em poller.
  */
-class clientee : public pollee, public evt_cb<clientee> {
+class clientee
+: public pollee
+, public evt_cb<poller&, uint32_t, clientee&> {
 public:
 	/**
 	 * \brief ctor of clientee

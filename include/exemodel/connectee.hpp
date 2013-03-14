@@ -11,7 +11,9 @@ namespace exemodel {
  * \class connectee
  * \brief connection pollee, used by \em poller.
  */
-class connectee : public pollee, public evt_cb<connectee> {
+class connectee
+: public pollee
+, public evt_cb<poller&, uint32_t, connectee&> {
 public:
 	typedef std::function<void (poller &)> destroy_cb_t;
 public:

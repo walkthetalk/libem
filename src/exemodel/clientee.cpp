@@ -1,7 +1,5 @@
-#include <sys/epoll.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <unistd.h>	// read/write
 
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/clientee.hpp"
@@ -46,8 +44,7 @@ void clientee::dispose(poller & mgr, uint32_t evts)
 		mgr.mod(*this);
 	}
 
-	clientee::args_t args = { mgr, *this, evts };
-	this->exe(args);
+	this->exe(mgr, evts, *this);
 }
 
 size_t clientee::recv(void * buffer, size_t length)
