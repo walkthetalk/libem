@@ -56,7 +56,7 @@ private:
 };
 
 template<>
-class devicee
+class devicee<void>
 : public pollee {
 public:
 	explicit devicee(const char* path)
