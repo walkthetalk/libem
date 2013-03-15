@@ -59,8 +59,8 @@ template<>
 class devicee<void>
 : public pollee {
 public:
-	explicit devicee(const char* path)
-	: pollee(::open(path, O_RDWR), 0)
+	explicit devicee(const char* path, int oflag = O_RDWR)
+	: pollee(::open(path, oflag), 0)
 	, m_path(path)
 	{
 	}
