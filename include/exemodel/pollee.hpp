@@ -31,7 +31,7 @@ public:
 		return ::read(m_fd, buf, nbyte);
 	}
 
-	ssize_t wrire(const void *buf, size_t nbyte)
+	ssize_t write(const void *buf, size_t nbyte)
 	{
 		return ::write(m_fd, buf, nbyte);
 	}
