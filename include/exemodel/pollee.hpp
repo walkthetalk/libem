@@ -30,6 +30,11 @@ public:
 	{
 		return ::read(m_fd, buf, nbyte);
 	}
+
+	ssize_t wrire(const void *buf, size_t nbyte)
+	{
+		return ::write(m_fd, buf, nbyte);
+	}
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
