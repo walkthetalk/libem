@@ -55,4 +55,24 @@ private:
 	T m_data;
 };
 
+template<>
+class devicee
+: public pollee {
+public:
+	explicit devicee(const char* path)
+	: pollee(::open(path, O_RDWR), 0)
+	, m_path(path)
+	{
+	}
+
+	virtual ~devicee() {};
+public:
+	virtual void dispose(poller &mgr, uint32_t evts) {}
+private:
+	devicee(const devicee &rhs ) = delete;
+	devicee &operator = (devicee & rhs) = delete;
+private:
+	const char* const m_path;
+};
+
 }
