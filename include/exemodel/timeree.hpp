@@ -40,7 +40,15 @@ public:
 	 */
 	void start(void);
 	void stop(void);
-	void setcycle(struct timercycle cycle);
+	void setcycle(const struct timercycle cycle);
+	void setcycle_ms(uint32_t ms)
+	{
+		const struct timercycle tmp = {
+			ms / 1000,
+			ms % 1000 * 1000,
+		};
+		setcycle(tmp);
+	}
 	void setmodel(bool oneshot);       //false:loop   true:once
 public:
 	/**
