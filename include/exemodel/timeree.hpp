@@ -49,7 +49,10 @@ public:
 		};
 		setcycle(tmp);
 	}
-	void setmodel(bool oneshot);       //false:loop   true:once
+	/**
+	 *
+	 */
+	void setmodel(bool oneshot);
 public:
 	/**
 	 * \brief used for disposing the event caughted by \em poller attached
@@ -59,8 +62,8 @@ private:
 	timeree(const timeree & rhs) = delete;
 	timeree & operator = (const timeree & rhs ) = delete;
 private:
-	struct timespec m_value;                //it_value
-	struct timespec m_interval;             //it_interval
+	struct timespec m_value;	//it_value
+	bool m_oneshot;			//model of timer: loop or once
 };
 
 }
