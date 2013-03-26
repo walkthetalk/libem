@@ -5,7 +5,7 @@ namespace exemodel{
 
 timeree::timeree(struct timercycle interval, bool oneshot)
 : pollee(::timerfd_create(CLOCK_MONOTONIC,TFD_CLOEXEC),uint32_t(::EPOLLIN))
-, m_value{ interval.sec, interval.nsec, }
+, m_value{ (decltype(m_value.tv_sec))interval.sec, (decltype(m_value.tv_nsec))interval.nsec, }
 , m_oneshot(oneshot)
 {
 }
