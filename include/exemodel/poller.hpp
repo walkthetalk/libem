@@ -1,16 +1,18 @@
 #pragma once
+
+#include "exemodel/pollee.hpp"
+
 /**
  * \file	exemodel/poller.hpp
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
 namespace exemodel {
 
-class pollee;
 /**
  * \class poller
  * \brief it can wait on some \em pollee(s) for events.
  */
-class poller {
+class poller : public pollee {
 public:
 	explicit poller();
 	virtual ~poller();
@@ -28,11 +30,10 @@ public:
 	 * \note  it won't return.
 	 */
 	void run(void);
+	void dispose(poller & mgr, uint32_t evts) final;
 private:
 	poller(const poller & rhs) = delete;
 	poller & operator = (const poller & rhs) = delete;
-private:
-	int m_fd;
 };
 
 }

@@ -5,37 +5,35 @@
 namespace exemodel {
 
 poller::poller()
-: m_fd(::epoll_create1(EPOLL_CLOEXEC))
+: pollee(::epoll_create1(EPOLL_CLOEXEC), uint32_t(::EPOLLIN | ::EPOLLOUT | ::EPOLLPRI))
 {
-	validate_fd(m_fd);
 }
 
 poller::~poller()
 {
-	::close(m_fd);
 }
 
 void poller::add(pollee & obj) const
 {
 	struct epoll_event evt;
-	evt.events = obj._evts_();
+	evt.events = obj._evts();
 	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(m_fd, EPOLL_CTL_ADD, obj._fd_(), &evt);
+	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_ADD, obj._fd(), &evt);
 	validate_ret(ret, "epoll add fd");
 }
 
 void poller::del(pollee & obj) const
 {
-	int ret = ::epoll_ctl(m_fd, EPOLL_CTL_DEL, obj._fd_(), NULL);
+	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_DEL, obj._fd(), NULL);
 	validate_ret(ret, "epoll del fd");
 }
 
 void poller::mod(pollee & obj) const
 {
 	struct epoll_event evt;
-	evt.events = obj._evts_();
+	evt.events = obj._evts();
 	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(m_fd, EPOLL_CTL_MOD, obj._fd_(), &evt);
+	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_MOD, obj._fd(), &evt);
 	validate_ret(ret, "epoll del fd");
 }
 
@@ -43,10 +41,27 @@ void poller::run()
 {
 	struct epoll_event evt;
 	do {
-		int ret = epoll_wait(m_fd, &evt, 1, -1);
+		int ret = epoll_wait(_fd(), &evt, 1, -1);
 		if (ret <= 0) {
 			// TODO: log
 			continue;
+		}
+
+		((pollee *)evt.data.ptr)->dispose(*this, evt.events);
+	} while(true);
+}
+
+void poller::dispose(poller & mgr, uint32_t evts)
+{
+	(void)mgr;
+	(void)evts;
+
+	struct epoll_event evt;
+	do {
+		int ret = epoll_wait(_fd(), &evt, 1, 0);
+		if (ret <= 0) {
+			// TODO: log
+			break;
 		}
 
 		((pollee *)evt.data.ptr)->dispose(*this, evt.events);

@@ -4,9 +4,8 @@
  * \author	justgaoyuan<gao_yuangy@126.com>
  */
 #include <sys/stat.h>
-#include <fcntl.h>
 
-#include <cstdint>
+#include <stdint.h>
 
 #include "exemodel/pollee.hpp"
 #include "exemodel/evt_cb.hpp"
