@@ -8,7 +8,6 @@ pollee::pollee(int fd, uint32_t evts)
 : m_evts(evts)
 , m_fd(validate_fd(fd))
 {
-	std::cout << fd << std::endl;
 	int ret = 0;
 	ret = f_cntl(F_SETFL,
 		f_cntl(F_GETFL, 0) | O_NONBLOCK);
