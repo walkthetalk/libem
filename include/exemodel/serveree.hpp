@@ -17,7 +17,7 @@ class poller;
  */
 class serveree
 : public pollee
-, public connectee::cb_t {
+, public connectee::cb_obj_t {
 public:
 	/**
 	 * \brief ctor of serveree

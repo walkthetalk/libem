@@ -15,9 +15,9 @@ class poller;
  */
 template<typename... _ArgTypes>
 class evt_cb {
-	typedef std::function<void(_ArgTypes...)> _cb_t;
 public:
-	typedef evt_cb<_ArgTypes...> cb_t;
+	typedef std::function<void(_ArgTypes...)> cb_func_t;
+	typedef evt_cb<_ArgTypes...> cb_obj_t;
 public:
 	evt_cb() : m_cb(nullptr) {}
 	virtual ~evt_cb() {}
@@ -25,12 +25,12 @@ public:
 	/**
 	 * \brief connect the callback user specified.
 	 */
-	void connect(_cb_t&& func)
+	void connect(const cb_func_t & func)
 	{
 		m_cb = func;
 	}
 
-	void connect(const cb_t & other)
+	void connect(const cb_obj_t & other)
 	{
 		m_cb = other.m_cb;
 	}
@@ -54,7 +54,7 @@ private:
 	evt_cb(const evt_cb & rhs) = delete;
 	evt_cb & operator=(const evt_cb & rhs) = delete;
 private:
-	_cb_t m_cb;
+	cb_func_t m_cb;
 };
 
 }
