@@ -46,6 +46,10 @@ public:
 
 		this->exe(m_data);
 	}
+	const char * path(void) const
+	{
+		return m_path;
+	}
 private:
 	devicee(const devicee &rhs ) = delete;
 	devicee &operator = (devicee & rhs) = delete;
@@ -67,6 +71,10 @@ public:
 	virtual ~devicee() {};
 public:
 	virtual void dispose(poller &mgr, uint32_t evts) {}
+	const char * path(void) const
+	{
+		return m_path;
+	}
 private:
 	devicee(const devicee &rhs ) = delete;
 	devicee &operator = (devicee & rhs) = delete;
