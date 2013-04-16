@@ -70,7 +70,7 @@ public:
 	 */
 	void start(void)
 	{
-		int ret = set_spec(0, &m_spec, NULL);
+		int ret = __set_spec(0, &m_spec, NULL);
 		validate_ret(ret,"start timer error!\n");
 	}
 
@@ -78,15 +78,22 @@ public:
 	{
 		/// store new value
 		m_spec = new_value;
+		this->start();
+	}
 
-		int ret = set_spec(0, &new_value, NULL);
-		validate_ret(ret,"start timer error!\n");
+	void start_abs(const itimerspec_t & new_value)
+	{
+		/// store new value
+		m_spec = new_value;
+
+		int ret = __set_spec(TFD_TIMER_ABSTIME, &new_value, NULL);
+		validate_ret(ret,"start timer abs error!\n");
 	}
 
 	void stop(void)
 	{
 		struct itimerspec new_value = {	{0,0}, {0,0}, };
-		int ret = set_spec(0, &new_value, NULL);
+		int ret = __set_spec(0, &new_value, NULL);
 		validate_ret(ret,"stop timer error!\n");
 	}
 public:
@@ -105,7 +112,7 @@ public:
 		this->exe(mgr, buf);
 	}
 private:
-	int set_spec(int flags,
+	int __set_spec(int flags,
 		const itimerspec_t *new_value,
 		itimerspec_t *old_value)
 	{
