@@ -15,6 +15,11 @@ namespace exemodel {
 typedef ::timespec timespec_t;
 typedef ::itimerspec itimerspec_t;
 
+inline timespec_t ms_to_timespec(uint32_t ms)
+{
+	return { ms/1000, static_cast<uint16_t>(ms%1000) * 1000 * 1000 };
+}
+
 
 template< clockid_t clk_id >
 class clock_info {
