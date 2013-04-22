@@ -11,16 +11,19 @@ public:
 	soft_pwm()
 	: m_t1()
 	, m_t2()
+	, m_f_stop(nullptr)
 	{
 		this->add(m_t1);
 		this->add(m_t2);
 	}
 
 	void connect(__tmr_t::cb_func_t const & f1,
-		__tmr_t::cb_func_t const & f2)
+		__tmr_t::cb_func_t const & f2,
+		std::function<void(void)> const & f_stop = nullptr)
 	{
 		m_t1.connect(f1);
 		m_t2.connect(f2);
+		m_f_stop = f_stop;
 	}
 
 	void start(const timespec_t & t1, const timespec_t & t2)
@@ -53,10 +56,14 @@ public:
 	{
 		m_t1.stop();
 		m_t2.stop();
+		if (m_f_stop) {
+			m_f_stop();
+		}
 	}
 private:
 	__tmr_t m_t1;
 	__tmr_t m_t2;
+	std::function<void(void)> m_f_stop;
 };
 
 } /* namespace exemodel */
