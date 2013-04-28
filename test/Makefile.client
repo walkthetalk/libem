@@ -2,7 +2,7 @@ override CFLAGS += -std=c11
 override CXXFLAGS += -std=c++11
 
 # you can add your own libs need to link.
-override LDLIBS += -lexemodel -lmsgpack
+#override LDLIBS += -lexemodel -lmsgpack
 
 # the aux variable, used to identify the directory this Makefile in.
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
@@ -12,9 +12,9 @@ output_dir := ${dir_self}/output-client
 # the main name of this program
 main_name := emt-client
 # include directories, use `:' as seperator
-inc_dir_set := ${dir_self}/include
+inc_dir_set := ${dir_self}/include:${dir_self}/../include
 # recursive directory, will compile files in it, and in it's subdirectories.
-src_recdir_set:=${dir_self}/client
+src_recdir_set:=${dir_self}/client:${dir_self}/../src
 # solo directory, will only compile the files under it directly, no recursive.
 #src_solodir_set:=${dir_self}/src
 
