@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <algorithm>
 #include <stdexcept>
 
@@ -78,7 +77,6 @@ public:
 		}
 
 		size_t r = (o.*f)(m_e, l);
-		
 		if (r != l) {
 			throw read_fail("read fail");
 		}
@@ -181,7 +179,7 @@ public:
 		this->unpack_td(v);
 		this->unpack_td(args...);
 	}
-	
+
 	void unpack_d()
 	{
 	}
@@ -206,7 +204,7 @@ public:
 	template< typename _T, typename std::enable_if<
 		   std::is_arithmetic<_T>::value
 		&& !std::is_same<_T, bool>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(id_of<_T>::value);
 	}
@@ -225,7 +223,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		   std::is_same<_T, bool>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(id_of<_T>::value);
 	}
@@ -243,7 +241,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		std::is_enum<_T>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(
 			id_of< typename std::underlying_type<_T>::type >::value);
@@ -263,7 +261,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		   std::is_array<_T>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(id_of<_T>::value);
 		array_rank_t constexpr r = std::rank<_T>::value;
@@ -388,8 +386,7 @@ public:
 		m_base.fill<false>(m_hdr.flag);
 		this->__convert_to(m_hdr);
 
-		/// \note we will recv msg body only when 'len' greater then zero.
-		if (m_hdr.len > 0) {
+		if(m_hdr.len > 0 ) {
 			m_base.template read_from(o, f, m_hdr.len);
 		}
 

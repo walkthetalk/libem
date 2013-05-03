@@ -1,12 +1,11 @@
 #pragma once
 
-#include <cstdint>
 #include <limits>
 #include <type_traits>
-#include <stdio.h>
+
+#include "zmsg_cmm.hpp"
 
 namespace zmsg {
-
 
 /**
  * \brief data types
@@ -56,59 +55,32 @@ typedef uint16_t array_extent_t;
 
 typedef uint16_t msg_len_t;
 
-static constexpr size_t s_def_buf_size = std::numeric_limits<msg_len_t>::max() + 1;
+static constexpr msg_len_t ZMSG_MAX_LEN = std::numeric_limits<msg_len_t>::max();
+static constexpr size_t s_def_buf_size = ZMSG_MAX_LEN + 1;
 
 
-/*
-* \brief message identifier
-*/
-enum class mid_t : uint16_t {
-	nil,	/// occupy symbol, correspond to \em NULL.
-	test1,
-	test2,
-	svc_state,
-	alarm,
-	heat_start,
-	fs,
-	fusion_splice_start,
-	discharge_adjust_start,
-	regular_test_start,
-	go_on,
-	stop,
+/// \todo
+static constexpr bool IS_LE = true;
 
-	motor_start,
-	motor_stop,
-
-	discharge_test_start,
-	discharge_test_stop,
-
-	image_move,
-	/// \todo add new message id
-	max,
-
+struct zmsg_header {
+	uint8_t flag;
+	uint8_t version;
+	uint16_t magic;
+	msg_len_t len;
+	uint16_t crc;
+	mid_t mid;
+public:
+	/**
+	 * \note no 'flag'
+	 */
+	ZMSG_PU(version, magic, len, crc, mid)
 };
 
-template< mid_t mid >
-struct zmsg;	/// not implemented.
+constexpr std::underlying_type<mid_t>::type to_val(const mid_t mid)
+{
+	return (std::underlying_type<mid_t>::type)(mid);
+}
 
+constexpr size_t HDR_SIZE = sizeof(zmsg_header);
 
-
-/**
- * \brief zmsg pack/unpack macro
- */
-#define ZMSG_PU(...) \
-	template< typename _T > \
-	void serialize(_T & o) const \
-	{ \
-		o.template operator()(__VA_ARGS__); \
-	} \
-	template< typename _T > \
-	void serialize(_T & o) \
-	{ \
-		o.template operator()(__VA_ARGS__); \
-	}
-
-
-}/* namespace zmsg */
-
-#define DCL_ZMSG(mid) zmsg::zmsg<zmsg::mid_t::mid>
+} /* zmsg */

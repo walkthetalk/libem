@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <stdexcept>
 
-#include "zmsg_cmm.hpp"
-#include "zmsg_header.hpp"
+#include "zmsg/zmsg_cmm.hpp"
+#include "zmsg/zmsg_header.hpp"
 
 namespace zmsg {
 
@@ -170,7 +170,7 @@ public:
 		this->pack_td(v);
 		this->pack_td(args...);
 	}
-	
+
 	void pack_d()
 	{
 	}
@@ -400,7 +400,11 @@ public:
 		if (_rev != IS_LE) h.flag |= 0x2;
 		hdr_buf.fill<false>(h.flag);
 
-		h.len = (m_base.size() - HDR_SIZE);
+		if (ZMSG_MAX_LEN < m_base.size()) {
+			throw std::overflow_error("zmsg size overflow!");
+		}
+
+		h.len = static_cast<msg_len_t>((m_base.size() - HDR_SIZE));
 		packer_pure hdr_packer(hdr_buf);
 		h.template serialize(hdr_packer);
 	}
