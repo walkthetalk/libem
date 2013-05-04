@@ -1,4 +1,7 @@
-zhfonts = {}
+moduledata = moduledata or {}
+moduledata.zhfonts = moduledata.zhfonts or {}
+local zhfonts = moduledata.zhfonts
+local zhspuncs = require "t-zhspuncs"
 
 local string_strip = string.strip
 local string_split = string.split
@@ -53,7 +56,7 @@ latinfonts.mono.bolditalic  = {name = 'lmmonolt10boldoblique'}
 
 local mathfonts = {roman = {}}
 mathfonts.roman.name = 'xitsmathregular'
-mathfonts.roman.feature = 'math\mathsizesuffix'
+mathfonts.roman.feature = 'math\\mathsizesuffix'
 mathfonts.roman.goodies = 'xits-math'
 
 local function gen_cjk_typescript (ft)
@@ -175,7 +178,7 @@ local function gen_typeface ()
     context ('\\starttypescript[zhfonts]')
     context ('\\definetypeface[zhfonts][rm][serif][zhfonts][default][features=zh]')
     context ('\\definetypeface[zhfonts][ss][sans][zhfonts][default][features=zh]')
-    context ('\\definetypeface[zhfonts][tt][mono][zhfonts][default][features=default]')
+    context ('\\definetypeface[zhfonts][tt][mono][zhfonts][default]')
     if mathfonts.roman.name then
 	context ('\\definetypeface[zhfonts][mm][math][zhfonts]')
     end
@@ -220,7 +223,6 @@ local function setup_mathfonts (fontlist)
     end
 end
 
-
 local fontfeatures = "mode=node,protrusion=myvector,liga=yes,"
 local function setup_fontfeatures (s)
     fontfeatures = fontfeatures .. s
@@ -239,14 +241,13 @@ function zhfonts.setup (metainfo, fontinfo)
     end
 end
 
-function zhfonts.use (param)
+function zhfonts.main (param)
     context ('\\setscript[hanzi]')
     zhspuncs.opt ()
-    context ('\\definefontfeature[zh][default][' .. fontfeatures .. ']')
-    --context ('\\setupalign[flushleft,nothyphenated,broad]')
-    context ('\\setupalign[hz,hanging]')
     local arg_list = string_split_and_strip (param, ',')
     if arg_list[1] ~= "none" and arg_list[2] ~= "none" then
+	context ('\\definefontfeature[zh][default][' .. fontfeatures .. ']')
+	context ('\\setupalign[hz,hanging]')
         zhfonts.gen_typescript ()
         if arg_list[1] ~= "hack" and arg_list[2] ~= "hack" then
 	    context ('\\usetypescript[zhfonts]')
@@ -254,3 +255,4 @@ function zhfonts.use (param)
         end
     end
 end
+
