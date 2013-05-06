@@ -5,14 +5,9 @@
 /***********************************************************************************************************************
 * 消息频道定义
 ***********************************************************************************************************************/
-#define QWSC_ORGNIZIATION "jilong"
+#define QWSC_CHANNEL_GUI "jilong/app/gui"
 
-
-#define QWSC_MODULE_APP "app"
-#define QWSC_MODULE_SRV "srv"
-
-#define QWSC_CHANNEL_GUI QWSC_ORGNIZIATION##QWSC_MODULE_APP##gui"
-#define QWSC_CHANNEL_FUSION QWSC_ORGNIZIATION##QWSC_MODULE_SRV##"fusion"
+#define QWSC_CHANNEL_FUSION "jilong/srv/fusion"
 
 
 /***********************************************************************************************************************
