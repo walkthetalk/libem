@@ -5,13 +5,25 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::svc_state> {
-	zmsg(svc_state_t s)
+struct zmsg<mid_t::fs_state> {
+	zmsg(svc_fs_state_t s)
 	: sstate(s)
 	{
 	}
 public:
-	svc_state_t sstate;
+	svc_fs_state_t sstate;
+public:
+	ZMSG_PU(sstate)
+};
+
+template<>
+struct zmsg<mid_t::heat_state> {
+	zmsg(svc_heat_state_t s)
+	: sstate(s)
+	{
+	}
+public:
+	svc_heat_state_t sstate;
 public:
 	ZMSG_PU(sstate)
 };

@@ -31,16 +31,24 @@ typedef void VOID;
 
 } /* namespace zmsg */
 
-
 /**
- * \brief service state
+ * \brief service fs state
  */
-enum class svc_state_t : uint16_t {
-	fs_reset,
+enum class svc_fs_state_t : uint16_t {
+	fs_reseting,
 	fs_ready,
 	fs_clring,
-	///
-	heat_idle,
+	fs_calibrating,
+};
+
+/**
+ * \brief service heat state
+ */
+enum class svc_heat_state_t : uint16_t {
+	heat_ready,
+	heat_ascending,
+	heat_stabling,
+	heat_descending,
 };
 
 /**

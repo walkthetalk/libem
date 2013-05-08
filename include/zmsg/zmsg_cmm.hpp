@@ -11,7 +11,10 @@ enum class mid_t : uint16_t {
 	nil,	/// occupy symbol, correspond to \em NULL.
 	test1,
 	test2,
-	svc_state,
+
+	fs_state,
+	heat_state,
+
 	alarm,
 	heat_start,
 	fs,
