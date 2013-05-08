@@ -39,14 +39,12 @@ serveree::serveree(uint16_t port)
 
 serveree::~serveree()
 {
-	delete m_connectee;
 }
 
 void serveree::destroy(poller & mgr)
 {
 	assert(m_connectee != nullptr);
 	mgr.del(*m_connectee);
-	delete m_connectee;
 	m_connectee = nullptr;
 }
 
@@ -60,11 +58,12 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 	int conn_sock = ::accept(_fd(), NULL, NULL);
 	validate_ret(conn_sock, "accept");
 
-	if (m_connectee != nullptr) {
+	if (m_connectee) {
 		destroy(mgr);
 	}
 
-	m_connectee = new connectee(m_destroycb, conn_sock);
+	m_connectee = std::unique_ptr<connectee>(
+		new connectee(m_destroycb, conn_sock));
 	m_connectee->connect(*this);
 	mgr.add(*m_connectee);
 }

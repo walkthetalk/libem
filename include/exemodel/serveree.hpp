@@ -3,6 +3,8 @@
  * \file	exemodel/serveree.hpp
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
+#include <memory>
+
 #include "exemodel/evt_cb.hpp"
 #include "exemodel/pollee.hpp"
 
@@ -50,7 +52,7 @@ private:
 	 * \brief connection(s) connected.
 	 * \note only support single connection currently.
 	 */
-	connectee * m_connectee;
+	std::unique_ptr<connectee> m_connectee;
 };
 
 }
