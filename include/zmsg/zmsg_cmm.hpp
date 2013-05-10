@@ -27,8 +27,7 @@ enum class mid_t : uint16_t {
 	motor_start,
 	motor_stop,
 
-	discharge_test_start,
-	discharge_test_stop,
+	discharge,
 
 	image_move,
 	/// \todo add new message id
