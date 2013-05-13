@@ -17,7 +17,7 @@ typedef ::itimerspec itimerspec_t;
 
 inline timespec_t ms_to_timespec(uint32_t ms)
 {
-	return { ms/1000, static_cast<uint16_t>(ms%1000) * 1000 * 1000 };
+	return { (::__time_t)(ms/1000), static_cast<uint16_t>(ms%1000) * 1000 * 1000 };
 }
 
 
@@ -105,7 +105,7 @@ public:
 	/**
 	 * \brief used for disposing the event caughted by \em poller attached
 	 */
-	virtual void dispose(poller & mgr, uint32_t evts)
+	virtual void dispose(poller & mgr, uint32_t)
 	{
 		uint64_t buf = 0;
 		ssize_t ret = read(&buf, sizeof(buf));

@@ -8,7 +8,7 @@ namespace zmsg {
 template<>
 struct zmsg<mid_t::fusion_splice_reset> {
 public:
-	ZMSG_PU();
+	ZMSG_PU()
 };
 
 }

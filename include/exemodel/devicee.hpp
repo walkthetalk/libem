@@ -37,7 +37,7 @@ public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
 	 */
-	virtual void dispose(poller &mgr, uint32_t evts)
+	virtual void dispose(poller &, uint32_t)
 	{
 		ssize_t ret = this->read(&m_data, sizeof(m_data));
 		if (ret == -1) {
@@ -70,7 +70,7 @@ public:
 
 	virtual ~devicee() {};
 public:
-	virtual void dispose(poller &mgr, uint32_t evts) {}
+	virtual void dispose(poller &, uint32_t) {}
 	const char * path(void) const
 	{
 		return m_path;
