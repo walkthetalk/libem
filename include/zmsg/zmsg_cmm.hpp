@@ -16,8 +16,10 @@ enum class mid_t : uint16_t {
 	heat_state,
 
 	alarm,
+
+	fusion_splice_reset,
+
 	heat_start,
-	fs,
 	fusion_splice_start,
 	discharge_adjust_start,
 	regular_test_start,
