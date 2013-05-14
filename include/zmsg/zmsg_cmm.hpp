@@ -32,6 +32,7 @@ enum class mid_t : uint16_t {
 	discharge,
 
 	image_move,
+	set_fs_display_mode,
 	/// \todo add new message id
 	max,
 

@@ -62,3 +62,13 @@ enum motorId_t : uint8_t {
 	NUM,	// total number
 };
 
+/**
+ * \brief fusion splice display mode
+ */
+enum fs_display_mode_t : uint8_t {
+	X = 0x0,	/// only x
+	Y = 0x1,	/// only y
+	TB = 0x2,	/// top <-> bottom
+	LR = 0x3,	/// left <-> right
+	NO = 0x4,	/// no
+};
