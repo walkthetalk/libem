@@ -13,6 +13,7 @@ namespace zmsg {
 enum class id_t : uint8_t {
 	BOOL = std::numeric_limits<bool>::digits,
 	ARRAY = 2,
+	CLASS = 3,
 	INT8 = std::numeric_limits<int8_t>::digits,
 	UINT8 = std::numeric_limits<uint8_t>::digits,
 	INT16 = std::numeric_limits<int16_t>::digits,
@@ -48,6 +49,13 @@ struct id_of< _T, typename std::enable_if<
 	std::is_array<_T>::value>::type > {
 
 	static constexpr id_t value = id_t::ARRAY;
+};
+
+template<typename _T>
+struct id_of< _T, typename std::enable_if<
+	std::is_class<_T>::value>::type > {
+
+	static constexpr id_t value = id_t::CLASS;
 };
 
 typedef uint8_t array_rank_t;

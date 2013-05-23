@@ -29,8 +29,8 @@ struct packer_base final {
 public:
 	packer_base(uint8_t * buf, size_t l)
 	: m_buf(buf)
-	, m_e(m_buf + l)
-	, m_s(m_buf)
+	, m_buf_end(m_buf + l)
+	, m_e(m_buf)
 	{
 	}
 
@@ -39,7 +39,7 @@ public:
 	void print(_T & o) const
 	{
 		const uint8_t * p = m_buf;
-		while (p < m_s) {
+		while (p < m_e) {
 			o << (uint16_t)(*p++) << " ";
 		}
 		o << "\n";
@@ -47,13 +47,13 @@ public:
 
 	void reset(void)
 	{
-		m_s = m_buf;
+		m_e = m_buf;
 	}
 public:
 	/**
 	 * \note only for debug
 	 */
-	size_t read(uint8_t * buf, size_t l) const
+	size_t dbg_read(uint8_t * buf, size_t l) const
 	{
 		size_t ret = std::min(l, this->size());
 		std::copy_n(m_buf, l, buf);
@@ -81,14 +81,14 @@ public:
 	packer_base reserve(size_t l)
 	{
 		__check_err(l);
-		uint8_t * const ret = m_s;
-		m_s += l;
+		uint8_t * const ret = m_e;
+		m_e += l;
 		return packer_base(ret, l);
 	}
 public:
 	size_t size(void) const
 	{
-		return static_cast<size_t>(m_s - m_buf);
+		return static_cast<size_t>(m_e - m_buf);
 	}
 public:
 	template< bool _rev, typename _T >
@@ -102,8 +102,8 @@ private:
 	void __fill(const uint8_t * src, size_t l)
 	{
 		__check_err(l);
-		std::copy_n(src, l, m_s);
-		m_s += l;
+		std::copy_n(src, l, m_e);
+		m_e += l;
 	}
 
 	template< bool _rev, typename std::enable_if<
@@ -111,27 +111,28 @@ private:
 	void __fill(const uint8_t * src, size_t l)
 	{
 		__check_err(l);
-		std::reverse_copy(src, src+l, m_s);
-		m_s += l;
+		std::reverse_copy(src, src+l, m_e);
+		m_e += l;
 	}
 
 	void __check_err(size_t l)
 	{
-		if (m_s + l > m_e) {
+		if (m_e + l > m_buf_end) {
 			throw std::bad_alloc();
 		}
 	}
 private:
 	uint8_t * const m_buf;
-	uint8_t * const m_e;
-	uint8_t * m_s;
+	uint8_t * const m_buf_end;
+	uint8_t * m_e;
 };
 
-template< bool _reverse >
+template< typename _helper_t, bool _reverse >
 class packer {
 public:
-	packer(packer_base & b)
+	packer(_helper_t & helper, packer_base & b)
 	: m_base(b)
+	, m_helper(helper)
 	{
 	}
 public:
@@ -261,6 +262,24 @@ public:
 		this->__pack_type_base(
 			id_of<typename std::remove_all_extents<_T>::type>::value);
 	}
+
+	/**
+	 * struc / class
+	 */
+	template< typename _T, typename std::enable_if<
+		std::is_class<_T>::value, bool>::type = false >
+	void pack_data(_T const & v)
+	{
+		v.template serialize(m_helper);
+	}
+
+	template< typename _T, typename std::enable_if<
+		std::is_class<_T>::value, bool>::type = false >
+	void pack_type(_T const & v)
+	{
+		this->__pack_type_base(
+			id_of< _T >::value);
+	}
 private:
 	template< typename _T, typename std::enable_if<
 		std::is_array<_T>::value, bool>::type = false >
@@ -282,15 +301,17 @@ private:
 	}
 private:
 	packer_base & m_base;
+	_helper_t & m_helper;
 };
 
 /**
  * \brief native pure
  */
-class packer_np final : private packer<false> {
+class packer_np final : private packer<packer_np, false> {
+	typedef packer<packer_np, false> base_t;
 public:
 	packer_np(packer_base & b)
-	: packer<false>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -304,10 +325,11 @@ public:
 /**
  * \brief native full
  */
-class packer_nf final : private packer<false> {
+class packer_nf final : private packer<packer_nf, false> {
+	typedef packer<packer_nf, false> base_t;
 public:
 	packer_nf(packer_base & b)
-	: packer<false>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -321,10 +343,11 @@ public:
 /**
  * \brief native pure
  */
-class packer_rp final : private packer<true> {
+class packer_rp final : private packer<packer_rp, true> {
+	typedef packer<packer_rp, true> base_t;
 public:
 	packer_rp(packer_base & b)
-	: packer<true>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -338,10 +361,11 @@ public:
 /**
  * \brief native full
  */
-class packer_rf final : private packer<true> {
+class packer_rf final : private packer<packer_rf, true> {
+	typedef packer<packer_rf, true> base_t;
 public:
 	packer_rf(packer_base & b)
-	: packer<true>(b)
+	: base_t(*this, b)
 	{
 	}
 public:

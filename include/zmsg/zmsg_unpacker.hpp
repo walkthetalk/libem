@@ -55,7 +55,8 @@ public:
 	template< typename _T >
 	void print(_T & o) const
 	{
-		const uint8_t * p = m_buf;
+		o << (uint64_t)m_d << ":  ";
+		const uint8_t * p = m_d;
 		while (p < m_e) {
 			o << (uint16_t)(*p++) << " ";
 		}
@@ -136,11 +137,12 @@ private:
 	uint8_t * m_e;
 };
 
-template< bool _reverse >
+template< typename _helper_t, bool _reverse >
 class unpacker {
 public:
-	unpacker(unpacker_base & base)
+	unpacker(_helper_t & helper, unpacker_base & base)
 	: m_base(base)
+	, m_helper(helper)
 	{
 	}
 public:
@@ -271,6 +273,24 @@ public:
 		this->__unpack_type_base(
 			id_of<typename std::remove_all_extents<_T>::type>::value);
 	}
+
+	/**
+	 * struct / class
+	 */
+	template< typename _T, typename std::enable_if<
+		std::is_class<_T>::value, bool>::type = false >
+	void unpack_data(_T & v)
+	{
+		v.template serialize(m_helper);
+	}
+
+	template< typename _T, typename std::enable_if<
+		std::is_class<_T>::value, bool>::type = false >
+	void unpack_type(_T const &)
+	{
+		this->__unpack_type_base(
+			id_of< _T >::value);
+	}
 private:
 	template< typename _T, typename std::enable_if<
 		std::is_array<_T>::value, bool>::type = false >
@@ -296,15 +316,17 @@ private:
 	}
 private:
 	unpacker_base & m_base;
+	_helper_t & m_helper;
 };
 
 /**
  * \brief native pure
  */
-class unpacker_np final : private unpacker<false> {
+class unpacker_np final : private unpacker<unpacker_np, false> {
+	typedef unpacker<unpacker_np, false> base_t;
 public:
 	unpacker_np(unpacker_base & b)
-	: unpacker<false>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -318,10 +340,11 @@ public:
 /**
  * \brief native full
  */
-class unpacker_nf final : private unpacker<false> {
+class unpacker_nf final : private unpacker<unpacker_nf, false> {
+	typedef unpacker<unpacker_nf, false> base_t;
 public:
 	unpacker_nf(unpacker_base & b)
-	: unpacker<false>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -335,10 +358,11 @@ public:
 /**
  * \brief native pure
  */
-class unpacker_rp final : private unpacker<true> {
+class unpacker_rp final : private unpacker<unpacker_rp, true> {
+	typedef unpacker<unpacker_rp, true> base_t;
 public:
 	unpacker_rp(unpacker_base & b)
-	: unpacker<true>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -352,10 +376,11 @@ public:
 /**
  * \brief native full
  */
-class unpacker_rf final : private unpacker<true> {
+class unpacker_rf final : private unpacker<unpacker_rf, true> {
+	typedef unpacker<unpacker_rf, true> base_t;
 public:
 	unpacker_rf(unpacker_base & b)
-	: unpacker<true>(b)
+	: base_t(*this, b)
 	{
 	}
 public:
@@ -416,10 +441,9 @@ public:
 	/**
 	 * \note only for debug
 	 */
-	template< typename _T >
-	void fill_from(_T  & o, size_t l)
+	void dbg_fill_from(std::function<size_t (void *, size_t)> && f, size_t l)
 	{
-		m_base.template read_from(o, l);
+		m_base.template read_from(f, l);
 		m_base.fill<false>(m_hdr.flag);
 		this->__convert_to(m_hdr);
 	}
