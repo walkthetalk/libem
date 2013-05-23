@@ -72,6 +72,11 @@ public:
 	BOOL BadCutSurface;
 	BOOL AutoAlignAfterStop;
 	ULONG ManualDischargeTimes;
+
+    /* motor test para */
+    UINT32 MotorTestTimes;
+    UINT32 ElectricArcTestTimes;
+    UINT32 CleanArcRate;
 public:
 	ZMSG_PU(
 		FSPattern,
