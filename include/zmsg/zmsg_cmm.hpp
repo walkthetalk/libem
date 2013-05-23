@@ -23,6 +23,7 @@ enum class mid_t : uint16_t {
 	fusion_splice_start,
 	discharge_adjust_start,
 	regular_test_start,
+	motor_test_start,
 	go_on,
 	stop,
 
