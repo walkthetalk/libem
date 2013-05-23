@@ -138,7 +138,10 @@ public:
 		FibreAutoFeed,
 		BadCutSurface,
 		AutoAlignAfterStop,
-		ManualDischargeTimes)
+        ManualDischargeTimes,
+        MotorTestTimes,
+        ElectricArcTestTimes,
+        CleanArcRate)
 };
 
 }
