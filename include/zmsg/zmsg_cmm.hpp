@@ -24,6 +24,7 @@ enum class mid_t : uint16_t {
 	discharge_adjust_start,
 	regular_test_start,
 	motor_test_start,
+	dust_check_start,
 	go_on,
 	stop,
 
