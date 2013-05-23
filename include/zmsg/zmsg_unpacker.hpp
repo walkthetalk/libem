@@ -443,7 +443,7 @@ public:
 	 */
 	void dbg_fill_from(std::function<size_t (void *, size_t)> && f, size_t l)
 	{
-		m_base.template read_from(f, l);
+		m_base.read_from(f, l);
 		m_base.fill<false>(m_hdr.flag);
 		this->__convert_to(m_hdr);
 	}
