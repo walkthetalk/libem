@@ -275,17 +275,71 @@ public:
 	}
 
 	/**
+	 * std array
+	 */
+	template< typename _T, typename std::enable_if<
+		is_std_array<_T>::value, bool>::type = false >
+	void unpack_data(_T & v)
+	{
+		for (auto & i : v) {
+			this->unpack_data(i);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		is_std_array<_T>::value, bool>::type = false >
+	void unpack_type(_T const & v)
+	{
+		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
+			throw;
+		}
+		this->__unpack_type_base(id_of<_T>::value);
+		this->__unpack_type_base(static_cast<ele_num_t>(v.size()));
+
+		this->__unpack_type_base(id_of<typename _T::value_type>::value);
+	}
+
+	/**
+	 * std vector
+	 */
+	template< typename _T, typename std::enable_if<
+		is_std_vector<_T>::value, bool>::type = false >
+	void unpack_data(_T & v)
+	{
+		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
+			throw;
+		}
+
+		ele_num_t size;
+		this->unpack_data(size);
+
+		for (int i = 0; i < size; ++i) {
+			typename _T::value_type tmp;
+			this->unpack_data(tmp);
+			v.push_back(tmp);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		is_std_vector<_T>::value, bool>::type = false >
+	void unpack_type(_T const & v)
+	{
+		this->__unpack_type_base(id_of<_T>::value);
+		this->__unpack_type_base(id_of<typename _T::value_type>::value);
+	}
+
+	/**
 	 * struct / class
 	 */
 	template< typename _T, typename std::enable_if<
-		std::is_class<_T>::value, bool>::type = false >
+		id_of<_T>::value == id_t::UDT, bool>::type = false >
 	void unpack_data(_T & v)
 	{
 		v.template serialize(m_helper);
 	}
 
 	template< typename _T, typename std::enable_if<
-		std::is_class<_T>::value, bool>::type = false >
+		id_of<_T>::value == id_t::UDT, bool>::type = false >
 	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(

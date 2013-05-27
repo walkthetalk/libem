@@ -2,6 +2,8 @@
 
 #include <limits>
 #include <type_traits>
+#include <array>
+#include <vector>
 
 #include "zmsg_cmm.hpp"
 
@@ -13,7 +15,9 @@ namespace zmsg {
 enum class id_t : uint8_t {
 	BOOL = std::numeric_limits<bool>::digits,
 	ARRAY = 2,
-	CLASS = 3,
+	FIX_SIZE_CONTAINER = 3,
+	DYNAMIC_SIZE_CONTAINER = 4,
+	UDT = 5,
 	INT8 = std::numeric_limits<int8_t>::digits,
 	UINT8 = std::numeric_limits<uint8_t>::digits,
 	INT16 = std::numeric_limits<int16_t>::digits,
@@ -26,6 +30,16 @@ enum class id_t : uint8_t {
 	DOUBLE = std::numeric_limits<double>::digits,
 };
 
+/**
+ * \brief helper class
+ */
+template <typename T> struct is_std_vector { static constexpr bool value = false; };
+template <typename T>
+struct is_std_vector< std::vector<T> > { static constexpr bool value = true; };
+
+template <typename T> struct is_std_array { static constexpr bool value = false; };
+template <typename T, std::size_t size>
+struct is_std_array< std::array<T, size> > { static constexpr bool value = true; };
 
 /**
  * \brief id_of
@@ -53,13 +67,31 @@ struct id_of< _T, typename std::enable_if<
 
 template<typename _T>
 struct id_of< _T, typename std::enable_if<
-	std::is_class<_T>::value>::type > {
+	is_std_array<_T>::value>::type > {
 
-	static constexpr id_t value = id_t::CLASS;
+	static constexpr id_t value = id_t::FIX_SIZE_CONTAINER;
+};
+
+template<typename _T>
+struct id_of< _T, typename std::enable_if<
+	is_std_vector<_T>::value>::type > {
+
+	static constexpr id_t value = id_t::DYNAMIC_SIZE_CONTAINER;
+};
+
+template<typename _T>
+struct id_of< _T, typename std::enable_if<
+	    std::is_class<_T>::value
+	&& !is_std_vector<_T>::value
+	&& !is_std_array<_T>::value>::type > {
+
+	static constexpr id_t value = id_t::UDT;
 };
 
 typedef uint8_t array_rank_t;
 typedef uint16_t array_extent_t;
+
+typedef uint16_t ele_num_t;
 
 typedef uint16_t msg_len_t;
 
