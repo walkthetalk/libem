@@ -13,9 +13,9 @@ public:
 struct bool_img {
 	uint16_t width;
 	uint16_t height;
-	std::vector<bool> value;
+	std::vector<bool> data;
 public:
-	ZMSG_PU(width, height, value);
+	ZMSG_PU(width, height, data);
 };
 
 template<>
