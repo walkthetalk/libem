@@ -306,17 +306,16 @@ public:
 		is_std_vector<_T>::value, bool>::type = false >
 	void unpack_data(_T & v)
 	{
-		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
+		if (v.size() != 0) {
 			throw;
 		}
 
 		ele_num_t size;
 		this->unpack_data(size);
+		v.resize(size);
 
-		for (int i = 0; i < size; ++i) {
-			typename _T::value_type tmp;
-			this->unpack_data(tmp);
-			v.push_back(tmp);
+		for (auto & i : v) {
+			this->unpack_data(i);
 		}
 	}
 
@@ -497,6 +496,7 @@ public:
 	 */
 	void dbg_fill_from(std::function<size_t (void *, size_t)> && f, size_t l)
 	{
+		m_base.reset();
 		m_base.read_from(f, l);
 		m_base.fill<false>(m_hdr.flag);
 		this->__convert_to(m_hdr);
