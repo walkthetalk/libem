@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <vector>
+
 #include "zmsg_cmm.hpp"
 
 namespace zmsg {
