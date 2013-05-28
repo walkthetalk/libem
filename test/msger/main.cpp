@@ -18,10 +18,11 @@ public:
 struct T2 {
 	uint16_t x;
 	float y;
+	std::vector<bool> b;
 	int32_t z;
 	std::vector<double> t;
 public:
-	ZMSG_PU(x, y, z, t)
+	ZMSG_PU(x, y, b, z, t)
 };
 
 
@@ -68,16 +69,38 @@ struct print_aux {
 	}
 
 	template< typename _1st_t, typename std::enable_if<
-		   zmsg::is_std_vector<_1st_t>::value
-		|| zmsg::is_std_array<_1st_t>::value, bool>::type = false  >
+		zmsg::is_std_array<_1st_t>::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
 		m_o << "size: " << v.size() << " ";
-#if 1
 		for (auto & i : v) {
 			this->template operator()(i);
 		}
-#endif
+	}
+
+	template< typename _1st_t, typename std::enable_if<
+		    zmsg::is_std_vector<_1st_t>::value
+		&& !std::is_same< typename _1st_t::value_type, bool >::value, bool>::type = false  >
+	void operator()(_1st_t & v)
+	{
+		m_o << "size: " << v.size() << " ";
+		for (auto & i : v) {
+			this->template operator()(i);
+		}
+	}
+
+	template< typename _1st_t, typename std::enable_if<
+		   zmsg::is_std_vector<_1st_t>::value
+		&& std::is_same< typename _1st_t::value_type, bool >::value, bool>::type = false  >
+	void operator()(_1st_t & v)
+	{
+		m_o << "bool size: " << v.size() << " ";
+		auto i = v.begin();
+		while (i != v.end()) {
+			bool tb = *i;
+			this->template operator()(tb);
+			++i;
+		}
 	}
 
 	template< typename _1st_t, typename std::enable_if<
@@ -134,7 +157,7 @@ int main(void)
 
 	DCL_ZMSG(test1) msg = {
 		{ 0x34, 0x777, 1.01, {{ 2, 3, 4, }} },
-		{ 0x4568, 0.544f, 0xabcdef, {{ 3.4, 2.5, }} },
+		{ 0x4568, 0.544f, { true, false, false, true, false, }, 0xabcdef, {{ 3.4, 2.5, }} },
 		'c',
 	};
 #if 1

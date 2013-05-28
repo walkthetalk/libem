@@ -292,7 +292,8 @@ public:
 	 * std vector
 	 */
 	template< typename _T, typename std::enable_if<
-		is_std_vector<_T>::value, bool>::type = false >
+		   is_std_vector<_T>::value
+		&& !std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
 	void pack_data(_T const & v)
 	{
 		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
@@ -303,6 +304,41 @@ public:
 
 		for (auto & i : v) {
 			this->pack_data(i);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		   is_std_vector<_T>::value
+		&& std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
+	void pack_data(_T const & v)
+	{
+		auto const size = v.size();
+		if (size > std::numeric_limits<ele_num_t>::max()) {
+			throw;
+		}
+		this->pack_data(static_cast<ele_num_t>(v.size()));
+
+		uint8_t sv = 0;
+		std::vector<bool>::const_iterator it = v.begin();
+		for (auto i = size / 8; i > 0; --i) {
+			sv = 0;
+			for (auto j = 0; j < 8; ++j) {
+				if (*it++) {
+					sv |= (1 << j);
+				}
+			}
+			this->pack_data(sv);
+		}
+
+		auto remainder = size % 8;
+		if (remainder > 0) {
+			sv = 0;
+			for (auto j = 0; j < remainder; ++j) {
+				if (*it++) {
+					sv |= (1 << j);
+				}
+			}
+			this->pack_data(sv);
 		}
 	}
 

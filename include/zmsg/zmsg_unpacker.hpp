@@ -303,7 +303,8 @@ public:
 	 * std vector
 	 */
 	template< typename _T, typename std::enable_if<
-		is_std_vector<_T>::value, bool>::type = false >
+		   is_std_vector<_T>::value
+		&& !std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
 	void unpack_data(_T & v)
 	{
 		if (v.size() != 0) {
@@ -316,6 +317,43 @@ public:
 
 		for (auto & i : v) {
 			this->unpack_data(i);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		   is_std_vector<_T>::value
+		&& std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
+	void unpack_data(_T & v)
+	{
+		if (v.size() != 0) {
+			throw;
+		}
+
+		ele_num_t size;
+		this->unpack_data(size);
+		v.resize(size, false);
+
+		uint8_t sv = 0;
+		std::vector<bool>::iterator it = v.begin();
+		for (auto i = size / 8; i > 0; --i) {
+			this->unpack_data(sv);
+			for (auto j = 0; j < 8; ++j) {
+				if (sv & (1 << j)) {
+					*it = true;
+				}
+				++it;
+			}
+		}
+
+		auto remainder = size % 8;
+		if (remainder > 0) {
+			this->unpack_data(sv);
+			for (auto j = 0; j < remainder; ++j) {
+				if (sv & (1 << j)) {
+					*it = true;
+				}
+				++it;
+			}
 		}
 	}
 
