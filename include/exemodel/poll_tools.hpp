@@ -5,21 +5,8 @@
  */
 #include <errno.h>
 #include <system_error>
-#include <iostream>
 
 namespace exemodel {
-
-/**
- * \brief logger procedure.
- * \param ctx	user can specify a string to log.
- */
-inline void emlog(const char * ctx)
-{
-#if defined(NDEBUG)
-	std::cout << ctx << std::endl;
-#else
-#endif
-}
 
 /**
  * \brief validate the file descriptor if it is valid.

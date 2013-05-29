@@ -1,5 +1,7 @@
 #include <sys/socket.h>
 
+#include "zlog/zlog.hpp"
+
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/connectee.hpp"
 
@@ -14,7 +16,7 @@ connectee::connectee(const destroy_cb_t & destroycb, int fd)
 void connectee::dispose(poller & mgr, uint32_t evts)
 {
 	if ((evts & ::EPOLLRDHUP) || (evts & ::EPOLLERR)) {
-		emlog("connectee ERROR");
+		zlog::zlog_warning("connectee ERROR");
 		m_destroycb(mgr);
 		return;
 	}

@@ -1,9 +1,8 @@
 #pragma once
 /**
  * \file	exemodel/fifo.hpp
- * \author	justgaoyuan<gao_yuangy@126.com>
+ * \author	Yi Qingliang<niqingliang2003@gmail.com>
  */
-#include <sys/stat.h>
 
 #include <stdint.h>
 #include <vector>
@@ -26,38 +25,14 @@ public:
 	 * \brief ctor of fifo_readee
 	 * \param path	point to a pathname to open.
 	 */
-	explicit fifo_readee(const char* path)
-	: pollee(::open(path, (O_RDONLY | O_NONBLOCK)),
-		 (uint32_t)(::EPOLLIN))
-	, m_path(path)
-	{
-	}
-
-	virtual ~fifo_readee() {};
+	explicit fifo_readee(const char* path);
+	virtual ~fifo_readee();
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
 	 */
-	virtual void dispose(poller &, uint32_t evts)
-	{
-		if (evts & ::EPOLLIN) {
-			m_data.clear();
+	virtual void dispose(poller &, uint32_t evts);
 
-			uint8_t buf;
-			do {
-				ssize_t ret = this->read(&buf, sizeof(buf));
-				if (ret <= 0) {
-					break;
-				}
-
-				m_data.push_back(buf);
-			} while (true);
-
-			if (m_data.size()) {
-				this->exe(m_data);
-			}
-		}
-	}
 	const char * path(void) const
 	{
 		return m_path;
@@ -78,31 +53,15 @@ public:
 	 * \brief ctor of fifo_writee
 	 * \param path	point to a pathname to open.
 	 */
-	explicit fifo_writee(const char* path)
-	: pollee(::open(path, (O_WRONLY | O_NONBLOCK)),
-		 (uint32_t)(::EPOLLOUT))
-	, m_path(path)
-	{
-	}
+	explicit fifo_writee(const char* path);
 
-	virtual ~fifo_writee() {};
+	virtual ~fifo_writee();
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
 	 */
-	virtual void dispose(poller &, uint32_t evts)
-	{
-		if (evts & ::EPOLLOUT) {
-			m_data.clear();
-			this->exe(m_data);
+	virtual void dispose(poller &, uint32_t evts);
 
-			ssize_t ret = this->write(m_data.data(), m_data.size());
-			if (ret < 0
-				|| (size_t)ret != m_data.size()) {
-				return;
-			}
-		}
-	}
 	const char * path(void) const
 	{
 		return m_path;

@@ -1,6 +1,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#include "zlog/zlog.hpp"
+
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/clientee.hpp"
 #include "exemodel/poller.hpp"
@@ -34,7 +36,7 @@ clientee::clientee(uint32_t svrip, uint16_t svrport)
 void clientee::dispose(poller & mgr, uint32_t evts)
 {
 	if ((evts & ::EPOLLRDHUP) || (evts & ::EPOLLERR)) {
-		emlog("clientee ERROR");
+		zlog::zlog_warning("clientee ERROR");
 		return;
 	}
 

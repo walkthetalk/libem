@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+#include "zlog/zlog.hpp"
+
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/serveree.hpp"
 #include "exemodel/poller.hpp"
@@ -74,7 +76,7 @@ size_t serveree::send(const void * buffer, size_t length)
 		return m_connectee->send(buffer, length);
 	}
 	else {
-		std::cout << "WARNING:: no client, it is needed for send msg!!" << std::endl;
+		zlog::zlog_warning("no client, it is needed for send msg!!");
 		return 0;
 	}
 }
