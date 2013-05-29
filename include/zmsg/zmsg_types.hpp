@@ -82,6 +82,6 @@ enum class fs_display_mode_t : uint8_t {
  * \brief dust check error code
  */
 enum class dust_check_err_t : uint8_t {
-	success;
-	cover_openned;
+	success,
+	cover_openned,
 };
