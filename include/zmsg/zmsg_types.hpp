@@ -92,4 +92,6 @@ enum class dust_check_err_t : uint8_t {
 enum class motor_test_err_t : uint8_t {
 	success,
 	cover_openned,
+	no_fiber,
+	fiber_defect,
 };
