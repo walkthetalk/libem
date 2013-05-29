@@ -20,10 +20,12 @@ public:
 
 template<>
 struct zmsg<mid_t::dust_check_result> {
+	bool xz_ok;
 	bool_img xz;
+	bool yz_ok;
 	bool_img yz;
 public:
-	ZMSG_PU(xz, yz)
+	ZMSG_PU(xz_ok, xz, yz_ok, yz)
 };
 
 } /* msg */
