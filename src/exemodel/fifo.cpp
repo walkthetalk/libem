@@ -7,9 +7,13 @@
 
 namespace exemodel {
 
+/**
+ * \note we use 'EPOLLET' for fifo_readee, because if remote end closed it, we
+ * will receive EPOLLHUP always.
+ */
 fifo_readee::fifo_readee(const char* path)
 : pollee(::open(path, (O_RDONLY | O_NONBLOCK)),
-		(uint32_t)(::EPOLLIN))
+		(uint32_t)(::EPOLLIN | ::EPOLLET))
 , m_path(path)
 {
 }
@@ -18,6 +22,9 @@ fifo_readee::~fifo_readee()
 {
 }
 
+/**
+ * \note because fifo_readee is 'EPOLLET', so we must read until empty.
+ */
 void fifo_readee::dispose(poller &, uint32_t evts)
 {
 	if (evts & ::EPOLLIN) {
@@ -37,9 +44,11 @@ void fifo_readee::dispose(poller &, uint32_t evts)
 			this->exe(m_data);
 		}
 	}
+#if 0
 	else {
 		zlog::zlog_debug("exemodel: unkown fifo_readee event, %u", evts);
 	}
+#endif
 }
 
 fifo_writee::fifo_writee(const char* path)
