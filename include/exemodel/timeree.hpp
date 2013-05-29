@@ -6,6 +6,8 @@
  */
 #include <sys/timerfd.h>
 
+#include "zlog/zlog.hpp"
+
 #include "exemodel/pollee.hpp"
 #include "exemodel/evt_cb.hpp"
 #include "exemodel/poll_tools.hpp"
@@ -110,7 +112,7 @@ public:
 		uint64_t buf = 0;
 		ssize_t ret = read(&buf, sizeof(buf));
 		if(ret != sizeof(buf)){
-			std::cout << "read error!" << std::endl;
+			zlog::zlog_warning("exemodel: timeree read error!");
 			return;
 		}
 
