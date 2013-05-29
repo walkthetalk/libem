@@ -140,6 +140,7 @@ public:
 		AutoAlignAfterStop,
 
 		ManualDischargeTimes,
+
 		MotorTestTimes,
 		ElectricArcTestTimes,
 		CleanArcRate)
@@ -148,6 +149,10 @@ public:
 template<>
 struct zmsg<mid_t::motor_test_result> {
 	motor_test_err_t code;
+
+	UINT32 motor_test_times;
+	UINT32 ele_arc_test_times;
+
 	/// \note following are error times
 	UINT32 reset;
 	UINT32 push;
