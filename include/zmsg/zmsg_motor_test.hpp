@@ -159,7 +159,7 @@ struct zmsg<mid_t::motor_test_result> {
 	UINT32 ele_arc;
 	UINT32 img;
 public:
-	ZMSG_PU(code, reset, push, ele_arc, img);
+	ZMSG_PU(code, reset, push, ele_arc, img)
 };
 
 } /* namespace zmsg */
