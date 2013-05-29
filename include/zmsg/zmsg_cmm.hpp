@@ -37,6 +37,7 @@ enum class mid_t : uint16_t {
 	set_fs_display_mode,
 
 	dust_check_result,
+	motor_test_result,
 	/// \todo add new message id
 	max,
 

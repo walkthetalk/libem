@@ -73,10 +73,10 @@ public:
 	BOOL AutoAlignAfterStop;
 	ULONG ManualDischargeTimes;
 
-    /* motor test para */
-    UINT32 MotorTestTimes;
-    UINT32 ElectricArcTestTimes;
-    UINT32 CleanArcRate;
+	/* motor test para */
+	UINT32 MotorTestTimes;
+	UINT32 ElectricArcTestTimes;
+	UINT32 CleanArcRate;
 public:
 	ZMSG_PU(
 		FSPattern,
@@ -138,11 +138,24 @@ public:
 		FibreAutoFeed,
 		BadCutSurface,
 		AutoAlignAfterStop,
-        ManualDischargeTimes,
-        MotorTestTimes,
-        ElectricArcTestTimes,
-        CleanArcRate)
+
+		ManualDischargeTimes,
+		MotorTestTimes,
+		ElectricArcTestTimes,
+		CleanArcRate)
 };
 
-}
+template<>
+struct zmsg<mid_t::motor_test_result> {
+	motor_test_err_t code;
+	/// \note following are error times
+	UINT32 reset;
+	UINT32 push;
+	UINT32 ele_arc;
+	UINT32 img;
+public:
+	ZMSG_PU(code, reset, push, ele_arc, img);
+};
+
+} /* namespace zmsg */
 
