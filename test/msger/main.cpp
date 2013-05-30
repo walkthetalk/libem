@@ -6,6 +6,8 @@
 
 #include "zmsg/zmsg_header.hpp"
 
+#include "zmsg/zmsg_dust_check.hpp"
+
 struct T1 {
 	int a;
 	int c;
@@ -167,6 +169,16 @@ int main(void)
 	typedef std::vector<double> self_t;
 	std::cout << (int)zmsg::id_of<self_t>::value << std::endl;
 #endif
+
+	DCL_ZMSG(dust_check_result) msg2 = {
+		dust_check_err_t::success,
+		true,
+		{ 320, 240, { true, false, true, }, },
+		false,
+		{ 320, 240, { false, true, true, }, },
+	};
+	test<false, false>(p, u, msg2);
+	test<true, false>(p, u, msg2);
 
 	return 0;
 }

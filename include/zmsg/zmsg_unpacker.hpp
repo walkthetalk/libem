@@ -291,7 +291,7 @@ public:
 	void unpack_type(_T const & v)
 	{
 		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
-			throw;
+			throw std::overflow_error("std::array size overflow!");
 		}
 		this->__unpack_type_base(id_of<_T>::value);
 		this->__unpack_type_base(static_cast<ele_num_t>(v.size()));
@@ -307,10 +307,6 @@ public:
 		&& !std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
 	void unpack_data(_T & v)
 	{
-		if (v.size() != 0) {
-			throw;
-		}
-
 		ele_num_t size;
 		this->unpack_data(size);
 		v.resize(size);
@@ -325,10 +321,6 @@ public:
 		&& std::is_same< typename _T::value_type, bool >::value, bool>::type = false >
 	void unpack_data(_T & v)
 	{
-		if (v.size() != 0) {
-			throw;
-		}
-
 		ele_num_t size;
 		this->unpack_data(size);
 		v.resize(size, false);

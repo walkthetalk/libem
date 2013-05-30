@@ -91,7 +91,7 @@ struct id_of< _T, typename std::enable_if<
 typedef uint8_t array_rank_t;
 typedef uint16_t array_extent_t;
 
-typedef uint16_t ele_num_t;
+typedef uint32_t ele_num_t;
 
 typedef uint16_t msg_len_t;
 

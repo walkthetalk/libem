@@ -280,7 +280,7 @@ public:
 	void pack_type(_T const & v)
 	{
 		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
-			throw;
+			throw std::overflow_error("std::array size overflow!");
 		}
 		this->__pack_type_base(id_of<_T>::value);
 		this->__pack_type_base(static_cast<ele_num_t>(v.size()));
@@ -297,7 +297,7 @@ public:
 	void pack_data(_T const & v)
 	{
 		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
-			throw;
+			throw std::overflow_error("std::vector size overflow!");
 		}
 
 		this->pack_data(static_cast<ele_num_t>(v.size()));
@@ -314,7 +314,7 @@ public:
 	{
 		auto const size = v.size();
 		if (size > std::numeric_limits<ele_num_t>::max()) {
-			throw;
+			throw std::overflow_error("std::vector size overflow!");
 		}
 		this->pack_data(static_cast<ele_num_t>(v.size()));
 
