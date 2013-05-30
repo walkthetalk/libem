@@ -340,7 +340,7 @@ public:
 		auto remainder = size % 8;
 		if (remainder > 0) {
 			this->unpack_data(sv);
-			for (auto j = 0; j < remainder; ++j) {
+			for (decltype(remainder) j = 0; j < remainder; ++j) {
 				if (sv & (1 << j)) {
 					*it = true;
 				}
