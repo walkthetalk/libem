@@ -288,7 +288,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		is_std_array<_T>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
 			throw std::overflow_error("std::array size overflow!");
@@ -351,7 +351,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		is_std_vector<_T>::value, bool>::type = false >
-	void unpack_type(_T const & v)
+	void unpack_type(_T const &)
 	{
 		this->__unpack_type_base(id_of<_T>::value);
 		this->__unpack_type_base(id_of<typename _T::value_type>::value);
