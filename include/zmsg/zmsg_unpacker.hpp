@@ -309,6 +309,7 @@ public:
 	{
 		ele_num_t size;
 		this->unpack_data(size);
+		v.clear();
 		v.resize(size);
 
 		for (auto & i : v) {
@@ -323,6 +324,7 @@ public:
 	{
 		ele_num_t size;
 		this->unpack_data(size);
+		v.clear();	/// \note here we must clear, because resize will not initialize old elements
 		v.resize(size, false);
 
 		uint8_t sv = 0;

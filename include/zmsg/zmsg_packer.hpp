@@ -333,7 +333,7 @@ public:
 		auto remainder = size % 8;
 		if (remainder > 0) {
 			sv = 0;
-			for (auto j = 0; j < remainder; ++j) {
+			for (decltype(remainder) j = 0; j < remainder; ++j) {
 				if (*it++) {
 					sv |= (1 << j);
 				}
