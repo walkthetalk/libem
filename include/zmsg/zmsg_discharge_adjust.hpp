@@ -143,7 +143,7 @@ struct zmsg<mid_t::discharge_adjust_result> {
 	uint16_t i[2];
 	double   t[2];
 public:
-	ZMSG_PU(i, t)
+	ZMSG_PU(code, i, t)
 };
 
 }
