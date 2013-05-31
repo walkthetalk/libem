@@ -1,14 +1,27 @@
 #include <iostream>
 #include <iomanip>
 
+#include "zmsg/zmsg_alarm.hpp"
+#include "zmsg/zmsg_camera_oper.hpp"
+#include "zmsg/zmsg_cmm.hpp"
+#include "zmsg/zmsg_discharge.hpp"
+#include "zmsg/zmsg_discharge_adjust.hpp"
+#include "zmsg/zmsg_display_oper.hpp"
+#include "zmsg/zmsg_dust_check.hpp"
+#include "zmsg/zmsg_fusion_splice.hpp"
+#include "zmsg/zmsg_fusion_splice_reset.hpp"
+#include "zmsg/zmsg_header.hpp"
+#include "zmsg/zmsg_heat.hpp"
+#include "zmsg/zmsg_motor_oper.hpp"
+#include "zmsg/zmsg_motor_test.hpp"
 #include "zmsg/zmsg_packer.hpp"
+#include "zmsg/zmsg_process_control.hpp"
+#include "zmsg/zmsg_regular_test.hpp"
+#include "zmsg/zmsg_stabilize_electrode.hpp"
+#include "zmsg/zmsg_svc_state.hpp"
+#include "zmsg/zmsg_types.hpp"
 #include "zmsg/zmsg_unpacker.hpp"
 
-#include "zmsg/zmsg_header.hpp"
-
-#include "zmsg/zmsg_dust_check.hpp"
-
-#include "zmsg/zmsg_stabilize_electrode.hpp"
 
 struct T1 {
 	int a;
@@ -173,7 +186,7 @@ int main(void)
 #endif
 
 	DCL_ZMSG(dust_check_result) msg2 = {
-		dust_check_err_t::success,
+		fs_err_t::success,
 		true,
 		{ 320, 240, { true, false, true, }, },
 		false,

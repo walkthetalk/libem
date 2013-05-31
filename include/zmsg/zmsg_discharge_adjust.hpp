@@ -138,7 +138,7 @@ public:
 
 template<>
 struct zmsg<mid_t::discharge_adjust_result> {
-	discharge_adjust_err_t code;
+	fs_err_t code;
 
 	uint16_t i[2];
 	double   t[2];

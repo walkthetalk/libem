@@ -20,7 +20,7 @@ public:
 
 template<>
 struct zmsg<mid_t::dust_check_result> {
-	dust_check_err_t code;
+	fs_err_t code;
 
 	/// \note following member are valid only if 'code' is 'SUCCESS'!
 	bool xz_ok;

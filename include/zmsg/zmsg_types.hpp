@@ -79,35 +79,11 @@ enum class fs_display_mode_t : uint8_t {
 };
 
 /**
- * \brief dust check error code
+ * \brief fusion splice related error code
  */
-enum class dust_check_err_t : uint8_t {
-	success,
-	cover_openned,
-};
-
-/**
- * \brief motor test error code
- */
-enum class motor_test_err_t : uint8_t {
+enum class fs_err_t : uint8_t {
 	success,
 	cover_openned,
 	no_fiber,
 	fiber_defect,
-};
-
-/**
- * \brief discharge adjust error code
- */
-enum class discharge_adjust_err_t : uint8_t {
-	success,
-	fail,
-};
-
-/**
- * \brief discharge adjust error code
- */
-enum class stabilize_electrode_err_t : uint8_t {
-	success,
-	fail,
 };

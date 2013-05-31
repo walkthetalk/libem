@@ -37,13 +37,14 @@ enum class mid_t : uint16_t {
 	image_move,
 	set_fs_display_mode,
 
+	fusion_splice_result,
 	dust_check_result,
 	motor_test_result,
+	regular_test_result,
 	discharge_adjust_result,
 	stabilize_electrode_result,
 	/// \todo add new message id
 	max,
-
 };
 
 template< mid_t mid >

@@ -137,4 +137,11 @@ public:
 		ManualDischargeTimes)
 };
 
+template<>
+struct zmsg<mid_t::fusion_splice_result> {
+	fs_err_t code;
+public:
+	ZMSG_PU(code)
+};
+
 }

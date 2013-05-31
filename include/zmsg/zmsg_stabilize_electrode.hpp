@@ -16,9 +16,11 @@ public:
 
 template<>
 struct zmsg<mid_t::stabilize_electrode_result> {
-	stabilize_electrode_err_t code;
+	fs_err_t code;
+
+	uint32_t number;
 public:
-	ZMSG_PU(code)
+	ZMSG_PU(code, number)
 };
 
 }
