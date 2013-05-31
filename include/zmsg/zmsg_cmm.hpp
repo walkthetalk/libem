@@ -38,6 +38,7 @@ enum class mid_t : uint16_t {
 
 	dust_check_result,
 	motor_test_result,
+	discharge_adjust_result;
 	/// \todo add new message id
 	max,
 

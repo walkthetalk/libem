@@ -95,3 +95,11 @@ enum class motor_test_err_t : uint8_t {
 	no_fiber,
 	fiber_defect,
 };
+
+/**
+ * \brief discharge adjust error code
+ */
+enum class discharge_adjust_err_t : uint8_t {
+	success,
+	fail,
+};

@@ -136,5 +136,15 @@ public:
 		ManualDischargeTimes)
 };
 
+template<>
+struct zmsg<mid_t::discharge_adjust_result> {
+	discharge_adjust_err_t code;
+
+	uint16_t i[2];
+	double   t[2];
+public:
+	ZMSG_PU(i, t)
+}
+
 }
 
