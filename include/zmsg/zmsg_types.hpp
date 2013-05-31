@@ -103,3 +103,11 @@ enum class discharge_adjust_err_t : uint8_t {
 	success,
 	fail,
 };
+
+/**
+ * \brief discharge adjust error code
+ */
+enum class stabilize_electrode_err_t : uint8_t {
+	success,
+	fail,
+};

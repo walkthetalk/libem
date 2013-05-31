@@ -161,7 +161,8 @@ struct zmsg<mid_t::motor_test_result> {
 public:
 	ZMSG_PU(code,
 		motor_test_times,
-		ele_arc_test_times, reset, push, ele_arc, img)
+		ele_arc_test_times,
+		reset, push, ele_arc, img)
 };
 
 } /* namespace zmsg */

@@ -25,6 +25,7 @@ enum class mid_t : uint16_t {
 	regular_test_start,
 	motor_test_start,
 	dust_check_start,
+	stabilize_electrode_start,
 	go_on,
 	stop,
 
@@ -39,6 +40,7 @@ enum class mid_t : uint16_t {
 	dust_check_result,
 	motor_test_result,
 	discharge_adjust_result,
+	stabilize_electrode_result,
 	/// \todo add new message id
 	max,
 

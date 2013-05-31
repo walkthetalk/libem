@@ -8,6 +8,8 @@
 
 #include "zmsg/zmsg_dust_check.hpp"
 
+#include "zmsg/zmsg_stabilize_electrode.hpp"
+
 struct T1 {
 	int a;
 	int c;
