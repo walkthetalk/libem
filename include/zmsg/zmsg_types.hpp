@@ -39,6 +39,7 @@ typedef void VOID;
  */
 enum class svc_fs_state_t : uint16_t {
 	fs_reseting,
+	fs_idle,
 	fs_ready,
 	fs_clring,
 	fs_calibrating,
