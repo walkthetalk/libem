@@ -37,6 +37,8 @@ enum class mid_t : uint16_t {
 	image_move,
 	set_fs_display_mode,
 
+	defect_detect_result,
+
 	fusion_splice_result,
 	dust_check_result,
 	motor_test_result,

@@ -72,6 +72,8 @@ typedef struct ifd_line final {
 	{
 		return (core || wrap);
 	}
+public:
+	ZMSG_PU(core, wrap, h_angle, v_angle)
 } ifd_line_t;
 
 typedef struct img_defects final {
@@ -84,6 +86,8 @@ typedef struct img_defects final {
 	{
 		return (yzl || yzr || xzl || xzr);
 	}
+public:
+	ZMSG_PU(yzl, yzr, xzl, xzr)
 } img_defects_t;
 
 /**
