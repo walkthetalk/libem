@@ -35,6 +35,58 @@ typedef void VOID;
 } /* namespace zmsg */
 
 /**
+ * \brief img fiber defect description
+ */
+typedef uint32_t ifd_t;
+
+static constexpr ifd_t ifd_spot = 0x1;
+static constexpr ifd_t ifd_break = 0x2;
+static constexpr ifd_t ifd_bottom_sag = 0x4;
+static constexpr ifd_t ifd_bottom_crest = 0x8;
+static constexpr ifd_t ifd_bottom_corner = 0x10;
+static constexpr ifd_t ifd_top_sag = 0x20;
+static constexpr ifd_t ifd_top_crest = 0x40;
+static constexpr ifd_t ifd_top_corner = 0x80;
+static constexpr ifd_t ifd_end_crude = 0x100;
+static constexpr ifd_t ifd_horizontal_angle = 0x200;
+static constexpr ifd_t ifd_vertical_angle = 0x400;
+
+static constexpr ifd_t ifd_cant_identify = 0x80000000;
+
+typedef struct ifd_line final {
+	ifd_t core;
+	ifd_t wrap;
+
+	double h_angle;
+	double v_angle;
+
+	ifd_line()
+	: core(0)
+	, wrap(0)
+	, h_angle(0)
+	, v_angle(0)
+	{
+	}
+
+	operator bool() const
+	{
+		return (core || wrap);
+	}
+} ifd_line_t;
+
+typedef struct img_defects final {
+	ifd_line_t yzl;
+	ifd_line_t yzr;
+	ifd_line_t xzl;
+	ifd_line_t xzr;
+
+	operator bool() const
+	{
+		return (yzl || yzr || xzl || xzr);
+	}
+} img_defects_t;
+
+/**
  * \brief service fs state
  */
 enum class svc_fs_state_t : uint16_t {
