@@ -4,9 +4,9 @@
 
 namespace exemodel {
 
-pollee::pollee(int fd, uint32_t evts)
+pollee::pollee(int fd, uint32_t evts, const char * info)
 : m_evts(evts)
-, m_fd(validate_fd(fd))
+, m_fd(validate_fd(fd, info))
 {
 	int ret = 0;
 	ret = f_cntl(F_SETFL,

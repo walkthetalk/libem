@@ -13,7 +13,8 @@ namespace exemodel {
  */
 fifo_readee::fifo_readee(const char* path)
 : pollee(::open(path, (O_RDONLY | O_NONBLOCK)),
-		(uint32_t)(::EPOLLIN | ::EPOLLET))
+	 (uint32_t)(::EPOLLIN | ::EPOLLET),
+	 "fofo_readee")
 , m_path(path)
 {
 }
@@ -53,7 +54,8 @@ void fifo_readee::dispose(poller &, uint32_t evts)
 
 fifo_writee::fifo_writee(const char* path)
 : pollee(::open(path, (O_WRONLY | O_NONBLOCK)),
-		(uint32_t)(::EPOLLOUT))
+	 (uint32_t)(::EPOLLOUT),
+	 "fifo_writee")
 , m_path(path)
 {
 }

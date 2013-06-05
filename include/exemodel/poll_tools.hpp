@@ -12,10 +12,10 @@ namespace exemodel {
  * \brief validate the file descriptor if it is valid.
  * \param fd	the file descriptor need validated.
  */
-inline int validate_fd(int fd)
+inline int validate_fd(int fd, const char * info)
 {
 	if (fd < 0) {
-		throw std::system_error(errno, std::system_category(), "validate fd");
+		throw std::system_error(errno, std::system_category(), info);
 	}
 
 	return fd;

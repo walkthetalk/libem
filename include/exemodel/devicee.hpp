@@ -27,7 +27,7 @@ public:
 	 * \param path	point to a pathname to open.
 	 */
 	explicit devicee(const char* path)
-	: pollee(::open(path, O_RDWR), uint32_t(::EPOLLIN))
+	: pollee(::open(path, O_RDWR), uint32_t(::EPOLLIN), path)
 	, m_path(path)
 	{
 	}
@@ -63,7 +63,7 @@ class devicee<void>
 : public pollee {
 public:
 	explicit devicee(const char* path, int oflag = O_RDWR)
-	: pollee(::open(path, oflag), 0)
+	: pollee(::open(path, oflag), 0, path)
 	, m_path(path)
 	{
 	}

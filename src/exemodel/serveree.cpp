@@ -13,7 +13,8 @@ namespace exemodel {
 
 serveree::serveree(uint16_t port)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
-	(uint32_t)(::EPOLLIN))
+	 (uint32_t)(::EPOLLIN),
+	 "serveree")
 , connectee::cb_obj_t()
 , m_destroycb(std::bind(&serveree::destroy, this, std::placeholders::_1))
 , m_connectee(nullptr)

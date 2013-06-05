@@ -25,7 +25,7 @@ public:
 	 * \param fd	the file descriptor representing this pollee.
 	 * \param evts	the events it cared about.
 	 */
-	explicit pollee(int fd, uint32_t evts);
+	explicit pollee(int fd, uint32_t evts, const char * info);
 	virtual ~pollee();
 public:
 	ssize_t pread(void *buf, size_t nbyte, off_t offset)

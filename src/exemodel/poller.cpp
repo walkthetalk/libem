@@ -5,7 +5,7 @@
 namespace exemodel {
 
 poller::poller()
-: pollee(::epoll_create1(EPOLL_CLOEXEC), uint32_t(::EPOLLIN | ::EPOLLOUT | ::EPOLLPRI))
+: pollee(::epoll_create1(EPOLL_CLOEXEC), uint32_t(::EPOLLIN | ::EPOLLOUT | ::EPOLLPRI), "poller")
 {
 }
 

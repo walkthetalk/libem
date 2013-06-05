@@ -8,7 +8,7 @@
 namespace exemodel {
 
 connectee::connectee(const destroy_cb_t & destroycb, int fd)
-: pollee(fd, (uint32_t)(::EPOLLIN | ::EPOLLRDHUP | ::EPOLLERR))
+: pollee(fd, (uint32_t)(::EPOLLIN | ::EPOLLRDHUP | ::EPOLLERR), "connectee")
 , m_destroycb(destroycb)
 {
 }

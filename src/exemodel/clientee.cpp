@@ -11,7 +11,8 @@ namespace exemodel {
 
 clientee::clientee(uint32_t svrip, uint16_t svrport)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
-	(uint32_t)(::EPOLLIN | ::EPOLLOUT | ::EPOLLRDHUP | ::EPOLLERR))
+	 (uint32_t)(::EPOLLIN | ::EPOLLOUT | ::EPOLLRDHUP | ::EPOLLERR),
+	 "clientee")
 , m_svrip(svrip)
 , m_svrport(svrport)
 {

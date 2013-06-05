@@ -62,7 +62,8 @@ public:
 	explicit timeree(itimerspec_t spec = { {0,0}, {0,0} })
 	: pollee(
 		::timerfd_create(clk_id, TFD_NONBLOCK | TFD_CLOEXEC)
-		, uint32_t(::EPOLLIN))
+		, uint32_t(::EPOLLIN)
+		, "timeree")
 	, m_spec(spec)
 	{
 	}
