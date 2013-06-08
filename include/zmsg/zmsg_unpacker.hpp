@@ -63,6 +63,11 @@ public:
 		o << "\n";
 	}
 
+	size_t size(void) const
+	{
+		return m_e - m_buf;
+	}
+
 	void reset(void)
 	{
 		m_d = m_buf;
@@ -78,11 +83,8 @@ public:
 		}
 
 		size_t r = (o.*f)(m_e, l);
-		if (r != l) {
-			throw read_fail("read fail");
-		}
 
-		m_e += l;
+		m_e += r;
 	}
 
 	void read_from(std::function<size_t (void *, size_t)> & f, size_t l)
@@ -93,11 +95,8 @@ public:
 		}
 
 		size_t r = f(m_e, l);
-		if (r != l) {
-			throw read_fail("read fail");
-		}
 
-		m_e += l;
+		m_e += r;
 	}
 public:
 	template< bool _rev, typename _T >
@@ -489,33 +488,64 @@ public:
 	}
 public:
 	template< typename _T >
-	void fill_from( _T & o, size_t (_T::*f)(void *, size_t))
+	bool fill_from( _T & o, size_t (_T::*f)(void *, size_t))
 	{
-		m_base.reset();
-		m_base.template read_from(o, f, HDR_SIZE);
-		m_base.fill<false>(m_hdr.flag);
-		this->__convert_to(m_hdr);
-
-		if(m_hdr.len > 0 ) {
-			m_base.template read_from(o, f, m_hdr.len);
+		if (m_base.size() < HDR_SIZE) {
+			m_base.template read_from(o, f, HDR_SIZE - m_base.size());
+			if (m_base.size() < HDR_SIZE) {
+				return false;
+			}
 		}
 
+		if (m_base.size() == HDR_SIZE) {
+			m_base.fill<false>(m_hdr.flag);
+			this->__convert_to(m_hdr);
+			if (m_hdr.len == 0) {
+				return true;
+			}
+		}
+
+		if (m_base.size() < (HDR_SIZE + m_hdr.len)) {
+			m_base.template read_from(o, f, (HDR_SIZE + m_hdr.len) - m_base.size());
+			if (m_base.size() < (HDR_SIZE + m_hdr.len)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	template< typename _T >
-	void fill_from( _T & o)
+	bool fill_from( _T & o)
 	{
-		fill_from(o, &_T::recv);
+		return fill_from(o, &_T::recv);
 	}
 
-	void fill_from(std::function<size_t (void *, size_t)> && f)
+	bool fill_from(std::function<size_t (void *, size_t)> && f)
 	{
-		m_base.reset();
-		m_base.read_from(f, HDR_SIZE);
-		m_base.fill<false>(m_hdr.flag);
-		this->__convert_to(m_hdr);
+		if (m_base.size() < HDR_SIZE) {
+			m_base.read_from(f, HDR_SIZE - m_base.size());
+			if (m_base.size() < HDR_SIZE) {
+				return false;
+			}
+		}
 
-		m_base.read_from(f, m_hdr.len);
+		if (m_base.size() == HDR_SIZE) {
+			m_base.fill<false>(m_hdr.flag);
+			this->__convert_to(m_hdr);
+			if (m_hdr.len == 0) {
+				return true;
+			}
+		}
+
+		if (m_base.size() < (HDR_SIZE + m_hdr.len)) {
+			m_base.read_from(f, (HDR_SIZE + m_hdr.len) - m_base.size());
+			if (m_base.size() < (HDR_SIZE + m_hdr.len)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	mid_t id(void) const
@@ -563,6 +593,9 @@ public:
 				v.template serialize(tmp);
 			}
 		}
+
+		/// \note reset buffer
+		m_base.reset();
 	}
 private:
 	void __convert_to(zmsg_header & v)
