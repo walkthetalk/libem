@@ -37,6 +37,7 @@ public:
 	ULONG ConeFSWaitTime;
 	ULONG ConeFSSpeed;
 	ULONG ConeFSStretchLength;
+
 	UINT32 LossEstimationMode;
 	FLOAT LeftFibreMFD;
 	FLOAT RightFibreMFD;
@@ -44,6 +45,9 @@ public:
 	FLOAT RateOfSyntropyBending;
 	FLOAT RateOfReverseBending;
 	FLOAT RateOfMFDDeviation;
+
+	UINT32 TensionSpeed;
+	UINT32 TensionStretchLength;
 
 	BOOL AutoStart;
 	BOOL Stop1;
@@ -111,6 +115,9 @@ public:
 		RateOfSyntropyBending,
 		RateOfReverseBending,
 		RateOfMFDDeviation,
+
+		TensionSpeed,
+		TensionStretchLength,
 
 		AutoStart,
 		Stop1,
