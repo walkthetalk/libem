@@ -1,5 +1,7 @@
 #pragma once
 
+#include <endian.h>
+
 #include <limits>
 #include <type_traits>
 #include <array>
@@ -98,9 +100,11 @@ typedef uint16_t msg_len_t;
 static constexpr msg_len_t ZMSG_MAX_LEN = std::numeric_limits<msg_len_t>::max();
 static constexpr size_t s_def_buf_size = ZMSG_MAX_LEN + 1;
 
-
-/// \todo
+#if __BYTE_ORDER == __LITTLE_ENDIAN
 static constexpr bool IS_LE = true;
+#elif __BYTE_ORDER == __BIG_ENDIAN
+static constexpr bool IS_LE = false;
+#endif
 
 struct zmsg_header {
 	uint8_t flag;
