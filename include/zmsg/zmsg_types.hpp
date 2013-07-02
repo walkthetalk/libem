@@ -145,3 +145,11 @@ enum class fs_err_t : uint8_t {
 	fiber_defect,
 	fiber_cross_over,
 };
+
+/**
+ * \brief led id
+ */
+enum class ledId_t : uint8_t {
+	CMOS_X = 0x0,
+	CMOS_Y,
+};
