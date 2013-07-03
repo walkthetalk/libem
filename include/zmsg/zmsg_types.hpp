@@ -28,6 +28,8 @@ typedef unsigned long ULONG;
 
 typedef float FLOAT;
 
+typedef double DOUBLE;
+
 typedef ULONG BOOL;
 
 typedef void VOID;
