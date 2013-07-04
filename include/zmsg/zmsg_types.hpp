@@ -121,6 +121,7 @@ enum motorId_t : uint8_t {
 	RZ,	// right z
 	X,	// x
 	Y,	// y
+
 	NUM,	// total number
 };
 
@@ -151,7 +152,28 @@ enum class fs_err_t : uint8_t {
 /**
  * \brief led id
  */
-enum class ledId_t : uint8_t {
+enum ledId_t : uint8_t {
 	CMOS_X = 0x0,
 	CMOS_Y,
+
+	LED_NUM,
 };
+
+/**
+ * \brief discharge_data_t, used for discharge revising
+ */
+typedef struct {
+	struct {
+		uint16_t x;
+		double   y;
+	public:
+		ZMSG_PU(x, y)
+	} p[2];
+
+	bool empty()
+	{
+		return (p[0].x == p[1].x);
+	}
+public:
+	ZMSG_PU(p)
+} discharge_data_t;

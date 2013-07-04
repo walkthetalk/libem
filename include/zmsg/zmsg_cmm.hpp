@@ -31,22 +31,20 @@ enum class mid_t : uint16_t {
 
 	motor_start,
 	motor_stop,
-
 	discharge,
-
 	image_move,
 	set_fs_display_mode,
-
 	set_led,
 
 	defect_detect_result,
-
 	fusion_splice_result,
 	dust_check_result,
 	motor_test_result,
 	regular_test_result,
 	discharge_adjust_result,
 	stabilize_electrode_result,
+
+	set_fs_spec,
 	/// \todo add new message id
 	max,
 };
