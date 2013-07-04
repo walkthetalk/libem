@@ -170,7 +170,7 @@ typedef struct {
 		ZMSG_PU(x, y)
 	} p[2];
 
-	bool empty()
+	bool empty() const
 	{
 		return (p[0].x == p[1].x);
 	}
