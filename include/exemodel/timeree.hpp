@@ -74,6 +74,13 @@ public:
 
 public:
 	/**
+	 * \brief set spec
+	 */
+	void set_spec(const itimerspec_t & new_value)
+	{
+		m_spec = new_value;
+	}
+	/**
 	 * \brief used for starting/stoping the timer
 	 */
 	void start(void)
@@ -84,16 +91,13 @@ public:
 
 	void start(const itimerspec_t & new_value)
 	{
-		/// store new value
-		m_spec = new_value;
+		this->set_spec();
 		this->start();
 	}
 
 	void start_abs(const itimerspec_t & new_value)
 	{
-		/// store new value
-		m_spec = new_value;
-
+		this->set_spec();
 		int ret = __set_spec(TFD_TIMER_ABSTIME, &new_value, NULL);
 		validate_ret(ret,"start timer abs error!\n");
 	}
