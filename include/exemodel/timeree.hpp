@@ -91,13 +91,13 @@ public:
 
 	void start(const itimerspec_t & new_value)
 	{
-		this->set_spec();
+		this->set_spec(new_value);
 		this->start();
 	}
 
 	void start_abs(const itimerspec_t & new_value)
 	{
-		this->set_spec();
+		this->set_spec(new_value);
 		int ret = __set_spec(TFD_TIMER_ABSTIME, &new_value, NULL);
 		validate_ret(ret,"start timer abs error!\n");
 	}
