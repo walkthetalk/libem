@@ -66,12 +66,12 @@ public:
 	BOOL AirPressure;
 	BOOL Temperature;
 	/*fiber_image_display*/
-	UINT32 ImgGap;
-	UINT32 ImgStop1;
-	UINT32 ImgAlign;
-	UINT32 ImgStop2;
-	UINT32 ImgDischarge;
-	UINT32 ImgLossEstimation;
+	fs_display_mode_t ImgGap;
+	fs_display_mode_t ImgStop1;
+	fs_display_mode_t ImgAlign;
+	fs_display_mode_t ImgStop2;
+	fs_display_mode_t ImgDischarge;
+	fs_display_mode_t ImgLossEstimation;
 	/*else*/
 	BOOL FibreAutoFeed;
 	BOOL BadCutSurface;
