@@ -14,9 +14,9 @@ public:
 
 template<>
 struct zmsg<mid_t::discharge_count>{
-	uint32_t num;
+	uint32_t discharge_count;
 public:
-	ZMSG_PU(num)
+	ZMSG_PU(discharge_count)
 };
 
 } /* msg */
