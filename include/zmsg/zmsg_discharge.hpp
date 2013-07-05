@@ -12,4 +12,11 @@ public:
 	ZMSG_PU(magnitude, time)
 };
 
+template<>
+struct zmsg<mid_t::discharge_count>{
+	uint32_t num;
+public:
+	ZMSG_PU(num)
+};
+
 } /* msg */

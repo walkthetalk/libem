@@ -45,6 +45,7 @@ enum class mid_t : uint16_t {
 	stabilize_electrode_result,
 
 	set_fs_spec,
+	discharge_count,
 	/// \todo add new message id
 	max,
 };
