@@ -12,8 +12,8 @@ public:
 
 template<>
 struct zmsg<mid_t::report_wave_form> {
-	std::vector<bool> x_wave;
-	std::vector<bool> y_wave;
+	std::vector<uint8_t> x_wave;
+	std::vector<uint8_t> y_wave;
 public:
 	ZMSG_PU(x_wave, y_wave)
 };
