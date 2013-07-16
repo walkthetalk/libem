@@ -150,6 +150,13 @@ enum class fs_err_t : uint8_t {
 };
 
 /**
+ * \brief heat related error code
+ */
+enum class heat_err_t : uint8_t {
+	success,
+};
+
+/**
  * \brief led id
  */
 enum ledId_t : uint8_t {

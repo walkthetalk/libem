@@ -44,8 +44,14 @@ enum class mid_t : uint16_t {
 	discharge_adjust_result,
 	stabilize_electrode_result,
 
+
 	set_fs_spec,
 	discharge_count,
+
+	heat_result,
+
+	query_dev_state,
+	report_dev_state,
 	/// \todo add new message id
 	max,
 };

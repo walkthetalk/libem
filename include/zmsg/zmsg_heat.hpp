@@ -17,6 +17,13 @@ public:
         ZMSG_PU(Material,Fiberlen,Heatctl,heat_time,heat_temp,finish_temp)
 };
 
+template<>
+struct zmsg<mid_t::heat_result> {
+	heat_err_t code;
+public:
+	ZMSG_PU(code)
+};
+
 }
 
 
