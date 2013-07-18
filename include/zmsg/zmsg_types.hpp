@@ -74,6 +74,12 @@ typedef struct ifd_line final {
 	{
 		return (core || wrap);
 	}
+
+	bool check(ifd_t msk) const
+	{
+		return ((core & msk)
+			|| (wrap & msk));
+	}
 public:
 	ZMSG_PU(core, wrap, h_angle, v_angle)
 } ifd_line_t;
@@ -87,6 +93,14 @@ typedef struct img_defects final {
 	operator bool() const
 	{
 		return (yzl || yzr || xzl || xzr);
+	}
+
+	bool check(ifd_t msk) const
+	{
+		return (yzl.check(msk)
+			|| yzr.check(msk)
+			|| xzl.check(msk)
+			|| xzr.check(msk));
 	}
 public:
 	ZMSG_PU(yzl, yzr, xzl, xzr)
