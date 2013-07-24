@@ -24,6 +24,7 @@ public:
 	uint16_t motor_max_speed[motorId_t::NUM];
 
 	uint16_t motor_lzrz_fs_speed;
+	uint16_t motor_xy_precise_calibrate_speed;
 
 	uint16_t motor_xy_steps_per_pixel;	// unit: step/pixel
 
@@ -58,6 +59,7 @@ public:
 		motor_max_speed,
 
 		motor_lzrz_fs_speed,
+		motor_xy_precise_calibrate_speed,
 
 		motor_xy_steps_per_pixel,
 
