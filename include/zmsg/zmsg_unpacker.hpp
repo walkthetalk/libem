@@ -517,7 +517,7 @@ public:
 	template< typename _T >
 	bool fill_from( _T & o, size_t (_T::*f)(void *, size_t))
 	{
-		return this->fill_from([&o](void * buf, size_t l) -> size_t {
+		return this->fill_from([&o, f](void * buf, size_t l) -> size_t {
 			return (o.*f)(buf, l);
 		});
 	}
