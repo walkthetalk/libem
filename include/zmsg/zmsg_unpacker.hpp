@@ -487,8 +487,23 @@ public:
 		return m_base;
 	}
 public:
+	/**
+	 * \brief this function will use f to read a message, and only a message.
+	 * and just \em try.
+	 * \note
+	 * if it has a complete message before, then just drop it, and read a new one.
+	 * if it has half message before, then try to complete it.
+	 * if it is null before, then try to read a new one.
+	 * \return the bool value returned represents if it has a complete message.
+	 */
 	bool fill_from(std::function<size_t (void *, size_t)> && f)
 	{
+		/// \note reset buffer if needed
+		if (m_base.size() >= HDR_SIZE
+		    && m_base.size() >= (HDR_SIZE + m_hdr.len)) {
+			m_base.reset();
+		}
+
 		if (m_base.size() < HDR_SIZE) {
 			m_base.read_from(f, HDR_SIZE - m_base.size());
 			if (m_base.size() < HDR_SIZE) {
@@ -573,9 +588,6 @@ public:
 				v.template serialize(tmp);
 			}
 		}
-
-		/// \note reset buffer
-		m_base.reset();
 	}
 private:
 	void __convert_to(zmsg_header & v)
