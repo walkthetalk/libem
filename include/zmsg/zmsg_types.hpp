@@ -108,13 +108,28 @@ public:
 
 /**
  * \brief service fs state
+ * \note all states mean enter this state.
  */
 enum class svc_fs_state_t : uint16_t {
 	fs_reseting,
 	fs_idle,
 	fs_ready,
-	fs_clring,
+
+	fs_entering,
+	fs_push1,
 	fs_calibrating,
+	fs_clring,
+	fs_defect_detecting,
+	fs_push2,
+	fs_pause1,
+	fs_precise_calibrating,
+	fs_pause2,
+	fs_pre_splice,
+	fs_discharge1,
+	fs_discharge2,
+	fs_discharge_manual,
+	fs_loss_estimating,
+	fs_tension_testing,
 };
 
 /**
