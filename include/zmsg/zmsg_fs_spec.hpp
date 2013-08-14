@@ -77,4 +77,14 @@ public:
 		led_brightness)
 };
 
+template<>
+struct zmsg<mid_t::update_led_brightness> {
+public:
+	ledId_t  id;
+	double   brightness;
+public:
+        ZMSG_PU(id,
+		brightness)
+};
+
 }

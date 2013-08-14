@@ -55,6 +55,8 @@ enum class mid_t : uint16_t {
 
 	query_wave_form,
 	report_wave_form,
+
+	update_led_brightness,
 	/// \todo add new message id
 	max,
 };
