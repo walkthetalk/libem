@@ -16,7 +16,6 @@ public:
 	uint32_t nm_per_step;			// unit: nm/step
 
 	uint16_t img_cap_delay;			// unit: ms
-	uint16_t img_delay_for_env_change;	// unit: ms
 
 	uint32_t clr_discharge_gap;		// unit: nm
 	uint16_t check_fiber_exist_time;	// unit: ms
@@ -52,7 +51,6 @@ public:
 		nm_per_step,
 
 		img_cap_delay,
-		img_delay_for_env_change,
 
 		clr_discharge_gap,
 		check_fiber_exist_time,
