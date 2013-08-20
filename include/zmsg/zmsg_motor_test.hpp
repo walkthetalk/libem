@@ -156,6 +156,7 @@ struct zmsg<mid_t::motor_test_result> {
 	/// \note following are error times
 	UINT32 reset;
 	UINT32 push;
+	UINT32 calibrate;
 	UINT32 ele_arc;
 	UINT32 img;
 public:
