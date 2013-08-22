@@ -56,8 +56,6 @@ public:
 		clr_discharge_strength,
 		clr_discharge_gap,
 		check_fiber_exist_time,
-		calbrating_time,
-		motor_reset_time,
 
 		motor_min_speed,
 		motor_max_speed,
