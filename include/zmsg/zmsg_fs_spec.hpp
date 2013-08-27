@@ -89,4 +89,13 @@ public:
 		brightness)
 };
 
+template<>
+struct zmsg<mid_t::update_window_position> {
+	bool is_pos_x;
+	uint16_t row;
+	uint16_t column;
+public:
+	ZMSG_PU(is_pos_x,row,column)
+};
+
 }
