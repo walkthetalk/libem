@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <array>
 #include <vector>
 
@@ -102,9 +103,29 @@ typedef struct img_defects final {
 			|| xzl.check(msk)
 			|| xzr.check(msk));
 	}
+
+	double left_cut_angle(void) const
+	{
+		return std::max(yzl.v_angle, xzl.v_angle);
+	}
+
+	double right_cut_angle(void) const
+	{
+		return std::max(yzr.v_angle, xzr.v_angle);
+	}
 public:
 	ZMSG_PU(yzl, yzr, xzl, xzr)
 } img_defects_t;
+
+/**
+ * \biref fiber recognition infomation
+ */
+typedef struct final {
+	uint32_t wrap_diameter;	/// unit: nm
+	uint32_t core_diameter; /// unit: nm
+public:
+	ZMSG_PU(wrap_diameter, core_diameter)
+} fiber_rec_info_t;
 
 /**
  * \brief service fs state
