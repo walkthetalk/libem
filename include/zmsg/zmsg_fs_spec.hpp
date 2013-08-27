@@ -39,6 +39,7 @@ public:
 
 	double   dust_check_threshold0;
 	double   dust_check_threshold1;
+	uint16_t img_denoise_threshold;
 
 	double   led_brightness[ledId_t::LED_NUM];
 public:
@@ -75,6 +76,7 @@ public:
 
 		dust_check_threshold0,
 		dust_check_threshold1,
+		img_denoise_threshold,
 
 		led_brightness)
 };

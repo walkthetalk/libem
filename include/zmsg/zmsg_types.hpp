@@ -61,7 +61,7 @@ typedef struct ifd_line final {
 	ifd_t wrap;
 
 	double h_angle;
-	double v_angle;
+	double v_angle;		/// \note must greater than zero
 
 	ifd_line()
 	: core(0)
