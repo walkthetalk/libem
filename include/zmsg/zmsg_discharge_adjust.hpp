@@ -1,6 +1,6 @@
 #pragma once
 
-#include "zmsg_cmm.hpp"
+#include "zmsg_types.hpp"
 
 namespace zmsg {
 
