@@ -150,6 +150,8 @@ template<>
 struct zmsg<mid_t::motor_test_result> {
 	fs_err_t code;
 
+	img_defects_t defect_data;
+
 	UINT32 motor_test_times;
 	UINT32 ele_arc_test_times;
 
@@ -161,6 +163,7 @@ struct zmsg<mid_t::motor_test_result> {
 	UINT32 img;
 public:
 	ZMSG_PU(code,
+		defect_data,
 		motor_test_times,
 		ele_arc_test_times,
 		reset, push, calibrate, ele_arc, img)
