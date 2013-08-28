@@ -7,7 +7,7 @@ namespace zmsg {
 template<>
 struct zmsg<mid_t::motor_test_start> {
 public:
-	UINT32 FSPattern;
+	fs_pattern_t FSPattern;
 	UINT32 FibreType;
 	UINT32 FibreAlignment;
 	BOOL XImageFocus;

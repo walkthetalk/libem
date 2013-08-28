@@ -238,3 +238,13 @@ typedef struct {
 public:
 	ZMSG_PU(p, temp)
 } discharge_data_t;
+
+/**
+ * \brief fusion splice pattern
+ */
+enum fs_pattern_t : uint8_t {
+	FS_PATTERN_AUTO = 0x0,
+	FS_PATTERN_CALIBRATE,
+	FS_PATTERN_NORMAL,
+	FS_PATTERN_SPECIAL,
+};
