@@ -229,10 +229,12 @@ typedef struct {
 		ZMSG_PU(x, y)
 	} p[2];
 
+	double temp;	/// unit: degree centigrade
+
 	bool empty() const
 	{
 		return (p[0].x == p[1].x);
 	}
 public:
-	ZMSG_PU(p)
+	ZMSG_PU(p, temp)
 } discharge_data_t;
