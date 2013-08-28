@@ -140,6 +140,8 @@ template<>
 struct zmsg<mid_t::discharge_adjust_result> {
 	fs_err_t code;
 
+	zmsg<mid_t::discharge_adjust_start> cfg;
+
 	fiber_rec_info_t rec_info;
 
 	img_defects_t defect_data;
@@ -147,7 +149,7 @@ struct zmsg<mid_t::discharge_adjust_result> {
 	discharge_data_t base;
 	discharge_data_t revise;
 public:
-	ZMSG_PU(code, rec_info, defect_data, base, revise)
+	ZMSG_PU(code, cfg, rec_info, defect_data, base, revise)
 };
 
 }

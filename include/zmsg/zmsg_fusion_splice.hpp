@@ -148,11 +148,15 @@ template<>
 struct zmsg<mid_t::fusion_splice_result> {
 	fs_err_t code;
 
+	zmsg<mid_t::fusion_splice_start> cfg;
+
 	fiber_rec_info_t rec_info;
 
 	img_defects_t defect_data;
+
+	double loss_db;		/// unit: db
 public:
-	ZMSG_PU(code, rec_info, defect_data)
+	ZMSG_PU(code, cfg, rec_info, defect_data, loss_db)
 };
 
 }
