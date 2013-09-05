@@ -57,12 +57,14 @@ static constexpr ifd_t ifd_vertical_angle = 0x400;
 static constexpr ifd_t ifd_cant_identify = 0x80000000;
 
 typedef struct ifd_line final {
-	ifd_t core;
-	ifd_t wrap;
+	ifd_t  core;
+	ifd_t  wrap;
 
 	/// \note all angles' unit are degree
 	double h_angle;
 	double v_angle;		/// \note must greater than zero
+
+	int32_t wrap_diameter;	/// unit: pixel
 
 	ifd_line()
 	: core(0)
@@ -83,7 +85,7 @@ typedef struct ifd_line final {
 			|| (wrap & msk));
 	}
 public:
-	ZMSG_PU(core, wrap, h_angle, v_angle)
+	ZMSG_PU(core, wrap, h_angle, v_angle, wrap_diameter)
 } ifd_line_t;
 
 typedef struct img_defects final {
