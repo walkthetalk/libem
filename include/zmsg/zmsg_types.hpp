@@ -60,6 +60,7 @@ typedef struct ifd_line final {
 	ifd_t core;
 	ifd_t wrap;
 
+	/// \note all angles' unit are degree
 	double h_angle;
 	double v_angle;		/// \note must greater than zero
 
