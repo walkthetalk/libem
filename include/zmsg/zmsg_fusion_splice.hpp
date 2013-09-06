@@ -156,8 +156,9 @@ struct zmsg<mid_t::fusion_splice_result> {
 
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
+	bool auto_push_no_waiting;
 public:
-	ZMSG_PU(code, cfg, rec_info, defect_data, pattern_compensate, loss_db)
+	ZMSG_PU(code, cfg, rec_info, defect_data, pattern_compensate, loss_db, auto_push_no_waiting)
 };
 
 }
