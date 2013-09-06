@@ -71,6 +71,7 @@ typedef struct ifd_line final {
 	, wrap(0)
 	, h_angle(0)
 	, v_angle(0)
+	, wrap_diameter(0)
 	{
 	}
 
@@ -93,6 +94,11 @@ typedef struct img_defects final {
 	ifd_line_t yzr;
 	ifd_line_t xzl;
 	ifd_line_t xzr;
+
+	img_defects()
+	: yzl(), yzr(), xzl(), xzr()
+	{
+	}
 
 	operator bool() const
 	{
