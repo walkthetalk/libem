@@ -31,7 +31,7 @@ typedef float FLOAT;
 
 typedef double DOUBLE;
 
-typedef ULONG BOOL;
+typedef bool BOOL;
 
 typedef void VOID;
 
