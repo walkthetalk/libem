@@ -36,7 +36,7 @@ public:
 	ULONG ConeFSWaitTime;
 	ULONG ConeFSSpeed;
 	ULONG ConeFSStretchLength;
-	UINT32 LossEstimationMode;
+	loss_estimate_mode_t LossEstimationMode;
 	FLOAT LeftFibreMFD;
 	FLOAT RightFibreMFD;
 	FLOAT LeastLoss;

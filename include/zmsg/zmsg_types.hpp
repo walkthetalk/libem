@@ -257,3 +257,13 @@ enum fs_pattern_t : uint8_t {
 	FS_PATTERN_NORMAL,
 	FS_PATTERN_SPECIAL,
 };
+
+/**
+ * \brief loss estimate mode
+ */
+enum loss_estimate_mode_t : uint8_t {
+	off = 0x0,
+	accurate,
+	core,
+	cladding,
+};
