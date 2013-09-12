@@ -44,7 +44,7 @@ public:
 	FLOAT LeastLoss;
 	FLOAT RateOfSyntropyBending;
 	FLOAT RateOfReverseBending;
-	FLOAT RateOfMFDDeviation;
+	FLOAT MFDMismatchCoefficient;
 
 	UINT32 TensionSpeed;
 	UINT32 TensionStretchLength;
@@ -114,7 +114,7 @@ public:
 		LeastLoss,
 		RateOfSyntropyBending,
 		RateOfReverseBending,
-		RateOfMFDDeviation,
+		MFDMismatchCoefficient,
 
 		TensionSpeed,
 		TensionStretchLength,
