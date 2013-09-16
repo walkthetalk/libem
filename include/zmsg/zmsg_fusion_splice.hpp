@@ -39,12 +39,12 @@ public:
 	ULONG ConeFSStretchLength;
 
 	loss_estimate_mode_t LossEstimationMode;
-	FLOAT LeftFibreMFD;
-	FLOAT RightFibreMFD;
-	FLOAT LeastLoss;
+	FLOAT LeftFibreMFD;			/// unit: um
+	FLOAT RightFibreMFD;			/// unit: um
+	FLOAT LeastLoss;			/// unit: db
 	FLOAT RateOfSyntropyBending;
 	FLOAT RateOfReverseBending;
-	FLOAT MFDMismatchCoefficient;
+	FLOAT MFDMismatchCoefficient;		/// 0.0 ~ 1.0
 
 	UINT32 TensionSpeed;
 	UINT32 TensionStretchLength;
