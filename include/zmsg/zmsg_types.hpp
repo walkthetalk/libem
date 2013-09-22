@@ -207,6 +207,7 @@ enum class fs_err_t : uint8_t {
 	no_fiber,
 	fiber_defect,
 	fiber_cross_over,
+	fiber_off_center,
 	img_brightness,
 	abnormal_arc,
 
