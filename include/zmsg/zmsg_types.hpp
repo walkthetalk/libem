@@ -210,6 +210,7 @@ enum class fs_err_t : uint8_t {
 	fiber_off_center,
 	img_brightness,
 	abnormal_arc,
+	motor_err,
 
 	arc_time_zero,
 };
