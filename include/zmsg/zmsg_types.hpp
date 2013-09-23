@@ -212,6 +212,9 @@ enum class fs_err_t : uint8_t {
 	abnormal_arc,
 	motor_err,
 
+	revise1_mag,
+	revise2_mag,
+
 	arc_time_zero,
 };
 
