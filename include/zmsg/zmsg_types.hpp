@@ -241,7 +241,7 @@ enum ledId_t : uint8_t {
 typedef struct {
 	struct {
 		uint16_t x;
-		double   y;		/// unit: nm
+		double   y;		/// unit: um
 	public:
 		ZMSG_PU(x, y)
 	} p[2];
