@@ -243,22 +243,6 @@ enum class mt_err_t : uint8_t {
 };
 
 /**
- * \brief regular test related error code
- */
-enum class rt_err_t : uint8_t {
-	success,
-	cover_openned,
-	no_fiber,
-	fiber_defect,
-	fiber_cross_over,
-	fiber_off_center,
-	img_brightness,
-	abnormal_arc,
-
-	arc_time_zero,
-};
-
-/**
  * \brief stablize electrode error code
  */
 enum class se_err_t : uint8_t {
