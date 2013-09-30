@@ -148,7 +148,7 @@ public:
 
 template<>
 struct zmsg<mid_t::motor_test_result> {
-	fs_err_t code;
+	mt_err_t code;
 
 	zmsg<mid_t::motor_test_start> cfg;
 

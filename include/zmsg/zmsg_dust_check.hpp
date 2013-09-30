@@ -20,7 +20,7 @@ public:
 
 template<>
 struct zmsg<mid_t::dust_check_result> {
-	fs_err_t code;
+	dc_err_t code;
 
 	zmsg<mid_t::dust_check_start> cfg;
 

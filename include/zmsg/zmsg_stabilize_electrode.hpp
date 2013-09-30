@@ -16,7 +16,7 @@ public:
 
 template<>
 struct zmsg<mid_t::stabilize_electrode_result> {
-	fs_err_t code;
+	se_err_t code;
 
 	zmsg<mid_t::stabilize_electrode_start> cfg;
 

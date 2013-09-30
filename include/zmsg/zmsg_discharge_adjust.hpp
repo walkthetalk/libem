@@ -138,7 +138,7 @@ public:
 
 template<>
 struct zmsg<mid_t::discharge_adjust_result> {
-	fs_err_t code;
+	da_err_t code;
 
 	zmsg<mid_t::discharge_adjust_start> cfg;
 

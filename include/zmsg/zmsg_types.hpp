@@ -210,7 +210,82 @@ enum class fs_err_t : uint8_t {
 	fiber_off_center,
 	img_brightness,
 	abnormal_arc,
-	motor_err,
+
+	arc_time_zero,
+};
+
+/**
+ * \brief dust check related error code
+ */
+enum class dc_err_t : uint8_t {
+	success,
+	cover_openned,
+	img_brightness,
+};
+
+/**
+ * \brief motor test related error code
+ */
+enum class mt_err_t : uint8_t {
+	success,
+	cover_openned,
+	no_fiber,
+	fiber_defect,
+	fiber_cross_over,
+	fiber_off_center,
+	img_brightness,
+	abnormal_arc,
+	push_timeout,
+	calibrate_timeout,
+	reset_timeout,
+
+	arc_time_zero,
+};
+
+/**
+ * \brief regular test related error code
+ */
+enum class rt_err_t : uint8_t {
+	success,
+	cover_openned,
+	no_fiber,
+	fiber_defect,
+	fiber_cross_over,
+	fiber_off_center,
+	img_brightness,
+	abnormal_arc,
+
+	arc_time_zero,
+};
+
+/**
+ * \brief stablize electrode error code
+ */
+enum class se_err_t : uint8_t {
+	success,
+	cover_openned,
+	no_fiber,
+	fiber_defect,
+	fiber_cross_over,
+	fiber_off_center,
+	img_brightness,
+	abnormal_arc,
+
+	arc_time_zero,
+};
+
+/**
+ * \brief discharg adjust error code
+ */
+enum class da_err_t : uint8_t {
+	success,
+	cover_openned,
+	no_fiber,
+	fiber_defect,
+	fiber_cross_over,
+	fiber_off_center,
+	img_brightness,
+	abnormal_arc,
 
 	revise1_mag,
 	revise2_mag,
