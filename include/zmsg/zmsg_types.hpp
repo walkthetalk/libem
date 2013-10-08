@@ -215,6 +215,13 @@ enum class fs_err_t : uint8_t {
 };
 
 /**
+ * \brief regular test related error code
+ */
+enum class fs_err_t : uint8_t {
+	success,
+};
+
+/**
  * \brief dust check related error code
  */
 enum class dc_err_t : uint8_t {
