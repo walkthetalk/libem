@@ -217,7 +217,7 @@ enum class fs_err_t : uint8_t {
 /**
  * \brief regular test related error code
  */
-enum class fs_err_t : uint8_t {
+enum class rt_err_t : uint8_t {
 	success,
 };
 
