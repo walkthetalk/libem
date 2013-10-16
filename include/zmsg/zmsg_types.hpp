@@ -315,17 +315,17 @@ public:
 /**
  * \brief fusion splice pattern
  */
-enum fs_pattern_t : uint8_t {
-	FS_PATTERN_AUTO = 0x0,
-	FS_PATTERN_CALIBRATE,
-	FS_PATTERN_NORMAL,
-	FS_PATTERN_SPECIAL,
+enum class fs_pattern_t : uint8_t {
+	automatic = 0x0,
+	calibrate,
+	normal,
+	special,
 };
 
 /**
  * \brief loss estimate mode
  */
-enum loss_estimate_mode_t : uint8_t {
+enum class loss_estimate_mode_t : uint8_t {
 	off = 0x0,
 	accurate,
 	core,
