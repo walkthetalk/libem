@@ -7,10 +7,10 @@ namespace zmsg {
 template<>
 struct zmsg<mid_t::set_fs_spec> {
 public:
-	uint16_t window_x_row;			// unit: pixel
-	uint16_t window_x_col;			// unit: pixel
-	uint16_t window_y_row;			// unit: pixel
-	uint16_t window_y_col;			// unit: pixel
+	int32_t window_x_row;			// unit: pixel
+	int32_t window_x_col;			// unit: pixel
+	int32_t window_y_row;			// unit: pixel
+	int32_t window_y_col;			// unit: pixel
 
 	uint32_t nm_per_pixel;			// unit: nm/pixel
 	uint32_t nm_per_step;			// unit: nm/step
@@ -94,8 +94,8 @@ public:
 template<>
 struct zmsg<mid_t::update_window_position> {
 	bool is_pos_x;
-	uint16_t row;
-	uint16_t column;
+	int32_t row;
+	int32_t column;
 public:
 	ZMSG_PU(is_pos_x,row,column)
 };
