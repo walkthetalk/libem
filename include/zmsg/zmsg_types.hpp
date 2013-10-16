@@ -42,33 +42,23 @@ typedef void VOID;
  */
 typedef uint32_t ifd_t;
 
-static constexpr ifd_t ifd_spot = 0x1;
-static constexpr ifd_t ifd_break = 0x2;
-static constexpr ifd_t ifd_bottom_sag = 0x4;
-static constexpr ifd_t ifd_bottom_crest = 0x8;
-static constexpr ifd_t ifd_bottom_corner = 0x10;
-static constexpr ifd_t ifd_top_sag = 0x20;
-static constexpr ifd_t ifd_top_crest = 0x40;
-static constexpr ifd_t ifd_top_corner = 0x80;
-static constexpr ifd_t ifd_end_crude = 0x100;
-static constexpr ifd_t ifd_horizontal_angle = 0x200;
-static constexpr ifd_t ifd_vertical_angle = 0x400;
+static constexpr ifd_t ifd_end_crude = 0x1;
+static constexpr ifd_t ifd_horizontal_angle = 0x2;
+static constexpr ifd_t ifd_vertical_angle = 0x4;
 
 static constexpr ifd_t ifd_cant_identify = 0x80000000;
 
 typedef struct ifd_line final {
-	ifd_t  core;
-	ifd_t  wrap;
+	ifd_t  dbmp;
 
 	/// \note all angles' unit are degree
 	double h_angle;
-	double v_angle;		/// \note must greater than zero
+	double v_angle;
 
 	int32_t wrap_diameter;	/// unit: pixel
 
 	ifd_line()
-	: core(0)
-	, wrap(0)
+	: dbmp(0)
 	, h_angle(0)
 	, v_angle(0)
 	, wrap_diameter(0)
@@ -77,16 +67,15 @@ typedef struct ifd_line final {
 
 	operator bool() const
 	{
-		return (core || wrap);
+		return dbmp;
 	}
 
 	bool check(ifd_t msk) const
 	{
-		return ((core & msk)
-			|| (wrap & msk));
+		return (dbmp & msk);
 	}
 public:
-	ZMSG_PU(core, wrap, h_angle, v_angle, wrap_diameter)
+	ZMSG_PU(dbmp, h_angle, v_angle, wrap_diameter)
 } ifd_line_t;
 
 typedef struct img_defects final {
