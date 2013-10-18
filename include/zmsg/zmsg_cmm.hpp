@@ -13,7 +13,7 @@ enum class mid_t : uint16_t {
 	test2,
 
 	fs_state,
-	heat_state,                //5
+	heat_state,			/// 5
 
 	alarm,
 
@@ -21,31 +21,31 @@ enum class mid_t : uint16_t {
 
 	heat_start,
 	fusion_splice_start,
-	discharge_adjust_start,    //10
+	discharge_adjust_start,		/// 10
 	regular_test_start,
 	motor_test_start,
 	dust_check_start,
 	stabilize_electrode_start,
-	go_on,                     //15
+	go_on,				/// 15
 	stop,
 
 	motor_start,
 	motor_stop,
 	discharge,
-	image_move,                //20
+	image_move,			/// 20
 	set_fs_display_mode,
 	set_led,
 
 	defect_detect_result,
 	fusion_splice_result,
-	dust_check_result,         //25
+	dust_check_result,		/// 25
 	motor_test_result,
 	regular_test_result,
 	discharge_adjust_result,
 	stabilize_electrode_result,
 
 
-	set_fs_spec,               //30
+	set_fs_spec,			/// 30
 	discharge_count,
 
 	heat_result,
@@ -53,13 +53,16 @@ enum class mid_t : uint16_t {
 	query_dev_state,
 	report_dev_state,
 
-	query_wave_form,           //35
+	query_wave_form,		/// 35
 	report_wave_form,
 
 	update_led_brightness,
 	update_window_position,
-	/// \todo add new message id
-	max,                       //38
+
+	set_lcd_brightness,
+
+	/// \todo add new message id above this line
+	max,
 };
 
 template< mid_t mid >
