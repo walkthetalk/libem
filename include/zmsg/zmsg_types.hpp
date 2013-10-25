@@ -192,7 +192,6 @@ enum class fs_display_mode_t : uint8_t {
  */
 enum class fs_err_t : uint8_t {
 	success,
-	fail,
 	cover_openned,
 	no_fiber,
 	fiber_defect,
@@ -201,6 +200,7 @@ enum class fs_err_t : uint8_t {
 	img_brightness,
 	abnormal_arc,
 	tense_test_fail,
+	fiber_broken,
 
 	arc_time_zero,
 };
