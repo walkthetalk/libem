@@ -38,6 +38,17 @@ typedef void VOID;
 } /* namespace zmsg */
 
 /**
+ * \brief bool image
+ */
+struct bool_img {
+	uint16_t width;
+	uint16_t height;
+	std::vector<bool> data;
+public:
+	ZMSG_PU(width, height, data)
+};
+
+/**
  * \brief img fiber defect description
  */
 typedef uint32_t ifd_t;
@@ -84,6 +95,10 @@ typedef struct img_defects final {
 	ifd_line_t xzl;
 	ifd_line_t xzr;
 
+	/// the image contain missed corner info
+	bool_img yz_img;
+	bool_img xz_img;
+
 	img_defects()
 	: yzl(), yzr(), xzl(), xzr()
 	{
@@ -112,7 +127,7 @@ typedef struct img_defects final {
 		return std::max(yzr.v_angle, xzr.v_angle);
 	}
 public:
-	ZMSG_PU(yzl, yzr, xzl, xzr)
+	ZMSG_PU(yzl, yzr, xzl, xzr, yz_img, xz_img)
 } img_defects_t;
 
 /**
@@ -124,17 +139,6 @@ typedef struct final {
 public:
 	ZMSG_PU(wrap_diameter, core_diameter)
 } fiber_rec_info_t;
-
-/**
- * \brief bool image
- */
-struct bool_img {
-	uint16_t width;
-	uint16_t height;
-	std::vector<bool> data;
-public:
-	ZMSG_PU(width, height, data)
-};
 
 /**
  * \brief service fs state
