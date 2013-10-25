@@ -126,6 +126,17 @@ public:
 } fiber_rec_info_t;
 
 /**
+ * \brief bool image
+ */
+struct bool_img {
+	uint16_t width;
+	uint16_t height;
+	std::vector<bool> data;
+public:
+	ZMSG_PU(width, height, data)
+};
+
+/**
  * \brief service fs state
  * \note all states mean enter this state.
  */

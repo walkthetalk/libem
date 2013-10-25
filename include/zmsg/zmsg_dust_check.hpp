@@ -10,14 +10,6 @@ public:
 	ZMSG_PU()
 };
 
-struct bool_img {
-	uint16_t width;
-	uint16_t height;
-	std::vector<bool> data;
-public:
-	ZMSG_PU(width, height, data)
-};
-
 template<>
 struct zmsg<mid_t::dust_check_result> {
 	dc_err_t code;
