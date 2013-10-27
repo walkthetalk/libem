@@ -165,6 +165,7 @@ enum class svc_fs_state_t : uint16_t {
 	fs_discharge_manual,
 	fs_loss_estimating,
 	fs_tension_testing,
+	fs_waiting_coveropen,
 };
 
 /**
