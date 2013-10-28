@@ -41,6 +41,13 @@ typedef void VOID;
  * \brief bool image
  */
 struct bool_img {
+	bool_img()
+	: width(0)
+	, height(0)
+	, data()
+	{
+	}
+
 	uint16_t width;
 	uint16_t height;
 	std::vector<bool> data;
@@ -101,6 +108,7 @@ typedef struct img_defects final {
 
 	img_defects()
 	: yzl(), yzr(), xzl(), xzr()
+	, yz_img(), xz_img()
 	{
 	}
 
