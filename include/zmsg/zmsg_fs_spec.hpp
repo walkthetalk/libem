@@ -45,6 +45,8 @@ public:
 	uint16_t img_denoise_threshold;
 
 	double   led_brightness[ledId_t::LED_NUM];
+	double   x_focal_distance;
+	double   y_focal_distance;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -84,7 +86,10 @@ public:
 		dust_check_threshold1,
 		img_denoise_threshold,
 
-		led_brightness)
+		led_brightness,
+
+		x_focal_distance,
+		y_focal_distance)
 };
 
 template<>
