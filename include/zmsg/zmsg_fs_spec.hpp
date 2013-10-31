@@ -24,6 +24,9 @@ public:
 	uint16_t motor_min_speed[motorId_t::NUM];
 	uint16_t motor_max_speed[motorId_t::NUM];
 
+	uint32_t TensionSpeed;
+	uint32_t TensionStretchLength;
+
 	uint16_t motor_lzrz_fs_speed;
 	uint32_t motor_xy_precise_calibrate_speed;
 
@@ -60,6 +63,9 @@ public:
 
 		motor_min_speed,
 		motor_max_speed,
+
+		TensionSpeed;
+		TensionStretchLength;
 
 		motor_lzrz_fs_speed,
 		motor_xy_precise_calibrate_speed,

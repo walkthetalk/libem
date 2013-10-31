@@ -46,9 +46,6 @@ public:
 	FLOAT RateOfReverseBending;
 	FLOAT MFDMismatchCoefficient;		/// 0.0 ~ 1.0
 
-	UINT32 TensionSpeed;
-	UINT32 TensionStretchLength;
-
 	BOOL AutoStart;
 	BOOL Stop1;
 	BOOL Stop2;
