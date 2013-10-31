@@ -64,8 +64,8 @@ public:
 		motor_min_speed,
 		motor_max_speed,
 
-		TensionSpeed;
-		TensionStretchLength;
+		TensionSpeed,
+		TensionStretchLength,
 
 		motor_lzrz_fs_speed,
 		motor_xy_precise_calibrate_speed,
