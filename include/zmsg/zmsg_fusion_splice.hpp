@@ -113,9 +113,6 @@ public:
 		RateOfReverseBending,
 		MFDMismatchCoefficient,
 
-		TensionSpeed,
-		TensionStretchLength,
-
 		AutoStart,
 		Stop1,
 		Stop2,
