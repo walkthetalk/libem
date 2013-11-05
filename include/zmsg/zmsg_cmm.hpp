@@ -61,6 +61,7 @@ enum class mid_t : uint16_t {
 
 	set_lcd_brightness,
 	loss_estimating_result,
+	manual_focal_distance,
 
 	/// \todo add new message id above this line
 	max,
