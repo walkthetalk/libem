@@ -111,4 +111,13 @@ public:
 	ZMSG_PU(is_pos_x,row,column)
 };
 
+template<>
+struct zmsg<mid_t::update_cmos_focal_distance> {
+public:
+	double x_focal_distance;
+	double y_focal_distance;
+public:
+	ZMSG_PU(x_focal_distance, y_focal_distance)
+}
+
 }
