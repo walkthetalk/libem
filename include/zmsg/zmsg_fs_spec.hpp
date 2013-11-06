@@ -118,6 +118,6 @@ public:
 	double y_focal_distance;
 public:
 	ZMSG_PU(x_focal_distance, y_focal_distance)
-}
+};
 
 }
