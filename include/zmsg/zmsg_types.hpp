@@ -48,6 +48,13 @@ struct bool_img {
 	{
 	}
 
+	void init(void)
+	{
+		this->width = 0;
+		this->height = 0;
+		this->data.clear();
+	}
+
 	uint16_t width;
 	uint16_t height;
 	std::vector<bool> data;
@@ -83,6 +90,14 @@ typedef struct ifd_line final {
 	{
 	}
 
+	void init(void)
+	{
+		this->dbmp = 0;
+		this->h_angle = 0;
+		this->v_angle = 0;
+		this->wrap_diameter = 0;
+	}
+
 	operator bool() const
 	{
 		return dbmp;
@@ -110,6 +125,16 @@ typedef struct img_defects final {
 	: yzl(), yzr(), xzl(), xzr()
 	, yz_img(), xz_img()
 	{
+	}
+
+	void init(void)
+	{
+		this->yzl.init();
+		this->yzr.init();
+		this->xzl.init();
+		this->xzr.init();
+		this->yz_img.init();
+		this->xz_img.init();
 	}
 
 	operator bool() const
