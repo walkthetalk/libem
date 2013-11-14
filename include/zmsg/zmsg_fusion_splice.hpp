@@ -148,10 +148,22 @@ struct zmsg<mid_t::fusion_splice_result> {
 
 	img_defects_t defect_data;
 
+	double core_diff_pre;		/// unit: um
+	double cladding_diff_pre;	/// unit: um
+	double vertex_intersect_angle;	/// unit: degree
+
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
 public:
-	ZMSG_PU(code, cfg, rec_info, defect_data, pattern_compensate, loss_db)
+	ZMSG_PU(code,
+		cfg,
+		rec_info,
+		defect_data,
+		core_diff_pre,
+		cladding_diff_pre,
+		vertex_intersect_angle,
+		pattern_compensate,
+		loss_db)
 };
 
 }
