@@ -60,9 +60,11 @@ enum class mid_t : uint16_t {
 	update_window_position,
 
 	set_lcd_brightness,
-	loss_estimating_result,
+	loss_estimating_result,		/// 40
 	manual_focal_distance,
 	update_cmos_focal_distance,
+
+	get_fiber_defect_info,
 
 	/// \todo add new message id above this line
 	max,
