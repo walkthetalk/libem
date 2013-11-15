@@ -150,7 +150,7 @@ template<>
 struct zmsg<mid_t::motor_test_result> {
 	mt_err_t code;
 
-	zmsg<mid_t::motor_test_start> cfg;
+	zmsg<mid_t::motor_test_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 

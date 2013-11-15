@@ -65,6 +65,8 @@ enum class mid_t : uint16_t {
 	update_cmos_focal_distance,
 
 	get_fiber_defect_info,
+	manual_discharge_times,
+	tense_test_result,
 
 	/// \todo add new message id above this line
 	max,

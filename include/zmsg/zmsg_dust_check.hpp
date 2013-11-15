@@ -14,7 +14,7 @@ template<>
 struct zmsg<mid_t::dust_check_result> {
 	dc_err_t code;
 
-	zmsg<mid_t::dust_check_start> cfg;
+	zmsg<mid_t::dust_check_start> z_cfg;
 
 	/// \note following member are valid only if 'code' is 'SUCCESS'!
 	bool xz_ok;

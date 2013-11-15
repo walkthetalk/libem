@@ -142,7 +142,7 @@ template<>
 struct zmsg<mid_t::fusion_splice_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::fusion_splice_start> cfg;
+	zmsg<mid_t::fusion_splice_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 
@@ -154,6 +154,11 @@ struct zmsg<mid_t::fusion_splice_result> {
 
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
+
+	bool is_tense_test;
+	zmsg<mid_t::tense_test_result> z_tense_test_result;
+
+	zmsg<mid_t::manual_discharge_times> z_manual_discharge_times;
 public:
 	ZMSG_PU(code,
 		cfg,
@@ -163,7 +168,10 @@ public:
 		cladding_diff_pre,
 		vertex_intersect_angle,
 		pattern_compensate,
-		loss_db)
+		loss_db,
+		is_tense_test,
+		tense_test_result,
+		manual_discharge_times;)
 };
 
 }

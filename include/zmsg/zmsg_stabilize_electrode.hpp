@@ -18,7 +18,7 @@ template<>
 struct zmsg<mid_t::stabilize_electrode_result> {
 	se_err_t code;
 
-	zmsg<mid_t::stabilize_electrode_start> cfg;
+	zmsg<mid_t::stabilize_electrode_start> z_cfg;
 
 	uint32_t number;
 public:

@@ -140,7 +140,7 @@ template<>
 struct zmsg<mid_t::discharge_adjust_result> {
 	da_err_t code;
 
-	zmsg<mid_t::discharge_adjust_start> cfg;
+	zmsg<mid_t::discharge_adjust_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 
