@@ -22,7 +22,7 @@ struct zmsg<mid_t::stabilize_electrode_result> {
 
 	uint32_t number;
 public:
-	ZMSG_PU(code, cfg, number)
+	ZMSG_PU(code, z_cfg, number)
 };
 
 }

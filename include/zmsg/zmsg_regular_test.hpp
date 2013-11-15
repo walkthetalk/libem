@@ -16,7 +16,7 @@ struct zmsg<mid_t::regular_test_result> {
 
 	zmsg<mid_t::regular_test_start> z_cfg;
 public:
-	ZMSG_PU(code, cfg)
+	ZMSG_PU(code, z_cfg)
 };
 
 } /* msg */

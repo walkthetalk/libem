@@ -167,7 +167,7 @@ struct zmsg<mid_t::motor_test_result> {
 	UINT32 img;
 public:
 	ZMSG_PU(code,
-		cfg,
+		z_cfg,
 		rec_info,
 		defect_data,
 		motor_test_times,

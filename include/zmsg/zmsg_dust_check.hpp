@@ -22,7 +22,7 @@ struct zmsg<mid_t::dust_check_result> {
 	bool yz_ok;
 	bool_img yz;
 public:
-	ZMSG_PU(code, cfg, xz_ok, xz, yz_ok, yz)
+	ZMSG_PU(code, z_cfg, xz_ok, xz, yz_ok, yz)
 };
 
 } /* msg */

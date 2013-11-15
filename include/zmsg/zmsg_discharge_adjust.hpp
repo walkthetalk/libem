@@ -149,7 +149,7 @@ struct zmsg<mid_t::discharge_adjust_result> {
 	discharge_data_t base;
 	discharge_data_t revise;
 public:
-	ZMSG_PU(code, cfg, rec_info, defect_data, base, revise)
+	ZMSG_PU(code, z_cfg, rec_info, defect_data, base, revise)
 };
 
 }

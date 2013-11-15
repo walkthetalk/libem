@@ -2,6 +2,8 @@
 
 #include "zmsg_cmm.hpp"
 #include "zmsg_types.hpp"
+#include "zmsg_tense_test_result.hpp"
+#include "zmsg_manual_discharge_times.hpp"
 
 namespace zmsg {
 
@@ -161,7 +163,7 @@ struct zmsg<mid_t::fusion_splice_result> {
 	zmsg<mid_t::manual_discharge_times> z_manual_discharge_times;
 public:
 	ZMSG_PU(code,
-		cfg,
+		z_cfg,
 		rec_info,
 		defect_data,
 		core_diff_pre,
@@ -170,8 +172,8 @@ public:
 		pattern_compensate,
 		loss_db,
 		is_tense_test,
-		tense_test_result,
-		manual_discharge_times;)
+		z_tense_test_result,
+		z_manual_discharge_times)
 };
 
 }
