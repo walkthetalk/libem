@@ -65,6 +65,7 @@ enum class mid_t : uint16_t {
 	update_cmos_focal_distance,
 
 	get_fiber_defect_info,
+	record_off_set,
 	manual_discharge_times,
 	tense_test_result,
 

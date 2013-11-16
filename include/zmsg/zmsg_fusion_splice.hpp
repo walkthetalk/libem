@@ -4,6 +4,7 @@
 #include "zmsg_types.hpp"
 #include "zmsg_tense_test_result.hpp"
 #include "zmsg_manual_discharge_times.hpp"
+#include "zmsg_record_off_set.hpp"
 
 namespace zmsg {
 
@@ -150,9 +151,7 @@ struct zmsg<mid_t::fusion_splice_result> {
 
 	img_defects_t defect_data;
 
-	double core_diff_pre;		/// unit: um
-	double cladding_diff_pre;	/// unit: um
-	double vertex_intersect_angle;	/// unit: degree
+	zmsg<mid_t::record_off_set> z_record_off_set;
 
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
@@ -166,9 +165,7 @@ public:
 		z_cfg,
 		rec_info,
 		defect_data,
-		core_diff_pre,
-		cladding_diff_pre,
-		vertex_intersect_angle,
+		z_record_off_set,
 		pattern_compensate,
 		loss_db,
 		is_tense_test,
