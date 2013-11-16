@@ -167,7 +167,6 @@ public:
 		z_record_off_set,
 		pattern_compensate,
 		loss_db,
-		is_tense_test,
 		z_tense_test_result,
 		z_manual_discharge_times)
 };
