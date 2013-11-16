@@ -3,7 +3,7 @@
 #include "zmsg_cmm.hpp"
 #include "zmsg_types.hpp"
 #include "zmsg_tense_test_result.hpp"
-#include "zmsg_manual_discharge_times.hpp"
+#include "zmsg_manual_discharge_counts.hpp"
 #include "zmsg_record_off_set.hpp"
 
 namespace zmsg {
@@ -158,7 +158,7 @@ struct zmsg<mid_t::fusion_splice_result> {
 
 	zmsg<mid_t::tense_test_result> z_tense_test_result;
 
-	zmsg<mid_t::manual_discharge_times> z_manual_discharge_times;
+	zmsg<mid_t::manual_discharge_counts> z_manual_discharge_counts;
 public:
 	ZMSG_PU(code,
 		z_cfg,
@@ -168,7 +168,7 @@ public:
 		pattern_compensate,
 		loss_db,
 		z_tense_test_result,
-		z_manual_discharge_times)
+		z_manual_discharge_counts)
 };
 
 }

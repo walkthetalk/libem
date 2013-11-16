@@ -5,12 +5,12 @@
 namespace zmsg {
 
 template <>
-struct zmsg<mid_t::manual_discharge_times> {
+struct zmsg<mid_t::manual_discharge_counts> {
 public:
-	int times;
+	int counts;
 public:
 	ZMSG_PU(
-		times)
+		counts)
 };
 
 }
