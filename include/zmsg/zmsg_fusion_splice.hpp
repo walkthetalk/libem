@@ -156,7 +156,6 @@ struct zmsg<mid_t::fusion_splice_result> {
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
 
-	bool is_tense_test;
 	zmsg<mid_t::tense_test_result> z_tense_test_result;
 
 	zmsg<mid_t::manual_discharge_times> z_manual_discharge_times;
