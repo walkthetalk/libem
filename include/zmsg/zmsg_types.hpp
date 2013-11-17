@@ -250,6 +250,7 @@ enum class fs_err_t : uint8_t {
 	abnormal_arc,
 	tense_test_fail,
 	fiber_broken,
+	quit_midway,
 
 	arc_time_zero,
 };
