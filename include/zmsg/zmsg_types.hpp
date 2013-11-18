@@ -199,6 +199,8 @@ enum class svc_fs_state_t : uint16_t {
 	fs_loss_estimating,
 	fs_tension_testing,
 	fs_finished,
+
+	fs_wait_reset,
 };
 
 /**
