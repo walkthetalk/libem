@@ -66,8 +66,10 @@ enum class mid_t : uint16_t {
 
 	get_fiber_defect_info,
 	record_off_set,
-	manual_discharge_counts,
+	manual_discharge_counts,	/// 45
 	tense_test_result,
+
+	skip,
 
 	/// \todo add new message id above this line
 	max,
