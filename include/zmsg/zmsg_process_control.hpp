@@ -11,6 +11,12 @@ public:
 };
 
 template<>
+struct zmsg<mid_t::skip> {
+public:
+	ZMSG_PU()
+};
+
+template<>
 struct zmsg<mid_t::stop> {
 public:
 	ZMSG_PU()
