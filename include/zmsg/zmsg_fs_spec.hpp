@@ -47,6 +47,9 @@ public:
 	double   led_brightness[ledId_t::LED_NUM];
 	double   x_focal_distance;
 	double   y_focal_distance;
+
+	int32_t lz_nm_per_step;
+	int32_t rz_nm_per_step;
 public:
         ZMSG_PU(
 		window_x_row,
