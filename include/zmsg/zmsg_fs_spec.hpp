@@ -13,7 +13,8 @@ public:
 	int32_t window_y_col;			// unit: pixel
 
 	uint32_t nm_per_pixel;			// unit: nm/pixel
-	uint32_t nm_per_step;			// unit: nm/step
+	double lz_nm_per_step;
+	double rz_nm_per_step;			// unit: nm/step
 
 	uint16_t img_cap_delay;			// unit: ms
 
@@ -47,9 +48,6 @@ public:
 	double   led_brightness[ledId_t::LED_NUM];
 	double   x_focal_distance;
 	double   y_focal_distance;
-
-	int32_t lz_nm_per_step;
-	int32_t rz_nm_per_step;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -58,7 +56,8 @@ public:
 		window_y_col,
 
 		nm_per_pixel,
-		nm_per_step,
+		lz_nm_per_step,
+		rz_nm_per_step,
 
 		img_cap_delay,
 
@@ -92,9 +91,7 @@ public:
 		led_brightness,
 
 		x_focal_distance,
-		y_focal_distance,
-		lz_nm_per_step,
-		rz_nm_per_step)
+		y_focal_distance)
 };
 
 template<>
