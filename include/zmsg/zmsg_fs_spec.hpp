@@ -89,7 +89,9 @@ public:
 		led_brightness,
 
 		x_focal_distance,
-		y_focal_distance)
+		y_focal_distance,
+		lz_nm_per_step,
+		rz_nm_per_step)
 };
 
 template<>
