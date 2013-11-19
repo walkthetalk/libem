@@ -70,6 +70,7 @@ enum class mid_t : uint16_t {
 	tense_test_result,
 
 	skip,
+	fs_cover_openned,
 
 	/// \todo add new message id above this line
 	max,
