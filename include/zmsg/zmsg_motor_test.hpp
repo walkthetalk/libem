@@ -34,7 +34,7 @@ public:
 
 	BOOL ConeFS;
 	ULONG ConeFSWaitTime;
-	ULONG ConeFSSpeed;
+	DOUBLE ConeFSSpeed;
 	ULONG ConeFSStretchLength;
 	loss_estimate_mode_t LossEstimationMode;
 	FLOAT LeftFibreMFD;

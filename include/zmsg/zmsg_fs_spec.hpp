@@ -25,11 +25,11 @@ public:
 	uint16_t motor_min_speed[motorId_t::NUM];
 	uint16_t motor_max_speed[motorId_t::NUM];
 
-	uint32_t tensionSpeed;
+	double   tensionSpeed;
 	uint32_t tensionStretchLength;
 
-	uint16_t motor_lzrz_fs_speed;
-	uint32_t motor_xy_precise_calibrate_speed;
+	double   motor_lzrz_fs_speed;
+	double   motor_xy_precise_calibrate_speed;
 
 	uint16_t motor_xy_steps_per_pixel;	// unit: step/pixel
 
