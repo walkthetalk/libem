@@ -71,6 +71,7 @@ enum class mid_t : uint16_t {
 
 	skip,
 	fs_cover_openned,
+	stop_discharge,
 
 	/// \todo add new message id above this line
 	max,

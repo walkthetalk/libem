@@ -13,6 +13,12 @@ public:
 };
 
 template<>
+struct zmsg<mid_t::stop_discharge> {
+public:
+	ZMSG_PU()
+};
+
+template<>
 struct zmsg<mid_t::discharge_count>{
 	uint32_t discharge_count;
 public:
