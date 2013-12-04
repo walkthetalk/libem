@@ -25,11 +25,16 @@ public:
 	uint16_t motor_min_speed[motorId_t::NUM];
 	uint16_t motor_max_speed[motorId_t::NUM];
 
-	double   tensionSpeed;
-	uint32_t tensionStretchLength;
+	double entering_speed;
+	double push1_speed;
+	double push2_stage1_speed;
+	double push2_stage2_speed;
+	double manual_calibrate_speed;
+	double motor_lzrz_fs_speed;
+	double motor_xy_precise_calibrate_speed;
+	double tensionSpeed;
 
-	double   motor_lzrz_fs_speed;
-	double   motor_xy_precise_calibrate_speed;
+	uint32_t tensionStretchLength;
 
 	uint16_t motor_xy_steps_per_pixel;	// unit: step/pixel
 
@@ -68,11 +73,16 @@ public:
 		motor_min_speed,
 		motor_max_speed,
 
-		tensionSpeed,
-		tensionStretchLength,
-
+		entering_speed,
+		push1_speed,
+		push2_stage1_speed,
+		push2_stage2_speed,
+		manual_calibrate_speed,
 		motor_lzrz_fs_speed,
 		motor_xy_precise_calibrate_speed,
+		tensionSpeed,
+
+		tensionStretchLength,
 
 		motor_xy_steps_per_pixel,
 
