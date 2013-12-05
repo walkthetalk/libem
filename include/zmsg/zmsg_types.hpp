@@ -306,6 +306,7 @@ enum class se_err_t : uint8_t {
 	abnormal_arc,
 
 	arc_time_zero,
+	ignore,
 };
 
 /**
