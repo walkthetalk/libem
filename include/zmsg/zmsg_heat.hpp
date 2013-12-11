@@ -19,7 +19,7 @@ public:
 
 template<>
 struct zmsg<mid_t::heat_result> {
-	heat_err_t code;
+	fs_err_t code;
 public:
 	ZMSG_PU(code)
 };

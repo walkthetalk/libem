@@ -12,7 +12,7 @@ public:
 
 template<>
 struct zmsg<mid_t::regular_test_result> {
-	rt_err_t code;
+	fs_err_t code;
 
 	zmsg<mid_t::regular_test_start> z_cfg;
 public:

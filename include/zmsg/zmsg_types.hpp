@@ -239,7 +239,7 @@ enum class fs_display_mode_t : uint8_t {
 };
 
 /**
- * \brief fusion splice related error code
+ * \brief fusion splicer related error code
  */
 enum class fs_err_t : uint8_t {
 	success,
@@ -253,86 +253,15 @@ enum class fs_err_t : uint8_t {
 	tense_test_fail,
 	fiber_broken,
 	quit_midway,
-
-	arc_time_zero,
-};
-
-/**
- * \brief regular test related error code
- */
-enum class rt_err_t : uint8_t {
-	success,
-};
-
-/**
- * \brief dust check related error code
- */
-enum class dc_err_t : uint8_t {
-	success,
-	cover_openned,
-	img_brightness,
-};
-
-/**
- * \brief motor test related error code
- */
-enum class mt_err_t : uint8_t {
-	success,
-	cover_openned,
-	no_fiber,
-	fiber_defect,
-	fiber_cross_over,
-	fiber_off_center,
-	img_brightness,
-	abnormal_arc,
 	push_timeout,
 	calibrate_timeout,
 	reset_timeout,
 
 	arc_time_zero,
 	ignore,
-};
-
-/**
- * \brief stablize electrode error code
- */
-enum class se_err_t : uint8_t {
-	success,
-	cover_openned,
-	no_fiber,
-	fiber_defect,
-	fiber_cross_over,
-	fiber_off_center,
-	img_brightness,
-	abnormal_arc,
-
-	arc_time_zero,
-};
-
-/**
- * \brief discharg adjust error code
- */
-enum class da_err_t : uint8_t {
-	success,
-	cover_openned,
-	no_fiber,
-	fiber_defect,
-	fiber_cross_over,
-	fiber_off_center,
-	img_brightness,
-	abnormal_arc,
 
 	revise1_mag,
 	revise2_mag,
-
-	arc_time_zero,
-};
-
-/**
- * \brief heat related error code
- */
-enum class heat_err_t : uint8_t {
-	success,
 };
 
 /**
