@@ -18,7 +18,7 @@ public:
 
 	uint16_t img_cap_delay;			// unit: ms
 
-	uint16_t clr_discharge_strength; 	// unit:  bit
+	double   clr_discharge_strength; 	// unit: volt
 	uint32_t clr_discharge_gap;		// unit: nm
 	uint16_t check_fiber_exist_time;	// unit: ms
 

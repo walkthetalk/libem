@@ -7,7 +7,7 @@ namespace zmsg {
 template<>
 struct zmsg<mid_t::stabilize_electrode_start> {
 public:
-	uint16_t magnitude;
+	double   magnitude; /// unit: volt
 	uint32_t time;	/// unit: ms
 	uint32_t number;
 public:

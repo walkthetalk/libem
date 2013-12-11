@@ -25,12 +25,12 @@ public:
 	ULONG CleanDischargeTime;
 	ULONG FibreIntervalSetup;
 	LONG  FSPosSetup;
-	UINT16 FibrePreFSStrength;
+	DOUBLE FibrePreFSStrength;
 	ULONG FibrePreFSTime;
 	ULONG FibreOverlapSetup;
-	UINT16 Discharge1Strength;
+	DOUBLE Discharge1Strength;
 	ULONG Discharge1Time;
-	UINT16 Discharge2Strength;
+	DOUBLE Discharge2Strength;
 	ULONG Discharge2LastTime;
 	ULONG Discharge2StartTime;
 	ULONG Discharge2StopTime;
