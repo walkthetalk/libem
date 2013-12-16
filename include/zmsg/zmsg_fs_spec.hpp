@@ -53,6 +53,17 @@ public:
 	double   led_brightness[ledId_t::LED_NUM];
 	double   x_focal_distance;
 	double   y_focal_distance;
+
+	double   zmotor_speed_factor;
+	double   zmotor_speed_pow;
+	double   zmotor_speed_max;		/// 0.0 ~ 1.0
+
+	double   xymotor_speed_factor;
+	double   xymotor_speed_pow;
+	double   xymotor_speed_max;		/// 0.0 ~ 1.0
+
+	double   zmotor_forward_distance;	/// unit: nm
+	double   zmotor_stroke;			/// unit: nm
 public:
         ZMSG_PU(
 		window_x_row,
@@ -101,7 +112,18 @@ public:
 		led_brightness,
 
 		x_focal_distance,
-		y_focal_distance)
+		y_focal_distance,
+
+		zmotor_speed_factor,
+		zmotor_speed_pow,
+		zmotor_speed_max,
+
+		xymotor_speed_factor,
+		xymotor_speed_pow,
+		xymotor_speed_max,
+
+		zmotor_forward_distance,
+		zmotor_stroke)
 };
 
 template<>
