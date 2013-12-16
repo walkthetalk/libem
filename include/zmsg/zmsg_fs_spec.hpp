@@ -13,7 +13,10 @@ public:
 	int32_t window_y_col;			// unit: pixel
 
 	uint32_t nm_per_pixel;			// unit: nm/pixel
-	double lz_nm_per_step;
+
+	double zmotor_spec_nm_per_step;		// unit: nm/step
+
+	double lz_nm_per_step;			// unit: nm/step
 	double rz_nm_per_step;			// unit: nm/step
 
 	uint16_t img_cap_delay;			// unit: ms
@@ -72,6 +75,7 @@ public:
 		window_y_col,
 
 		nm_per_pixel,
+		zmotor_spec_nm_per_step,
 		lz_nm_per_step,
 		rz_nm_per_step,
 
