@@ -16,7 +16,7 @@ public:
 	UINT32 FibreAlignment;
 	BOOL XImageFocus;
 	BOOL YImageFocus;
-	UINT32 FibreShift;
+	BOOL FibreShift;
 	BOOL DischargeStrengthAdjustment;
 	BOOL TensionSet;
 	FLOAT CutAngleLimit;
