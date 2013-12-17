@@ -207,6 +207,7 @@ enum class svc_fs_state_t : uint16_t {
  * \brief service heat state
  */
 enum class svc_heat_state_t : uint16_t {
+	heat_idle,
 	heat_ready,
 	heat_ascending,
 	heat_stabling,
