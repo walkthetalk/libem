@@ -263,6 +263,9 @@ enum class fs_err_t : uint8_t {
 
 	revise1_mag,
 	revise2_mag,
+
+	focus_x,
+	focus_y,
 };
 
 /**
