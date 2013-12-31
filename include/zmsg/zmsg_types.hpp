@@ -187,6 +187,7 @@ enum class svc_fs_state_t : uint16_t {
 	fs_calibrating,
 	fs_waiting,
 	fs_clring,
+	fs_focusing,
 	fs_defect_detecting,
 	fs_push2,
 	fs_pause1,
