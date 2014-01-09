@@ -267,6 +267,9 @@ enum class fs_err_t : uint8_t {
 
 	focus_x,
 	focus_y,
+
+	img_process_error,
+	system_error,
 };
 
 /**
