@@ -322,3 +322,12 @@ enum class loss_estimate_mode_t : uint8_t {
 	core,
 	cladding,
 };
+
+/**
+ * \brief shrinkabletube length
+ */
+enum class shrink_tube_t : uint8_t {
+	len_20mm = 0x0,
+	len_40mm,
+	len_60mm,
+};

@@ -8,7 +8,7 @@ template<>
 struct zmsg<mid_t::heat_start> {
 public:
         UINT32 Material;
-        UINT32 Fiberlen;
+        shrink_tube_t Fiberlen;
         BOOL Heatctl;
         UINT8 heat_time;	/// unit: second
         INT16 heat_temp;	/// unit: degree Celsius
