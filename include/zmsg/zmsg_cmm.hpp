@@ -73,6 +73,9 @@ enum class mid_t : uint16_t {
 	fs_cover_openned,
 	stop_discharge,
 
+	full_dust_check_start,		/// 50
+	full_dust_check_result,
+
 	/// \todo add new message id above this line
 	max,
 };

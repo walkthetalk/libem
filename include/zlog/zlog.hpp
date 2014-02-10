@@ -8,13 +8,7 @@ namespace zlog {
 template< typename... args_t >
 inline void zlog_base(int priority, const char *format, args_t... args)
 {
-#if 1
 	syslog(priority, format, args...);
-#else
-	printf("[%d] : ", priority);
-	printf(format, args...);
-	printf("\n");
-#endif
 }
 
 template< typename... args_t >
