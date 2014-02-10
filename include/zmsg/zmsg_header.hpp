@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <array>
 #include <vector>
+#include <string>
 
 #include "zmsg_cmm.hpp"
 
@@ -38,6 +39,10 @@ enum class id_t : uint8_t {
 template <typename T> struct is_std_vector { static constexpr bool value = false; };
 template <typename T>
 struct is_std_vector< std::vector<T> > { static constexpr bool value = true; };
+
+template <typename T> struct is_std_string { static constexpr bool value = false; };
+template <typename T>
+struct is_std_string< std::basic_string<T> > { static constexpr bool value = true; };
 
 template <typename T> struct is_std_array { static constexpr bool value = false; };
 template <typename T, std::size_t size>
@@ -83,9 +88,18 @@ struct id_of< _T, typename std::enable_if<
 
 template<typename _T>
 struct id_of< _T, typename std::enable_if<
+	is_std_string<_T>::value>::type > {
+
+	static constexpr id_t value = id_t::DYNAMIC_SIZE_CONTAINER;
+};
+
+template<typename _T>
+struct id_of< _T, typename std::enable_if<
 	    std::is_class<_T>::value
 	&& !is_std_vector<_T>::value
-	&& !is_std_array<_T>::value>::type > {
+	&& !is_std_array<_T>::value
+	&& !is_std_string<_T>::value
+>::type > {
 
 	static constexpr id_t value = id_t::UDT;
 };

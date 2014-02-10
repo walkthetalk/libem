@@ -351,6 +351,32 @@ public:
 	}
 
 	/**
+	 * std string
+	 */
+	template< typename _T, typename std::enable_if<
+		   is_std_string<_T>::value, bool>::type = false >
+	void pack_data(_T const & v)
+	{
+		if (v.size() > std::numeric_limits<ele_num_t>::max()) {
+			throw std::overflow_error("std::string size overflow!");
+		}
+
+		this->pack_data(static_cast<ele_num_t>(v.size()));
+
+		for (auto & i : v) {
+			this->pack_data(i);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		is_std_string<_T>::value, bool>::type = false >
+	void pack_type(_T const & v)
+	{
+		this->__pack_type_base(id_of<_T>::value);
+		this->__pack_type_base(id_of<typename _T::value_type>::value);
+	}
+
+	/**
 	 * struc / class
 	 */
 	template< typename _T, typename std::enable_if<

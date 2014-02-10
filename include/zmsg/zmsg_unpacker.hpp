@@ -359,6 +359,31 @@ public:
 	}
 
 	/**
+	 * string
+	 */
+	template< typename _T, typename std::enable_if<
+		   is_std_string<_T>::value, bool>::type = false >
+	void unpack_data(_T & v)
+	{
+		ele_num_t size;
+		this->unpack_data(size);
+		v.clear();
+		v.resize(size);
+
+		for (auto & i : v) {
+			this->unpack_data(i);
+		}
+	}
+
+	template< typename _T, typename std::enable_if<
+		is_std_string<_T>::value, bool>::type = false >
+	void unpack_type(_T const &)
+	{
+		this->__unpack_type_base(id_of<_T>::value);
+		this->__unpack_type_base(id_of<typename _T::value_type>::value);
+	}
+
+	/**
 	 * struct / class
 	 */
 	template< typename _T, typename std::enable_if<
