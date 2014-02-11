@@ -1,15 +1,12 @@
 #pragma once
 
-#include "zmsg_cmm.hpp"
 #include "zmsg_types.hpp"
-#include "zmsg_tense_test_result.hpp"
-#include "zmsg_manual_discharge_counts.hpp"
 #include "zmsg_record_offset.hpp"
 
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::fusion_splice_start> {
+struct zmsg<mid_t::shrinkage_test_start> {
 public:
 	fs_pattern_t FSPattern;
 	UINT32 FibreType;
@@ -40,14 +37,13 @@ public:
 	ULONG ConeFSWaitTime;
 	DOUBLE ConeFSSpeed;
 	ULONG ConeFSStretchLength;
-
 	loss_estimate_mode_t LossEstimationMode;
-	FLOAT LeftFibreMFD;			/// unit: um
-	FLOAT RightFibreMFD;			/// unit: um
-	FLOAT LeastLoss;			/// unit: db
+	FLOAT LeftFibreMFD;
+	FLOAT RightFibreMFD;
+	FLOAT LeastLoss;
 	FLOAT RateOfSyntropyBending;
 	FLOAT RateOfReverseBending;
-	FLOAT MFDMismatchCoefficient;		/// 0.0 ~ 1.0
+	FLOAT RateOfMFDDeviation;
 
 	BOOL AutoStart;
 	BOOL Stop1;
@@ -66,12 +62,12 @@ public:
 	BOOL AirPressure;
 	BOOL Temperature;
 	/*fiber_image_display*/
-	fs_display_mode_t ImgGap;
-	fs_display_mode_t ImgStop1;
-	fs_display_mode_t ImgAlign;
-	fs_display_mode_t ImgStop2;
-	fs_display_mode_t ImgDischarge;
-	fs_display_mode_t ImgLossEstimation;
+	UINT32 ImgGap;
+	UINT32 ImgStop1;
+	UINT32 ImgAlign;
+	UINT32 ImgStop2;
+	UINT32 ImgDischarge;
+	UINT32 ImgLossEstimation;
 	/*else*/
 	BOOL FibreAutoFeed;
 	BOOL BadCutSurface;
@@ -114,7 +110,7 @@ public:
 		LeastLoss,
 		RateOfSyntropyBending,
 		RateOfReverseBending,
-		MFDMismatchCoefficient,
+		RateOfMFDDeviation,
 
 		AutoStart,
 		Stop1,
@@ -142,33 +138,21 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::fusion_splice_result> {
+struct zmsg<mid_t::shrinkage_test_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::fusion_splice_start> z_cfg;
+	zmsg<mid_t::shrinkage_test_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 
 	img_defects_t defect_data;
 
-	zmsg<mid_t::record_off_set> z_record_off_set;
+	zmsg<mid_t::record_off_set> z_record_offset;
 
-	double pattern_compensate;	/// 0.0~1.0
-	double loss_db;		/// unit: db
-
-	zmsg<mid_t::tense_test_result> z_tense_test_result;
-
-	zmsg<mid_t::manual_discharge_counts> z_manual_discharge_counts;
+	double shrinkage;		/// unit: um
 public:
-	ZMSG_PU(code,
-		z_cfg,
-		rec_info,
-		defect_data,
-		z_record_off_set,
-		pattern_compensate,
-		loss_db,
-		z_tense_test_result,
-		z_manual_discharge_counts)
+	ZMSG_PU(code, z_cfg, rec_info, defect_data, z_record_offset, shrinkage)
 };
 
 }
+

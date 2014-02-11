@@ -4,9 +4,9 @@
 
 namespace zmsg {
 
-/*
-* \brief message identifier
-*/
+/**
+ * \brief message identifier
+ */
 enum class mid_t : uint16_t {
 	nil,	/// occupy symbol, correspond to \em NULL.
 	test1,
@@ -75,6 +75,9 @@ enum class mid_t : uint16_t {
 
 	full_dust_check_start,		/// 50
 	full_dust_check_result,
+
+	shrinkage_test_start,
+	shrinkage_test_result,
 
 	/// \todo add new message id above this line
 	max,
