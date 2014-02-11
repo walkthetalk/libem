@@ -149,9 +149,10 @@ struct zmsg<mid_t::shrinkage_test_result> {
 
 	zmsg<mid_t::record_off_set> z_record_offset;
 
+	double real_gap;		/// unit: um
 	double shrinkage;		/// unit: um
 public:
-	ZMSG_PU(code, z_cfg, rec_info, defect_data, z_record_offset, shrinkage)
+	ZMSG_PU(code, z_cfg, rec_info, defect_data, z_record_offset, real_gap, shrinkage)
 };
 
 }
