@@ -22,5 +22,12 @@ public:
 	ZMSG_PU()
 };
 
+template<>
+struct zmsg<mid_t::process_progress> {
+	double progress;
+public:
+	ZMSG_PU(progress)
+};
+
 }
 

@@ -79,6 +79,8 @@ enum class mid_t : uint16_t {
 	shrinkage_test_start,
 	shrinkage_test_result,
 
+	process_progress,
+
 	/// \todo add new message id above this line
 	max,
 };
