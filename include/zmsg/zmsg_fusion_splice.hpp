@@ -76,6 +76,7 @@ public:
 	BOOL FibreAutoFeed;
 	BOOL BadCutSurface;
 	BOOL AutoAlignAfterStop;
+	BOOL CleanDischargeTwice;
 	ULONG ManualDischargeTimes;
 public:
 	ZMSG_PU(
@@ -138,6 +139,7 @@ public:
 		FibreAutoFeed,
 		BadCutSurface,
 		AutoAlignAfterStop,
+		CleanDischargeTwice,
 		ManualDischargeTimes)
 };
 
