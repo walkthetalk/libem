@@ -67,6 +67,9 @@ public:
 
 	double   zmotor_forward_distance;	/// unit: nm
 	double   zmotor_stroke;			/// unit: nm
+
+	double   dbg_hangle_limit;		/// unit: degree
+	double   dbg_vangle_limit;		/// unit: degree
 public:
         ZMSG_PU(
 		window_x_row,
@@ -127,7 +130,10 @@ public:
 		xymotor_speed_max,
 
 		zmotor_forward_distance,
-		zmotor_stroke)
+		zmotor_stroke,
+
+		dbg_hangle_limit,
+		dbg_vangle_limit)
 };
 
 template<>
