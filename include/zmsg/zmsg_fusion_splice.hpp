@@ -13,7 +13,7 @@ struct zmsg<mid_t::fusion_splice_start> {
 public:
 	fs_pattern_t FSPattern;
 	UINT32 FibreType;
-	UINT32 FibreAlignment;
+	align_method_t FibreAlignment;
 	BOOL XImageFocus;
 	BOOL YImageFocus;
 	BOOL FibreShift;

@@ -333,3 +333,13 @@ enum class shrink_tube_t : uint8_t {
 	len_40mm,
 	len_60mm,
 };
+
+/**
+ * \brief fiber align method
+ */
+enum class align_method_t : uint8_t {
+	fine = 0x0,
+	clad,
+	core,
+	manual,
+};
