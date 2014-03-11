@@ -248,7 +248,7 @@ enum class fs_err_t : uint8_t {
 	cover_openned,
 	no_fiber,
 	fiber_defect,
-	fiber_cross_over,
+	fiber_cross_over,	/// sw or hw problem
 	fiber_off_center,
 	img_brightness,
 	abnormal_arc,
@@ -270,6 +270,8 @@ enum class fs_err_t : uint8_t {
 
 	img_process_error,
 	system_error,
+
+	fiber_offside,		/// user should replace fiber
 };
 
 /**
