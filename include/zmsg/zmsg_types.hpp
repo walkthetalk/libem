@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <cmath>
 #include <array>
 #include <vector>
@@ -72,6 +73,18 @@ static constexpr ifd_t ifd_horizontal_angle = 0x2;
 static constexpr ifd_t ifd_vertical_angle = 0x4;
 
 static constexpr ifd_t ifd_cant_identify = 0x80000000;
+
+static constexpr ifd_t ifd_all = std::numeric_limits<ifd_t>::max();
+
+inline ifd_clr(ifd_t & dst, const ifd_t src)
+{
+	dst &= ~src;
+}
+
+inline ifd_set(ifd_t & dst, const ifd_t src)
+{
+	dst |= src;
+}
 
 typedef struct ifd_line final {
 	ifd_t  dbmp;
