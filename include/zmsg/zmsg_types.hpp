@@ -76,12 +76,12 @@ static constexpr ifd_t ifd_cant_identify = 0x80000000;
 
 static constexpr ifd_t ifd_all = std::numeric_limits<ifd_t>::max();
 
-inline ifd_clr(ifd_t & dst, const ifd_t src)
+inline void ifd_clr(ifd_t & dst, const ifd_t src)
 {
 	dst &= ~src;
 }
 
-inline ifd_set(ifd_t & dst, const ifd_t src)
+inline void ifd_set(ifd_t & dst, const ifd_t src)
 {
 	dst |= src;
 }
