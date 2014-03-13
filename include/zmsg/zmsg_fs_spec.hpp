@@ -70,6 +70,8 @@ public:
 
 	double   dbg_hangle_limit;		/// unit: degree
 	double   dbg_vangle_limit;		/// unit: degree
+
+	double   pre_cal_xy_dist_threshold_relax_ratio;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -133,7 +135,9 @@ public:
 		zmotor_stroke,
 
 		dbg_hangle_limit,
-		dbg_vangle_limit)
+		dbg_vangle_limit,
+
+		pre_cal_xy_dist_threshold_relax_ratio)
 };
 
 template<>
