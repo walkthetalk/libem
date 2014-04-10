@@ -36,6 +36,9 @@ public:
 	ULONG Discharge2StopTime;
 	ULONG ExtraManualDischargeTime;
 
+	DOUBLE LeftFSSpeed;	/// 0.0~1.0
+	DOUBLE RightFSSpeed;	/// 0.0~1.0
+
 	BOOL ConeFS;
 	ULONG ConeFSWaitTime;
 	DOUBLE ConeFSSpeed;
@@ -104,6 +107,9 @@ public:
 		Discharge2StartTime,
 		Discharge2StopTime,
 		ExtraManualDischargeTime,
+
+		LeftFSSpeed,
+		RightFSSpeed,
 
 		ConeFS,
 		ConeFSWaitTime,

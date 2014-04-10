@@ -33,7 +33,6 @@ public:
 	double push2_stage1_speed;
 	double push2_stage2_speed;
 	double manual_calibrate_speed;
-	double motor_lzrz_fs_speed;
 	double motor_xy_precise_calibrate_speed;
 	double tensionSpeed;
 
@@ -98,7 +97,6 @@ public:
 		push2_stage1_speed,
 		push2_stage2_speed,
 		manual_calibrate_speed,
-		motor_lzrz_fs_speed,
 		motor_xy_precise_calibrate_speed,
 		tensionSpeed,
 
