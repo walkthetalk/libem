@@ -10,7 +10,7 @@ public:
         uint32_t Material;
         shrink_tube_t Fiberlen;
         bool Heatctl;
-        uint32_t heat_time;	/// unit: second
+        uint16_t heat_time;	/// unit: second
         int16_t heat_temp;	/// unit: degree Celsius
         int16_t finish_temp;	/// unit: degree Celsius
 public:
