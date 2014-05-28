@@ -17,9 +17,63 @@ namespace exemodel {
 typedef ::timespec timespec_t;
 typedef ::itimerspec itimerspec_t;
 
-inline timespec_t ms_to_timespec(uint32_t ms)
+static inline timespec_t ms_to_timespec(uint32_t ms)
 {
-	return { (::__time_t)(ms/1000), static_cast<uint16_t>(ms%1000) * 1000 * 1000 };
+	return { (::__time_t)(ms/1000), static_cast<int32_t>(ms%1000) * 1000 * 1000 };
+}
+
+void set_normalized_timespec(timespec_t & ts,
+			decltype(ts.tv_sec) sec,
+			decltype(ts.tv_nsec) nsec);
+
+static inline bool timespec_equal(const timespec_t &a,
+					const timespec_t &b)
+{
+	return (a.tv_sec == b.tv_sec) && (a.tv_nsec == b.tv_nsec);
+}
+
+/*
+* lhs < rhs:  return <0
+* lhs == rhs: return 0
+* lhs > rhs:  return >0
+*/
+static inline int timespec_compare(const timespec_t &lhs,
+					const timespec_t &rhs)
+{
+	if (lhs.tv_sec < rhs.tv_sec) {
+		return -1;
+	}
+	if (lhs.tv_sec > rhs.tv_sec) {
+		return 1;
+	}
+	if (lhs.tv_nsec < rhs.tv_nsec) {
+		return -1;
+	}
+	if (lhs.tv_nsec > rhs.tv_nsec) {
+		return 1;
+	}
+	return 0;
+}
+
+static inline timespec_t timespec_add(const timespec_t lhs,
+					const timespec_t rhs)
+{
+	timespec_t ts_delta;
+	set_normalized_timespec(ts_delta, lhs.tv_sec + rhs.tv_sec,
+				lhs.tv_nsec + rhs.tv_nsec);
+	return ts_delta;
+}
+
+/*
+* sub = lhs - rhs, in normalized form
+*/
+static inline timespec_t timespec_sub(const timespec_t lhs,
+						const timespec_t rhs)
+{
+	timespec_t ts_delta;
+	set_normalized_timespec(ts_delta, lhs.tv_sec - rhs.tv_sec,
+				lhs.tv_nsec - rhs.tv_nsec);
+	return ts_delta;
 }
 
 
@@ -141,6 +195,9 @@ private:
 private:
 	itimerspec_t m_spec;
 };
+
+typedef clock_info<CLOCK_MONOTONIC> monotonic_clock_info;
+typedef clock_info<CLOCK_REALTIME> realtime_clock_info;
 
 typedef timeree<CLOCK_MONOTONIC> monotonic_timeree;
 typedef timeree<CLOCK_REALTIME> realtime_timeree;
