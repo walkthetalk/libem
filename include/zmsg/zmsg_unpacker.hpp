@@ -10,19 +10,7 @@ namespace zmsg {
 
 class bad_type : public std::runtime_error {
 public:
-#if 0	/// \note it is only implemented in gcc >=4.8
 	using std::runtime_error::runtime_error;
-#else
-	explicit bad_type( const std::string& what_arg )
-	: runtime_error(what_arg)
-	{
-	}
-
-	explicit bad_type( const char* what_arg )
-	: runtime_error(what_arg)
-	{
-	}
-#endif
 };
 
 class read_fail : public std::runtime_error {

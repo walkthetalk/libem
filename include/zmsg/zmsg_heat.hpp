@@ -7,12 +7,12 @@ namespace zmsg {
 template<>
 struct zmsg<mid_t::heat_start> {
 public:
-        UINT32 Material;
+        uint32_t Material;
         shrink_tube_t Fiberlen;
-        BOOL Heatctl;
-        UINT8 heat_time;	/// unit: second
-        INT16 heat_temp;	/// unit: degree Celsius
-        INT16 finish_temp;	/// unit: degree Celsius
+        bool Heatctl;
+        uint32_t heat_time;	/// unit: second
+        int16_t heat_temp;	/// unit: degree Celsius
+        int16_t finish_temp;	/// unit: degree Celsius
 public:
         ZMSG_PU(Material,Fiberlen,Heatctl,heat_time,heat_temp,finish_temp)
 };

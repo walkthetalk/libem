@@ -9,70 +9,70 @@ template<>
 struct zmsg<mid_t::shrinkage_test_start> {
 public:
 	fs_pattern_t FSPattern;
-	UINT32 FibreType;
-	UINT32 FibreAlignment;
-	BOOL XImageFocus;
-	BOOL YImageFocus;
-	BOOL FibreShift;
-	BOOL DischargeStrengthAdjustment;
-	BOOL TensionSet;
-	FLOAT CutAngleLimit;
-	FLOAT LossLimit;
-	FLOAT FibreAngleLimit;
-	ULONG CleanDischargeTime;
-	ULONG FibreIntervalSetup;
-	LONG  FSPosSetup;
-	DOUBLE FibrePreFSStrength;
-	ULONG FibrePreFSTime;
-	ULONG FibreOverlapSetup;
-	DOUBLE Discharge1Strength;
-	ULONG Discharge1Time;
-	DOUBLE Discharge2Strength;
-	ULONG Discharge2LastTime;
-	ULONG Discharge2StartTime;
-	ULONG Discharge2StopTime;
-	ULONG ExtraManualDischargeTime;
+	uint32_t FibreType;
+	uint32_t FibreAlignment;
+	bool XImageFocus;
+	bool YImageFocus;
+	bool FibreShift;
+	bool DischargeStrengthAdjustment;
+	bool TensionSet;
+	double CutAngleLimit;
+	double LossLimit;
+	double FibreAngleLimit;
+	uint32_t CleanDischargeTime;
+	uint32_t FibreIntervalSetup;
+	int32_t  FSPosSetup;
+	double FibrePreFSStrength;
+	uint32_t FibrePreFSTime;
+	uint32_t FibreOverlapSetup;
+	double Discharge1Strength;
+	uint32_t Discharge1Time;
+	double Discharge2Strength;
+	uint32_t Discharge2LastTime;
+	uint32_t Discharge2StartTime;
+	uint32_t Discharge2StopTime;
+	uint32_t ExtraManualDischargeTime;
 
-	BOOL ConeFS;
-	ULONG ConeFSWaitTime;
-	DOUBLE ConeFSSpeed;
-	ULONG ConeFSStretchLength;
+	bool ConeFS;
+	uint32_t ConeFSWaitTime;
+	double ConeFSSpeed;
+	uint32_t ConeFSStretchLength;
 	loss_estimate_mode_t LossEstimationMode;
-	FLOAT LeftFibreMFD;
-	FLOAT RightFibreMFD;
-	FLOAT LeastLoss;
-	FLOAT RateOfSyntropyBending;
-	FLOAT RateOfReverseBending;
-	FLOAT RateOfMFDDeviation;
+	double LeftFibreMFD;
+	double RightFibreMFD;
+	double LeastLoss;
+	double RateOfSyntropyBending;
+	double RateOfReverseBending;
+	double RateOfMFDDeviation;
 
-	BOOL AutoStart;
-	BOOL Stop1;
-	BOOL Stop2;
+	bool AutoStart;
+	bool Stop1;
+	bool Stop2;
 	/*data dispaly*/
-	BOOL CutAngle;
-	BOOL OffsetData;
+	bool CutAngle;
+	bool OffsetData;
 	/*omitted choice*/
-	BOOL Cut;
-	BOOL Loss;
-	BOOL FibreCoreAngle;
-	BOOL Bubble;
-	BOOL Thick;
-	BOOL Thin;
+	bool Cut;
+	bool Loss;
+	bool FibreCoreAngle;
+	bool Bubble;
+	bool Thick;
+	bool Thin;
 	/*dischargesupplement*/
-	BOOL AirPressure;
-	BOOL Temperature;
+	bool AirPressure;
+	bool Temperature;
 	/*fiber_image_display*/
-	UINT32 ImgGap;
-	UINT32 ImgStop1;
-	UINT32 ImgAlign;
-	UINT32 ImgStop2;
-	UINT32 ImgDischarge;
-	UINT32 ImgLossEstimation;
+	uint32_t ImgGap;
+	uint32_t ImgStop1;
+	uint32_t ImgAlign;
+	uint32_t ImgStop2;
+	uint32_t ImgDischarge;
+	uint32_t ImgLossEstimation;
 	/*else*/
-	BOOL FibreAutoFeed;
-	BOOL BadCutSurface;
-	BOOL AutoAlignAfterStop;
-	ULONG ManualDischargeTimes;
+	bool FibreAutoFeed;
+	bool BadCutSurface;
+	bool AutoAlignAfterStop;
+	uint32_t ManualDischargeTimes;
 public:
 	ZMSG_PU(
 		FSPattern,

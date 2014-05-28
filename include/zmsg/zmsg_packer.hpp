@@ -10,19 +10,7 @@ namespace zmsg {
 
 class write_fail : public std::runtime_error {
 public:
-#if 0	/// \note it is only implemented in gcc >=4.8
 	using std::runtime_error::runtime_error;
-#else
-	explicit write_fail( const std::string& what_arg )
-	: runtime_error(what_arg)
-	{
-	}
-
-	explicit write_fail( const char* what_arg )
-	: runtime_error(what_arg)
-	{
-	}
-#endif
 };
 
 struct packer_base final {

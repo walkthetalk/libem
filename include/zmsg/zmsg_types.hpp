@@ -12,29 +12,12 @@ namespace zmsg {
 /**
  * \brief typedefs
  */
-typedef signed char CHAR;
-typedef unsigned char UCHAR;
-
-typedef signed short SHORT;
-typedef unsigned short USHORT;
-
-typedef int8_t INT8;
-typedef uint8_t UINT8;
-typedef int16_t INT16;
-typedef uint16_t UINT16;
-typedef int32_t INT32;
-typedef uint32_t UINT32;
-
-typedef signed long LONG;
-typedef unsigned long ULONG;
-
-typedef float FLOAT;
-
-typedef double DOUBLE;
-
-typedef bool BOOL;
-
-typedef void VOID;
+#if 0
+int{8|16|32}_t
+uint{8|16|32}_t
+float
+double
+#endif
 
 } /* namespace zmsg */
 

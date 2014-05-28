@@ -12,62 +12,62 @@ template<>
 struct zmsg<mid_t::fusion_splice_start> {
 public:
 	fs_pattern_t FSPattern;
-	UINT32 FibreType;
+	uint32_t FibreType;
 	align_method_t FibreAlignment;
-	BOOL XImageFocus;
-	BOOL YImageFocus;
-	BOOL FibreShift;
-	BOOL DischargeStrengthAdjustment;
-	BOOL TensionSet;
-	FLOAT CutAngleLimit;
-	FLOAT LossLimit;
-	FLOAT FibreAngleLimit;
-	ULONG CleanDischargeTime;
-	ULONG FibreIntervalSetup;
-	LONG  FSPosSetup;
-	DOUBLE FibrePreFSStrength;
-	ULONG FibrePreFSTime;
-	ULONG FibreOverlapSetup;
-	DOUBLE Discharge1Strength;
-	ULONG Discharge1Time;
-	DOUBLE Discharge2Strength;
-	ULONG Discharge2LastTime;
-	ULONG Discharge2StartTime;
-	ULONG Discharge2StopTime;
-	ULONG ExtraManualDischargeTime;
+	bool XImageFocus;
+	bool YImageFocus;
+	bool FibreShift;
+	bool DischargeStrengthAdjustment;
+	bool TensionSet;
+	double CutAngleLimit;
+	double LossLimit;
+	double FibreAngleLimit;
+	uint32_t CleanDischargeTime;
+	uint32_t FibreIntervalSetup;
+	int32_t  FSPosSetup;
+	double FibrePreFSStrength;
+	uint32_t FibrePreFSTime;
+	uint32_t FibreOverlapSetup;
+	double Discharge1Strength;
+	uint32_t Discharge1Time;
+	double Discharge2Strength;
+	uint32_t Discharge2LastTime;
+	uint32_t Discharge2StartTime;
+	uint32_t Discharge2StopTime;
+	uint32_t ExtraManualDischargeTime;
 
-	DOUBLE LeftFSSpeed;	/// 0.0~1.0
-	DOUBLE RightFSSpeed;	/// 0.0~1.0
+	double LeftFSSpeed;	/// 0.0~1.0
+	double RightFSSpeed;	/// 0.0~1.0
 
-	BOOL ConeFS;
-	ULONG ConeFSWaitTime;
-	DOUBLE ConeFSSpeed;
-	ULONG ConeFSStretchLength;
+	bool ConeFS;
+	uint32_t ConeFSWaitTime;
+	double ConeFSSpeed;
+	uint32_t ConeFSStretchLength;
 
 	loss_estimate_mode_t LossEstimationMode;
-	FLOAT LeftFibreMFD;			/// unit: um
-	FLOAT RightFibreMFD;			/// unit: um
-	FLOAT LeastLoss;			/// unit: db
-	FLOAT RateOfSyntropyBending;
-	FLOAT RateOfReverseBending;
-	FLOAT MFDMismatchCoefficient;		/// 0.0 ~ 1.0
+	double LeftFibreMFD;			/// unit: um
+	double RightFibreMFD;			/// unit: um
+	double LeastLoss;			/// unit: db
+	double RateOfSyntropyBending;
+	double RateOfReverseBending;
+	double MFDMismatchCoefficient;		/// 0.0 ~ 1.0
 
-	BOOL AutoStart;
-	BOOL Stop1;
-	BOOL Stop2;
+	bool AutoStart;
+	bool Stop1;
+	bool Stop2;
 	/*data dispaly*/
-	BOOL CutAngle;
-	BOOL OffsetData;
+	bool CutAngle;
+	bool OffsetData;
 	/*omitted choice*/
-	BOOL Cut;
-	BOOL Loss;
-	BOOL FibreCoreAngle;
-	BOOL Bubble;
-	BOOL Thick;
-	BOOL Thin;
+	bool Cut;
+	bool Loss;
+	bool FibreCoreAngle;
+	bool Bubble;
+	bool Thick;
+	bool Thin;
 	/*dischargesupplement*/
-	BOOL AirPressure;
-	BOOL Temperature;
+	bool AirPressure;
+	bool Temperature;
 	/*fiber_image_display*/
 	fs_display_mode_t ImgGap;
 	fs_display_mode_t ImgStop1;
@@ -76,11 +76,11 @@ public:
 	fs_display_mode_t ImgDischarge;
 	fs_display_mode_t ImgLossEstimation;
 	/*else*/
-	BOOL FibreAutoFeed;
-	BOOL BadCutSurface;
-	BOOL AutoAlignAfterStop;
-	BOOL CleanDischargeTwice;
-	ULONG ManualDischargeTimes;
+	bool FibreAutoFeed;
+	bool BadCutSurface;
+	bool AutoAlignAfterStop;
+	bool CleanDischargeTwice;
+	uint32_t ManualDischargeTimes;
 public:
 	ZMSG_PU(
 		FSPattern,

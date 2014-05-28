@@ -12,14 +12,14 @@ public:
 
 template<>
 struct zmsg<mid_t::report_dev_state> {
-	DOUBLE pressure;	/// kpa
-	DOUBLE humidity;
-	DOUBLE env_temp;	/// degree Celsius
-	DOUBLE int_temp;	/// internal temperature
+	double pressure;	/// kpa
+	double humidity;
+	double env_temp;	/// degree Celsius
+	double int_temp;	/// internal temperature
 
-	DOUBLE heat_temp;
+	double heat_temp;
 
-	DOUBLE bat_voltage;
+	double bat_voltage;
 public:
 	ZMSG_PU(pressure,
 		humidity,
