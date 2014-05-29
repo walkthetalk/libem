@@ -12,22 +12,22 @@ template<>
 struct zmsg<mid_t::fusion_splice_start> {
 public:
 	fs_pattern_t FSPattern;
-	uint32_t FibreType;
-	align_method_t FibreAlignment;
+	uint32_t FiberType;
+	align_method_t FiberAlignment;
 	bool XImageFocus;
 	bool YImageFocus;
-	bool FibreShift;
+	bool FiberShift;
 	bool DischargeStrengthAdjustment;
 	bool TensionSet;
 	double CutAngleLimit;
 	double LossLimit;
-	double FibreAngleLimit;
+	double FiberAngleLimit;
 	uint32_t CleanDischargeTime;
-	uint32_t FibreIntervalSetup;
+	uint32_t FiberIntervalSetup;
 	int32_t  FSPosSetup;
-	double FibrePreFSStrength;
-	uint32_t FibrePreFSTime;
-	uint32_t FibreOverlapSetup;
+	double FiberPreFSStrength;
+	uint32_t FiberPreFSTime;
+	uint32_t FiberOverlapSetup;
 	double Discharge1Strength;
 	uint32_t Discharge1Time;
 	double Discharge2Strength;
@@ -45,8 +45,8 @@ public:
 	uint32_t ConeFSStretchLength;
 
 	loss_estimate_mode_t LossEstimationMode;
-	double LeftFibreMFD;			/// unit: um
-	double RightFibreMFD;			/// unit: um
+	double LeftFiberMFD;			/// unit: um
+	double RightFiberMFD;			/// unit: um
 	double LeastLoss;			/// unit: db
 	double RateOfSyntropyBending;
 	double RateOfReverseBending;
@@ -61,7 +61,7 @@ public:
 	/*omitted choice*/
 	bool Cut;
 	bool Loss;
-	bool FibreCoreAngle;
+	bool FiberCoreAngle;
 	bool Bubble;
 	bool Thick;
 	bool Thin;
@@ -76,7 +76,7 @@ public:
 	fs_display_mode_t ImgDischarge;
 	fs_display_mode_t ImgLossEstimation;
 	/*else*/
-	bool FibreAutoFeed;
+	bool FiberAutoFeed;
 	bool BadCutSurface;
 	bool AutoAlignAfterStop;
 	bool CleanDischargeTwice;
@@ -84,22 +84,22 @@ public:
 public:
 	ZMSG_PU(
 		FSPattern,
-		FibreType,
-		FibreAlignment,
+		FiberType,
+		FiberAlignment,
 		XImageFocus,
 		YImageFocus,
-		FibreShift,
+		FiberShift,
 		DischargeStrengthAdjustment,
 		TensionSet,
 		CutAngleLimit,
 		LossLimit,
-		FibreAngleLimit,
+		FiberAngleLimit,
 		CleanDischargeTime,
-		FibreIntervalSetup,
+		FiberIntervalSetup,
 		FSPosSetup,
-		FibrePreFSStrength,
-		FibrePreFSTime,
-		FibreOverlapSetup,
+		FiberPreFSStrength,
+		FiberPreFSTime,
+		FiberOverlapSetup,
 		Discharge1Strength,
 		Discharge1Time,
 		Discharge2Strength,
@@ -116,8 +116,8 @@ public:
 		ConeFSSpeed,
 		ConeFSStretchLength,
 		LossEstimationMode,
-		LeftFibreMFD,
-		RightFibreMFD,
+		LeftFiberMFD,
+		RightFiberMFD,
 		LeastLoss,
 		RateOfSyntropyBending,
 		RateOfReverseBending,
@@ -130,7 +130,7 @@ public:
 		OffsetData,
 		Cut,
 		Loss,
-		FibreCoreAngle,
+		FiberCoreAngle,
 		Bubble,
 		Thick,
 		Thin,
@@ -142,7 +142,7 @@ public:
 		ImgStop2,
 		ImgDischarge,
 		ImgLossEstimation,
-		FibreAutoFeed,
+		FiberAutoFeed,
 		BadCutSurface,
 		AutoAlignAfterStop,
 		CleanDischargeTwice,

@@ -81,6 +81,28 @@ enum class mid_t : uint16_t {
 
 	process_progress,
 
+	/// \todo ribbon message
+	ribbon_get_defect_info,
+	ribbon_defect_detect_result,
+
+	ribbon_fusion_splicer_start,
+	ribbon_fusion_splicer_result,
+
+	ribbon_discharge_adjust_start,
+	ribbon_discharge_adjust_result,
+
+	ribbon_set_fs_spec,
+
+	ribbon_loss_estimating_result,
+
+	ribbon_motor_test_start,
+	ribbon_motor_test_result,
+
+	ribbon_record_off_set,
+
+	ribbon_shrinkage_test_start,
+	ribbon_shrinkage_test_result,
+
 	/// \todo add new message id above this line
 	max,
 };
