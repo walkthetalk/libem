@@ -2,7 +2,7 @@
 
 #include "zmsg_cmm.hpp"
 #include "zmsg_types.hpp"
-#include "zmsg_tense_test_result"
+#include "zmsg_tense_test_result.hpp"
 #include "zmsg_manual_discharge_counts.hpp"
 #include "zmsg_ribbon_record_offset.hpp"
 
