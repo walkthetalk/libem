@@ -156,8 +156,8 @@ struct zmsg<mid_t::motor_test_result> {
 
 	img_defects_t defect_data;
 
-	uint32_t motor_test_times;
-	uint32_t ele_arc_test_times;
+	uint32_t motor_tested_times;
+	uint32_t ele_arc_tested_times;
 
 	/// \note following are error times
 	uint32_t reset;
@@ -170,8 +170,8 @@ public:
 		z_cfg,
 		rec_info,
 		defect_data,
-		motor_test_times,
-		ele_arc_test_times,
+		motor_tested_times,
+		ele_arc_tested_times,
 		reset, push, calibrate, ele_arc, img)
 };
 
