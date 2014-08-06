@@ -18,11 +18,15 @@ struct zmsg<mid_t::dust_check_result> {
 
 	/// \note following member are valid only if 'code' is 'SUCCESS'!
 	bool xz_ok;
-	bool_img xz;
+	std::string xz_ori;
+	std::string xz_dust;
 	bool yz_ok;
-	bool_img yz;
+	std::string yz_ori;
+	std::string yz_dust;
 public:
-	ZMSG_PU(code, z_cfg, xz_ok, xz, yz_ok, yz)
+	ZMSG_PU(code, z_cfg,
+		xz_ok, xz_ori, xz_dust,
+		yz_ok, yz_ori, yz_dust)
 };
 
 template<>
