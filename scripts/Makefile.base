@@ -45,7 +45,7 @@ define mf_gen_dep_file
   $(CMD_MKDIR) $(dir $1)
   @set -e; \
   $(CMD_RM) $1; \
-  $(COMPILE.cc) -MM  $2 > $1.$$$$; \
+  $(COMPILE.cc) -MM $2 > $1.$$$$; \
   $(CMD_SED) 's,\($(basename $(notdir $2))\)\.o[ :]*,$(patsubst %.d,%.o,$1) $1 : ,g' < $1.$$$$ > $1; \
   $(CMD_RM) $1.$$$$
 endef
@@ -55,17 +55,20 @@ temp_var := $$(shell $(CMD_FIND) ${2} ${3} -type f -regex ".*\.\(c\|cpp\)")
 obj_files += $$(patsubst ${2}/%,${1}/%.o,$${temp_var})
 dep_files += $$(patsubst ${2}/%,${1}/%.d,$${temp_var})
 
+# 1. if no .d, then will generate the .d
+# 2. if has .d, and if need recompile, then then regenerate the .d
+# 3. if has .d, and don't need recompile, nothing happened
 ${1}/%.c.o:${2}/%.c
+	@echo "  [gen depen] $$<"
+	@$$(call mf_gen_dep_file, $$(patsubst %.o,%.d,$$@), $$<)
 	@echo "  [compiling] $$<"
 	@$$(COMPILE.c) $$< -o $$@
 
 ${1}/%.cpp.o:${2}/%.cpp
+	@echo "  [gen depen] $$<"
+	@$$(call mf_gen_dep_file, $$(patsubst %.o,%.d,$$@), $$<)
 	@echo "  [compiling] $$<"
 	@$$(COMPILE.cpp) $$< -o $$@
-
-${1}/%.d:${2}/%
-	@echo "  [gen dep] $$<"
-	@$$(call mf_gen_dep_file, $$@, $$<)
 endef
 
 #####################################################################
@@ -123,8 +126,8 @@ endif
 #####################################################################
 #############################compile option##########################
 #####################################################################
-override CXXFLAGS += -Wall -Werror -fPIC -pedantic
-override CFLAGS += -Wall -Werror -fPIC -pedantic
+override CXXFLAGS += -Wall -Wextra -Wstrict-aliasing -Wstrict-overflow -Wconversion -Werror -fPIC -pedantic
+override CFLAGS += -Wall -Wextra -Wstrict-aliasing -Wstrict-overflow -Wconversion  -Werror -fPIC -pedantic
 override CPPFLAGS += $(foreach temp, $(subst ${colon},${space},${inc_dir_set}), -I ${temp})
 
 #####################################################################
@@ -236,6 +239,7 @@ distclean clean:
 	-@$(CMD_RM) $(obj_files)
 	-@$(CMD_RM) $(dep_files)
 	-@$(CMD_RM) ${all_depends}
+	-@$(CMD_RM) ${extra_clean}
 	@echo "clean done"
 
 #####################################################################
