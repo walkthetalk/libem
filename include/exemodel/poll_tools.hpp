@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <system_error>
 
+#include <stdexcept>
+
 namespace exemodel {
 
 /**
@@ -32,5 +34,13 @@ inline void validate_ret(int ret, const char * ctx)
 		throw std::system_error(errno, std::system_category(), ctx);
 	}
 }
+
+/**
+ * \brief indicate the run loop should stop.
+ */
+class exec_stop final : public std::runtime_error {
+public:
+	using std::runtime_error::runtime_error;
+};
 
 }
