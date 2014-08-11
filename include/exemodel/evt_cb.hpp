@@ -57,5 +57,52 @@ private:
 	cb_func_t m_cb;
 };
 
+/**
+ * specialize of evt_cb
+ */
+template<>
+class evt_cb<void> {
+public:
+	typedef std::function<void()> cb_func_t;
+	typedef evt_cb<void> cb_obj_t;
+public:
+	evt_cb() : m_cb(nullptr) {}
+	virtual ~evt_cb() {}
+public:
+	/**
+	 * \brief connect the callback user specified.
+	 */
+	void connect(const cb_func_t & func)
+	{
+		m_cb = func;
+	}
+
+	void connect(const cb_obj_t & other)
+	{
+		m_cb = other.m_cb;
+	}
+
+	/**
+	 * \brief disconnect the callback stored.
+	 */
+	void disconnect(void)
+	{
+		m_cb = nullptr;
+	}
+
+	/**
+	 * \brief execute the callback stored.
+	 */
+	void exe(void)
+	{
+		m_cb();
+	}
+private:
+	evt_cb(const evt_cb & rhs) = delete;
+	evt_cb & operator=(const evt_cb & rhs) = delete;
+private:
+	cb_func_t m_cb;
+};
+
 }
 
