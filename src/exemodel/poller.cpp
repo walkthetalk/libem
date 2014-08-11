@@ -1,3 +1,6 @@
+
+#include "zlog/zlog.hpp"
+
 #include "exemodel/poll_tools.hpp"
 #include "exemodel/poller.hpp"
 #include "exemodel/pollee.hpp"
@@ -52,7 +55,7 @@ void poller::run()
 		} while(true);
 	}
 	catch (const exec_stop & e) {
-		return;
+		zlog::zlog_info(e.what());
 	}
 }
 
