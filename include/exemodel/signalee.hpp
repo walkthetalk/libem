@@ -39,4 +39,6 @@ private:
 	signalee &operator = (signalee & rhs) = delete;
 };
 
+void mask_signal(int signum);
+
 }

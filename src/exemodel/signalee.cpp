@@ -7,7 +7,7 @@
 
 namespace exemodel {
 
-static int gen_signalfd(int signum)
+void mask_signal(int signum)
 {
 	sigset_t mask;
 	sigemptyset(&mask);
@@ -15,6 +15,13 @@ static int gen_signalfd(int signum)
 
 	int ret = ::sigprocmask(SIG_BLOCK, &mask, NULL);
 	validate_ret(ret, "sigprocmask");
+}
+
+static int gen_signalfd(int signum)
+{
+	sigset_t mask;
+	sigemptyset(&mask);
+	sigaddset(&mask, signum);
 
 	int sfd = ::signalfd(-1, &mask, 0);
 	validate_ret(sfd, "generate signal fd");
