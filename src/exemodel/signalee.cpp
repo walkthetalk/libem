@@ -24,7 +24,7 @@ static int gen_signalfd(int signum)
 	sigaddset(&mask, signum);
 
 	int sfd = ::signalfd(-1, &mask, 0);
-	validate_ret(sfd, "generate signal fd");
+	validate_fd(sfd, "generate signal fd");
 
 	return sfd;
 }
