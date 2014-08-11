@@ -39,16 +39,21 @@ void poller::mod(pollee & obj) const
 
 void poller::run()
 {
-	struct epoll_event evt;
-	do {
-		int ret = epoll_wait(_fd(), &evt, 1, -1);
-		if (ret <= 0) {
-			// TODO: log
-			continue;
-		}
+	try {
+		struct epoll_event evt;
+		do {
+			int ret = epoll_wait(_fd(), &evt, 1, -1);
+			if (ret <= 0) {
+				// TODO: log
+				continue;
+			}
 
-		((pollee *)evt.data.ptr)->dispose(*this, evt.events);
-	} while(true);
+			((pollee *)evt.data.ptr)->dispose(*this, evt.events);
+		} while(true);
+	}
+	catch (const exec_stop & e) {
+		return;
+	}
 }
 
 void poller::dispose(poller & mgr, uint32_t evts)
