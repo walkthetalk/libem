@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stropts.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/epoll.h>
 
 #include <cstdint>
@@ -68,6 +69,11 @@ public:
 	int f_cntl(int cmd)
 	{
 		return ::fcntl(m_fd, cmd);
+	}
+
+	int f_stat(struct stat & buf)
+	{
+		return ::fstat(m_fd, &buf);
 	}
 public:
 	/**
