@@ -305,9 +305,66 @@ typedef struct {
 	{
 		return (p[0].x == p[1].x);
 	}
+
+	void clear()
+	{
+		p[0].x = p[1].x = 0;
+		p[1].y = p[1].y = 0;
+		temp = 0;
+		pressure = 0;
+	}
 public:
 	ZMSG_PU(p, temp, pressure)
 } discharge_data_t;
+
+/**
+ * \brief rt_revise_data_t, used for real time discharge revising
+ */
+typedef struct {
+	int32_t  rt_x_exposure;
+	int32_t  rt_y_exposure;
+	double   rt_revise_a3;
+	double   rt_revise_a2;
+	double   rt_revise_a1;
+	double   rt_revise_a0;
+	double   rt_auto_ds_offset;
+	double   rt_auto_nz_offset;
+	double   rt_auto_mm_offset;
+	double   rt_auto_sm_offset;
+	double   rt_cal_ds_offset;
+	double   rt_cal_nz_offset;
+	double   rt_cal_mm_offset;
+	double   rt_cal_sm_offset;
+
+	bool empty() const
+	{
+		return rt_x_exposure < 0;
+	}
+
+	void clear()
+	{
+		rt_x_exposure = -1;
+		rt_y_exposure = -1;
+		rt_revise_a3 = rt_revise_a2 = rt_revise_a1 = rt_revise_a0 = 0;
+		rt_auto_ds_offset = rt_auto_nz_offset = rt_auto_mm_offset = rt_auto_sm_offset = 0;
+		rt_cal_ds_offset = rt_cal_nz_offset = rt_cal_mm_offset = rt_cal_sm_offset = 0;
+	}
+public:
+	ZMSG_PU(rt_x_exposure,
+		rt_y_exposure,
+		rt_revise_a3,
+		rt_revise_a2,
+		rt_revise_a1,
+		rt_revise_a0,
+		rt_auto_ds_offset,
+		rt_auto_nz_offset,
+		rt_auto_mm_offset,
+		rt_auto_sm_offset,
+		rt_cal_ds_offset,
+		rt_cal_nz_offset,
+		rt_cal_mm_offset,
+		rt_cal_sm_offset)
+} rt_revise_data_t;
 
 /**
  * \brief fusion splice pattern

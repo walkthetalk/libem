@@ -71,6 +71,8 @@ public:
 	double   dbg_vangle_limit;		/// unit: degree
 
 	double   pre_cal_xy_dist_threshold_relax_ratio;
+
+	rt_revise_data_t rt_revise_data;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -135,7 +137,9 @@ public:
 		dbg_hangle_limit,
 		dbg_vangle_limit,
 
-		pre_cal_xy_dist_threshold_relax_ratio)
+		pre_cal_xy_dist_threshold_relax_ratio,
+
+		rt_revise_data)
 };
 
 template<>
