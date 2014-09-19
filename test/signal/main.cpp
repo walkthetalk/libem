@@ -36,7 +36,7 @@ static std::function<void()> s_sigterm_hdl;
 void signal_handler(int sig)
 {
 	std::cout << "haha " << sig << std::endl;
-	//zlog::zlog_warning("received sigterm %d", sig);
+	zlog::zlog_base(LOG_INFO, "received sigterm %d");
 	s_sigterm_hdl();
 }
 

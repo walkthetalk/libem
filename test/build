@@ -16,3 +16,4 @@ fi
 
 ${make_bin} -f Makefile.client $*
 ${make_bin} -f Makefile.svr $*
+${make_bin} -f Makefile.sig $*
