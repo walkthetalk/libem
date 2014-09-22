@@ -327,27 +327,20 @@ typedef struct {
 	double   rt_revise_a2;
 	double   rt_revise_a1;
 	double   rt_revise_a0;
-	double   rt_auto_ds_offset;
-	double   rt_auto_nz_offset;
-	double   rt_auto_mm_offset;
-	double   rt_auto_sm_offset;
-	double   rt_cal_ds_offset;
-	double   rt_cal_nz_offset;
-	double   rt_cal_mm_offset;
-	double   rt_cal_sm_offset;
+	double   rt_offset_auto;
+	double   rt_offset_cal;
 
 	bool empty() const
 	{
-		return rt_x_exposure < 0;
+		return (rt_x_exposure <= 0 || rt_y_exposure <= 0);
 	}
 
 	void clear()
 	{
-		rt_x_exposure = -1;
-		rt_y_exposure = -1;
+		rt_x_exposure = 0;
+		rt_y_exposure = 0;
 		rt_revise_a3 = rt_revise_a2 = rt_revise_a1 = rt_revise_a0 = 0;
-		rt_auto_ds_offset = rt_auto_nz_offset = rt_auto_mm_offset = rt_auto_sm_offset = 0;
-		rt_cal_ds_offset = rt_cal_nz_offset = rt_cal_mm_offset = rt_cal_sm_offset = 0;
+		rt_offset_auto = rt_offset_cal = 0;
 	}
 public:
 	ZMSG_PU(rt_x_exposure,
@@ -356,15 +349,17 @@ public:
 		rt_revise_a2,
 		rt_revise_a1,
 		rt_revise_a0,
-		rt_auto_ds_offset,
-		rt_auto_nz_offset,
-		rt_auto_mm_offset,
-		rt_auto_sm_offset,
-		rt_cal_ds_offset,
-		rt_cal_nz_offset,
-		rt_cal_mm_offset,
-		rt_cal_sm_offset)
+		rt_offset_auto,
+		rt_offset_cal)
 } rt_revise_data_t;
+
+enum class fiber_t : uint8_t {
+	sm = 0x0,
+	ds,
+	nz,
+	mm,
+	max,
+};
 
 /**
  * \brief fusion splice pattern

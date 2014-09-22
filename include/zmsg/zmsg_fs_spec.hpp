@@ -1,5 +1,6 @@
 #pragma once
 
+#include "zmsg_utils.hpp"
 #include "zmsg_types.hpp"
 
 namespace zmsg {
@@ -72,7 +73,7 @@ public:
 
 	double   pre_cal_xy_dist_threshold_relax_ratio;
 
-	rt_revise_data_t rt_revise_data;
+	rt_revise_data_t rt_revise_data[to_val(fiber_t::max)];
 public:
         ZMSG_PU(
 		window_x_row,

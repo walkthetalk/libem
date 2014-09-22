@@ -134,11 +134,6 @@ public:
 	ZMSG_PU(version, magic, len, crc, mid)
 };
 
-constexpr std::underlying_type<mid_t>::type to_val(const mid_t mid)
-{
-	return (std::underlying_type<mid_t>::type)(mid);
-}
-
 constexpr size_t HDR_SIZE = sizeof(zmsg_header);
 
 } /* zmsg */
