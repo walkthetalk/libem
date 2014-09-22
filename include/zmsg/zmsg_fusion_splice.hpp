@@ -68,6 +68,7 @@ public:
 	/*dischargesupplement*/
 	bool AirPressure;
 	bool Temperature;
+	bool RealTimeRevise;
 	/*fiber_image_display*/
 	fs_display_mode_t ImgGap;
 	fs_display_mode_t ImgStop1;
@@ -136,6 +137,7 @@ public:
 		Thin,
 		AirPressure,
 		Temperature,
+		RealTimeRevise,
 		ImgGap,
 		ImgStop1,
 		ImgAlign,
