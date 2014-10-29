@@ -309,7 +309,7 @@ typedef struct {
 	void clear()
 	{
 		p[0].x = p[1].x = 0;
-		p[1].y = p[1].y = 0;
+		p[0].y = p[1].y = 0;
 		temp = 0;
 		pressure = 0;
 	}
