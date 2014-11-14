@@ -103,6 +103,10 @@ enum class mid_t : uint16_t {
 	ribbon_shrinkage_test_start,
 	ribbon_shrinkage_test_result,
 
+	realtime_revise_start,
+	realtime_revise_update,
+	realtime_revise_result,
+
 	/// \todo add new message id above this line
 	max,
 };
