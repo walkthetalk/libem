@@ -107,6 +107,8 @@ enum class mid_t : uint16_t {
 	realtime_revise_update,
 	realtime_revise_result,
 
+	fs_cover_state,
+
 	/// \todo add new message id above this line
 	max,
 };
