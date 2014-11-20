@@ -276,6 +276,7 @@ enum class fs_err_t : uint8_t {
 
 	fiber_offside,		/// user should replace fiber
 	cmos_exposure,
+	loss_estimate,
 };
 
 /**
