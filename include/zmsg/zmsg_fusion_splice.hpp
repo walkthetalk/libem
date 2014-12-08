@@ -58,6 +58,7 @@ public:
 	/*data dispaly*/
 	bool CutAngle;
 	bool OffsetData;
+	bool ArcCorrectedValue;
 	/*omitted choice*/
 	bool Cut;
 	bool Loss;
