@@ -130,6 +130,7 @@ public:
 		Stop2,
 		CutAngle,
 		OffsetData,
+		ArcCorrectedValue,
 		Cut,
 		Loss,
 		FiberCoreAngle,
