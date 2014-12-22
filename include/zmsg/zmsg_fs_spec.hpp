@@ -75,7 +75,6 @@ public:
 
 	rt_revise_data_t rt_revise_data[to_val(fiber_t::max)];
 
-	double	arc_strength_ratio;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -142,9 +141,7 @@ public:
 
 		pre_cal_xy_dist_threshold_relax_ratio,
 
-		rt_revise_data,
-
-		arc_strength_ratio)
+		rt_revise_data)
 };
 
 template<>
