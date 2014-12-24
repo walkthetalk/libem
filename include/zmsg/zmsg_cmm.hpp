@@ -110,6 +110,8 @@ enum class mid_t : uint16_t {
 	fs_cover_state,
 	arc_revise,
 
+	discharge_adjust_init,
+
 	/// \todo add new message id above this line
 	max,
 };

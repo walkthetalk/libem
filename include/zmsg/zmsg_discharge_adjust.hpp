@@ -5,6 +5,12 @@
 namespace zmsg {
 
 template<>
+struct zmsg<mid_t::discharge_adjust_init> {
+public:
+	ZMSG_PU()
+};
+
+template<>
 struct zmsg<mid_t::discharge_adjust_start> {
 public:
 	fs_pattern_t FSPattern;
