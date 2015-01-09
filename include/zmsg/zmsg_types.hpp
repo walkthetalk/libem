@@ -290,16 +290,18 @@ enum ledId_t : uint8_t {
 	LED_NUM,
 };
 
+typedef struct {
+	double x;	/// unit: volt
+	double y;	/// unit: um
+public:
+	ZMSG_PU(x, y)
+} mag2shrink_t;
+
 /**
  * \brief discharge_data_t, used for discharge revising
  */
 typedef struct {
-	struct {
-		double x;		/// unit: volt
-		double y;		/// unit: um
-	public:
-		ZMSG_PU(x, y)
-	} p[2];
+	mag2shrink_t p[2];
 
 	double temp;		/// unit: degree centigrade
 	double pressure;	/// unit: bar
