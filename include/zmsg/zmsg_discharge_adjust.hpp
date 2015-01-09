@@ -154,8 +154,11 @@ struct zmsg<mid_t::discharge_adjust_result> {
 
 	discharge_data_t base;
 	discharge_data_t revise;
+	/// suggest value for next
+	double strength1;
+	double strength2;
 public:
-	ZMSG_PU(code, z_cfg, rec_info, defect_data, base, revise)
+	ZMSG_PU(code, z_cfg, rec_info, defect_data, base, revise, strength1, strength2)
 };
 
 }
