@@ -50,12 +50,12 @@ public:
 	}
 
 	template< typename _T >
-	int io_ctl(int request, _T v)
+	int io_ctl(unsigned long int request, _T v)
 	{
 		return ::ioctl(m_fd, request, v);
 	}
 
-	int io_ctl(int request)
+	int io_ctl(unsigned long int request)
 	{
 		return ::ioctl(m_fd, request);
 	}

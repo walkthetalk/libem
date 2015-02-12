@@ -149,6 +149,11 @@ public:
 		this->start();
 	}
 
+	void start(const uint32_t firstms, const uint32_t laterms)
+	{
+		this->start({ ms_to_timespec(firstms), ms_to_timespec(laterms), });
+	}
+
 	void start_abs(const itimerspec_t & new_value)
 	{
 		this->set_spec(new_value);

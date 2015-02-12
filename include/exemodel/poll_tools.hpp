@@ -28,7 +28,7 @@ inline int validate_fd(int fd, const char * info)
  * \param ret	the value returen by OS call.
  * \param ctx	the string used as the arguments of exception.
  */
-inline void validate_ret(int ret, const char * ctx)
+inline void validate_ret(long ret, const char * ctx)
 {
 	if (ret == -1) {
 		throw std::system_error(errno, std::system_category(), ctx);
