@@ -41,6 +41,7 @@ public:
 	{
 		this->exe(p, evts);
 	}
+
 	const char * path(void) const
 	{
 		return m_path.c_str();

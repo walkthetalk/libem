@@ -21,13 +21,13 @@ void poller::add(pollee & obj) const
 	struct epoll_event evt;
 	evt.events = obj._evts();
 	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_ADD, obj._fd(), &evt);
+	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_ADD, obj.fd(), &evt);
 	validate_ret(ret, "epoll add fd");
 }
 
 void poller::del(pollee & obj) const
 {
-	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_DEL, obj._fd(), NULL);
+	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_DEL, obj.fd(), NULL);
 	validate_ret(ret, "epoll del fd");
 }
 
@@ -36,7 +36,7 @@ void poller::mod(pollee & obj) const
 	struct epoll_event evt;
 	evt.events = obj._evts();
 	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(_fd(), EPOLL_CTL_MOD, obj._fd(), &evt);
+	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_MOD, obj.fd(), &evt);
 	validate_ret(ret, "epoll del fd");
 }
 
@@ -45,7 +45,7 @@ void poller::run()
 	try {
 		struct epoll_event evt;
 		do {
-			int ret = epoll_wait(_fd(), &evt, 1, -1);
+			int ret = epoll_wait(this->fd(), &evt, 1, -1);
 			if (ret <= 0) {
 				// TODO: log
 				continue;
@@ -66,7 +66,7 @@ void poller::dispose(poller & mgr, uint32_t evts)
 
 	struct epoll_event evt;
 	do {
-		int ret = epoll_wait(_fd(), &evt, 1, 0);
+		int ret = epoll_wait(this->fd(), &evt, 1, 0);
 		if (ret <= 0) {
 			// TODO: log
 			break;

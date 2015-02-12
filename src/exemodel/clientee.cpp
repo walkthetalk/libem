@@ -22,7 +22,7 @@ clientee::clientee(uint32_t svrip, uint16_t svrport)
 		svraddr.sin_port = htons(svrport);
 		svraddr.sin_addr.s_addr = htonl(svrip);
 
-		int ret = ::connect(_fd(),
+		int ret = ::connect(this->fd(),
 			(struct sockaddr*)&svraddr, sizeof(svraddr));
 		validate_ret(ret, "connect");
 	} catch (std::system_error & e) {
@@ -52,7 +52,7 @@ void clientee::dispose(poller & mgr, uint32_t evts)
 
 size_t clientee::recv(void * buffer, size_t length)
 {
-	ssize_t ret = ::recv(_fd(), buffer, length, 0);
+	ssize_t ret = ::recv(this->fd(), buffer, length, 0);
 	validate_ret((int)ret, "socket recv");
 
 	return (size_t)ret;
@@ -60,7 +60,7 @@ size_t clientee::recv(void * buffer, size_t length)
 
 size_t clientee::send(const void * buffer, size_t length)
 {
-	ssize_t ret = ::send(_fd(), buffer, length, 0);
+	ssize_t ret = ::send(this->fd(), buffer, length, 0);
 	validate_ret((int)ret, "socket send");
 
 	return (size_t)ret;

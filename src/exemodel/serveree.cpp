@@ -23,7 +23,7 @@ serveree::serveree(uint16_t port)
 
 	// reuse address when TIME_WAIT
 	int opt = 1;
-	ret = ::setsockopt(_fd(), SOL_SOCKET, SO_REUSEADDR,
+	ret = ::setsockopt(this->fd(), SOL_SOCKET, SO_REUSEADDR,
 			 (const void*)&opt, sizeof(opt));
 	validate_ret(ret, "setsockopt,reuseaddr");
 
@@ -32,11 +32,11 @@ serveree::serveree(uint16_t port)
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
-	ret = ::bind(_fd(),  (struct sockaddr *)&addr,  sizeof(addr));
+	ret = ::bind(this->fd(),  (struct sockaddr *)&addr,  sizeof(addr));
 	validate_ret(ret, "bind");
 
 	// listen
-	ret = ::listen(_fd(), 0);
+	ret = ::listen(this->fd(), 0);
 	validate_ret(ret, "listen");
 }
 
@@ -58,7 +58,7 @@ void serveree::dispose(poller & mgr, uint32_t evts)
 		return;
 	}
 
-	int conn_sock = ::accept(_fd(), NULL, NULL);
+	int conn_sock = ::accept(this->fd(), NULL, NULL);
 	validate_ret(conn_sock, "accept");
 
 	if (m_connectee) {

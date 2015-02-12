@@ -3,12 +3,23 @@
  * \file	exemodel/poll_tools.hpp
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
+#include <fcntl.h>
+
 #include <errno.h>
 #include <system_error>
 
 #include <stdexcept>
 
 namespace exemodel {
+
+/**
+ * \brief operate flags for file
+ */
+enum class oflag_t : int {
+	ro = O_RDONLY,
+	wo = O_WRONLY,
+	rw = O_RDWR,
+};
 
 /**
  * \brief validate the file descriptor if it is valid.

@@ -75,6 +75,8 @@ public:
 	{
 		return ::fstat(m_fd, &buf);
 	}
+
+	int fd(void) const { return m_fd; }
 public:
 	/**
 	 * \brief used for disposing the event caught by the \em poller attached.
@@ -88,7 +90,6 @@ protected:
 	 * \enum used by subclass
 	 */
 	friend class poller;
-	int _fd(void) const { return m_fd; }
 	uint32_t _evts(void) const { return m_evts; }
 private:
 	pollee(const pollee & rhs) = delete;

@@ -187,12 +187,12 @@ private:
 		const itimerspec_t *new_value,
 		itimerspec_t *old_value)
 	{
-		return ::timerfd_settime(_fd(), flags, new_value, old_value);
+		return ::timerfd_settime(this->fd(), flags, new_value, old_value);
 	}
 
 	int get_spec(itimerspec_t *curr_value) const
 	{
-		return ::timerfd_gettime(_fd(), curr_value);
+		return ::timerfd_gettime(this->fd(), curr_value);
 	}
 private:
 	timeree(const timeree & rhs) = delete;

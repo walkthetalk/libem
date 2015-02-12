@@ -11,18 +11,12 @@
 ///
 #include <type_traits>
 ///
-#include <cstring>
+#include <string>
 #include <sstream>
 
-#include <zlog/zlog.hpp>
+#include <exemodel/poll_tools.hpp>
 
 namespace exemodel {
-
-enum class oflag_t : int {
-	ro = O_RDONLY,
-	wo = O_WRONLY,
-	rw = O_RDWR,
-};
 
 /**
  * \brief device attribute
@@ -32,7 +26,7 @@ class dev_attr final {
 	static constexpr int __oflag = static_cast<int>(_oflag);
 public:
 	dev_attr(const char * path)
-	: m_fd(::open(path, __oflag))
+	: m_fd(validate_fd(::open(path, __oflag), ""))
 	, m_path(path)
 	, m_soft_val()
 	{
@@ -55,7 +49,7 @@ public:
 		char buf[16] = "";
 		ssize_t ret = ::pread(m_fd, buf, sizeof(buf), 0);
 		if (ret < 0) {
-			throw std::system_error(errno, std::system_category(), "read dev attr" + std::string(m_path));
+			throw std::system_error(errno, std::system_category(), "read dev attr " + m_path);
 		}
 
 		std::stringstream ss(buf);
@@ -74,11 +68,10 @@ public:
 		std::stringstream ss;
 		ss << val << "\n";
 		std::string s = ss.str();
-		const char * buf = s.c_str();
 
-		ssize_t ret = ::pwrite(m_fd, buf, std::strlen(buf), 0);
+		ssize_t ret = ::pwrite(m_fd, s.c_str(), s.size(), 0);
 		if (ret < 0) {
-			throw std::system_error(errno, std::system_category(), "write dev attr" + std::string(m_path));
+			throw std::system_error(errno, std::system_category(), "write dev attr " + m_path);
 		}
 
 		m_soft_val = val;
@@ -91,7 +84,7 @@ private:
 
 private:
 	int m_fd;
-	const char * m_path;
+	const std::string m_path;
 	_val_t m_soft_val;	/// \note the hard value may not same as soft value
 };
 
