@@ -112,6 +112,8 @@ enum class mid_t : uint16_t {
 
 	discharge_adjust_init,
 
+	set_fs_display_mode_ext,
+
 	/// \todo add new message id above this line
 	max,
 };

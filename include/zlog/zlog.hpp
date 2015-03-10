@@ -6,7 +6,8 @@
 namespace zlog {
 
 template< typename... args_t >
-inline void zlog_base(int priority, const char *format, args_t... args)
+//__attribute__((__format__ (__printf__, 2, 3)))
+static inline void zlog_base(int priority, const char *format, args_t... args)
 {
 	syslog(priority, format, args...);
 }
