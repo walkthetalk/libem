@@ -2,6 +2,7 @@
 
 #include "zmsg_cmm.hpp"
 #include "zmsg_types.hpp"
+#include "zmsg_utils.hpp"
 #include "zmsg_tense_test_result.hpp"
 #include "zmsg_manual_discharge_counts.hpp"
 #include "zmsg_record_offset.hpp"
@@ -151,14 +152,9 @@ public:
 
 template<>
 struct zmsg<mid_t::realtime_revise_update> {
-	fs_pattern_t FSPattern;
-	fiber_t FiberType;
-	double offset;
+	rt_revise_data_t rt_revise_data[to_val(fiber_t::max)];
 public:
-	ZMSG_PU(
-		FSPattern,
-		FiberType,
-		offset)
+	ZMSG_PU(rt_revise_data)
 };
 
 template<>
