@@ -13,7 +13,7 @@ public:
 	int32_t window_y_row;			// unit: pixel
 	int32_t window_y_col;			// unit: pixel
 
-	uint32_t nm_per_pixel;			// unit: nm/pixel
+	/*deprecated*/ uint32_t nm_per_pixel;			// unit: nm/pixel
 
 	double zmotor_spec_nm_per_step;		// unit: nm/step
 
