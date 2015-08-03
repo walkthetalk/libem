@@ -111,6 +111,7 @@ enum class mid_t : uint16_t {
 	arc_revise,
 
 	discharge_adjust_init,
+	dust_check1_start,
 
 	/// \todo add new message id above this line
 	max,
