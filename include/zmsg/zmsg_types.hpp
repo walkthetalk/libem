@@ -22,31 +22,6 @@ double
 } /* namespace zmsg */
 
 /**
- * \brief bool image
- */
-struct bool_img {
-	bool_img()
-	: width(0)
-	, height(0)
-	, data()
-	{
-	}
-
-	void init(void)
-	{
-		this->width = 0;
-		this->height = 0;
-		this->data.clear();
-	}
-
-	uint16_t width;
-	uint16_t height;
-	std::vector<bool> data;
-public:
-	ZMSG_PU(width, height, data)
-};
-
-/**
  * \brief img fiber defect description
  */
 typedef uint32_t ifd_t;
@@ -117,8 +92,8 @@ typedef struct img_defects final {
 	double xz_hangle_intersect;
 
 	/// the image contain missed corner info
-	bool_img yz_img;
-	bool_img xz_img;
+	std::string yz_img;
+	std::string xz_img;
 
 	img_defects()
 	: yzl(), yzr(), xzl(), xzr()
@@ -136,8 +111,8 @@ typedef struct img_defects final {
 		this->xzr.init();
 		this->yz_hangle_intersect = 0;
 		this->xz_hangle_intersect = 0;
-		this->yz_img.init();
-		this->xz_img.init();
+		this->yz_img = "";
+		this->xz_img = "";
 	}
 
 	operator bool() const
