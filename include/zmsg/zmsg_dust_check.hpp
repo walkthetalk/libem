@@ -11,6 +11,12 @@ public:
 };
 
 template<>
+struct zmsg<mid_t::dust_check1_start> {
+public:
+	ZMSG_PU()
+};
+
+template<>
 struct zmsg<mid_t::dust_check_result> {
 	fs_err_t code;
 

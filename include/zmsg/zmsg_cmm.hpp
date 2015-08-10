@@ -111,6 +111,7 @@ enum class mid_t : uint16_t {
 	arc_revise,
 
 	discharge_adjust_init,
+	dust_check1_start,
 
 	set_fs_display_mode_ext,
 
