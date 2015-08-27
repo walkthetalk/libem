@@ -191,7 +191,6 @@ enum class svc_heat_state_t : uint16_t {
 	heat_ascending,
 	heat_stabling,
 	heat_descending,
-	heat_keep_finish_temp,
 };
 
 /**
