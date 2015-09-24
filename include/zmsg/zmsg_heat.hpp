@@ -13,9 +13,10 @@ public:
         uint16_t heat_time;	/// unit: second
         int16_t heat_temp;	/// unit: degree Celsius
         int16_t finish_temp;	/// unit: degree Celsius
+        int16_t stable_temp;	/// unit: degree Celsius
         bool fast_heat;
 public:
-        ZMSG_PU(Material,Fiberlen,Heatctl,heat_time,heat_temp,finish_temp,fast_heat)
+        ZMSG_PU(Material,Fiberlen,Heatctl,heat_time,heat_temp,finish_temp,stable_temp,fast_heat)
 };
 
 template<>
