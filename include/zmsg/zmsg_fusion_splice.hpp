@@ -171,6 +171,9 @@ struct zmsg<mid_t::fusion_splice_result> {
 	zmsg<mid_t::tense_test_result> z_tense_test_result;
 
 	zmsg<mid_t::manual_discharge_counts> z_manual_discharge_counts;
+
+	std::string fs_done_x_img;
+	std::string fs_done_y_img;
 public:
 	ZMSG_PU(code,
 		z_cfg,
@@ -180,7 +183,9 @@ public:
 		pattern_compensate,
 		loss_db,
 		z_tense_test_result,
-		z_manual_discharge_counts)
+		z_manual_discharge_counts,
+		fs_done_x_img,
+		fs_done_y_img)
 };
 
 }
