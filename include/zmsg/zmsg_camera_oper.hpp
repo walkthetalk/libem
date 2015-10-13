@@ -13,5 +13,14 @@ public:
 	ZMSG_PU(is_pos_x,row,column)
 };
 
+template<>
+struct zmsg<mid_t::set_window>{
+	bool is_pos_x;
+	uint16_t row;
+	uint16_t column;
+public:
+	ZMSG_PU(is_pos_x,row,column)
+};
+
 } /* msg */
 
