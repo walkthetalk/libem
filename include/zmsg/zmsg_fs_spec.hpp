@@ -26,8 +26,8 @@ public:
 	uint32_t clr_discharge_gap;		// unit: nm
 	uint16_t check_fiber_exist_time;	// unit: ms
 
-	uint16_t motor_min_speed[motorId_t::NUM];
-	uint16_t motor_max_speed[motorId_t::NUM];
+	std::array<uint16_t, motorId_t::NUM>	motor_min_speed;
+	std::array<uint16_t, motorId_t::NUM>	motor_max_speed;
 
 	double entering_speed;
 	double push1_speed;
@@ -53,7 +53,7 @@ public:
 	double   dust_check_threshold1;
 	uint16_t img_denoise_threshold;
 
-	double   led_brightness[ledId_t::LED_NUM];
+	std::array<double, ledId_t::LED_NUM>	led_brightness;
 	double   x_focal_distance;
 	double   y_focal_distance;
 
@@ -73,7 +73,7 @@ public:
 
 	double   pre_cal_xy_dist_threshold_relax_ratio;
 
-	rt_revise_data_t rt_revise_data[to_val(fiber_t::max)];
+	std::array<rt_revise_data_t, to_val(fiber_t::max)> rt_revise_data;
 
 public:
         ZMSG_PU(

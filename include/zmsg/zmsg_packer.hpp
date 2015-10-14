@@ -106,7 +106,7 @@ private:
 
 	void __check_err(size_t l)
 	{
-		if (m_e + l > m_buf_end) {
+		if (l > static_cast<size_t>(m_buf_end - m_e)) {
 			throw std::bad_alloc();
 		}
 	}

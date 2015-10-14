@@ -152,7 +152,7 @@ public:
 
 template<>
 struct zmsg<mid_t::realtime_revise_update> {
-	rt_revise_data_t rt_revise_data[to_val(fiber_t::max)];
+	std::array<rt_revise_data_t, to_val(fiber_t::max)> rt_revise_data;
 public:
 	ZMSG_PU(rt_revise_data)
 };

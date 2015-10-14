@@ -44,7 +44,7 @@ inline void ifd_set(ifd_t & dst, const ifd_t src)
 	dst |= src;
 }
 
-typedef struct ifd_line final {
+struct ifd_line_t final {
 	ifd_t  dbmp;
 
 	/// \note all angles' unit are degree
@@ -53,7 +53,7 @@ typedef struct ifd_line final {
 
 	int32_t wrap_diameter;	/// unit: pixel
 
-	ifd_line()
+	ifd_line_t()
 	: dbmp(0)
 	, h_angle(0)
 	, v_angle(0)
@@ -80,9 +80,9 @@ typedef struct ifd_line final {
 	}
 public:
 	ZMSG_PU(dbmp, h_angle, v_angle, wrap_diameter)
-} ifd_line_t;
+};
 
-typedef struct img_defects final {
+struct img_defects_t final {
 	ifd_line_t yzl;
 	ifd_line_t yzr;
 	ifd_line_t xzl;
@@ -95,7 +95,7 @@ typedef struct img_defects final {
 	std::string yz_img;
 	std::string xz_img;
 
-	img_defects()
+	img_defects_t()
 	: yzl(), yzr(), xzl(), xzr()
 	, yz_hangle_intersect(0)
 	, xz_hangle_intersect(0)
@@ -139,17 +139,17 @@ typedef struct img_defects final {
 	}
 public:
 	ZMSG_PU(yzl, yzr, xzl, xzr, yz_hangle_intersect, xz_hangle_intersect, yz_img, xz_img)
-} img_defects_t;
+};
 
 /**
  * \biref fiber recognition infomation
  */
-typedef struct final {
+struct fiber_rec_info_t final {
 	uint32_t wrap_diameter;	/// unit: nm
 	uint32_t core_diameter; /// unit: nm
 public:
 	ZMSG_PU(wrap_diameter, core_diameter)
-} fiber_rec_info_t;
+};
 
 /**
  * \brief service fs state
@@ -265,18 +265,18 @@ enum ledId_t : uint8_t {
 	LED_NUM,
 };
 
-typedef struct {
+struct mag2shrink_t {
 	double x;	/// unit: volt
 	double y;	/// unit: um
 public:
 	ZMSG_PU(x, y)
-} mag2shrink_t;
+};
 
 /**
  * \brief discharge_data_t, used for discharge revising
  */
-typedef struct {
-	mag2shrink_t p[2];
+struct discharge_data_t {
+	std::array<mag2shrink_t, 2> p;
 
 	double temp;		/// unit: degree centigrade
 	double pressure;	/// unit: bar
@@ -295,12 +295,12 @@ typedef struct {
 	}
 public:
 	ZMSG_PU(p, temp, pressure)
-} discharge_data_t;
+};
 
 /**
  * \brief rt_revise_data_t, used for real time discharge revising
  */
-typedef struct {
+struct rt_revise_data_t {
 	int32_t  rt_x_exposure;
 	int32_t  rt_y_exposure;
 	double   rt_revise_a3;
@@ -331,7 +331,7 @@ public:
 		rt_revise_a0,
 		rt_offset_auto,
 		rt_offset_cal)
-} rt_revise_data_t;
+};
 
 enum class fiber_t : uint8_t {
 	sm = 0x0,
