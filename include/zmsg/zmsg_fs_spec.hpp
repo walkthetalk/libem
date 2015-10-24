@@ -75,6 +75,7 @@ public:
 
 	std::array<rt_revise_data_t, to_val(fiber_t::max)> rt_revise_data;
 
+	double	loss_factor;
 public:
         ZMSG_PU(
 		window_x_row,
@@ -141,7 +142,9 @@ public:
 
 		pre_cal_xy_dist_threshold_relax_ratio,
 
-		rt_revise_data)
+		rt_revise_data,
+
+		loss_factor)
 };
 
 template<>
