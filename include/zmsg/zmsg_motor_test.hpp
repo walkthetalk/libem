@@ -32,6 +32,9 @@ public:
 	uint32_t Discharge2StopTime;
 	uint32_t ExtraManualDischargeTime;
 
+	double LeftFSSpeed;	/// 0.0~1.0
+	double RightFSSpeed;	/// 0.0~1.0
+
 	bool ConeFS;
 	uint32_t ConeFSWaitTime;
 	double ConeFSSpeed;
@@ -104,6 +107,9 @@ public:
 		Discharge2StopTime,
 		ExtraManualDischargeTime,
 
+		LeftFSSpeed,
+		RightFSSpeed,
+
 		ConeFS,
 		ConeFSWaitTime,
 		ConeFSSpeed,
@@ -146,6 +152,23 @@ public:
 		CleanArcRate)
 };
 
+struct statistic_data_t {
+	int32_t cnt;
+	double ref_v;
+	double min_v;
+	double max_v;
+	double mid_v;
+	double avg_v;
+	std::string data;
+public:
+	bool empty()
+	{
+		return (cnt == 0);
+	}
+public:
+	ZMSG_PU(cnt, ref_v, min_v, max_v, mid_v, avg_v, data)
+};
+
 template<>
 struct zmsg<mid_t::motor_test_result> {
 	fs_err_t code;
@@ -165,6 +188,13 @@ struct zmsg<mid_t::motor_test_result> {
 	uint32_t calibrate;
 	uint32_t ele_arc;
 	uint32_t img;
+
+	statistic_data_t nm_per_pixel_xz;
+	statistic_data_t nm_per_pixel_yz;
+	statistic_data_t nm_per_step_lz;
+	statistic_data_t nm_per_step_rz;
+	statistic_data_t nm_push_lz;
+	statistic_data_t nm_push_rz;
 public:
 	ZMSG_PU(code,
 		z_cfg,
@@ -172,7 +202,13 @@ public:
 		defect_data,
 		motor_tested_times,
 		ele_arc_tested_times,
-		reset, push, calibrate, ele_arc, img)
+		reset, push, calibrate, ele_arc, img,
+		nm_per_pixel_xz,
+		nm_per_pixel_yz,
+		nm_per_step_lz,
+		nm_per_step_rz,
+		nm_push_lz,
+		nm_push_rz)
 };
 
 } /* namespace zmsg */
