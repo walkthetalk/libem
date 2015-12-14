@@ -195,6 +195,8 @@ struct zmsg<mid_t::motor_test_result> {
 	statistic_data_t nm_per_step_rz;
 	statistic_data_t nm_push_lz;
 	statistic_data_t nm_push_rz;
+	statistic_data_t arc_mag;
+	statistic_data_t img_process;
 public:
 	ZMSG_PU(code,
 		z_cfg,
@@ -208,7 +210,9 @@ public:
 		nm_per_step_lz,
 		nm_per_step_rz,
 		nm_push_lz,
-		nm_push_rz)
+		nm_push_rz,
+		arc_mag,
+		img_process)
 };
 
 } /* namespace zmsg */
