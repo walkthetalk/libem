@@ -122,7 +122,7 @@ public:
 
 	double read(void)
 	{
-		return m_attr.read() / static_cast<double>(_factor);
+		return static_cast<double>(m_attr.read()) / static_cast<double>(_factor);
 	}
 
 	void write(double val)
@@ -151,7 +151,7 @@ class dev_attr_nor {
 public:
 	dev_attr_nor(const char * path, unsigned long factor)
 	: m_attr(path)
-	, m_factor(factor)
+	, m_factor(static_cast<double>(factor))
 	{
 	}
 
@@ -171,7 +171,7 @@ public:
 
 	double read(void)
 	{
-		return m_attr.read() / m_factor;
+		return static_cast<double>(m_attr.read()) / m_factor;
 	}
 
 	void write(double val)
