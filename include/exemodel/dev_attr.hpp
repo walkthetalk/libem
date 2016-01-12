@@ -149,9 +149,10 @@ using dev_attr_adv_rw = dev_attr_adv<oflag_t::rw, _val_t, _factor>;
 template< oflag_t _oflag, typename _val_t>
 class dev_attr_nor {
 public:
-	dev_attr_nor(const char * path, unsigned long factor)
+	dev_attr_nor(const char * path, long maxv, long minv = 0)
 	: m_attr(path)
-	, m_factor(static_cast<double>(factor))
+	, m_min(minv)
+	, m_max(maxv)
 	{
 	}
 
@@ -171,19 +172,23 @@ public:
 
 	double read(void)
 	{
-		return static_cast<double>(m_attr.read()) / m_factor;
+		return (double)(read_raw() - m_min) / (m_max - m_min);
 	}
 
 	void write(double val)
 	{
-		m_attr.write(static_cast<_val_t>(val * m_factor));
+		m_attr.write((_val_t)((m_max - m_min) * val + m_min));
 	}
+
+	long get_min() const { return m_min; }
+	long get_max() const { return m_max; }
 private:
 	dev_attr_nor(const dev_attr_nor & rhs) = delete;
 	dev_attr_nor & operator = (const dev_attr_nor & rhs ) = delete;
 private:
 	dev_attr<_oflag, _val_t> m_attr;
-	const double m_factor;
+	const long m_min;
+	const long m_max;
 };
 
 template < typename _val_t>
