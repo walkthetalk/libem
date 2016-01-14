@@ -57,11 +57,11 @@ public:
 	double   x_focal_distance;
 	double   y_focal_distance;
 
-	double   zmotor_speed_factor;
+	double   zmotor_speed_factor;		/// unit: um
 	double   zmotor_speed_pow;
 	double   zmotor_speed_max;		/// 0.0 ~ 1.0
 
-	double   xymotor_speed_factor;
+	double   xymotor_speed_factor;		/// unit: um
 	double   xymotor_speed_pow;
 	double   xymotor_speed_max;		/// 0.0 ~ 1.0
 
