@@ -384,7 +384,7 @@ enum class align_method_t : uint8_t {
 struct fs_base_cfg_t {
 public:
 	fs_pattern_t FSPattern;
-	uint32_t FiberType;
+	fiber_t FiberType;
 	align_method_t FiberAlignment;
 	bool XImageFocus;
 	bool YImageFocus;
