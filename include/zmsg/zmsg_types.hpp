@@ -253,7 +253,9 @@ enum class fs_err_t : uint8_t {
 	cmos_exposure,
 	loss_estimate,
 	arc_off_center,
-	failed
+	failed,
+
+	arc_mag_overflow,
 };
 
 /**
