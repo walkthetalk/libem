@@ -394,6 +394,7 @@ public:
 	double CutAngleLimit;
 	double LossLimit;
 	double FiberAngleLimit;
+	double CleanDischargeStrength;
 	uint32_t CleanDischargeTime;
 	uint32_t FiberIntervalSetup;
 	int32_t  FSPosSetup;
@@ -468,6 +469,7 @@ public:
 		CutAngleLimit,
 		LossLimit,
 		FiberAngleLimit,
+		CleanDischargeStrength,
 		CleanDischargeTime,
 		FiberIntervalSetup,
 		FSPosSetup,
