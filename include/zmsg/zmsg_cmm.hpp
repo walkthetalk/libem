@@ -114,6 +114,7 @@ enum class mid_t : uint16_t {
 	dust_check1_start,
 
 	set_fs_display_mode_ext,
+	set_fs_display_zoom_ext,
 
 	set_window,
 
