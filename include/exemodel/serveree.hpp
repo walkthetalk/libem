@@ -25,7 +25,7 @@ public:
 	 * \brief ctor of serveree
 	 * \param port	the server will listen on.
 	 */
-	explicit serveree(uint16_t port);
+	explicit serveree(uint16_t port, int max_conn = 1);
 	virtual ~serveree();
 public:
 	/**

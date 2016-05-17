@@ -11,7 +11,7 @@
 
 namespace exemodel {
 
-serveree::serveree(uint16_t port)
+serveree::serveree(uint16_t port, int max_conn)
 : pollee(::socket(AF_INET, ::SOCK_STREAM, 0),
 	 (uint32_t)(::EPOLLIN),
 	 "serveree")
@@ -36,7 +36,11 @@ serveree::serveree(uint16_t port)
 	validate_ret(ret, "bind");
 
 	// listen
-	ret = ::listen(this->fd(), 0);
+	if (max_conn <= 0) {
+		zlog::zlog_warning("underflow max connection number %d listening on %d", max_conn, (int)port);
+	}
+
+	ret = ::listen(this->fd(), max_conn);
 	validate_ret(ret, "listen");
 }
 
