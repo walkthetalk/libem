@@ -9,9 +9,10 @@ struct zmsg<mid_t::stabilize_electrode_start> {
 public:
 	double   magnitude; /// unit: volt
 	uint32_t time;	/// unit: ms
+	uint32_t interval;	/// unit: ms
 	uint32_t number;
 public:
-	ZMSG_PU(magnitude, time, number)
+	ZMSG_PU(magnitude, time, interval, number)
 };
 
 template<>
