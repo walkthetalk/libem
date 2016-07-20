@@ -185,7 +185,7 @@ public:
 	template< typename _T, typename std::enable_if<
 		   std::is_arithmetic<_T>::value
 		&& !std::is_same<_T, bool>::value, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(id_of<_T>::value);
 	}
@@ -203,7 +203,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		   std::is_same<_T, bool>::value, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(id_of<_T>::value);
 	}
@@ -221,7 +221,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		std::is_enum<_T>::value, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(
 			id_of< typename std::underlying_type<_T>::type >::value);
@@ -313,7 +313,7 @@ public:
 			sv = 0;
 			for (auto j = 0; j < 8; ++j) {
 				if (*it++) {
-					sv |= (1 << j);
+					sv |= (uint8_t)(1 << j);
 				}
 			}
 			this->pack_data(sv);
@@ -324,7 +324,7 @@ public:
 			sv = 0;
 			for (decltype(remainder) j = 0; j < remainder; ++j) {
 				if (*it++) {
-					sv |= (1 << j);
+					sv |= (uint8_t)(1 << j);
 				}
 			}
 			this->pack_data(sv);
@@ -333,7 +333,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		is_std_vector<_T>::value, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(id_of<_T>::value);
 		this->__pack_type_base(id_of<typename _T::value_type>::value);
@@ -359,7 +359,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		is_std_string<_T>::value, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(id_of<_T>::value);
 		this->__pack_type_base(id_of<typename _T::value_type>::value);
@@ -377,7 +377,7 @@ public:
 
 	template< typename _T, typename std::enable_if<
 		id_of<_T>::value == id_t::UDT, bool>::type = false >
-	void pack_type(_T const & v)
+	void pack_type(_T const & /*v*/)
 	{
 		this->__pack_type_base(
 			id_of< _T >::value);
