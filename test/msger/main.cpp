@@ -66,8 +66,11 @@ struct print_aux {
 	template< typename _1st_t, typename ... _args_t >
 	void operator()(_1st_t & v, _args_t & ... args)
 	{
+		//m_o << " xxxxxxxxx multi " << std::endl;
+		//m_o << typeid(v).name() << std::endl;
 		this->template operator()(v);
 
+		//m_o << " remain size is: " << sizeof...(args) << std::endl;
 		this->template operator()(args...);
 	}
 
@@ -75,6 +78,7 @@ struct print_aux {
 		std::is_arithmetic<_1st_t>::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
+		//m_o << " xxxxxxxxx num " << std::endl;
 		m_o << v << " ";
 	}
 
@@ -82,13 +86,16 @@ struct print_aux {
 		std::is_enum<_1st_t>::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
-		m_o << static_cast< typename std::underlying_type<_1st_t>::type >(v) << " ";
+		//m_o << " xxxxxxxxx enum " << std::endl;
+		auto under_v = static_cast< typename std::underlying_type<_1st_t>::type >(v);
+		m_o << (long)under_v << " ";
 	}
 
 	template< typename _1st_t, typename std::enable_if<
 		zmsg::is_std_array<_1st_t>::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
+		//m_o << " xxxxxxxxx std::array " << std::endl;
 		m_o << "size: " << v.size() << " ";
 		for (auto & i : v) {
 			this->template operator()(i);
@@ -100,6 +107,7 @@ struct print_aux {
 		&& !std::is_same< typename _1st_t::value_type, bool >::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
+		//m_o << " xxxxxxxxx std::vector<!bool> " << std::endl;
 		m_o << "size: " << v.size() << " ";
 		for (auto & i : v) {
 			this->template operator()(i);
@@ -111,6 +119,7 @@ struct print_aux {
 		&& std::is_same< typename _1st_t::value_type, bool >::value, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
+		//m_o << " xxxxxxxxx std::vector<bool> " << std::endl;
 		m_o << "bool size: " << v.size() << " ";
 		auto i = v.begin();
 		while (i != v.end()) {
@@ -124,11 +133,24 @@ struct print_aux {
 		zmsg::id_of<_1st_t>::value == zmsg::id_t::UDT, bool>::type = false  >
 	void operator()(_1st_t & v)
 	{
+		//m_o << " xxxxxxxxx struct " << std::endl;
 		v.serialize(*this);
+	}
+
+	template< typename _1st_t, typename std::enable_if<
+		std::is_same< _1st_t, std::string >::value, bool>::type = false>
+	void operator()(_1st_t & v)
+	{
+		//m_o << " xxxxxxxx string " << std::endl;
+		m_o << "size: " << v.size() << " ";
+		for (auto & i : v) {
+			this->template operator()(i);
+		}
 	}
 
 	void operator()(void)
 	{
+		//m_o << " xxxxxxxxx null " << std::endl;
 	}
 private:
 	_T & m_o;
@@ -137,15 +159,20 @@ private:
 template< bool _wti, bool _rev, zmsg::mid_t mid >
 void test(zmsg::sender & p, zmsg::rcver & u, zmsg::zmsg<mid> & msg)
 {
+	//std::cout << "test -> print_aux start: " << std::endl;
 	print_aux<decltype(std::cout)> pa(std::cout);
+	//std::cout << "test -> print_aux end! " << std::endl;
 	msg.serialize(pa);
+	//std::cout << "test -> 1 " << std::endl;
 #if 1
 	//pa.template operator()("\n");
 	std::cout << std::endl;
 
 	p.pack<_wti, _rev>(msg);
+	//std::cout << "test -> 2 " << std::endl;
 	p.b().print(std::cout);
 
+	//std::cout << "test -> 3 " << std::endl;
 	u.dbg_fill_from([&p](void * buf, size_t size) -> size_t {
 		return p.b().dbg_read((uint8_t*)buf, size);
 	}, p.b().size());
@@ -178,21 +205,24 @@ int main(void)
 		'c',
 	};
 #if 1
-	test<false, false>(p, u, msg);
-	test<true, false>(p, u, msg);
+	//test<false, false>(p, u, msg);
+	//test<true, false>(p, u, msg);
 #else
 	typedef std::vector<double> self_t;
 	std::cout << (int)zmsg::id_of<self_t>::value << std::endl;
 #endif
+	//std::cout << "test done!" << std::endl;
 
 	DCL_ZMSG(dust_check_result) msg2 = {
 		fs_err_t::success,
+		{},
 		true,
-		{ 320, 240, { true, false, true, }, },
+		"fjdk", "kfdjafo",
 		false,
-		{ 320, 240, { false, true, true, }, },
+		"ofjoi", "932iew",
 	};
 	test<false, false>(p, u, msg2);
+	std::cout << "dust_check first done!" <<std::endl;
 	test<true, false>(p, u, msg2);
 
 	return 0;
