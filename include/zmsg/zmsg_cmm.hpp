@@ -118,6 +118,10 @@ enum class mid_t : uint16_t {
 
 	set_window,
 
+	fiber_train_init,
+	fiber_train_start,
+	fiber_train_result,
+
 	/// \todo add new message id above this line
 	max,
 };
