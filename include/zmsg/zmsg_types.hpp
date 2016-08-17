@@ -142,7 +142,7 @@ public:
 };
 
 /**
- * \biref fiber recognition infomation
+ * \brief fiber recognition infomation
  */
 struct fiber_rec_info_t final {
 	uint32_t wrap_diameter;	/// unit: nm
@@ -342,6 +342,13 @@ enum class fiber_t : uint8_t {
 	nz,
 	mm,
 	max,
+};
+
+/**
+ * \brief fiber recognition data
+ */
+struct fiber_reco_data_t final {
+	double data[4][4][3];
 };
 
 /**

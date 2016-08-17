@@ -1,6 +1,7 @@
 #pragma once
 
 #include "zmsg_types.hpp"
+#include "zmsg_utils.hpp"
 
 namespace zmsg {
 
@@ -28,8 +29,16 @@ struct zmsg<mid_t::fiber_train_result> {
 	fiber_rec_info_t rec_info;
 
 	img_defects_t defect_data;
+
+	uint32_t cnt;
+	uint32_t cnt_limit;
+
+	double lft_attr[2];
+	double rt_attr[2];
 public:
-	ZMSG_PU(code, z_cfg, rec_info, defect_data)
+	ZMSG_PU(code, z_cfg, rec_info, defect_data,
+		cnt, cnt_limit,
+		lft_attr, rt_attr)
 };
 
 }
