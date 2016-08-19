@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::set_lcd_brightness> {
+struct msg<mid_t::set_lcd_brightness> {
 public:
 	/// \brief the brightness of lcd, valid range: [0.0 ~ 1.0]
 	double   brightness;

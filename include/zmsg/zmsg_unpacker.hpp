@@ -76,7 +76,7 @@ public:
 		m_e += r;
 	}
 
-	void read_from(std::function<size_t (void *, size_t)> & f, size_t l)
+	void read_from(const std::function<size_t (void *, size_t)> & f, size_t l)
 	{
 		size_t idle_size = static_cast<size_t>(m_buf_end - m_e);
 		if (idle_size < l) {
@@ -574,7 +574,7 @@ public:
 	}
 public:
 	template< mid_t mid >
-	void convert_to(zmsg<mid> & v)
+	void convert_to(msg<mid> & v)
 	{
 		if (this->id() != mid) {
 			throw bad_type("msg id error");
@@ -604,7 +604,7 @@ public:
 		}
 	}
 private:
-	void __convert_to(zmsg_header & v)
+	void __convert_to(msg_header & v)
 	{
 		const bool _rev  = ((bool)(m_hdr.flag & 0x2) != IS_LE);
 		if (_rev) {
@@ -618,7 +618,7 @@ private:
 	}
 private:
 	unpacker_base m_base;
-	zmsg_header m_hdr;
+	msg_header m_hdr;
 };
 
 } /* namespace zmsg */

@@ -142,16 +142,6 @@ public:
 };
 
 /**
- * \brief fiber recognition infomation
- */
-struct fiber_rec_info_t final {
-	uint32_t wrap_diameter;	/// unit: nm
-	uint32_t core_diameter; /// unit: nm
-public:
-	ZMSG_PU(wrap_diameter, core_diameter)
-};
-
-/**
  * \brief service fs state
  * \note all states mean enter this state.
  */
@@ -349,6 +339,17 @@ enum class fiber_t : uint8_t {
  */
 struct fiber_reco_data_t final {
 	double data[4][4][3];
+};
+
+/**
+ * \brief fiber recognition infomation
+ */
+struct fiber_rec_info_t final {
+	fiber_t ft;
+	uint32_t wrap_diameter;	/// unit: nm
+	uint32_t core_diameter; /// unit: nm
+public:
+	ZMSG_PU(ft, wrap_diameter, core_diameter)
 };
 
 /**

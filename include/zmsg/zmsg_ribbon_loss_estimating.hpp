@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::ribbon_loss_estimating_result> {
+struct msg<mid_t::ribbon_loss_estimating_result> {
 	std::vector<bool> valid;
 	std::vector<double> loss_data;
 public:

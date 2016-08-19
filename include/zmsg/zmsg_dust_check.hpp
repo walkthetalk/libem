@@ -5,22 +5,22 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::dust_check_start> {
+struct msg<mid_t::dust_check_start> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::dust_check1_start> {
+struct msg<mid_t::dust_check1_start> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::dust_check_result> {
+struct msg<mid_t::dust_check_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::dust_check_start> z_cfg;
+	msg<mid_t::dust_check_start> z_cfg;
 
 	/// \note following member are valid only if 'code' is 'SUCCESS'!
 	bool xz_ok;
@@ -36,16 +36,16 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::full_dust_check_start> {
+struct msg<mid_t::full_dust_check_start> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::full_dust_check_result> {
+struct msg<mid_t::full_dust_check_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::full_dust_check_start> z_cfg;
+	msg<mid_t::full_dust_check_start> z_cfg;
 
 	/// \note following member are valid only if 'code' is 'SUCCESS'!
 	bool xz_ok;

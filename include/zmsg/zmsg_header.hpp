@@ -120,7 +120,7 @@ static constexpr bool IS_LE = true;
 static constexpr bool IS_LE = false;
 #endif
 
-struct zmsg_header {
+struct msg_header {
 	uint8_t flag;
 	uint8_t version;
 	uint16_t magic;
@@ -134,6 +134,6 @@ public:
 	ZMSG_PU(version, magic, len, crc, mid)
 };
 
-constexpr size_t HDR_SIZE = sizeof(zmsg_header);
+constexpr size_t HDR_SIZE = sizeof(msg_header);
 
 } /* zmsg */

@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::loss_estimating_result> {
+struct msg<mid_t::loss_estimating_result> {
 	bool valid; //"valid == 1" means that "loss_data" is valid
 	double loss_data;
 public:

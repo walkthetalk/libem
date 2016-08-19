@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::fs_state> {
+struct msg<mid_t::fs_state> {
 public:
 	svc_fs_state_t sstate;
 public:
@@ -13,7 +13,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::heat_state> {
+struct msg<mid_t::heat_state> {
 public:
 	svc_heat_state_t sstate;
 public:

@@ -9,7 +9,7 @@ namespace zmsg {
  * 
  */
 template <>
-struct zmsg<mid_t::arc_revise> {
+struct msg<mid_t::arc_revise> {
 	double revise;
 public:
 	ZMSG_PU(revise)

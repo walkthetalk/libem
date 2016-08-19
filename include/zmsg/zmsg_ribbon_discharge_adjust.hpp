@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::ribbon_discharge_adjust_start> {
+struct msg<mid_t::ribbon_discharge_adjust_start> {
 public:
 	fs_pattern_t FSPattern;
 	uint32_t FiberType;
@@ -62,7 +62,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::ribbon_discharge_adjust_result> {
+struct msg<mid_t::ribbon_discharge_adjust_result> {
 public:
 	fs_err_t code;
 	

@@ -6,7 +6,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::set_fs_spec> {
+struct msg<mid_t::set_fs_spec> {
 public:
 	int32_t window_x_row;			// unit: pixel
 	int32_t window_x_col;			// unit: pixel
@@ -148,7 +148,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::update_led_brightness> {
+struct msg<mid_t::update_led_brightness> {
 public:
 	ledId_t  id;
 	double   brightness;
@@ -158,7 +158,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::update_window_position> {
+struct msg<mid_t::update_window_position> {
 	bool is_pos_x;
 	int32_t row;
 	int32_t column;
@@ -167,7 +167,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::update_cmos_focal_distance> {
+struct msg<mid_t::update_cmos_focal_distance> {
 public:
 	double x_focal_distance;
 	double y_focal_distance;

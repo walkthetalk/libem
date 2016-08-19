@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::set_led> {
+struct msg<mid_t::set_led> {
 public:
         ledId_t	id;
         double	brightness;	/// 0~1		0: black	1: white

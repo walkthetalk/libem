@@ -9,7 +9,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::fusion_splice_start> : public fs_base_cfg_t {
+struct msg<mid_t::fusion_splice_start> : public fs_base_cfg_t {
 public:
 	///
 public:
@@ -17,30 +17,32 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::fusion_splice_result> {
+struct msg<mid_t::fusion_splice_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::fusion_splice_start> z_cfg;
+	msg<mid_t::fusion_splice_start> z_cfg;
 
-	fiber_rec_info_t rec_info;
+	fiber_rec_info_t lft_rec_info;
+	fiber_rec_info_t rt_rec_info;
 
 	img_defects_t defect_data;
 
-	zmsg<mid_t::record_off_set> z_record_off_set;
+	msg<mid_t::record_off_set> z_record_off_set;
 
 	double pattern_compensate;	/// 0.0~1.0
 	double loss_db;		/// unit: db
 
-	zmsg<mid_t::tense_test_result> z_tense_test_result;
+	msg<mid_t::tense_test_result> z_tense_test_result;
 
-	zmsg<mid_t::manual_discharge_counts> z_manual_discharge_counts;
+	msg<mid_t::manual_discharge_counts> z_manual_discharge_counts;
 
 	std::string fs_done_x_img;
 	std::string fs_done_y_img;
 public:
 	ZMSG_PU(code,
 		z_cfg,
-		rec_info,
+		lft_rec_info,
+		rt_rec_info,
 		defect_data,
 		z_record_off_set,
 		pattern_compensate,

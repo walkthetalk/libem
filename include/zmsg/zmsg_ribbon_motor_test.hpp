@@ -6,7 +6,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::ribbon_motor_test_start> {
+struct msg<mid_t::ribbon_motor_test_start> {
 	public:
 	fs_pattern_t FSPattern;
 	uint32_t FiberType;
@@ -64,11 +64,11 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::ribbon_motor_test_result> {
+struct msg<mid_t::ribbon_motor_test_result> {
 public:
 	fs_err_t code;
 	
-	zmsg<mid_t::ribbon_motor_test_start> z_cfg;
+	msg<mid_t::ribbon_motor_test_start> z_cfg;
 	
 	std::vector<fiber_rec_info_t> rec_info;
 	

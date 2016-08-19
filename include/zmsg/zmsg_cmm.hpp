@@ -122,12 +122,14 @@ enum class mid_t : uint16_t {
 	fiber_train_start,
 	fiber_train_result,
 
+	fiber_reco_result,
+
 	/// \todo add new message id above this line
 	max,
 };
 
 template< mid_t mid >
-struct zmsg;	/// not implemented.
+struct msg;	/// not implemented.
 
 /**
  * \brief zmsg pack/unpack macro
@@ -146,4 +148,4 @@ struct zmsg;	/// not implemented.
 
 }/* namespace zmsg */
 
-#define DCL_ZMSG(mid) zmsg::zmsg<zmsg::mid_t::mid>
+#define DCL_ZMSG(mid) zmsg::msg<zmsg::mid_t::mid>

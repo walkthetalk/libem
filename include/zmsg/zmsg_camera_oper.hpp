@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::image_move>{
+struct msg<mid_t::image_move>{
 	bool is_pos_x;
 	int16_t row;
 	int16_t column;
@@ -14,7 +14,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::set_window>{
+struct msg<mid_t::set_window>{
 	bool is_pos_x;
 	uint16_t row;
 	uint16_t column;

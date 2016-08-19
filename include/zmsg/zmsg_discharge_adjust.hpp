@@ -5,23 +5,23 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::discharge_adjust_init> {
+struct msg<mid_t::discharge_adjust_init> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::discharge_adjust_start> : public fs_base_cfg_t {
+struct msg<mid_t::discharge_adjust_start> : public fs_base_cfg_t {
 public:
 public:
 	ZMSG_PU(*(fs_base_cfg_t *)this)
 };
 
 template<>
-struct zmsg<mid_t::discharge_adjust_result> {
+struct msg<mid_t::discharge_adjust_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::discharge_adjust_start> z_cfg;
+	msg<mid_t::discharge_adjust_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 

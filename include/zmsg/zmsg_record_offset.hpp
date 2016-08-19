@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template <>
-struct zmsg<mid_t::record_off_set> {
+struct msg<mid_t::record_off_set> {
 public:
 	double core_diff_pre;		/// unit: um
 	double cladding_diff_pre;	/// unit: um

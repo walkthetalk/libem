@@ -6,7 +6,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::fusion_splice_reset> {
+struct msg<mid_t::fusion_splice_reset> {
 public:
 	ZMSG_PU()
 };

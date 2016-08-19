@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::motor_test_start> : public fs_base_cfg_t {
+struct msg<mid_t::motor_test_start> : public fs_base_cfg_t {
 public:
 	/* motor test para */
 	uint32_t MotorTestTimes;
@@ -36,10 +36,10 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::motor_test_result> {
+struct msg<mid_t::motor_test_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::motor_test_start> z_cfg;
+	msg<mid_t::motor_test_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 

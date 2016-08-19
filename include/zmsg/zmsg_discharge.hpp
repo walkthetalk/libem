@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::discharge>{
+struct msg<mid_t::discharge>{
 	double   magnitude;	/// unit: volt
 	uint16_t time;	/// unit: ms
 public:
@@ -13,13 +13,13 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::stop_discharge> {
+struct msg<mid_t::stop_discharge> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::discharge_count>{
+struct msg<mid_t::discharge_count>{
 	uint32_t discharge_count;
 public:
 	ZMSG_PU(discharge_count)

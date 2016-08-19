@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template <>
-struct zmsg<mid_t::manual_discharge_counts> {
+struct msg<mid_t::manual_discharge_counts> {
 public:
 	int counts;
 public:

@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::heat_start> {
+struct msg<mid_t::heat_start> {
 public:
         uint32_t Material;
         shrink_tube_t Fiberlen;
@@ -20,7 +20,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::heat_result> {
+struct msg<mid_t::heat_result> {
 	fs_err_t code;
 public:
 	ZMSG_PU(code)

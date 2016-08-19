@@ -6,13 +6,13 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::fiber_train_init> {
+struct msg<mid_t::fiber_train_init> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::fiber_train_start> : public fs_base_cfg_t {
+struct msg<mid_t::fiber_train_start> : public fs_base_cfg_t {
 public:
 	fiber_t lft_type;
 	fiber_t rt_type;
@@ -21,10 +21,10 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::fiber_train_result> {
+struct msg<mid_t::fiber_train_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::fiber_train_start> z_cfg;
+	msg<mid_t::fiber_train_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 

@@ -6,11 +6,11 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::ribbon_shrinkage_test_start> {
+struct msg<mid_t::ribbon_shrinkage_test_start> {
 };
 
 template<>
-struct zmsg<mid_t::ribbon_shrinkage_test_result> {
+struct msg<mid_t::ribbon_shrinkage_test_result> {
 };
 
 }

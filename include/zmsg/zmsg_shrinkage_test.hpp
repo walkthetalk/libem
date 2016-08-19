@@ -6,7 +6,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::shrinkage_test_start> : public fs_base_cfg_t {
+struct msg<mid_t::shrinkage_test_start> : public fs_base_cfg_t {
 public:
 	///
 public:
@@ -14,16 +14,16 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::shrinkage_test_result> {
+struct msg<mid_t::shrinkage_test_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::shrinkage_test_start> z_cfg;
+	msg<mid_t::shrinkage_test_start> z_cfg;
 
 	fiber_rec_info_t rec_info;
 
 	img_defects_t defect_data;
 
-	zmsg<mid_t::record_off_set> z_record_offset;
+	msg<mid_t::record_off_set> z_record_offset;
 
 	double real_gap;		/// unit: um
 	double shrinkage;		/// unit: um

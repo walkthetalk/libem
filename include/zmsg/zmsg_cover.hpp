@@ -5,13 +5,13 @@
 namespace zmsg {
 
 template <>
-struct zmsg<mid_t::fs_cover_openned> {
+struct msg<mid_t::fs_cover_openned> {
 public:
 	ZMSG_PU()
 };
 
 template <>
-struct zmsg<mid_t::fs_cover_state> {
+struct msg<mid_t::fs_cover_state> {
 	bool is_openned;
 public:
 	ZMSG_PU(is_openned)

@@ -9,7 +9,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::ribbon_fusion_splicer_start> {
+struct msg<mid_t::ribbon_fusion_splicer_start> {
 public:
 	fs_pattern_t FSPattern;
 	uint32_t FiberType;
@@ -67,23 +67,23 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::ribbon_fusion_splicer_result> {
+struct msg<mid_t::ribbon_fusion_splicer_result> {
 	fs_err_t code;
 	
-	zmsg<mid_t::ribbon_fusion_splicer_start> z_cfg;
+	msg<mid_t::ribbon_fusion_splicer_start> z_cfg;
 	
 	std::vector<fiber_rec_info_t> rec_info;
 	
 	std::vector<img_defects_t> defect_data;
 	
-	zmsg<mid_t::ribbon_record_off_set> z_record_set;
+	msg<mid_t::ribbon_record_off_set> z_record_set;
 	
 	std::vector<double> pattern_cpmpensate;
 	std::vector<double> loss_db;
 	
-	zmsg<mid_t::tense_test_result> z_tense_test_result;
+	msg<mid_t::tense_test_result> z_tense_test_result;
 	
-	zmsg<mid_t::manual_discharge_counts> z_manual_test_discharge_counts;
+	msg<mid_t::manual_discharge_counts> z_manual_test_discharge_counts;
 public:
 	ZMSG_PU(code,
 		z_cfg,

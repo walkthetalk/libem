@@ -5,14 +5,14 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::set_fs_display_mode>{
+struct msg<mid_t::set_fs_display_mode>{
 	fs_display_mode_t mode;
 public:
 	ZMSG_PU(mode)
 };
 
 template<>
-struct zmsg<mid_t::set_fs_display_mode_ext>{
+struct msg<mid_t::set_fs_display_mode_ext>{
 	bool order_xtoy;
 
 	uint16_t x_left;
@@ -31,7 +31,7 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::set_fs_display_zoom_ext>{
+struct msg<mid_t::set_fs_display_zoom_ext>{
 
 	uint16_t x_left;
 	uint16_t x_up;

@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::stabilize_electrode_start> {
+struct msg<mid_t::stabilize_electrode_start> {
 public:
 	double   magnitude; /// unit: volt
 	uint32_t time;	/// unit: ms
@@ -16,10 +16,10 @@ public:
 };
 
 template<>
-struct zmsg<mid_t::stabilize_electrode_result> {
+struct msg<mid_t::stabilize_electrode_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::stabilize_electrode_start> z_cfg;
+	msg<mid_t::stabilize_electrode_start> z_cfg;
 
 	uint32_t number;
 public:

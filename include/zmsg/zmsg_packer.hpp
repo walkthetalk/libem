@@ -494,21 +494,21 @@ public:
 	}
 public:
 	template< bool _wti, bool _rev, mid_t mid, typename _T >
-	void fill_to(zmsg<mid> const & msg,  _T & o, size_t (_T::*f)(const void *, size_t))
+	void fill_to(msg<mid> const & msg,  _T & o, size_t (_T::*f)(const void *, size_t))
 	{
 		this->pack<_wti, _rev>(msg);
 		m_base.template write_to(o, f);
 	}
 
 	template< bool _wti, bool _rev, mid_t mid >
-	void fill_to(zmsg<mid> const & msg, std::function<size_t(const void *, size_t)>  f)
+	void fill_to(msg<mid> const & msg, std::function<size_t(const void *, size_t)>  f)
 	{
 		this->pack<_wti, _rev>(msg);
 		m_base.template write_to(f);
 	}
 public:
 	template< bool _wti, bool _rev, mid_t mid >
-	void pack(zmsg<mid> const & v)
+	void pack(msg<mid> const & v)
 	{
 		typedef typename std::conditional<_rev, packer_rf, packer_nf>::type packer_full;
 		typedef typename std::conditional<_rev, packer_rp, packer_np>::type packer_pure;
@@ -521,7 +521,7 @@ public:
 		packer_specific payload_packer(m_base);
 		v.template serialize(payload_packer);
 		/// fill hdr
-		zmsg_header h = { 0xF0, 0xBB, 0xABCD, 0, 0x1357, mid, };
+		msg_header h = { 0xF0, 0xBB, 0xABCD, 0, 0x1357, mid, };
 		if (_wti) h.flag |= 0x1;
 		if (_rev != IS_LE) h.flag |= 0x2;
 		hdr_buf.fill<false>(h.flag);

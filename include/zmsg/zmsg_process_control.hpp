@@ -5,25 +5,25 @@
 namespace zmsg{
 
 template<>
-struct zmsg<mid_t::go_on> {
+struct msg<mid_t::go_on> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::skip> {
+struct msg<mid_t::skip> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::stop> {
+struct msg<mid_t::stop> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::process_progress> {
+struct msg<mid_t::process_progress> {
 	double progress;
 public:
 	ZMSG_PU(progress)

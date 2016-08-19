@@ -5,13 +5,13 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::query_wave_form> {
+struct msg<mid_t::query_wave_form> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::report_wave_form> {
+struct msg<mid_t::report_wave_form> {
 	std::string x_wave;
 	std::string y_wave;
 public:

@@ -5,13 +5,13 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::query_dev_state> {
+struct msg<mid_t::query_dev_state> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::report_dev_state> {
+struct msg<mid_t::report_dev_state> {
 	double pressure;	/// bar
 	double humidity;
 	double env_temp;	/// degree Celsius

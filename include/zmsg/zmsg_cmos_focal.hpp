@@ -5,7 +5,7 @@
 namespace zmsg {
 
 template <>
-struct zmsg<mid_t::manual_focal_distance> {
+struct msg<mid_t::manual_focal_distance> {
 public:
 	bool is_pos_x; // 1 is x cmos, 0 is y cmos
 	double   focal_distance;

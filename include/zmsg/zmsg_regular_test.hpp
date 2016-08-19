@@ -5,16 +5,16 @@
 namespace zmsg {
 
 template<>
-struct zmsg<mid_t::regular_test_start> {
+struct msg<mid_t::regular_test_start> {
 public:
 	ZMSG_PU()
 };
 
 template<>
-struct zmsg<mid_t::regular_test_result> {
+struct msg<mid_t::regular_test_result> {
 	fs_err_t code;
 
-	zmsg<mid_t::regular_test_start> z_cfg;
+	msg<mid_t::regular_test_start> z_cfg;
 public:
 	ZMSG_PU(code, z_cfg)
 };

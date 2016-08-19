@@ -5,7 +5,7 @@
 namespace zmsg{
 
 template <>
-struct zmsg<mid_t::alarm>{
+struct msg<mid_t::alarm>{
 public:
 	ZMSG_PU()
 };
