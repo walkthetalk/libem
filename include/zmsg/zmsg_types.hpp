@@ -91,6 +91,8 @@ struct img_defects_t final {
 	double yz_hangle_intersect;
 	double xz_hangle_intersect;
 
+	std::string yz_ref_img;
+	std::string xz_ref_img;
 	/// the image contain missed corner info
 	std::string yz_img;
 	std::string xz_img;
@@ -99,6 +101,7 @@ struct img_defects_t final {
 	: yzl(), yzr(), xzl(), xzr()
 	, yz_hangle_intersect(0)
 	, xz_hangle_intersect(0)
+	, yz_ref_img(), xz_ref_img()
 	, yz_img(), xz_img()
 	{
 	}
@@ -111,6 +114,8 @@ struct img_defects_t final {
 		this->xzr.init();
 		this->yz_hangle_intersect = 0;
 		this->xz_hangle_intersect = 0;
+		this->yz_ref_img = "";
+		this->xz_ref_img = "";
 		this->yz_img = "";
 		this->xz_img = "";
 	}
@@ -138,7 +143,9 @@ struct img_defects_t final {
 		return std::max(yzr.v_angle, xzr.v_angle);
 	}
 public:
-	ZMSG_PU(yzl, yzr, xzl, xzr, yz_hangle_intersect, xz_hangle_intersect, yz_img, xz_img)
+	ZMSG_PU(yzl, yzr, xzl, xzr,
+		yz_hangle_intersect, xz_hangle_intersect,
+		yz_ref_img, xz_ref_img, yz_img, xz_img)
 };
 
 /**
