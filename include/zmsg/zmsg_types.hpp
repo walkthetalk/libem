@@ -345,7 +345,9 @@ enum class fiber_t : uint8_t {
  * \brief fiber recognition data
  */
 struct fiber_reco_data_t final {
-	double data[4][4][3];
+	double data[4][5][3];
+public:
+	ZMSG_PU(data);
 };
 
 /**
