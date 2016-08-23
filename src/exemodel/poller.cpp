@@ -37,7 +37,7 @@ void poller::mod(pollee & obj) const
 	evt.events = obj._evts();
 	evt.data.ptr = &obj;
 	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_MOD, obj.fd(), &evt);
-	validate_ret(ret, "epoll del fd");
+	validate_ret(ret, "epoll mod fd");
 }
 
 void poller::run()
