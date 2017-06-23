@@ -23,4 +23,10 @@ pollee::~pollee()
 	close(m_fd);
 }
 
+void pollee::mod(poller & mgr, uint32_t evts)
+{
+	m_evts = evts;
+	mgr.mod(*this);
+}
+
 }

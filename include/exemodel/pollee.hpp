@@ -29,6 +29,8 @@ public:
 	explicit pollee(int fd, uint32_t evts, const char * info);
 	virtual ~pollee();
 public:
+	void mod(poller & mgr, uint32_t evts);
+public:
 	ssize_t pread(void *buf, size_t nbyte, off_t offset)
 	{
 		return ::pread(m_fd, buf, nbyte, offset);
