@@ -155,7 +155,7 @@ all: ${PN_SHAREDLIB}
 ${PN_SHAREDLIB}: ${obj_files}
 	@$(CMD_MKDIR) $(dir $@)
 	@echo "  [output ] $@"
-	@$(LINK.cc) -shared -Wl,-soname,${BN_PROVIDE_SHAREDLIB} -o $@ $^
+	@$(LINK.cc) -shared -Wl,-soname,${BN_PROVIDE_SHAREDLIB} -o $@ $^ ${LDLIBS}
 
 # install
 INSTALL_SHAREDLIB := install_sharedlib

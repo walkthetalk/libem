@@ -2,7 +2,7 @@ override CFLAGS += -std=c11
 override CXXFLAGS += -std=c++11
 
 # you can add your own libs need to link.
-override LDLIBS += -lpthread
+override LDLIBS += -lwebsockets \
 
 # the aux variable, used to identify the directory this Makefile in.
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
