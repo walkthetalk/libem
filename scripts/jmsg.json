@@ -1,0 +1,972 @@
+[
+
+{
+	"category"	: "enum",
+	"name"		: "ifd_t",
+	"attr"		: "flag",
+	"type"		: "uint32_t",
+	"fields"	: {
+		"ifd_end_crude" : "0x00000001",
+		"ifd_horizontal_angle"	: "0x00000002",
+		"ifd_vertical_angle"	: "0x00000004",
+		"ifd_cant_identify"	: "0x80000000",
+		"ifd_all"	: "0xFFFFFFFF",
+	},
+},
+
+{
+	"category"	: "struct",
+	"name"		: "ifd_line_t",
+	"fields"	: {
+		"dbmp" : "ifd_t",
+		"h_angle" : { "type" : "double", "unit" : "degree", },
+		"v_angle" : { "type" : "double", "unit" : "degree", },
+		"wrap_diameter" : { "type" : "int32_t", "unit" : "pixel", },
+	},
+},
+
+{
+	"category"	: "struct",
+	"name"		: "img_defects_t",
+	"fields"	: {
+		"yzl"	: "ifd_line_t",
+		"yzr"	: "ifd_line_t",
+		"xzl"	: "ifd_line_t",
+		"xzr"	: "ifd_line_t",
+
+		"yz_hangle_intersect" : "double",
+		"xz_hangle_intersect" : "double",
+
+		"yz_ref_img"	: "std::string",
+		"xz_ref_img"	: "std::string",
+		"yz_img"	: "std::string",
+		"xz_img"	: "std::string",
+	},
+},
+
+{
+	"category"	: "enum",
+	"name"		: "svc_fs_state_t",
+	"type"		: "uint16_t",
+	"attr"		: "class",
+	"fields"	: {
+		"reseting" : {},
+		"idle" : {},
+		"ready" : {},
+		"entering" : {},
+		"push1" : {},
+		"calibrating" : {},
+		"waiting" : {},
+		"clring" : {},
+		"focusing" : {},
+		"defect_detecting" : {},
+		"push2" : {},
+		"pause1" : {},
+		"precise_calibrating" : {},
+		"pause2" : {},
+		"pre_splice" : {},
+		"discharge1" : {},
+		"discharge2" : {},
+		"discharge_manual" : {},
+		"loss_estimating" : {},
+		"tension_testing" : {},
+		"finished" : {},
+		"wait_reset" : {},
+	},
+},
+
+{
+	"category"	: "enum",
+	"name"		: "svc_heat_state_t",
+	"type"		: "uint16_t",
+	"attr"		: "class",
+	"fields"	: {
+		"heat_idle" : {},
+		"heat_ready" : { "value" : 4, },
+		"heat_ascending" : {},
+		"heat_stabling" : {},
+		"heat_descending" : {},
+	},
+},
+
+{
+	"category"	: "enum",
+	"name"		: "motorId_t",
+	"type"		: "uint8_t",
+	"fields"	: {
+		"LZ" : { "comment" : "left motor" },
+		"RZ" : { "comment" : "right motor" },
+		"X" : {},
+		"Y" : {},
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "fs_display_mode_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"X" : {},
+		"Y" : {},
+		"TB" : {},
+		"LR" : {},
+		"NO" : {}
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "fs_err_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"success" : {},
+		"cover_openned" : {},
+		"no_fiber" : {},
+		"fiber_defect" : {},
+		"fiber_cross_over" : {},
+		"fiber_off_center" : {},
+		"img_brightness" : {},
+		"abnormal_arc" : {},
+		"tense_test_fail" : {},
+		"fiber_broken" : {},
+		"quit_midway" : {},
+		"push_timeout" : {},
+		"calibrate_timeout" : {},
+		"reset_timeout" : {},
+		"arc_time_zero" : {},
+		"ignore" : {},
+		"revise1_mag" : {},
+		"revise2_mag" : {},
+		"focus_x" : {},
+		"focus_y" : {},
+		"img_process_error" : {},
+		"system_error" : {},
+		"fiber_offside" : { "comment": "user should replace fiber" },
+		"cmos_exposure" : {},
+		"loss_estimate" : {},
+		"arc_off_center" : {},
+		"failed" : {},
+		"arc_mag_overflow" : {}
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "ledId_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"CMOS_X" : {},
+		"CMOS_Y" : {}
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "cmosId_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"X" : {},
+		"Y" : {}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "mag2shrink_t",
+	"fields"	: {
+		"x" : {
+			"type"	: "double",
+			"unit"	: "volt"
+		},
+		"y" : {
+			"type"	: "double",
+			"unit"	: "um"
+		}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "discharge_data_t",
+	"fields"	: {
+		"p" : {
+			"category": "rawarray",
+			"type"	: "mag2shrink_t",
+			"rank"	: 2
+		},
+		"temp" : {
+			"type"	: "double",
+			"unit"	: "degree centigrade"
+		},
+		"pressure" : {
+			"type"	: "double",
+			"unit"	: "bar"
+		}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "rt_revise_data_t",
+	"fields"	: {
+		"rt_x_exposure"	: "int32_t",
+		"rt_y_exposure"	: "int32_t",
+		"rt_revise_a3"	: "double",
+		"rt_revise_a2"	: "double",
+		"rt_revise_a1"	: "double",
+		"rt_revise_a0"	: "double",
+		"rt_offset_auto"	: "double",
+		"rt_offset_cal"	: "double",
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "fiber_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"sm" : {},
+		"ds" : {},
+		"nz" : {},
+		"mm" : {}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fiber_reco_data_t",
+	"fields"	: {
+		"data"	: {
+			"category" : "rawarray",
+			"type" : "double",
+			"rank" : [4,5,3]
+		}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fiber_rec_info_t",
+	"fields"	: {
+		"ft"	: "fiber_t",
+		"wrap_diameter" : {
+			"type" : "uint32_t",
+			"unit" : "nm"
+		},
+		"core_diameter" : {
+			"type" : "uint32_t",
+			"unit" : "nm"
+		},
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "fs_pattern_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"automatic" : {},
+		"calibrate" : {},
+		"normal" : {},
+		"special" : {},
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "loss_estimate_mode_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"off" : {},
+		"accurate" : {},
+		"core" : {},
+		"cladding" : {},
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "shrink_tube_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"len_20mm" : {},
+		"len_40mm" : {},
+		"len_60mm" : {}
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "align_method_t",
+	"type"		: "uint8_t",
+	"attr"		: "class",
+	"fields"	: {
+		"fine" : {},
+		"clad" : {},
+		"core" : {},
+		"manual" : {}
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_base_cfg_t",
+	"fields"	: {
+		"FSPattern" : "fs_pattern_t",
+		"FiberType" : "fiber_t",
+		"FiberAlignment" : "align_method_t",
+		"XImageFocus" : "bool",
+		"YImageFocus" : "bool",
+		"FiberShift" : "bool",
+		"DischargeStrengthAdjustment" : "bool",
+		"TensionSet" : "bool",
+		"CutAngleLimit" : "double",
+		"LossLimit" : "double",
+		"FiberAngleLimit" : "double",
+		"CleanDischargeStrength" : "double",
+		"CleanDischargeTime" : "uint32_t",
+		"FiberIntervalSetup" : "uint32_t",
+		"FSPosSetup" : "int32_t",
+		"FiberPreFSStrength" : "double",
+		"FiberPreFSTime" : "uint32_t",
+		"FiberOverlapSetup" : "uint32_t",
+		"Discharge1Strength" : "double",
+		"Discharge1Time" : "uint32_t",
+		"Discharge2Strength" : "double",
+		"Discharge2LastTime" : "uint32_t",
+		"Discharge2StartTime" : "uint32_t",
+		"Discharge2StopTime" : "uint32_t",
+		"ExtraManualDischargeTime" : "uint32_t",
+
+		"LeftFSSpeed" : {
+			"type" : "double",
+			"range" : "0.0~1.0",
+		},
+
+		"RightFSSpeed" : {
+			"type" : "double",
+			"range" : "0.0~1.0",
+		},
+
+		"ConeFS" : "bool",
+		"ConeFSWaitTime" : "uint32_t",
+		"ConeFSSpeed" : "double",
+		"ConeFSStretchLength" : "uint32_t",
+
+		"LossEstimationMode" : "loss_estimate_mode_t",
+		"LeftFiberMFD" : {
+			"type" : "double",
+			"unit" : "um",
+		},
+		"RightFiberMFD" : {
+			"type" : "double",
+			"unit" : "um",
+		},
+		"LeastLoss" : {
+			"type" : "double",
+			"unit" : "db",
+		},
+		"RateOfSyntropyBending" : "double",
+		"RateOfReverseBending" : "double",
+		"MFDMismatchCoefficient" : {
+			"type" : "double",
+			"range" : "0.0~1.0",
+		},
+
+		"AutoStart" : "bool",
+		"Stop1" : "bool",
+		"Stop2" : "bool",
+
+		"CutAngle" : "bool",
+		"OffsetData" : "bool",
+		"ArcCorrectedValue" : "bool",
+
+		"Cut" : "bool",
+		"Loss" : "bool",
+		"FiberCoreAngle" : "bool",
+		"Bubble" : "bool",
+		"Thick" : "bool",
+		"Thin" : "bool",
+
+		"AirPressure" : "bool",
+		"Temperature" : "bool",
+		"RealTimeRevise" : "bool",
+
+		"ImgGap" : "fs_display_mode_t",
+		"ImgStop1" : "fs_display_mode_t",
+		"ImgAlign" : "fs_display_mode_t",
+		"ImgStop2" : "fs_display_mode_t",
+		"ImgDischarge" : "fs_display_mode_t",
+		"ImgLossEstimation" : "fs_display_mode_t",
+
+		"FiberAutoFeed" : "bool",
+		"BadCutSurface" : "bool",
+		"AutoReset" : "uint32_t",
+		"CleanDischargeTwice" : "bool",
+		"ManualDischargeTimes" : "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_state",
+	"attr"		: "msg",
+	"fields"	: {
+		"sstate"	: "svc_fs_state_t"
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "heat_state",
+	"attr"		: "msg",
+	"fields"	: {
+		"sstate"	: "svc_heat_state_t"
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "simple_msg",
+	"msgid"		: [
+		"fusionSpliceReset",
+		"fusionSpliceStart",
+		"getFiberDefectInfo",
+		"dischargeAdjustInit",
+		"stopDischarge",
+		"dustCheckStart",
+		"dustCheckFullStart",
+		"fsCoverOpenned",
+		"goOn",
+		"skip",
+		"stop",
+		"regularTestStart",
+		"queryDevState",
+		"queryWaveForm",
+		"fiberTrainInit",
+	]
+},
+
+{
+	"category"	: "struct",
+	"name"		: "record_offset",
+	"alias"		: "record_offset_t",
+	"attr"		: "msg",
+	"fields"	: {
+		"core_diff_pre" : { "type" : "double", "unit" : "um" },
+		"cladding_diff_pre" : { "type" : "double", "unit" : "um" },
+		"vertex_intersect_angle" : { "type" : "double", "unit" : "degree" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "tense_test_result",
+	"msgid"		: "tenseTestResult",
+	"fields"	: {
+		"is_tense_test" : { "type" : "bool", "comment" : "if did" },
+		"is_success" : "bool",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "loss_estimating_result",
+	"attr"		: "msg",
+	"fields"	: {
+		"valid" : { "type" : "bool", "comment" : "if `loss_data' is valid" },
+		"loss_data" : "double",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "defect_detect_result",
+	"attr"		: "msg",
+	"fields"	: {
+		"data" : "img_defects_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fiber_reco_result",
+	"attr"		: "msg",
+	"fields"	: {
+		"lft_rec_info" : "fiber_rec_info_t",
+		"rt_rec_info" : "fiber_rec_info_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "manual_discharge_counts",
+	"attr"		: "msg",
+	"fields"	: {
+		"counts" : "int",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fusion_splice_result",
+	"alias"		: "fusion_splice_result_t",
+	"msgid"		: "fusionSpliceResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+
+		"lft_rec_info" : "fiber_rec_info_t",
+		"rt_rec_info" : "fiber_rec_info_t",
+
+		"defect_data" : "img_defects_t",
+
+		"z_record_off_set" : "record_offset_t",
+
+		"pattern_compensate" : { "type" : "double", "range" : "0.0~1.0" },
+		"loss_db" : { "type" : "double", "unit" : "db" },
+
+		"z_tense_test_result" : "tense_test_result",
+
+		"z_manual_discharge_counts" : "manual_discharge_counts",
+
+		"fs_done_x_img" : "std::string",
+		"fs_done_y_img" : "std::string",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "arc_revise",
+	"attr"		: "msg",
+	"fields"	: {
+		"revise"	: "double",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_da_cfg",
+	"alias"		: "fs_da_cfg_t",
+	"msgid"		: "dischargeAdjustStart",
+	"fields"	: {
+		"arc1_mag"	: "double",
+		"arc2_mag"	: "double",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "discharge_adjust_result",
+	"alias"		: "discharge_adjust_result_t",
+	"msgid"		: "dischargeAdjustResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+		"z_cfg" : "fs_da_cfg",
+		"rec_info" : "fiber_rec_info_t",
+		"defect_data" : "img_defects_t",
+		"base" : "discharge_data_t",
+		"revise" : "discharge_data_t",
+		"suggest1" : "double",
+		"suggest2" : "double",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "discharge",
+	"attr"		: "msg",
+	"fields"	: {
+		"magnitude" : { "type" : "double", "unit" : "volt" },
+		"time" : { "type" : "uint16_t", "unit" : "ms" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "discharge_count",
+	"attr"		: "msg",
+	"fields"	: {
+		"discharge_count"	: "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_fs_display_mode_ext",
+	"attr"		: "msg",
+	"msgid"		: "setFsDisplayModeExt",
+	"fields"	: {
+		"xovery" : "bool",
+
+		"x_left" : "uint16_t",
+		"x_top" : "uint16_t",
+		"x_width" : "uint16_t",
+		"x_height" : "uint16_t",
+
+		"y_left" : "uint16_t",
+		"y_top" : "uint16_t",
+		"y_width" : "uint16_t",
+		"y_height" : "uint16_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_fs_display_zoom_ext",
+	"attr"		: "msg",
+	"fields"	: {
+		"x_left" : "uint16_t",
+		"x_up" : "uint16_t",
+		"x_width" : "uint16_t",
+		"x_height" : "uint16_t",
+
+		"y_left" : "uint16_t",
+		"y_up" : "uint16_t",
+		"y_width" : "uint16_t",
+		"y_height" : "uint16_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_fs_display_mode",
+	"attr"		: "msg",
+	"fields"	: {
+		"mode"	: "fs_display_mode_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "dust_check_result",
+	"msgid"		: [ "dustCheckResult", "dustCheckFullResult" ],
+	"alias"		: "dust_check_result_t",
+	"fields"	: {
+		"code" : "fs_err_t",
+
+		"xz_ok" : "bool",
+		"xz_ori" : "std::string",
+		"xz_dust" : "std::string",
+		"yz_ok" : "bool",
+		"yz_ori" : "std::string",
+		"yz_dust" : "std::string",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "heat_start",
+	"attr"		: "msg",
+	"fields"	: {
+		"Material" : "uint32_t",
+		"Fiberlen" : "shrink_tube_t",
+		"Heatctl" : "bool",
+		"heat_time" : { "type" : "uint16_t", "unit" : "second" },
+		"heat_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
+		"finish_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
+		"stable_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
+		"fast_heat" : "bool",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "heat_result",
+	"attr"		: "msg",
+	"fields"	: {
+		"code" : "fs_err_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "image_move",
+	"attr"		: "msg",
+	"fields"	: {
+		"is_pos_x" : "bool",
+		"row"	: "int16_t",
+		"column" : "int16_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_window",
+	"attr"		: "msg",
+	"fields"	: {
+		"is_pos_x" : "bool",
+		"row"	: "uint16_t",
+		"column" : "uint16_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_cover_state",
+	"attr"		: "msg",
+	"fields"	: {
+		"is_openned" : "bool",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_lcd_brightness",
+	"attr"		: "msg",
+	"fields"	: {
+		"brightness" : { "type" : "double", "range" : "0.0~1.0" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_led",
+	"attr"		: "msg",
+	"fields"	: {
+		"id"	: "ledId_t",
+		"brightness" : { "type" : "double", "range" : "0.0~1.0" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "motor_start",
+	"attr"		: "msg",
+	"fields"	: {
+		"id"	: "motorId_t",
+		"m_forward_dir" : "bool",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "motor_stop",
+	"attr"		: "msg",
+	"fields"	: {
+		"id"	: "motorId_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_mt_cfg",
+	"alias"		: "fs_mt_cfg_t",
+	"msgid"		: "motorTestStart",
+	"fields"	: {
+		"MotorTestTimes" : "uint32_t",
+		"ElectricArcTestTimes" : "uint32_t",
+		"CleanArcRate" : "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "statistic_data_t",
+	"fields"	: {
+		"cnt" : "int32_t",
+		"ref_v" : "double",
+		"min_v" : "double",
+		"max_v" : "double",
+		"mid_v" : "double",
+		"avg_v" : "double",
+		"data" : "std::string",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "motor_test_result",
+	"alias"		: "motor_test_result_t",
+	"msgid"		: "motorTestResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+		"z_cfg" : "fs_mt_cfg",
+
+		"rec_info" : "fiber_rec_info_t",
+
+		"defect_data" : "img_defects_t",
+
+		"motor_tested_times" : "uint32_t",
+		"ele_arc_tested_times" : "uint32_t",
+
+
+		"reset" : "uint32_t",
+		"push" : "uint32_t",
+		"calibrate" : "uint32_t",
+		"ele_arc" : "uint32_t",
+		"img" : "uint32_t",
+
+		"nm_per_pixel_xz" : "statistic_data_t",
+		"nm_per_pixel_yz" : "statistic_data_t",
+		"nm_per_step_lz" : "statistic_data_t",
+		"nm_per_step_rz" : "statistic_data_t",
+		"nm_push_lz" : "statistic_data_t",
+		"nm_push_rz" : "statistic_data_t",
+		"arc_mag" : "statistic_data_t",
+		"img_process" : "statistic_data_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "process_progress",
+	"attr"		: "msg",
+	"fields"	: {
+		"progress" : "double",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_rr_cfg",
+	"alias"		: "fs_rr_cfg_t",
+	"msgid"		: "realtimeReviseStart",
+},
+
+{
+	"category"	: "struct",
+	"name"		: "realtime_revise_result",
+	"attr"		: "msg",
+	"alias"		: "realtime_revise_result_t",
+	"fields"	: {
+		"code" : "fs_err_t",
+
+		"rec_info" : "fiber_rec_info_t",
+		"defect_data" : "img_defects_t",
+		"z_record_off_set" : "record_offset_t",
+
+		"pattern_compensate" : { "type" : "double", "range" : "0.0~1.0" },
+		"loss_db" : { "type" : "double", "unit" : "db" },
+
+		"z_tense_test_result" : "tense_test_result",
+		"z_manual_discharge_counts" : "manual_discharge_counts",
+		"RealtimeReviseData" : "rt_revise_data_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "regular_test_result",
+	"alias"		: "regular_test_result_t",
+	"msgid"		: "regularTestResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_se_cfg",
+	"alias"		: "fs_se_cfg_t",
+	"msgid"		: "stabilizeElectrodeStart",
+	"fields"	: {
+		"magnitude" : "double",
+		"time" : { "type" : "uint32_t", "unit" : "ms" },
+		"interval" : { "type" : "uint32_t", "unit" : "ms" },
+		"number" : "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "stabilize_electrode_result",
+	"alias"		: "stabilize_electrode_result_t",
+	"msgid"		: "stabilizeElectrodeResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+		"z_cfg" : "fs_se_cfg",
+		"number" : "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "report_dev_state",
+	"attr"		: "msg",
+	"fields"	: {
+		"pressure" : { "type" : "double", "unit" : "bar" },
+		"humidity" : "double",
+		"env_temp" : { "type" : "double", "unit" : "degree Celsius" },
+		"int_temp" : { "type" : "double", "comment" : "internal temperature" },
+
+		"heat_temp" : "double",
+
+		"bat_voltage" : { "type" : "double", "unit" : "volt" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "report_wave_form",
+	"attr"		: "msg",
+	"fields"	: {
+		"x_wave" : "std::string",
+		"y_wave" : "std::string"
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_ft_cfg",
+	"alias"		: "fs_ft_cfg_t",
+	"msgid"		: "fiberTrainStart",
+	"fields"	: {
+		"lft_type" : "fiber_t",
+		"rt_type" : "fiber_t"
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fiber_train_result",
+	"alias"		: "fiber_train_result_t",
+	"msgid"		: "fiberTrainResult",
+	"fields"	: {
+		"code" : "fs_err_t",
+
+		"z_cfg" : "fs_ft_cfg",
+
+		"rec_info" : "fiber_rec_info_t",
+
+		"defect_data" : "img_defects_t",
+
+		"cnt" : "uint32_t",
+		"cnt_limit" : "uint32_t",
+
+		"lft_attr" : { "category" : "rawarray", "type" : "double", "rank" : [2] },
+		"rt_attr" : { "category" : "rawarray", "type" : "double", "rank" : [2] }
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "count_down",
+	"alias"		: "count_down_t",
+	"msgid"		: "countDown",
+	"fields"	: {
+		"cnt"	: { "type" : "uint32_t", "unit" : "second", },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "motor_spec",
+	"alias"		: "motor_spec_t",
+	"fields"	: {
+		"raw_max" : "uint16_t",
+		"raw_min" : "uint16_t",
+		"sfactor" : { "type" : "double", "unit" : "nm" },
+		"spow"    : "double",
+		"lps"     : { "type" : "double", "unit" : "nm/step" }
+	}
+},
+
+]
