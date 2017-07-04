@@ -3,76 +3,24 @@
 #include <sys/epoll.h>
 #include <iomanip>
 
-#include "exemodel/serveree.hpp"
-#include "exemodel/poller.hpp"
-#include "exemodel/poll_tools.hpp"
-
-#include "msg/zmsg_cmm.hpp"
-#include "msg/zmsg_packer.hpp"
-#include "msg/zmsg_unpacker.hpp"
-#include "msg/zmsg_msg.hpp"
-
-
-
-
-class CSvr : public exemodel::poller {
-private:
-	typedef CSvr self_t;
-public:
-	CSvr(uint16_t port)
-	: exemodel::poller()
-	, m_svr(port)
-	, m_recver()
-	, m_sender()
-	{
-		m_svr.connect([this](exemodel::poller&, uint32_t evts, exemodel::connectee& conn)
-		{
-			zmsg::print_aux<decltype(std::cout)> pa(std::cout);
-			if (evts & EPOLLIN) {
-				// 1. read
-				zmsg::rcver m_recver;
-				m_recver.fill_from(conn);
-				switch (m_recver.id()) {
-					case zmsg::mid_t::test1: {
-						zmsg::zmsg<zmsg::mid_t::test1> recved_msg;
-						m_recver.convert_to(recved_msg);
-						m_recver.b().print(std::cout);
-						recved_msg.serialize(pa);
-						pa. operator()("\n");
-
-						
-						DCL_ZMSG(test2) send_msg;
-
-						send_msg.serialize(pa);
-						pa. operator()("\n");
-						
-						m_sender.fill_to<false,true>(send_msg, m_svr, &exemodel::serveree::send);
-						m_sender.b().print(std::cout);
-						} break;
-					default:
-						break;
-				}
-			}
-		});
-		this->add(m_svr);
-	}
-
-	virtual ~CSvr()
-	{
-		this->del(m_svr);
-	}
-
-private:
-	exemodel::serveree m_svr;
-	zmsg::rcver m_recver;
-	zmsg::sender m_sender;
-};
+#include "exemodel/wsserveree.hpp"
+#include "jmsg/jmsg_sender.hpp"
+#include "jmsg/jmsg_rcver.hpp"
 
 int main(void)
 {
 	//signal(SIGPIPE,SIG_IGN);
 
-	CSvr svr(65533);
+	exemodel::wsserveree svr(5678);
+	sender s(LWS_PRE);
+	rcver r;
+	svr.setMessageCallback([&r, &s, &svr](exemodel::wsserveree::cid id, void* buf, size_t length) {
+		r.process(buf, length);
+		struct count_down smsg = { 978 };
+		s.fill_to<mid_t::countDown>(smsg, [&svr, id](void* b, size_t l){
+			svr.sendTextMessage(id, b, l);
+		});
+	}, nullptr);
 	svr.run();
 
 	return 0;

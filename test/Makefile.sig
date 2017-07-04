@@ -1,15 +1,15 @@
-override CFLAGS += -std=c11
-override CXXFLAGS += -std=c++11
+
+override CFLAGS += -std=c11 -DRAPIDJSON_HAS_STDSTRING=1
+override CXXFLAGS += -std=c++11 -DRAPIDJSON_HAS_STDSTRING=1
 
 # you can add your own libs need to link.
-#override LDLIBS += -lexemodel
-override LDLIBS += -lpthread
+override LDLIBS += -lwebsockets
 
 # the aux variable, used to identify the directory this Makefile in.
 dir_self := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 
 # dst directory, all the output files will be put in it.
-output_dir := ${dir_self}/output-sig
+output_dir := ${dir_self}/output/sig
 # the main name of this program
 main_name := emt-sig
 # include directories, use `:' as seperator
