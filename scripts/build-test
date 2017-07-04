@@ -1,0 +1,37 @@
+#!/bin/bash
+
+self_path="`readlink -fe $0`"
+self_dir=`dirname $self_path`
+main_dir=`readlink -fe "$self_dir/.."`
+
+test_dir="$main_dir/test"
+
+Olist=(`cd $test_dir; find -type f -name "Makefile.*"|sed 's/.*\.\(.*\)/\1/'`)
+
+make_bin="make"
+usage()
+{
+echo "Usage: `basename $0` [target] [options] ..."
+echo "       `basename $0` help"
+echo "target list: "
+for i in ${Olist[@]}; do
+echo "       $i"
+done
+echo "Options:"
+echo "  config=[release|debug]      Used to control the type of output binary."
+}
+
+if [ "$1" = "help" ]; then
+usage
+exit 0
+fi
+
+for i in ${Olist[@]}; do
+	if [ "$1" == "$i" ]; then
+		cd $test_dir; ${make_bin} -f Makefile.$*
+		exit 0
+	fi
+done
+
+usage
+exit 1

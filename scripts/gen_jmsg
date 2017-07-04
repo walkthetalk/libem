@@ -1,0 +1,18 @@
+#!/bin/bash
+
+self_path="`readlink -fe $0`"
+self_dir=`dirname $self_path`
+main_dir=`readlink -fe "$self_dir/.."`
+
+gen_bin="$main_dir/test/output/idl/debug/bin/jmsg_generator"
+
+inc_dir="$main_dir/include/jmsg"
+src_dir="$main_dir/src/jmsg"
+if not [ -d $inc_dir ]; then
+	mkdir $inc_dir
+fi
+if not [ -d $src_dir ]; then
+	mkdir $src_dir
+fi
+
+$gen_bin
