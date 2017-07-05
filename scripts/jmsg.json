@@ -60,6 +60,7 @@
 		"clring" : {},
 		"focusing" : {},
 		"defect_detecting" : {},
+		"fiber_rec" : {},
 		"push2" : {},
 		"pause1" : {},
 		"precise_calibrating" : {},
@@ -966,6 +967,28 @@
 		"sfactor" : { "type" : "double", "unit" : "nm" },
 		"spow"    : "double",
 		"lps"     : { "type" : "double", "unit" : "nm/step" }
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "update_window_position",
+	"alias"		: "update_window_position_t",
+	"msgid"		: "update_window_position",
+	"fields" : {
+		"is_pos_x" : "bool",
+		"row" : "uint32_t",
+		"column" : "uint32_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "update_led_brightness",
+	"msgid"		: "update_led_brightness",
+	"fields" : {
+		"id" : "ledId_t",
+		"brightness" : "double",
 	}
 },
 
