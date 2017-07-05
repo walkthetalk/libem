@@ -27,12 +27,7 @@ int main(int /*argc*/, char * /*argv*/[])
 	s_outf_id.output();
 
 	generate_converter(d);
-	if (0) {
-		generate_msgs(d);
-	}
-	else {
-		generate_wsmsgs(d);
-	}
+	generate_wsmsgs(d);
 	s_outf_converter.output();
 	s_outf_sender.output();
 	s_outf_rcver.output();

@@ -11,8 +11,6 @@ static const char * s_converter_header = R"convertheader(
 
 #include "in_out_wrapper.hpp"
 
-static constexpr std::size_t msg_header_size = 8;
-
 #include "jmsg/jmsg_types.hpp"
 #include "jmsg/jmsg_sender.hpp"
 #include "jmsg/jmsg_rcver.hpp"

@@ -41,5 +41,4 @@ void preprocess_types(rapidjson::Document & d);
 void generate_types(rapidjson::Document & d);
 void generate_id(rapidjson::Document & d);
 void generate_converter(rapidjson::Document & d);
-void generate_msgs(rapidjson::Document & d);
 void generate_wsmsgs(rapidjson::Document & d);
