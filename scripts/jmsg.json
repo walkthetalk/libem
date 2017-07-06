@@ -835,6 +835,7 @@
 	"category"	: "struct",
 	"name"		: "realtime_revise_result",
 	"attr"		: "msg",
+	"msgid"		: "realtimeReviseResult",
 	"alias"		: "realtime_revise_result_t",
 	"fields"	: {
 		"code" : "fs_err_t",
