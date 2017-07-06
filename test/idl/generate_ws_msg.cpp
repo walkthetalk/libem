@@ -21,7 +21,7 @@ static void generate_msg_sender_header(std::size_t lvl)
 /// @class sender : used to send messages
 class sender final {
 public:
-	sender(size_t reserve_header_size);
+	sender(size_t reserve_header_size = 0);
 	~sender();
 public:
 	template<mid_t mid, typename _T >
@@ -80,7 +80,7 @@ static void generate_msg_sender_implement(std::size_t lvl)
 	s_outf_converter.pf(lvl, R"senderfillheader(
 /// @sender constructor
 sender::sender(size_t reserve_header_size)
-: m_buf(&m_lbuf[reserve_header_size])
+: m_buf(&m_lbuf[reserve_header_size + LWS_PRE])
 , m_pcur(m_buf)
 , m_pend(m_lbuf + sizeof(m_lbuf))
 , m_doc(new rapidjson::Document())
