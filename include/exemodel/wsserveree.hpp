@@ -31,7 +31,7 @@ public:
 	void sendTextMessage(cid wsi, void * buffer, size_t length);
 	void sendBinaryMessage(cid wsi, void * buffer, size_t length);
 
-	void setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb);
+	void setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb = nullptr);
 private:
 	wsserveree(const wsserveree & rhs) = delete;
 	wsserveree & operator = (const wsserveree & rhs) = delete;
