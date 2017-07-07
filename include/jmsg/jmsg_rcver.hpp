@@ -76,6 +76,8 @@ private:
 	void __unpack(struct fs_ft_cfg & dst);
 	void __unpack(struct fiber_train_result & dst);
 	void __unpack(struct count_down & dst);
+	void __unpack(struct update_window_position & dst);
+	void __unpack(struct update_led_brightness & dst);
 
 private:
 	void __reset();

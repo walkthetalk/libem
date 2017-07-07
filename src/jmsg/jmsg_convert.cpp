@@ -186,28 +186,29 @@ static inline void json2c(struct img_defects_t & dst, const rapidjson::Value & s
 static const struct {
 	rapidjson::Value::StringRefType name;
 	uint16_t val;
-} str2e_svc_fs_state_t[22] = {
+} str2e_svc_fs_state_t[23] = {
 	{ "calibrating", 5 },
 	{ "clring", 7 },
 	{ "defect_detecting", 9 },
-	{ "discharge1", 15 },
-	{ "discharge2", 16 },
-	{ "discharge_manual", 17 },
+	{ "discharge1", 16 },
+	{ "discharge2", 17 },
+	{ "discharge_manual", 18 },
 	{ "entering", 3 },
-	{ "finished", 20 },
+	{ "fiber_rec", 10 },
+	{ "finished", 21 },
 	{ "focusing", 8 },
 	{ "idle", 1 },
-	{ "loss_estimating", 18 },
-	{ "pause1", 11 },
-	{ "pause2", 13 },
-	{ "pre_splice", 14 },
-	{ "precise_calibrating", 12 },
+	{ "loss_estimating", 19 },
+	{ "pause1", 12 },
+	{ "pause2", 14 },
+	{ "pre_splice", 15 },
+	{ "precise_calibrating", 13 },
 	{ "push1", 4 },
-	{ "push2", 10 },
+	{ "push2", 11 },
 	{ "ready", 2 },
 	{ "reseting", 0 },
-	{ "tension_testing", 19 },
-	{ "wait_reset", 21 },
+	{ "tension_testing", 20 },
+	{ "wait_reset", 22 },
 	{ "waiting", 6 },
 };
 
@@ -215,7 +216,7 @@ static const struct {
 static const struct {
 	uint16_t val;
 	rapidjson::Value::StringRefType name;
-} e2str_svc_fs_state_t[22] = {
+} e2str_svc_fs_state_t[23] = {
 	{ 0, "reseting" },
 	{ 1, "idle" },
 	{ 2, "ready" },
@@ -226,18 +227,19 @@ static const struct {
 	{ 7, "clring" },
 	{ 8, "focusing" },
 	{ 9, "defect_detecting" },
-	{ 10, "push2" },
-	{ 11, "pause1" },
-	{ 12, "precise_calibrating" },
-	{ 13, "pause2" },
-	{ 14, "pre_splice" },
-	{ 15, "discharge1" },
-	{ 16, "discharge2" },
-	{ 17, "discharge_manual" },
-	{ 18, "loss_estimating" },
-	{ 19, "tension_testing" },
-	{ 20, "finished" },
-	{ 21, "wait_reset" },
+	{ 10, "fiber_rec" },
+	{ 11, "push2" },
+	{ 12, "pause1" },
+	{ 13, "precise_calibrating" },
+	{ 14, "pause2" },
+	{ 15, "pre_splice" },
+	{ 16, "discharge1" },
+	{ 17, "discharge2" },
+	{ 18, "discharge_manual" },
+	{ 19, "loss_estimating" },
+	{ 20, "tension_testing" },
+	{ 21, "finished" },
+	{ 22, "wait_reset" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum svc_fs_state_t src)
@@ -1597,6 +1599,38 @@ static inline void json2c(struct motor_spec & dst, const rapidjson::Value & src)
 	DEC_MEM("lps", src, dst.lps);
 }
 
+/// @struct update_window_position
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct update_window_position & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "is_pos_x", v, src.is_pos_x);
+	ENC_MEM(jd, "row", v, src.row);
+	ENC_MEM(jd, "column", v, src.column);
+
+	return v;
+}
+static inline void json2c(struct update_window_position & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("is_pos_x", src, dst.is_pos_x);
+	DEC_MEM("row", src, dst.row);
+	DEC_MEM("column", src, dst.column);
+}
+
+/// @struct update_led_brightness
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct update_led_brightness & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "id", v, src.id);
+	ENC_MEM(jd, "brightness", v, src.brightness);
+
+	return v;
+}
+static inline void json2c(struct update_led_brightness & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("id", src, dst.id);
+	DEC_MEM("brightness", src, dst.brightness);
+}
+
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
@@ -1658,6 +1692,8 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"stop",
 	"stopDischarge",
 	"tenseTestResult",
+	"update_led_brightness",
+	"update_window_position",
 };
 
 static rapidjson::Value::StringRefType const s_id = "msgid";
@@ -1944,6 +1980,18 @@ void sender::__pack(const struct count_down & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
+void sender::__pack(const struct update_window_position & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
+void sender::__pack(const struct update_led_brightness & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
 
 /// @class rcver : used to receive messages
 rcver::rcver()
@@ -2179,6 +2227,16 @@ void rcver::__unpack(struct fiber_train_result & dst)
 }
 
 void rcver::__unpack(struct count_down & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct update_window_position & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct update_led_brightness & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

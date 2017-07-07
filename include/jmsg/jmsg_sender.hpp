@@ -71,6 +71,8 @@ private:
 	void __pack(const struct fs_ft_cfg & val);
 	void __pack(const struct fiber_train_result & val);
 	void __pack(const struct count_down & val);
+	void __pack(const struct update_window_position & val);
+	void __pack(const struct update_led_brightness & val);
 
 private:
 	void __reset(mid_t mid);

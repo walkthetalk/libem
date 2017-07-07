@@ -64,6 +64,8 @@ enum class mid_t : uint16_t {
 	stop = 56,
 	stopDischarge = 57,
 	tenseTestResult = 58,
+	update_led_brightness = 59,
+	update_window_position = 60,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -356,5 +358,15 @@ struct msg_helper<mid_t::stopDischarge> final {
 template<>
 struct msg_helper<mid_t::tenseTestResult> final {
 	typedef struct tense_test_result value_type;
+};
+
+template<>
+struct msg_helper<mid_t::update_led_brightness> final {
+	typedef struct update_led_brightness value_type;
+};
+
+template<>
+struct msg_helper<mid_t::update_window_position> final {
+	typedef struct update_window_position value_type;
 };
 

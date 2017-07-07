@@ -46,24 +46,25 @@ enum class svc_fs_state_t : uint16_t {
 	clring = 7,
 	focusing = 8,
 	defect_detecting = 9,
-	push2 = 10,
-	pause1 = 11,
-	precise_calibrating = 12,
-	pause2 = 13,
-	pre_splice = 14,
-	discharge1 = 15,
-	discharge2 = 16,
-	discharge_manual = 17,
-	loss_estimating = 18,
-	tension_testing = 19,
-	finished = 20,
-	wait_reset = 21,
-	/// @min : 0, @max : 21
+	fiber_rec = 10,
+	push2 = 11,
+	pause1 = 12,
+	precise_calibrating = 13,
+	pause2 = 14,
+	pre_splice = 15,
+	discharge1 = 16,
+	discharge2 = 17,
+	discharge_manual = 18,
+	loss_estimating = 19,
+	tension_testing = 20,
+	finished = 21,
+	wait_reset = 22,
+	/// @min : 0, @max : 22
 };
 template<> struct enum_info<enum svc_fs_state_t> {
 	static constexpr uint16_t min = 0;
-	static constexpr uint16_t max = 21;
-	static constexpr uint16_t size = 22;
+	static constexpr uint16_t max = 22;
+	static constexpr uint16_t size = 23;
 };
 
 enum class svc_heat_state_t : uint16_t {
@@ -611,4 +612,15 @@ typedef struct motor_spec {
 	double spow;
 	double lps;	/// @unit: nm/step
 } motor_spec_t;
+
+typedef struct update_window_position {
+	bool is_pos_x;
+	uint32_t row;
+	uint32_t column;
+} update_window_position_t;
+
+struct update_led_brightness {
+	enum ledId_t id;
+	double brightness;
+};
 
