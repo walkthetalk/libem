@@ -172,12 +172,12 @@ public:
 
 	double read(void)
 	{
-		return (double)(read_raw() - m_min) / (m_max - m_min);
+		return (double)(read_raw() - m_min) / (double)(m_max - m_min);
 	}
 
 	void write(double val)
 	{
-		m_attr.write((_val_t)((m_max - m_min) * val + m_min));
+		m_attr.write((_val_t)((double)(m_max - m_min) * val + (double)m_min));
 	}
 
 	long get_min() const { return m_min; }
