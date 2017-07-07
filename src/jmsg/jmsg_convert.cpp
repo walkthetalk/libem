@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cstring>
 
+#include "libwebsockets.h"
 #include "rapidjson/writer.h"
 
 #include "c2json.hpp"
