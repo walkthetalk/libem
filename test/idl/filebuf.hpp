@@ -47,11 +47,6 @@ public:
 		m_remain -= ret;
 	}
 
-	void pf_type_tail()
-	{
-		pf(0, ";\n\n");
-	}
-
 	void output()
 	{
 		std::ofstream ofs(m_file);

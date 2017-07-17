@@ -1,3 +1,5 @@
+#include <regex>
+
 #include "parser.hpp"
 
 
@@ -31,21 +33,27 @@ void generate_types(rapidjson::Document & d)
 		RAPIDJSON_ASSERT(itr.HasMember("category"));
 		const char * category = itr.FindMember("category")->value.GetString();
 		type_processor.at(category)(d, itr, 0);
+		s_outf_types.pf(0, ";\n");
 
-		if (itr.HasMember("val_size")) {
-			s_outf_types.pf(0, ";\n");
+		if (itr.HasMember("range_size")) {	/// enumeration
 			const char * const type_str = itr.FindMember("type")->value.GetString();
-			s_outf_types.pf(0, "template<> struct enum_info<enum %s> {\n",
-					itr.FindMember("name")->value.GetString());
-			s_outf_types.pf(1, "static constexpr %s min = %d;\n",type_str,
-					itr.FindMember("min")->value.GetInt());
-			s_outf_types.pf(1, "static constexpr %s max = %d;\n",type_str,
-					itr.FindMember("max")->value.GetInt());
-			s_outf_types.pf(1, "static constexpr %s size = %d;\n",type_str,
-					itr.FindMember("val_size")->value.GetInt());
-			s_outf_types.pf(0, "}");
+			const char * const name_str = itr.FindMember("name")->value.GetString();
+			const int min_id = itr.FindMember("min")->value.GetInt();
+			const int max_id = itr.FindMember("max")->value.GetInt();
+			const int range_size = itr.FindMember("range_size")->value.GetInt();
+			s_outf_types.pf(0, "template<> struct enum_info<enum %s> {\n", name_str);
+			s_outf_types.pf(1, "static constexpr %s min = %d;\n",type_str, min_id);
+			s_outf_types.pf(1, "static constexpr %s max = %d;\n",type_str, max_id);
+			s_outf_types.pf(1, "static constexpr %s size = %d;\n",type_str, range_size);
+			s_outf_types.pf(0, "};\n");
+
+			std::regex regex_rep("^([a-zA-Z0-9_]+)_t$");
+			std::string pure_name = std::regex_replace(name_str, regex_rep, "$1");
+			s_outf_types.pf(0, "static constexpr %s min_%s = %d;\n", type_str, pure_name.c_str(), min_id);
+			s_outf_types.pf(0, "static constexpr %s max_%s = %d;\n", type_str, pure_name.c_str(), max_id);
+			s_outf_types.pf(0, "static constexpr %s rsize_%s = %d;\n", type_str, pure_name.c_str(), range_size);
 		}
-		s_outf_types.pf_type_tail();
+		s_outf_types.pf(0, "\n");
 	}
 }
 
@@ -318,7 +326,8 @@ void process_type_enum(rapidjson::Document & doc, rapidjson::Value & val, const 
 				val.AddMember("min", val_min, doc.GetAllocator());
 				val.AddMember("max", val_max, doc.GetAllocator());
 				s_outf_types.pf(lvl+1, "/// @min : %d, @max : %d\n", val_min, val_max);
-				val.AddMember("val_size", int2string.size(), doc.GetAllocator());
+				val.AddMember("member_num", int2string.size(), doc.GetAllocator());
+				val.AddMember("range_size", (val_max - val_min + 1), doc.GetAllocator());
 			}
 		}
 	}
