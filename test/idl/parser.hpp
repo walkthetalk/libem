@@ -31,6 +31,7 @@ extern std::map<
 	const rapidjson::Value *
 > s_msg_lists;
 extern std::vector<rapidjson::Value *> s_msg_order;
+extern std::vector<rapidjson::Value *> s_export_order;
 
 static const char * const s_mid_under_type = "uint16_t";
 

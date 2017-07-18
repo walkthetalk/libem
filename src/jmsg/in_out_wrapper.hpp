@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 
 class in_wrapper final {
 public:
@@ -57,4 +58,19 @@ private:
 	out_wrapper& operator=(const out_wrapper&);
 public:
 	Ch * pcur;
+};
+
+struct out_string_wrapper final {
+public:
+	typedef char Ch;
+public:
+	out_string_wrapper(std::string & out)
+	: m_str(out)
+	{
+	}
+
+	void Put(Ch c) { m_str.push_back(c); }
+	void Flush() {}
+private:
+	std::string & m_str;
 };

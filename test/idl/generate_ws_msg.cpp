@@ -41,6 +41,16 @@ public:
 		__serialize();
 		f(m_buf, __size());
 	}
+)senderheader");
+
+	for (const auto & itr: s_export_order) {
+		/// @todo maybe not struct
+		const rapidjson::Value & val = *itr;
+		const char * type_name = val.FindMember("name")->value.GetString();
+		s_outf_sender.pf(lvl+1, "void convert(std::string & dst, const struct %s & src);\n", type_name);
+	}
+
+	s_outf_sender.pf(lvl, R"senderheader(
 private:
 )senderheader");
 
@@ -114,6 +124,19 @@ void sender::__serialize()
 )senderfillheader", s_mid_under_type);
 	s_outf_converter.pf(lvl, "\n");
 
+	for (const auto & itr: s_export_order) {
+		/// @todo maybe not struct
+		const rapidjson::Value & val = *itr;
+		const char * type_name = val.FindMember("name")->value.GetString();
+		s_outf_converter.pf(lvl, "void sender::convert(std::string & dst, const struct %s & src)\n", type_name);
+		s_outf_converter.pf(lvl, "{\n");
+		s_outf_converter.pf(lvl+1, "rapidjson::Document & doc = *(rapidjson::Document*)m_doc;\n");
+		s_outf_converter.pf(lvl+1, "out_string_wrapper buf(dst);\n");
+		s_outf_converter.pf(lvl+1, "rapidjson::Writer<out_string_wrapper> writer(buf);\n");
+		s_outf_converter.pf(lvl+1, "c2json(doc, src).Accept(writer);\n");
+		s_outf_converter.pf(lvl, "}\n\n");
+	}
+
 	s_outf_converter.pf(lvl, "/// messages packer wrapper\n");
 	for (const auto & itr: s_msg_order) {
 		/// @todo maybe not struct
@@ -157,6 +180,15 @@ public:
 			cb(msg);
 		};
 	}
+)rcverheader");
+
+	for (const auto & itr: s_export_order) {
+		rapidjson::Value & val = *itr;
+		const char * type_name = val.FindMember("name")->value.GetString();
+		s_outf_rcver.pf(lvl+1, "void convert(struct %s & dst, char *);\n", type_name);
+	}
+
+	s_outf_rcver.pf(lvl, R"rcverheader(
 private:
 	const char * __mid_to_str(mid_t mid);
 )rcverheader");
@@ -218,6 +250,18 @@ void rcver::process(void * buf, size_t /*len*/)
 }
 
 )rcverimplementer");
+
+	for (const auto & itr: s_export_order) {
+		rapidjson::Value & val = *itr;
+		const char * type_name = val.FindMember("name")->value.GetString();
+		s_outf_converter.pf(lvl, "void rcver::convert(struct %s & dst, char *buf)\n", type_name);
+		s_outf_converter.pf(lvl, "{\n");
+		s_outf_converter.pf(lvl+1, "rapidjson::Document & doc = *((rapidjson::Document*)m_doc);\n");
+		s_outf_converter.pf(lvl+1, "doc.ParseInsitu(buf);\n");
+		s_outf_converter.pf(lvl+1, "json2c(dst, doc);\n");
+		s_outf_converter.pf(lvl+1, "__reset();\n");
+		s_outf_converter.pf(lvl, "}\n\n", type_name);
+	}
 
 #if 0
 	/// register callback

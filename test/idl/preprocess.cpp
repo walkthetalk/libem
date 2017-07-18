@@ -18,6 +18,7 @@ std::map<
 > s_msg_lists;
 
 std::vector<rapidjson::Value *> s_msg_order;
+std::vector<rapidjson::Value *> s_export_order;
 
 #if 0
 bool is_as_msg(const rapidjson::Value & val)
@@ -96,6 +97,9 @@ void preprocess_types(rapidjson::Document & d)
 			if (sattr == "msg") {
 				has_attr_msg = true;
 				attr_val.GetArray().Erase(&sattr);
+			}
+			else if (sattr == "export") {
+				s_export_order.push_back(&itr);
 			}
 		}
 
