@@ -998,6 +998,7 @@
 	"category"	: "struct",
 	"name"		: "cmos_spec",
 	"alias"		: "cmos_spec_t",
+	"attr"		: "export",
 	"fields"	: {
 		"model" : "std::string",
 
@@ -1020,6 +1021,7 @@
 	"category"	: "struct",
 	"name"		: "hvb_spec",
 	"alias"		: "hvb_spec_t",
+	"attr"		: "export",
 	"fields"	: {
 		"max_volt" : { "type" : "double", "unit" : "volt" },
 		"pressure_c0" : { "type" : "double", "comment" : "coefficent 0 for pressure compensate" },
@@ -1031,6 +1033,7 @@
 	"category"	: "struct",
 	"name"		: "ia_spec",
 	"alias"		: "ia_spec_t",
+	"attr"		: "export",
 	"comment"	: "image analyze spec",
 	"fields"	: {
 		"bg_lum" : {
@@ -1106,6 +1109,7 @@
 	"category"	: "struct",
 	"name"		: "mc_spec",
 	"alias"		: "mc_spec_t",
+	"attr"		: "export",
 	"comment"	: "motor control spec",
 	"fields"	: {
 		"reset_speed" : { "type" : "int", "unit" : "um/s" },
@@ -1121,6 +1125,7 @@
 	"category"	: "struct",
 	"name"		: "ar_spec",
 	"alias"		: "ar_spec_t",
+	"attr"		: "export",
 	"comment"	: "arc revise spec",
 	"fields"	: {
 		"base" : "discharge_data_t",
@@ -1132,6 +1137,7 @@
 	"category"	: "struct",
 	"name"		: "rr_spec",
 	"alias"		: "rr_spec_t",
+	"attr"		: "export",
 	"comment"	: "realtime revise spec",
 	"fields"	: {
 		"sm" : "rt_revise_data_t",

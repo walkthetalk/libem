@@ -33,6 +33,13 @@ public:
 			cb(msg);
 		};
 	}
+	void convert(struct cmos_spec & dst, char *);
+	void convert(struct hvb_spec & dst, char *);
+	void convert(struct ia_spec & dst, char *);
+	void convert(struct mc_spec & dst, char *);
+	void convert(struct ar_spec & dst, char *);
+	void convert(struct rr_spec & dst, char *);
+
 private:
 	const char * __mid_to_str(mid_t mid);
 	void __unpack(struct fs_state & dst);

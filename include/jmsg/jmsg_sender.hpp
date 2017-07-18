@@ -29,6 +29,13 @@ public:
 		__serialize();
 		f(m_buf, __size());
 	}
+	void convert(std::string & dst, const struct cmos_spec & src);
+	void convert(std::string & dst, const struct hvb_spec & src);
+	void convert(std::string & dst, const struct ia_spec & src);
+	void convert(std::string & dst, const struct mc_spec & src);
+	void convert(std::string & dst, const struct ar_spec & src);
+	void convert(std::string & dst, const struct rr_spec & src);
+
 private:
 	void __pack(const struct fs_state & val);
 	void __pack(const struct heat_state & val);
