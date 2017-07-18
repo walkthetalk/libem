@@ -83,7 +83,6 @@ do { \
 	} \
 } while (0)
 
-
 void process_var_struct(const char * name, rapidjson::Document & doc, rapidjson::Value & val, const std::size_t lvl)
 {
 	process_type_struct(doc, val, lvl);
@@ -133,6 +132,14 @@ void process_type_struct(rapidjson::Document & doc, rapidjson::Value & val, cons
 		auto & mval = itr->value;
 		ENSURE_OBJECT(mval, "type", doc);
 		ENSURE_IF(!mval.HasMember("category"), mval, "type", doc);
+		ensure_has_bool_mem(mval, "maybenull", doc);
+
+		rapidjson::Value & maybenull_val = mval.FindMember("maybenull")->value;
+		RAPIDJSON_ASSERT(maybenull_val.IsBool());
+		const bool maybenull = maybenull_val.GetBool();
+		if (maybenull) {
+			s_outf_types.pf(lvl+1, "bool has_%s;\n", mname);
+		}
 
 		RAPIDJSON_ASSERT(mval.HasMember("type"));
 		rapidjson::Value & type_val = mval.FindMember("type")->value;

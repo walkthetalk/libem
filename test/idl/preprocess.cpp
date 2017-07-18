@@ -59,6 +59,16 @@ void ensure_has_array_mem(rapidjson::Value & _val, rapidjson::Value::StringRefTy
 	RAPIDJSON_ASSERT(_val.FindMember(_name)->value.IsArray());
 }
 
+void ensure_has_bool_mem(rapidjson::Value & _val, rapidjson::Value::StringRefType _name, rapidjson::Document & _doc)
+{
+	if (!_val.HasMember(_name)) {
+		rapidjson::Value v(rapidjson::kFalseType);
+		_val.AddMember(_name, v, _doc.GetAllocator());
+	}
+
+	RAPIDJSON_ASSERT(_val.FindMember(_name)->value.IsBool());
+}
+
 void preprocess_types(rapidjson::Document & d)
 {
 	/// pre record types

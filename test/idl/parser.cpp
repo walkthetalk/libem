@@ -1,5 +1,6 @@
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 #include "parser.hpp"
 #include "filebuf.hpp"
@@ -18,15 +19,20 @@ int main(int /*argc*/, char * /*argv*/[])
 	rapidjson::Document d;
 	d.ParseStream<rapidjson::kParseTrailingCommasFlag>(isw);
 
+	std::cout << "step 1: preprocess" << std::endl;
 	preprocess_types(d);
 
+	std::cout << "step 2: generate types" << std::endl;
 	generate_types(d);
 	s_outf_types.output();
 
+	std::cout << "step 3: generate id" << std::endl;
 	generate_id(d);
 	s_outf_id.output();
 
+	std::cout << "step 4: generate converter" << std::endl;
 	generate_converter(d);
+	std::cout << "step 5: generate message" << std::endl;
 	generate_wsmsgs(d);
 	s_outf_converter.output();
 	s_outf_sender.output();

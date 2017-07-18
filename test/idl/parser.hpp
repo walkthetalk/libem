@@ -36,6 +36,7 @@ static const char * const s_mid_under_type = "uint16_t";
 
 void ensure_has_object_mem(rapidjson::Value & _val, rapidjson::Value::StringRefType _name, rapidjson::Document & _doc);
 void ensure_has_array_mem(rapidjson::Value & _val, rapidjson::Value::StringRefType _name, rapidjson::Document & _doc);
+void ensure_has_bool_mem(rapidjson::Value & _val, rapidjson::Value::StringRefType _name, rapidjson::Document & _doc);
 
 void preprocess_types(rapidjson::Document & d);
 void generate_types(rapidjson::Document & d);

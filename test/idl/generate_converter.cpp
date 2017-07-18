@@ -175,7 +175,14 @@ void convert_struct(rapidjson::Document & /*doc*/, rapidjson::Value & val, const
 
 		outf.pf(lvl+1, "rapidjson::Value v(rapidjson::kObjectType);\n");
 		for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
-			outf.pf(lvl+1, "ENC_MEM(jd, \"%s\", v, src.%s);\n", itr->name.GetString(), itr->name.GetString());
+			const char * mname = itr->name.GetString();
+			auto & mval = itr->value;
+			if (mval.FindMember("maybenull")->value.GetBool()) {
+				outf.pf(lvl+1, "ENC_MEM_IF(jd, \"%s\", v, src.%s, src.has_%s);\n", mname, mname, mname);
+			}
+			else {
+				outf.pf(lvl+1, "ENC_MEM(jd, \"%s\", v, src.%s);\n", mname, mname);
+			}
 		}
 		outf.pf(0, "\n");
 		outf.pf(lvl+1, "return v;\n");
@@ -185,7 +192,14 @@ void convert_struct(rapidjson::Document & /*doc*/, rapidjson::Value & val, const
 		outf.pf(lvl, "static inline void json2c(struct %s & dst, const rapidjson::Value & src)\n", ename);
 		outf.pf(lvl, "{\n");
 		for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
-			outf.pf(lvl+1, "DEC_MEM(\"%s\", src, dst.%s);\n", itr->name.GetString(), itr->name.GetString());
+			const char * mname = itr->name.GetString();
+			auto & mval = itr->value;
+			if (mval.FindMember("maybenull")->value.GetBool()) {
+				outf.pf(lvl+1, "DEC_MEM_IF(\"%s\", src, dst.%s, dst.has_%s);\n", mname, mname, mname);
+			}
+			else {
+				outf.pf(lvl+1, "DEC_MEM(\"%s\", src, dst.%s);\n", mname, mname);
+			}
 		}
 		outf.pf(lvl, "}\n");
 
