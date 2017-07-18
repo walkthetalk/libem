@@ -15,25 +15,25 @@ enum ifd_t : uint32_t {
 	ifd_all = 0xFFFFFFFF,
 };
 
-struct ifd_line_t {
+typedef struct ifd_line {
 	enum ifd_t dbmp;
 	double h_angle;	/// @unit: degree
 	double v_angle;	/// @unit: degree
 	int32_t wrap_diameter;	/// @unit: pixel
-};
+} ifd_line_t;
 
-struct img_defects_t {
-	struct ifd_line_t yzl;
-	struct ifd_line_t yzr;
-	struct ifd_line_t xzl;
-	struct ifd_line_t xzr;
+typedef struct img_defects {
+	ifd_line_t yzl;
+	ifd_line_t yzr;
+	ifd_line_t xzl;
+	ifd_line_t xzr;
 	double yz_hangle_intersect;
 	double xz_hangle_intersect;
 	std::string yz_ref_img;
 	std::string xz_ref_img;
 	std::string yz_img;
 	std::string xz_img;
-};
+} img_defects_t;
 
 enum class svc_fs_state_t : uint16_t {
 	reseting = 0,
@@ -188,27 +188,27 @@ static constexpr uint8_t min_cmosId = 0;
 static constexpr uint8_t max_cmosId = 1;
 static constexpr uint8_t rsize_cmosId = 2;
 
-struct mag2shrink_t {
+typedef struct mag2shrink {
 	double x;	/// @unit: volt
 	double y;	/// @unit: um
-};
+} mag2shrink_t;
 
-struct discharge_data_t {
-	struct mag2shrink_t p[2];
+typedef struct discharge_data {
+	mag2shrink_t p[2];
 	double temp;	/// @unit: degree centigrade
 	double pressure;	/// @unit: bar
-};
+} discharge_data_t;
 
-struct rt_revise_data_t {
-	int32_t rt_x_exposure;
-	int32_t rt_y_exposure;
-	double rt_revise_a3;
-	double rt_revise_a2;
-	double rt_revise_a1;
-	double rt_revise_a0;
-	double rt_offset_auto;
-	double rt_offset_cal;
-};
+typedef struct rt_revise_data {
+	int32_t x_exposure;
+	int32_t y_exposure;
+	double a3;
+	double a2;
+	double a1;
+	double a0;
+	double offset_auto;
+	double offset_cal;
+} rt_revise_data_t;
 
 enum class fiber_t : uint8_t {
 	sm = 0,
@@ -226,15 +226,15 @@ static constexpr uint8_t min_fiber = 0;
 static constexpr uint8_t max_fiber = 3;
 static constexpr uint8_t rsize_fiber = 4;
 
-struct fiber_reco_data_t {
+typedef struct fiber_reco_data {
 	double data[4][5][3];
-};
+} fiber_reco_data_t;
 
-struct fiber_rec_info_t {
+typedef struct fiber_rec_info {
 	enum fiber_t ft;
-	uint32_t wrap_diameter;	/// @unit: nm
-	uint32_t core_diameter;	/// @unit: nm
-};
+	int wrap_diameter;	/// @unit: nm
+	int core_diameter;	/// @unit: nm
+} fiber_rec_info_t;
 
 enum class fs_pattern_t : uint8_t {
 	automatic = 0,
@@ -299,7 +299,7 @@ static constexpr uint8_t min_align_method = 0;
 static constexpr uint8_t max_align_method = 3;
 static constexpr uint8_t rsize_align_method = 4;
 
-struct fs_base_cfg_t {
+typedef struct fs_base_cfg {
 	enum fs_pattern_t FSPattern;
 	enum fiber_t FiberType;
 	enum align_method_t FiberAlignment;
@@ -364,7 +364,7 @@ struct fs_base_cfg_t {
 	uint32_t AutoReset;
 	bool CleanDischargeTwice;
 	uint32_t ManualDischargeTimes;
-};
+} fs_base_cfg_t;
 
 struct fs_state {
 	enum svc_fs_state_t sstate;
@@ -393,12 +393,12 @@ struct loss_estimating_result {
 };
 
 struct defect_detect_result {
-	struct img_defects_t data;
+	img_defects_t data;
 };
 
 struct fiber_reco_result {
-	struct fiber_rec_info_t lft_rec_info;
-	struct fiber_rec_info_t rt_rec_info;
+	fiber_rec_info_t lft_rec_info;
+	fiber_rec_info_t rt_rec_info;
 };
 
 struct manual_discharge_counts {
@@ -407,9 +407,9 @@ struct manual_discharge_counts {
 
 typedef struct fusion_splice_result {
 	enum fs_err_t code;
-	struct fiber_rec_info_t lft_rec_info;
-	struct fiber_rec_info_t rt_rec_info;
-	struct img_defects_t defect_data;
+	fiber_rec_info_t lft_rec_info;
+	fiber_rec_info_t rt_rec_info;
+	img_defects_t defect_data;
 	record_offset_t z_record_off_set;
 	double pattern_compensate;	/// @range: 0.0~1.0
 	double loss_db;	/// @unit: db
@@ -431,10 +431,10 @@ typedef struct fs_da_cfg {
 typedef struct discharge_adjust_result {
 	enum fs_err_t code;
 	struct fs_da_cfg z_cfg;
-	struct fiber_rec_info_t rec_info;
-	struct img_defects_t defect_data;
-	struct discharge_data_t base;
-	struct discharge_data_t revise;
+	fiber_rec_info_t rec_info;
+	img_defects_t defect_data;
+	discharge_data_t base;
+	discharge_data_t revise;
 	double suggest1;
 	double suggest2;
 } discharge_adjust_result_t;
@@ -477,12 +477,9 @@ struct set_fs_display_mode {
 
 typedef struct dust_check_result {
 	enum fs_err_t code;
-	bool xz_ok;
-	std::string xz_ori;
-	std::string xz_dust;
-	bool yz_ok;
-	std::string yz_ori;
-	std::string yz_dust;
+	enum cmosId_t cmosid;
+	std::string ori_img;
+	std::string dust_img;
 } dust_check_result_t;
 
 struct heat_start {
@@ -553,8 +550,8 @@ struct statistic_data_t {
 typedef struct motor_test_result {
 	enum fs_err_t code;
 	struct fs_mt_cfg z_cfg;
-	struct fiber_rec_info_t rec_info;
-	struct img_defects_t defect_data;
+	fiber_rec_info_t rec_info;
+	img_defects_t defect_data;
 	uint32_t motor_tested_times;
 	uint32_t ele_arc_tested_times;
 	uint32_t reset;
@@ -580,14 +577,14 @@ typedef struct fs_rr_cfg {} fs_rr_cfg_t;
 
 typedef struct realtime_revise_result {
 	enum fs_err_t code;
-	struct fiber_rec_info_t rec_info;
-	struct img_defects_t defect_data;
+	fiber_rec_info_t rec_info;
+	img_defects_t defect_data;
 	record_offset_t z_record_off_set;
 	double pattern_compensate;	/// @range: 0.0~1.0
 	double loss_db;	/// @unit: db
 	struct tense_test_result z_tense_test_result;
 	struct manual_discharge_counts z_manual_discharge_counts;
-	struct rt_revise_data_t RealtimeReviseData;
+	rt_revise_data_t RealtimeReviseData;
 } realtime_revise_result_t;
 
 typedef struct regular_test_result {
@@ -629,8 +626,8 @@ typedef struct fs_ft_cfg {
 typedef struct fiber_train_result {
 	enum fs_err_t code;
 	struct fs_ft_cfg z_cfg;
-	struct fiber_rec_info_t rec_info;
-	struct img_defects_t defect_data;
+	fiber_rec_info_t rec_info;
+	img_defects_t defect_data;
 	uint32_t cnt;
 	uint32_t cnt_limit;
 	double lft_attr[2];
@@ -642,12 +639,78 @@ typedef struct count_down {
 } count_down_t;
 
 typedef struct motor_spec {
-	uint16_t raw_max;
-	uint16_t raw_min;
-	double sfactor;	/// @unit: nm
+	int clock;	/// @unit: HZ
+	int raw_max;
+	int raw_min;
+	int backlash;	/// @unit: step
+	int stroke;	/// @unit: step
+	double sfactor;	/// @unit: um
 	double spow;
 	double lps;	/// @unit: nm/step
 } motor_spec_t;
+
+typedef struct cmos_spec {
+	std::string model;
+	int full_width;
+	int full_height;
+	int win_width;
+	int win_height;
+	int win_left;
+	int win_top;
+	int min_exposure;
+	int max_exposure;
+	int pixel_width;	/// @unit: nm
+	int pixel_height;	/// @unit: nm
+} cmos_spec_t;
+
+typedef struct hvb_spec {
+	double max_volt;	/// @unit: volt
+	double pressure_c0;
+	double pressure_c1;
+} hvb_spec_t;
+
+typedef struct ia_spec {
+	double bg_lum;	/// @range: 0.0~1.0
+	int cap_delay;	/// @unit: ms
+	int cover_delay;	/// @unit: ms
+	double led_lum[2];
+	double dc_th0;
+	double dc_th1;
+	int denoise_th;
+	double loss_est_factor;
+	double vdist_th0;	/// @unit: pixel
+	double vdist_th1;	/// @unit: pixel
+	double hdist_th0;	/// @unit: pixel
+	double hdist_th1;	/// @unit: pixel
+	double hangle_th;	/// @unit: degree
+	double vangle_th;	/// @unit: degree
+} ia_spec_t;
+
+typedef struct mc_spec {
+	int reset_speed;	/// @unit: um/s
+	int enter_speed;	/// @unit: um/s
+	int push1_speed;	/// @unit: um/s
+	int push2_speed;	/// @unit: um/s
+	int calib_speed;	/// @unit: um/s
+	int manual_speed;	/// @unit: um/s
+} mc_spec_t;
+
+typedef struct ar_spec {
+	discharge_data_t base;
+	discharge_data_t revise;
+} ar_spec_t;
+
+typedef struct rr_spec {
+	rt_revise_data_t sm;
+	rt_revise_data_t mm;
+	rt_revise_data_t nz;
+	rt_revise_data_t ds;
+} rr_spec_t;
+
+typedef struct fr_spec {
+	fiber_reco_data_t left;
+	fiber_reco_data_t right;
+} fr_spec_t;
 
 typedef struct update_window_position {
 	bool is_pos_x;

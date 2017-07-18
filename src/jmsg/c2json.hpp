@@ -61,3 +61,4 @@ inline rapidjson::Value c2json(rapidjson::Document & jd, const _T & src)
  * encode member
  */
 #define ENC_MEM(jd, m_name, jobj, src) jobj.AddMember(rapidjson::Value::StringRefType(m_name), c2json(jd, src).Move(), jd.GetAllocator());
+#define ENC_MEM_IF(jd, m_name, jobj, src, dep) if (dep) ENC_MEM(jd, m_name, jobj, src)

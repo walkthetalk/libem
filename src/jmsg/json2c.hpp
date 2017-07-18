@@ -81,3 +81,7 @@ inline void json2c(_T & dst, const rapidjson::Value & src)
  * encode member
  */
 #define DEC_MEM(m_name, src, dst) json2c(dst, src[m_name]);
+#define DEC_MEM_IF(m_name, src, dst, dep) do { \
+	dep = src.HasMember(m_name); \
+	if (dep) DEC_MEM(m_name, src, dst); \
+} while (0);
