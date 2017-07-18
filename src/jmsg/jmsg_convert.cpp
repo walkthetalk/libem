@@ -2229,50 +2229,50 @@ void rcver::process(void * buf, size_t /*len*/)
 	__reset();
 }
 
-void rcver::convert(struct cmos_spec & dst, char *buf)
+void rcver::convert(struct cmos_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }
 
-void rcver::convert(struct hvb_spec & dst, char *buf)
+void rcver::convert(struct hvb_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }
 
-void rcver::convert(struct ia_spec & dst, char *buf)
+void rcver::convert(struct ia_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }
 
-void rcver::convert(struct mc_spec & dst, char *buf)
+void rcver::convert(struct mc_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }
 
-void rcver::convert(struct ar_spec & dst, char *buf)
+void rcver::convert(struct ar_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }
 
-void rcver::convert(struct rr_spec & dst, char *buf)
+void rcver::convert(struct rr_spec & dst, const std::string & src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
-	doc.ParseInsitu(buf);
+	doc.Parse(src);
 	json2c(dst, doc);
 	__reset();
 }

@@ -185,7 +185,7 @@ public:
 	for (const auto & itr: s_export_order) {
 		rapidjson::Value & val = *itr;
 		const char * type_name = val.FindMember("name")->value.GetString();
-		s_outf_rcver.pf(lvl+1, "void convert(struct %s & dst, char *);\n", type_name);
+		s_outf_rcver.pf(lvl+1, "void convert(struct %s & dst, const std::string & src);\n", type_name);
 	}
 
 	s_outf_rcver.pf(lvl, R"rcverheader(
@@ -254,10 +254,10 @@ void rcver::process(void * buf, size_t /*len*/)
 	for (const auto & itr: s_export_order) {
 		rapidjson::Value & val = *itr;
 		const char * type_name = val.FindMember("name")->value.GetString();
-		s_outf_converter.pf(lvl, "void rcver::convert(struct %s & dst, char *buf)\n", type_name);
+		s_outf_converter.pf(lvl, "void rcver::convert(struct %s & dst, const std::string & src)\n", type_name);
 		s_outf_converter.pf(lvl, "{\n");
 		s_outf_converter.pf(lvl+1, "rapidjson::Document & doc = *((rapidjson::Document*)m_doc);\n");
-		s_outf_converter.pf(lvl+1, "doc.ParseInsitu(buf);\n");
+		s_outf_converter.pf(lvl+1, "doc.Parse(src);\n");
 		s_outf_converter.pf(lvl+1, "json2c(dst, doc);\n");
 		s_outf_converter.pf(lvl+1, "__reset();\n");
 		s_outf_converter.pf(lvl, "}\n\n", type_name);
