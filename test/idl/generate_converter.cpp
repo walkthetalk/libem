@@ -159,18 +159,20 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 	outf.pf(0, "\n");
 }
 
-void convert_struct(rapidjson::Document & /*doc*/, rapidjson::Value & val, const std::size_t lvl)
+static void convert_struct_by_name(rapidjson::Document & /*doc*/,
+			   const rapidjson::Value & val,
+			   const std::string & tname,
+			   const std::size_t lvl)
 {
-	RAPIDJSON_ASSERT(val.HasMember("name"));
-	const char * ename = val.FindMember("name")->value.GetString();
+	const char * ename = tname.c_str();
 	//bool is_msg = is_as_msg(val);
 	//const char * fn_prefix = is_msg ? "" : "static inline ";
 	const rapidjson::Value & fields = val.FindMember("fields")->value;
 
 	filebuf & outf = s_outf_converter;
 	if (fields.MemberCount() > 0) {
-		outf.pf(lvl, "/// @struct %s\n", ename);
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct %s & src)\n", ename);
+		outf.pf(lvl, "/// @%s\n", ename);
+		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & jd, const %s & src)\n", ename);
 		outf.pf(lvl, "{\n");
 
 		outf.pf(lvl+1, "rapidjson::Value v(rapidjson::kObjectType);\n");
@@ -189,7 +191,7 @@ void convert_struct(rapidjson::Document & /*doc*/, rapidjson::Value & val, const
 
 		outf.pf(lvl, "}\n");
 
-		outf.pf(lvl, "static inline void json2c(struct %s & dst, const rapidjson::Value & src)\n", ename);
+		outf.pf(lvl, "static inline void json2c(%s & dst, const rapidjson::Value & src)\n", ename);
 		outf.pf(lvl, "{\n");
 		for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
 			const char * mname = itr->name.GetString();
@@ -206,12 +208,50 @@ void convert_struct(rapidjson::Document & /*doc*/, rapidjson::Value & val, const
 		outf.pf(0, "\n");
 	}
 	else {
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const struct %s & /*src*/) {\n", ename);
+		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const %s & /*src*/) {\n", ename);
 		outf.pf(lvl+1, "return rapidjson::Value(rapidjson::kObjectType);\n");
 		outf.pf(lvl, "}\n");
-		outf.pf(lvl, "static inline void json2c(struct %s & /*dst*/, const rapidjson::Value & /*src*/) {}\n", ename);
+		outf.pf(lvl, "static inline void json2c(%s & /*dst*/, const rapidjson::Value & /*src*/) {}\n", ename);
 		outf.pf(0, "\n");
 	}
+}
+
+static void convert_nested_struct(rapidjson::Document & doc,
+			const rapidjson::Value & val,
+			const std::string prefix,
+			const std::size_t lvl)
+{
+	const rapidjson::Value & fields = val.FindMember("fields")->value;
+
+	for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin();
+	     itr != fields.MemberEnd(); ++itr) {
+		const char * mname = itr->name.GetString();
+		const auto & mval = itr->value;
+		const auto & memtype = mval.FindMember("type")->value;
+
+		if (!memtype.IsObject()) {
+			continue;
+		}
+
+		const auto & memtypecate = memtype.FindMember("category")->value;
+		if (std::string(memtypecate.GetString()) != "struct") {
+			continue;
+		}
+
+		const std::string newprefix = prefix + "::" + std::string(mname);
+
+		convert_nested_struct(doc, memtype, newprefix, lvl);
+
+		convert_struct_by_name(doc, memtype, std::string("decltype(") + newprefix + ")", lvl);
+	}
+}
+
+void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, const std::size_t lvl)
+{
+	RAPIDJSON_ASSERT(val.HasMember("name"));
+	const char * ename = val.FindMember("name")->value.GetString();
+	convert_nested_struct(doc, val, std::string(ename), lvl);
+	convert_struct_by_name(doc, val, std::string("struct ") + std::string(ename), lvl);
 }
 
 std::map<

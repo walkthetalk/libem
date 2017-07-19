@@ -96,7 +96,13 @@ void process_type_struct(rapidjson::Document & doc, rapidjson::Value & val, cons
 		name = val.FindMember("name")->value.GetString();
 	}
 
-	const rapidjson::Value & alias_v = val.FindMember("alias")->value;
+	/**
+	 * @note: nested struct do not have 'alias'
+	 */
+	const rapidjson::Value tmp_array(rapidjson::kArrayType);
+	const rapidjson::Value & alias_v = val.HasMember("alias")
+		? val.FindMember("alias")->value
+		: tmp_array;
 
 	bool has_attr_final = false;
 	if (val.HasMember("attr")) {
