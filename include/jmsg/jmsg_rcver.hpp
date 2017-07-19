@@ -33,6 +33,8 @@ public:
 			cb(msg);
 		};
 	}
+	void convert(struct fs_base_cfg & dst, const std::string & src);
+	void convert(struct fs_option_cfg & dst, const std::string & src);
 	void convert(struct cmos_spec & dst, const std::string & src);
 	void convert(struct hvb_spec & dst, const std::string & src);
 	void convert(struct ia_spec & dst, const std::string & src);

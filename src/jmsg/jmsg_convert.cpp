@@ -524,22 +524,26 @@ static inline void json2c(struct rt_revise_data & dst, const rapidjson::Value & 
 static const struct {
 	rapidjson::Value::StringRefType name;
 	uint8_t val;
-} str2e_fiber_t[4] = {
-	{ "ds", 1 },
-	{ "mm", 3 },
-	{ "nz", 2 },
-	{ "sm", 0 },
+} str2e_fiber_t[6] = {
+	{ "automatic", 0 },
+	{ "ds", 2 },
+	{ "follow", 5 },
+	{ "mm", 4 },
+	{ "nz", 3 },
+	{ "sm", 1 },
 };
 
 /// @fiber_t : enum to string
 static const struct {
 	uint8_t val;
 	rapidjson::Value::StringRefType name;
-} e2str_fiber_t[4] = {
-	{ 0, "sm" },
-	{ 1, "ds" },
-	{ 2, "nz" },
-	{ 3, "mm" },
+} e2str_fiber_t[6] = {
+	{ 0, "automatic" },
+	{ 1, "sm" },
+	{ 2, "ds" },
+	{ 3, "nz" },
+	{ 4, "mm" },
+	{ 5, "follow" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fiber_t src)
@@ -664,22 +668,24 @@ static inline void json2c(enum shrink_tube_t & dst, const rapidjson::Value & src
 static const struct {
 	rapidjson::Value::StringRefType name;
 	uint8_t val;
-} str2e_align_method_t[4] = {
-	{ "clad", 1 },
-	{ "core", 2 },
-	{ "fine", 0 },
-	{ "manual", 3 },
+} str2e_align_method_t[5] = {
+	{ "automatic", 0 },
+	{ "clad", 2 },
+	{ "core", 3 },
+	{ "fine", 1 },
+	{ "manual", 4 },
 };
 
 /// @align_method_t : enum to string
 static const struct {
 	uint8_t val;
 	rapidjson::Value::StringRefType name;
-} e2str_align_method_t[4] = {
-	{ 0, "fine" },
-	{ 1, "clad" },
-	{ 2, "core" },
-	{ 3, "manual" },
+} e2str_align_method_t[5] = {
+	{ 0, "automatic" },
+	{ 1, "fine" },
+	{ 2, "clad" },
+	{ 3, "core" },
+	{ 4, "manual" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum align_method_t src)
@@ -692,139 +698,238 @@ static inline void json2c(enum align_method_t & dst, const rapidjson::Value & sr
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_base_cfg & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "FSPattern", v, src.FSPattern);
-	ENC_MEM(jd, "FiberType", v, src.FiberType);
-	ENC_MEM(jd, "FiberAlignment", v, src.FiberAlignment);
-	ENC_MEM(jd, "XImageFocus", v, src.XImageFocus);
-	ENC_MEM(jd, "YImageFocus", v, src.YImageFocus);
-	ENC_MEM(jd, "FiberShift", v, src.FiberShift);
-	ENC_MEM(jd, "DischargeStrengthAdjustment", v, src.DischargeStrengthAdjustment);
-	ENC_MEM(jd, "TensionSet", v, src.TensionSet);
-	ENC_MEM(jd, "CutAngleLimit", v, src.CutAngleLimit);
-	ENC_MEM(jd, "LossLimit", v, src.LossLimit);
-	ENC_MEM(jd, "FiberAngleLimit", v, src.FiberAngleLimit);
-	ENC_MEM(jd, "CleanDischargeStrength", v, src.CleanDischargeStrength);
-	ENC_MEM(jd, "CleanDischargeTime", v, src.CleanDischargeTime);
-	ENC_MEM(jd, "FiberIntervalSetup", v, src.FiberIntervalSetup);
-	ENC_MEM(jd, "FSPosSetup", v, src.FSPosSetup);
-	ENC_MEM(jd, "FiberPreFSStrength", v, src.FiberPreFSStrength);
-	ENC_MEM(jd, "FiberPreFSTime", v, src.FiberPreFSTime);
-	ENC_MEM(jd, "FiberOverlapSetup", v, src.FiberOverlapSetup);
-	ENC_MEM(jd, "Discharge1Strength", v, src.Discharge1Strength);
-	ENC_MEM(jd, "Discharge1Time", v, src.Discharge1Time);
-	ENC_MEM(jd, "Discharge2Strength", v, src.Discharge2Strength);
-	ENC_MEM(jd, "Discharge2LastTime", v, src.Discharge2LastTime);
-	ENC_MEM(jd, "Discharge2StartTime", v, src.Discharge2StartTime);
-	ENC_MEM(jd, "Discharge2StopTime", v, src.Discharge2StopTime);
-	ENC_MEM(jd, "ExtraManualDischargeTime", v, src.ExtraManualDischargeTime);
-	ENC_MEM(jd, "LeftFSSpeed", v, src.LeftFSSpeed);
-	ENC_MEM(jd, "RightFSSpeed", v, src.RightFSSpeed);
-	ENC_MEM(jd, "ConeFS", v, src.ConeFS);
-	ENC_MEM(jd, "ConeFSWaitTime", v, src.ConeFSWaitTime);
-	ENC_MEM(jd, "ConeFSSpeed", v, src.ConeFSSpeed);
-	ENC_MEM(jd, "ConeFSStretchLength", v, src.ConeFSStretchLength);
-	ENC_MEM(jd, "LossEstimationMode", v, src.LossEstimationMode);
-	ENC_MEM(jd, "LeftFiberMFD", v, src.LeftFiberMFD);
-	ENC_MEM(jd, "RightFiberMFD", v, src.RightFiberMFD);
-	ENC_MEM(jd, "LeastLoss", v, src.LeastLoss);
-	ENC_MEM(jd, "RateOfSyntropyBending", v, src.RateOfSyntropyBending);
-	ENC_MEM(jd, "RateOfReverseBending", v, src.RateOfReverseBending);
-	ENC_MEM(jd, "MFDMismatchCoefficient", v, src.MFDMismatchCoefficient);
-	ENC_MEM(jd, "AutoStart", v, src.AutoStart);
-	ENC_MEM(jd, "Stop1", v, src.Stop1);
-	ENC_MEM(jd, "Stop2", v, src.Stop2);
-	ENC_MEM(jd, "CutAngle", v, src.CutAngle);
-	ENC_MEM(jd, "OffsetData", v, src.OffsetData);
-	ENC_MEM(jd, "ArcCorrectedValue", v, src.ArcCorrectedValue);
-	ENC_MEM(jd, "Cut", v, src.Cut);
-	ENC_MEM(jd, "Loss", v, src.Loss);
-	ENC_MEM(jd, "FiberCoreAngle", v, src.FiberCoreAngle);
-	ENC_MEM(jd, "Bubble", v, src.Bubble);
-	ENC_MEM(jd, "Thick", v, src.Thick);
-	ENC_MEM(jd, "Thin", v, src.Thin);
-	ENC_MEM(jd, "AirPressure", v, src.AirPressure);
-	ENC_MEM(jd, "Temperature", v, src.Temperature);
-	ENC_MEM(jd, "RealTimeRevise", v, src.RealTimeRevise);
-	ENC_MEM(jd, "ImgGap", v, src.ImgGap);
-	ENC_MEM(jd, "ImgStop1", v, src.ImgStop1);
-	ENC_MEM(jd, "ImgAlign", v, src.ImgAlign);
-	ENC_MEM(jd, "ImgStop2", v, src.ImgStop2);
-	ENC_MEM(jd, "ImgDischarge", v, src.ImgDischarge);
-	ENC_MEM(jd, "ImgLossEstimation", v, src.ImgLossEstimation);
-	ENC_MEM(jd, "FiberAutoFeed", v, src.FiberAutoFeed);
-	ENC_MEM(jd, "BadCutSurface", v, src.BadCutSurface);
-	ENC_MEM(jd, "AutoReset", v, src.AutoReset);
-	ENC_MEM(jd, "CleanDischargeTwice", v, src.CleanDischargeTwice);
-	ENC_MEM(jd, "ManualDischargeTimes", v, src.ManualDischargeTimes);
+	ENC_MEM(jd, "fusion_mode", v, src.fusion_mode);
+	ENC_MEM(jd, "lfti", v, src.lfti);
+	ENC_MEM(jd, "rfti", v, src.rfti);
+	ENC_MEM(jd, "align_mode", v, src.align_mode);
+	ENC_MEM(jd, "x_focus", v, src.x_focus);
+	ENC_MEM(jd, "y_focus", v, src.y_focus);
+	ENC_MEM(jd, "ecf_redress", v, src.ecf_redress);
+	ENC_MEM(jd, "auto_mag", v, src.auto_mag);
+	ENC_MEM(jd, "vangle_limit", v, src.vangle_limit);
+	ENC_MEM(jd, "hangle_limit", v, src.hangle_limit);
+	ENC_MEM(jd, "clr_mag", v, src.clr_mag);
+	ENC_MEM(jd, "clr_time", v, src.clr_time);
+	ENC_MEM(jd, "clr_pos", v, src.clr_pos);
+	ENC_MEM(jd, "position", v, src.position);
+	ENC_MEM(jd, "gap", v, src.gap);
+	ENC_MEM(jd, "overlap", v, src.overlap);
+	ENC_MEM(jd, "pre_mag", v, src.pre_mag);
+	ENC_MEM(jd, "pre_time", v, src.pre_time);
+	ENC_MEM(jd, "arc1_mag", v, src.arc1_mag);
+	ENC_MEM(jd, "arc1_time", v, src.arc1_time);
+	ENC_MEM(jd, "arc2_mag", v, src.arc2_mag);
+	ENC_MEM(jd, "arc2_time", v, src.arc2_time);
+	ENC_MEM(jd, "arc2_on_time", v, src.arc2_on_time);
+	ENC_MEM(jd, "arc2_off_time", v, src.arc2_off_time);
+	ENC_MEM(jd, "arc_man_time", v, src.arc_man_time);
+	ENC_MEM(jd, "lft_push_speed", v, src.lft_push_speed);
+	ENC_MEM(jd, "rt_push_speed", v, src.rt_push_speed);
+	ENC_MEM(jd, "taper_splice", v, src.taper_splice);
+	ENC_MEM(jd, "taper_wait_time", v, src.taper_wait_time);
+	ENC_MEM(jd, "taper_length", v, src.taper_length);
+	ENC_MEM(jd, "taper_speed", v, src.taper_speed);
+	ENC_MEM(jd, "tense_test", v, src.tense_test);
+	ENC_MEM(jd, "tense_speed", v, src.tense_speed);
+	ENC_MEM(jd, "tense_length", v, src.tense_length);
+	ENC_MEM(jd, "loss_mode", v, src.loss_mode);
+	ENC_MEM(jd, "loss_limit", v, src.loss_limit);
+	ENC_MEM(jd, "loss_min", v, src.loss_min);
+	ENC_MEM(jd, "lft_mfd", v, src.lft_mfd);
+	ENC_MEM(jd, "rt_mfd", v, src.rt_mfd);
+	ENC_MEM(jd, "syn_bend_co", v, src.syn_bend_co);
+	ENC_MEM(jd, "opp_bend_co", v, src.opp_bend_co);
+	ENC_MEM(jd, "mfd_mis_co", v, src.mfd_mis_co);
 
 	return v;
 }
 static inline void json2c(struct fs_base_cfg & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("FSPattern", src, dst.FSPattern);
-	DEC_MEM("FiberType", src, dst.FiberType);
-	DEC_MEM("FiberAlignment", src, dst.FiberAlignment);
-	DEC_MEM("XImageFocus", src, dst.XImageFocus);
-	DEC_MEM("YImageFocus", src, dst.YImageFocus);
-	DEC_MEM("FiberShift", src, dst.FiberShift);
-	DEC_MEM("DischargeStrengthAdjustment", src, dst.DischargeStrengthAdjustment);
-	DEC_MEM("TensionSet", src, dst.TensionSet);
-	DEC_MEM("CutAngleLimit", src, dst.CutAngleLimit);
-	DEC_MEM("LossLimit", src, dst.LossLimit);
-	DEC_MEM("FiberAngleLimit", src, dst.FiberAngleLimit);
-	DEC_MEM("CleanDischargeStrength", src, dst.CleanDischargeStrength);
-	DEC_MEM("CleanDischargeTime", src, dst.CleanDischargeTime);
-	DEC_MEM("FiberIntervalSetup", src, dst.FiberIntervalSetup);
-	DEC_MEM("FSPosSetup", src, dst.FSPosSetup);
-	DEC_MEM("FiberPreFSStrength", src, dst.FiberPreFSStrength);
-	DEC_MEM("FiberPreFSTime", src, dst.FiberPreFSTime);
-	DEC_MEM("FiberOverlapSetup", src, dst.FiberOverlapSetup);
-	DEC_MEM("Discharge1Strength", src, dst.Discharge1Strength);
-	DEC_MEM("Discharge1Time", src, dst.Discharge1Time);
-	DEC_MEM("Discharge2Strength", src, dst.Discharge2Strength);
-	DEC_MEM("Discharge2LastTime", src, dst.Discharge2LastTime);
-	DEC_MEM("Discharge2StartTime", src, dst.Discharge2StartTime);
-	DEC_MEM("Discharge2StopTime", src, dst.Discharge2StopTime);
-	DEC_MEM("ExtraManualDischargeTime", src, dst.ExtraManualDischargeTime);
-	DEC_MEM("LeftFSSpeed", src, dst.LeftFSSpeed);
-	DEC_MEM("RightFSSpeed", src, dst.RightFSSpeed);
-	DEC_MEM("ConeFS", src, dst.ConeFS);
-	DEC_MEM("ConeFSWaitTime", src, dst.ConeFSWaitTime);
-	DEC_MEM("ConeFSSpeed", src, dst.ConeFSSpeed);
-	DEC_MEM("ConeFSStretchLength", src, dst.ConeFSStretchLength);
-	DEC_MEM("LossEstimationMode", src, dst.LossEstimationMode);
-	DEC_MEM("LeftFiberMFD", src, dst.LeftFiberMFD);
-	DEC_MEM("RightFiberMFD", src, dst.RightFiberMFD);
-	DEC_MEM("LeastLoss", src, dst.LeastLoss);
-	DEC_MEM("RateOfSyntropyBending", src, dst.RateOfSyntropyBending);
-	DEC_MEM("RateOfReverseBending", src, dst.RateOfReverseBending);
-	DEC_MEM("MFDMismatchCoefficient", src, dst.MFDMismatchCoefficient);
-	DEC_MEM("AutoStart", src, dst.AutoStart);
-	DEC_MEM("Stop1", src, dst.Stop1);
-	DEC_MEM("Stop2", src, dst.Stop2);
-	DEC_MEM("CutAngle", src, dst.CutAngle);
-	DEC_MEM("OffsetData", src, dst.OffsetData);
-	DEC_MEM("ArcCorrectedValue", src, dst.ArcCorrectedValue);
-	DEC_MEM("Cut", src, dst.Cut);
-	DEC_MEM("Loss", src, dst.Loss);
-	DEC_MEM("FiberCoreAngle", src, dst.FiberCoreAngle);
-	DEC_MEM("Bubble", src, dst.Bubble);
-	DEC_MEM("Thick", src, dst.Thick);
-	DEC_MEM("Thin", src, dst.Thin);
-	DEC_MEM("AirPressure", src, dst.AirPressure);
-	DEC_MEM("Temperature", src, dst.Temperature);
+	DEC_MEM("fusion_mode", src, dst.fusion_mode);
+	DEC_MEM("lfti", src, dst.lfti);
+	DEC_MEM("rfti", src, dst.rfti);
+	DEC_MEM("align_mode", src, dst.align_mode);
+	DEC_MEM("x_focus", src, dst.x_focus);
+	DEC_MEM("y_focus", src, dst.y_focus);
+	DEC_MEM("ecf_redress", src, dst.ecf_redress);
+	DEC_MEM("auto_mag", src, dst.auto_mag);
+	DEC_MEM("vangle_limit", src, dst.vangle_limit);
+	DEC_MEM("hangle_limit", src, dst.hangle_limit);
+	DEC_MEM("clr_mag", src, dst.clr_mag);
+	DEC_MEM("clr_time", src, dst.clr_time);
+	DEC_MEM("clr_pos", src, dst.clr_pos);
+	DEC_MEM("position", src, dst.position);
+	DEC_MEM("gap", src, dst.gap);
+	DEC_MEM("overlap", src, dst.overlap);
+	DEC_MEM("pre_mag", src, dst.pre_mag);
+	DEC_MEM("pre_time", src, dst.pre_time);
+	DEC_MEM("arc1_mag", src, dst.arc1_mag);
+	DEC_MEM("arc1_time", src, dst.arc1_time);
+	DEC_MEM("arc2_mag", src, dst.arc2_mag);
+	DEC_MEM("arc2_time", src, dst.arc2_time);
+	DEC_MEM("arc2_on_time", src, dst.arc2_on_time);
+	DEC_MEM("arc2_off_time", src, dst.arc2_off_time);
+	DEC_MEM("arc_man_time", src, dst.arc_man_time);
+	DEC_MEM("lft_push_speed", src, dst.lft_push_speed);
+	DEC_MEM("rt_push_speed", src, dst.rt_push_speed);
+	DEC_MEM("taper_splice", src, dst.taper_splice);
+	DEC_MEM("taper_wait_time", src, dst.taper_wait_time);
+	DEC_MEM("taper_length", src, dst.taper_length);
+	DEC_MEM("taper_speed", src, dst.taper_speed);
+	DEC_MEM("tense_test", src, dst.tense_test);
+	DEC_MEM("tense_speed", src, dst.tense_speed);
+	DEC_MEM("tense_length", src, dst.tense_length);
+	DEC_MEM("loss_mode", src, dst.loss_mode);
+	DEC_MEM("loss_limit", src, dst.loss_limit);
+	DEC_MEM("loss_min", src, dst.loss_min);
+	DEC_MEM("lft_mfd", src, dst.lft_mfd);
+	DEC_MEM("rt_mfd", src, dst.rt_mfd);
+	DEC_MEM("syn_bend_co", src, dst.syn_bend_co);
+	DEC_MEM("opp_bend_co", src, dst.opp_bend_co);
+	DEC_MEM("mfd_mis_co", src, dst.mfd_mis_co);
+}
+
+/// @decltype(fs_option_cfg::operationOptions)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::operationOptions) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "autoStart", v, src.autoStart);
+	ENC_MEM(jd, "pause1", v, src.pause1);
+	ENC_MEM(jd, "pause2", v, src.pause2);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::operationOptions) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("autoStart", src, dst.autoStart);
+	DEC_MEM("pause1", src, dst.pause1);
+	DEC_MEM("pause2", src, dst.pause2);
+}
+
+/// @decltype(fs_option_cfg::dataDisplay)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::dataDisplay) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cleaveAngle", v, src.cleaveAngle);
+	ENC_MEM(jd, "axisOffset", v, src.axisOffset);
+	ENC_MEM(jd, "arcCorrectedValue", v, src.arcCorrectedValue);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::dataDisplay) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cleaveAngle", src, dst.cleaveAngle);
+	DEC_MEM("axisOffset", src, dst.axisOffset);
+	DEC_MEM("arcCorrectedValue", src, dst.arcCorrectedValue);
+}
+
+/// @decltype(fs_option_cfg::ignoreOptions)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::ignoreOptions) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cleave", v, src.cleave);
+	ENC_MEM(jd, "loss", v, src.loss);
+	ENC_MEM(jd, "fiberCoreAngle", v, src.fiberCoreAngle);
+	ENC_MEM(jd, "bubble", v, src.bubble);
+	ENC_MEM(jd, "thick", v, src.thick);
+	ENC_MEM(jd, "thin", v, src.thin);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::ignoreOptions) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cleave", src, dst.cleave);
+	DEC_MEM("loss", src, dst.loss);
+	DEC_MEM("fiberCoreAngle", src, dst.fiberCoreAngle);
+	DEC_MEM("bubble", src, dst.bubble);
+	DEC_MEM("thick", src, dst.thick);
+	DEC_MEM("thin", src, dst.thin);
+}
+
+/// @decltype(fs_option_cfg::arcCompensation)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::arcCompensation) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "pressure", v, src.pressure);
+	ENC_MEM(jd, "temperature", v, src.temperature);
+	ENC_MEM(jd, "RealTimeRevise", v, src.RealTimeRevise);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::arcCompensation) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("pressure", src, dst.pressure);
+	DEC_MEM("temperature", src, dst.temperature);
 	DEC_MEM("RealTimeRevise", src, dst.RealTimeRevise);
-	DEC_MEM("ImgGap", src, dst.ImgGap);
-	DEC_MEM("ImgStop1", src, dst.ImgStop1);
-	DEC_MEM("ImgAlign", src, dst.ImgAlign);
-	DEC_MEM("ImgStop2", src, dst.ImgStop2);
-	DEC_MEM("ImgDischarge", src, dst.ImgDischarge);
-	DEC_MEM("ImgLossEstimation", src, dst.ImgLossEstimation);
-	DEC_MEM("FiberAutoFeed", src, dst.FiberAutoFeed);
-	DEC_MEM("BadCutSurface", src, dst.BadCutSurface);
-	DEC_MEM("AutoReset", src, dst.AutoReset);
-	DEC_MEM("CleanDischargeTwice", src, dst.CleanDischargeTwice);
-	DEC_MEM("ManualDischargeTimes", src, dst.ManualDischargeTimes);
+}
+
+/// @decltype(fs_option_cfg::fiberImageDisplay)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::fiberImageDisplay) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "gapSet", v, src.gapSet);
+	ENC_MEM(jd, "pause1", v, src.pause1);
+	ENC_MEM(jd, "alignOption", v, src.alignOption);
+	ENC_MEM(jd, "pause2", v, src.pause2);
+	ENC_MEM(jd, "arc", v, src.arc);
+	ENC_MEM(jd, "estimateLoss", v, src.estimateLoss);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::fiberImageDisplay) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("gapSet", src, dst.gapSet);
+	DEC_MEM("pause1", src, dst.pause1);
+	DEC_MEM("alignOption", src, dst.alignOption);
+	DEC_MEM("pause2", src, dst.pause2);
+	DEC_MEM("arc", src, dst.arc);
+	DEC_MEM("estimateLoss", src, dst.estimateLoss);
+}
+
+/// @decltype(fs_option_cfg::others)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::others) & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "autoFeedFiber", v, src.autoFeedFiber);
+	ENC_MEM(jd, "badCleavedEndface", v, src.badCleavedEndface);
+	ENC_MEM(jd, "resetAfterSplice", v, src.resetAfterSplice);
+	ENC_MEM(jd, "cleanAgain", v, src.cleanAgain);
+	ENC_MEM(jd, "imageZoomIn", v, src.imageZoomIn);
+	ENC_MEM(jd, "manualArcLimit", v, src.manualArcLimit);
+
+	return v;
+}
+static inline void json2c(decltype(fs_option_cfg::others) & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("autoFeedFiber", src, dst.autoFeedFiber);
+	DEC_MEM("badCleavedEndface", src, dst.badCleavedEndface);
+	DEC_MEM("resetAfterSplice", src, dst.resetAfterSplice);
+	DEC_MEM("cleanAgain", src, dst.cleanAgain);
+	DEC_MEM("imageZoomIn", src, dst.imageZoomIn);
+	DEC_MEM("manualArcLimit", src, dst.manualArcLimit);
+}
+
+/// @struct fs_option_cfg
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_option_cfg & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "operationOptions", v, src.operationOptions);
+	ENC_MEM(jd, "dataDisplay", v, src.dataDisplay);
+	ENC_MEM(jd, "ignoreOptions", v, src.ignoreOptions);
+	ENC_MEM(jd, "arcCompensation", v, src.arcCompensation);
+	ENC_MEM(jd, "fiberImageDisplay", v, src.fiberImageDisplay);
+	ENC_MEM(jd, "others", v, src.others);
+
+	return v;
+}
+static inline void json2c(struct fs_option_cfg & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("operationOptions", src, dst.operationOptions);
+	DEC_MEM("dataDisplay", src, dst.dataDisplay);
+	DEC_MEM("ignoreOptions", src, dst.ignoreOptions);
+	DEC_MEM("arcCompensation", src, dst.arcCompensation);
+	DEC_MEM("fiberImageDisplay", src, dst.fiberImageDisplay);
+	DEC_MEM("others", src, dst.others);
 }
 
 /// @struct fs_state
@@ -1895,6 +2000,22 @@ void sender::__serialize()
 }
 
 
+void sender::convert(std::string & dst, const struct fs_base_cfg & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
+void sender::convert(std::string & dst, const struct fs_option_cfg & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
 void sender::convert(std::string & dst, const struct cmos_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
@@ -2226,6 +2347,22 @@ void rcver::process(void * buf, size_t /*len*/)
 	auto & cb = m_cbs[doc.FindMember(s_id)->value.GetString()];
 	if (cb) { cb(); }
 
+	__reset();
+}
+
+void rcver::convert(struct fs_base_cfg & dst, const std::string & src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
+void rcver::convert(struct fs_option_cfg & dst, const std::string & src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
 	__reset();
 }
 

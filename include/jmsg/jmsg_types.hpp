@@ -211,20 +211,22 @@ typedef struct rt_revise_data {
 } rt_revise_data_t;
 
 enum class fiber_t : uint8_t {
-	sm = 0,
-	ds = 1,
-	nz = 2,
-	mm = 3,
-	/// @min : 0, @max : 3
+	automatic = 0,
+	sm = 1,
+	ds = 2,
+	nz = 3,
+	mm = 4,
+	follow = 5,
+	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum fiber_t> {
 	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 3;
-	static constexpr uint8_t size = 4;
+	static constexpr uint8_t max = 5;
+	static constexpr uint8_t size = 6;
 };
 static constexpr uint8_t min_fiber = 0;
-static constexpr uint8_t max_fiber = 3;
-static constexpr uint8_t rsize_fiber = 4;
+static constexpr uint8_t max_fiber = 5;
+static constexpr uint8_t rsize_fiber = 6;
 
 typedef struct fiber_reco_data {
 	double data[4][5][3];
@@ -284,87 +286,108 @@ static constexpr uint8_t max_shrink_tube = 2;
 static constexpr uint8_t rsize_shrink_tube = 3;
 
 enum class align_method_t : uint8_t {
-	fine = 0,
-	clad = 1,
-	core = 2,
-	manual = 3,
-	/// @min : 0, @max : 3
+	automatic = 0,
+	fine = 1,
+	clad = 2,
+	core = 3,
+	manual = 4,
+	/// @min : 0, @max : 4
 };
 template<> struct enum_info<enum align_method_t> {
 	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 3;
-	static constexpr uint8_t size = 4;
+	static constexpr uint8_t max = 4;
+	static constexpr uint8_t size = 5;
 };
 static constexpr uint8_t min_align_method = 0;
-static constexpr uint8_t max_align_method = 3;
-static constexpr uint8_t rsize_align_method = 4;
+static constexpr uint8_t max_align_method = 4;
+static constexpr uint8_t rsize_align_method = 5;
 
 typedef struct fs_base_cfg {
-	enum fs_pattern_t FSPattern;
-	enum fiber_t FiberType;
-	enum align_method_t FiberAlignment;
-	bool XImageFocus;
-	bool YImageFocus;
-	bool FiberShift;
-	bool DischargeStrengthAdjustment;
-	bool TensionSet;
-	double CutAngleLimit;
-	double LossLimit;
-	double FiberAngleLimit;
-	double CleanDischargeStrength;
-	uint32_t CleanDischargeTime;
-	uint32_t FiberIntervalSetup;
-	int32_t FSPosSetup;
-	double FiberPreFSStrength;
-	uint32_t FiberPreFSTime;
-	uint32_t FiberOverlapSetup;
-	double Discharge1Strength;
-	uint32_t Discharge1Time;
-	double Discharge2Strength;
-	uint32_t Discharge2LastTime;
-	uint32_t Discharge2StartTime;
-	uint32_t Discharge2StopTime;
-	uint32_t ExtraManualDischargeTime;
-	double LeftFSSpeed;	/// @range: 0.0~1.0
-	double RightFSSpeed;	/// @range: 0.0~1.0
-	bool ConeFS;
-	uint32_t ConeFSWaitTime;
-	double ConeFSSpeed;
-	uint32_t ConeFSStretchLength;
-	enum loss_estimate_mode_t LossEstimationMode;
-	double LeftFiberMFD;	/// @unit: um
-	double RightFiberMFD;	/// @unit: um
-	double LeastLoss;	/// @unit: db
-	double RateOfSyntropyBending;
-	double RateOfReverseBending;
-	double MFDMismatchCoefficient;	/// @range: 0.0~1.0
-	bool AutoStart;
-	bool Stop1;
-	bool Stop2;
-	bool CutAngle;
-	bool OffsetData;
-	bool ArcCorrectedValue;
-	bool Cut;
-	bool Loss;
-	bool FiberCoreAngle;
-	bool Bubble;
-	bool Thick;
-	bool Thin;
-	bool AirPressure;
-	bool Temperature;
-	bool RealTimeRevise;
-	enum fs_display_mode_t ImgGap;
-	enum fs_display_mode_t ImgStop1;
-	enum fs_display_mode_t ImgAlign;
-	enum fs_display_mode_t ImgStop2;
-	enum fs_display_mode_t ImgDischarge;
-	enum fs_display_mode_t ImgLossEstimation;
-	bool FiberAutoFeed;
-	bool BadCutSurface;
-	uint32_t AutoReset;
-	bool CleanDischargeTwice;
-	uint32_t ManualDischargeTimes;
+	enum fs_pattern_t fusion_mode;
+	enum fiber_t lfti;
+	enum fiber_t rfti;
+	enum align_method_t align_mode;
+	bool x_focus;
+	bool y_focus;
+	bool ecf_redress;
+	bool auto_mag;
+	double vangle_limit;	/// @unit: degree
+	double hangle_limit;	/// @unit: degree
+	double clr_mag;	/// @unit: volt
+	int clr_time;	/// @unit: ms
+	int clr_pos;	/// @unit: um
+	double position;	/// @unit: um
+	double gap;	/// @unit: um
+	int overlap;	/// @unit: um
+	double pre_mag;	/// @unit: volt
+	int pre_time;	/// @unit: ms
+	double arc1_mag;	/// @unit: volt
+	int arc1_time;	/// @unit: ms
+	double arc2_mag;	/// @unit: volt
+	int arc2_time;	/// @unit: ms
+	int arc2_on_time;	/// @unit: ms
+	int arc2_off_time;	/// @unit: ms
+	int arc_man_time;	/// @unit: ms
+	int lft_push_speed;	/// @unit: um/s
+	int rt_push_speed;	/// @unit: um/s
+	bool taper_splice;
+	int taper_wait_time;	/// @unit: ms
+	double taper_length;	/// @unit: um
+	int taper_speed;	/// @unit: um/s
+	bool tense_test;
+	int tense_speed;	/// @unit: um/s
+	int tense_length;	/// @unit: um
+	enum loss_estimate_mode_t loss_mode;
+	double loss_limit;	/// @unit: db
+	double loss_min;	/// @unit: db
+	double lft_mfd;	/// @unit: um
+	double rt_mfd;	/// @unit: um
+	double syn_bend_co;
+	double opp_bend_co;
+	double mfd_mis_co;	/// @range: 0.0~1.0
 } fs_base_cfg_t;
+
+typedef struct fs_option_cfg {
+	struct {
+		bool autoStart;
+		bool pause1;
+		bool pause2;
+	} operationOptions;
+	struct {
+		bool cleaveAngle;
+		bool axisOffset;
+		bool arcCorrectedValue;
+	} dataDisplay;
+	struct {
+		bool cleave;
+		bool loss;
+		bool fiberCoreAngle;
+		bool bubble;
+		bool thick;
+		bool thin;
+	} ignoreOptions;
+	struct {
+		bool pressure;
+		bool temperature;
+		bool RealTimeRevise;
+	} arcCompensation;
+	struct {
+		enum fs_display_mode_t gapSet;
+		enum fs_display_mode_t pause1;
+		enum fs_display_mode_t alignOption;
+		enum fs_display_mode_t pause2;
+		enum fs_display_mode_t arc;
+		enum fs_display_mode_t estimateLoss;
+	} fiberImageDisplay;
+	struct {
+		bool autoFeedFiber;
+		bool badCleavedEndface;
+		int resetAfterSplice;	/// @unit: s
+		bool cleanAgain;
+		bool imageZoomIn;
+		int manualArcLimit;
+	} others;
+} fs_option_cfg_t;
 
 struct fs_state {
 	enum svc_fs_state_t sstate;
