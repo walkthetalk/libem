@@ -236,10 +236,12 @@
 	"type"		: "uint8_t",
 	"attr"		: "class",
 	"fields"	: {
+		"automatic" : {},
 		"sm" : {},
 		"ds" : {},
 		"nz" : {},
-		"mm" : {}
+		"mm" : {},
+		"follow" : {}
 	}
 },
 
@@ -317,6 +319,7 @@
 	"type"		: "uint8_t",
 	"attr"		: "class",
 	"fields"	: {
+		"automatic" : {},
 		"fine" : {},
 		"clad" : {},
 		"core" : {},
@@ -328,99 +331,131 @@
 	"category"	: "struct",
 	"name"		: "fs_base_cfg",
 	"alias"		: "fs_base_cfg_t",
+	"attr"		: "export",
 	"fields"	: {
-		"FSPattern" : "fs_pattern_t",
-		"FiberType" : "fiber_t",
-		"FiberAlignment" : "align_method_t",
-		"XImageFocus" : "bool",
-		"YImageFocus" : "bool",
-		"FiberShift" : "bool",
-		"DischargeStrengthAdjustment" : "bool",
-		"TensionSet" : "bool",
-		"CutAngleLimit" : "double",
-		"LossLimit" : "double",
-		"FiberAngleLimit" : "double",
-		"CleanDischargeStrength" : "double",
-		"CleanDischargeTime" : "uint32_t",
-		"FiberIntervalSetup" : "uint32_t",
-		"FSPosSetup" : "int32_t",
-		"FiberPreFSStrength" : "double",
-		"FiberPreFSTime" : "uint32_t",
-		"FiberOverlapSetup" : "uint32_t",
-		"Discharge1Strength" : "double",
-		"Discharge1Time" : "uint32_t",
-		"Discharge2Strength" : "double",
-		"Discharge2LastTime" : "uint32_t",
-		"Discharge2StartTime" : "uint32_t",
-		"Discharge2StopTime" : "uint32_t",
-		"ExtraManualDischargeTime" : "uint32_t",
+		"fusion_mode" : "fs_pattern_t",
+		"lfti" : "fiber_t",
+		"rfti" : "fiber_t",
+		"align_mode" : "align_method_t",
+		"x_focus" : "bool",
+		"y_focus" : "bool",
+		"ecf_redress" : "bool",
+		"auto_mag" : { "type" : "bool", "comment" : "auto adjust arc mag" },
+		"vangle_limit" : { "type" : "double", "unit" : "degree" },
+		"hangle_limit" : { "type" : "double", "unit" : "degree" },
 
-		"LeftFSSpeed" : {
-			"type" : "double",
-			"range" : "0.0~1.0",
+		"clr_mag"  : { "type" : "double", "unit" : "volt" },
+		"clr_time" : { "type" : "int", "unit" : "ms" },
+		"clr_pos"  : { "type" : "int", "unit" : "um" },
+
+		"position" : { "type" : "double", "unit" : "um" },
+		"gap"      : { "type" : "double", "unit" : "um" },
+		"overlap"  : { "type" : "int", "unit" : "um" },
+
+		"pre_mag"  : { "type" : "double", "unit" : "volt" },
+		"pre_time" : { "type" : "int", "unit" : "ms" },
+
+		"arc1_mag"  : { "type" : "double", "unit" : "volt" },
+		"arc1_time" : { "type" : "int", "unit" : "ms" },
+
+		"arc2_mag"  : { "type" : "double", "unit" : "volt" },
+		"arc2_time" : { "type" : "int", "unit" : "ms" },
+		"arc2_on_time"  : { "type" : "int", "unit" : "ms" },
+		"arc2_off_time" : { "type" : "int", "unit" : "ms" },
+
+		"arc_man_time"  : { "type" : "int", "unit" : "ms" },
+
+		"lft_push_speed" : { "type" : "int", "unit" : "um/s" },
+		"rt_push_speed" : { "type" : "int", "unit" : "um/s" },
+
+		"taper_splice"    : "bool",
+		"taper_wait_time" : { "type" : "int", "unit" : "ms" },
+		"taper_length"    : { "type" : "double", "unit" : "um" },
+		"taper_speed"     : { "type" : "int", "unit" : "um/s" },
+
+		"tense_test"   : "bool",
+		"tense_speed"  : { "type" : "int", "unit" : "um/s" },
+		"tense_length" : { "type" : "int", "unit" : "um" },
+
+		"loss_mode" : "loss_estimate_mode_t",
+		"loss_limit" : { "type" : "double", "unit" : "db" },
+		"loss_min"   : { "type" : "double", "unit" : "db" },
+		"lft_mfd"    : { "type" : "double", "unit" : "um" },
+		"rt_mfd"     : { "type" : "double", "unit" : "um" },
+		"syn_bend_co" : "double",
+		"opp_bend_co" : "double",
+		"mfd_mis_co" : { "type" : "double", "range" : "0.0~1.0" }
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "fs_option_cfg",
+	"alias"		: "fs_option_cfg_t",
+	"attr"		: "export",
+	"fields"	: {
+		"operationOptions" : {
+			"category" : "struct",
+			"fields" : {
+				"autoStart" : "bool",
+				"pause1" : "bool",
+				"pause2" : "bool"
+			}
 		},
 
-		"RightFSSpeed" : {
-			"type" : "double",
-			"range" : "0.0~1.0",
+		"dataDisplay" : {
+			"category" : "struct",
+			"fields" : {
+				"cleaveAngle" : "bool",
+				"axisOffset" : "bool",
+				"arcCorrectedValue" : "bool",
+			}
 		},
 
-		"ConeFS" : "bool",
-		"ConeFSWaitTime" : "uint32_t",
-		"ConeFSSpeed" : "double",
-		"ConeFSStretchLength" : "uint32_t",
-
-		"LossEstimationMode" : "loss_estimate_mode_t",
-		"LeftFiberMFD" : {
-			"type" : "double",
-			"unit" : "um",
-		},
-		"RightFiberMFD" : {
-			"type" : "double",
-			"unit" : "um",
-		},
-		"LeastLoss" : {
-			"type" : "double",
-			"unit" : "db",
-		},
-		"RateOfSyntropyBending" : "double",
-		"RateOfReverseBending" : "double",
-		"MFDMismatchCoefficient" : {
-			"type" : "double",
-			"range" : "0.0~1.0",
+		"ignoreOptions" : {
+			"category" : "struct",
+			"fields" : {
+				"cleave" : "bool",
+				"loss" : "bool",
+				"fiberCoreAngle" : "bool",
+				"bubble" : "bool",
+				"thick" : "bool",
+				"thin" : "bool"
+			}
 		},
 
-		"AutoStart" : "bool",
-		"Stop1" : "bool",
-		"Stop2" : "bool",
+		"arcCompensation" : {
+			"category" : "struct",
+			"fields" : {
+				"pressure" : "bool",
+				"temperature" : "bool",
+				"RealTimeRevise" : "bool"
+			}
+		},
 
-		"CutAngle" : "bool",
-		"OffsetData" : "bool",
-		"ArcCorrectedValue" : "bool",
+		"fiberImageDisplay" : {
+			"category" : "struct",
+			"fields" : {
+				"gapSet" : "fs_display_mode_t",
+				"pause1" : "fs_display_mode_t",
+				"alignOption" : "fs_display_mode_t",
+				"pause2" : "fs_display_mode_t",
+				"arc" : "fs_display_mode_t",
+				"estimateLoss" : "fs_display_mode_t"
+			}
+		},
 
-		"Cut" : "bool",
-		"Loss" : "bool",
-		"FiberCoreAngle" : "bool",
-		"Bubble" : "bool",
-		"Thick" : "bool",
-		"Thin" : "bool",
-
-		"AirPressure" : "bool",
-		"Temperature" : "bool",
-		"RealTimeRevise" : "bool",
-
-		"ImgGap" : "fs_display_mode_t",
-		"ImgStop1" : "fs_display_mode_t",
-		"ImgAlign" : "fs_display_mode_t",
-		"ImgStop2" : "fs_display_mode_t",
-		"ImgDischarge" : "fs_display_mode_t",
-		"ImgLossEstimation" : "fs_display_mode_t",
-
-		"FiberAutoFeed" : "bool",
-		"BadCutSurface" : "bool",
-		"AutoReset" : "uint32_t",
-		"CleanDischargeTwice" : "bool",
-		"ManualDischargeTimes" : "uint32_t",
+		"others" : {
+			"category" : "struct",
+			"fields" : {
+				"autoFeedFiber" : "bool",
+				"badCleavedEndface" : "bool",
+				"resetAfterSplice" : { "type" : "int", "unit" : "s" },
+				"cleanAgain" : "bool",
+				"imageZoomIn" : "bool",
+				"manualArcLimit" : "int",
+			}
+		}
 	}
 },
 
