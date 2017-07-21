@@ -236,12 +236,12 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"automatic" : {},
-		"sm" : {},
-		"ds" : {},
-		"nz" : {},
-		"mm" : {},
-		"follow" : {}
+		"AUTO" : {},
+		"SM" : {},
+		"DS" : {},
+		"NZ" : {},
+		"MM" : {},
+		"FOLLOW" : {}
 	}
 },
 
@@ -281,10 +281,10 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"automatic" : {},
-		"calibrate" : {},
-		"normal" : {},
-		"special" : {},
+		"AUTO" : {},
+		"CALIBRATE" : {},
+		"NORMAL" : {},
+		"SPECIAL" : {},
 	}
 },
 
@@ -294,10 +294,10 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"off" : {},
-		"accurate" : {},
-		"core" : {},
-		"cladding" : {},
+		"OFF" : {},
+		"FINE" : {},
+		"CORE" : {},
+		"CLAD" : {},
 	}
 },
 
@@ -319,11 +319,11 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"automatic" : {},
-		"fine" : {},
-		"clad" : {},
-		"core" : {},
-		"manual" : {}
+		"AUTO" : {},
+		"CLAD" : {},
+		"CORE" : {},
+		"FINE" : {},
+		"MANUAL" : {}
 	}
 },
 

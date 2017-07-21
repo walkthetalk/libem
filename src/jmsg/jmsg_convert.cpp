@@ -31,7 +31,7 @@ rapidjson::Value search_name_binary(const T &flist, const V val)
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		V cur = flist[mid].val;
 		if (cur == val) {
@@ -39,10 +39,10 @@ rapidjson::Value search_name_binary(const T &flist, const V val)
 			return  rapidjson::Value(str);
 		}
 		else if (cur < val) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
@@ -55,7 +55,7 @@ auto search_val_binary(const T & flist, const rapidjson::Value & name) -> declty
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		const rapidjson::Value::StringRefType & cur = flist[mid].name;
 		int cmp_result = std::strcmp(cur.s, name.GetString());
@@ -63,10 +63,10 @@ auto search_val_binary(const T & flist, const rapidjson::Value & name) -> declty
 			return flist[mid].val;
 		}
 		else if (cmp_result < 0) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
@@ -525,12 +525,12 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_fiber_t[6] = {
-	{ "automatic", 0 },
-	{ "ds", 2 },
-	{ "follow", 5 },
-	{ "mm", 4 },
-	{ "nz", 3 },
-	{ "sm", 1 },
+	{ "AUTO", 0 },
+	{ "DS", 2 },
+	{ "FOLLOW", 5 },
+	{ "MM", 4 },
+	{ "NZ", 3 },
+	{ "SM", 1 },
 };
 
 /// @fiber_t : enum to string
@@ -538,12 +538,12 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fiber_t[6] = {
-	{ 0, "automatic" },
-	{ 1, "sm" },
-	{ 2, "ds" },
-	{ 3, "nz" },
-	{ 4, "mm" },
-	{ 5, "follow" },
+	{ 0, "AUTO" },
+	{ 1, "SM" },
+	{ 2, "DS" },
+	{ 3, "NZ" },
+	{ 4, "MM" },
+	{ 5, "FOLLOW" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fiber_t src)
@@ -587,10 +587,10 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_fs_pattern_t[4] = {
-	{ "automatic", 0 },
-	{ "calibrate", 1 },
-	{ "normal", 2 },
-	{ "special", 3 },
+	{ "AUTO", 0 },
+	{ "CALIBRATE", 1 },
+	{ "NORMAL", 2 },
+	{ "SPECIAL", 3 },
 };
 
 /// @fs_pattern_t : enum to string
@@ -598,10 +598,10 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fs_pattern_t[4] = {
-	{ 0, "automatic" },
-	{ 1, "calibrate" },
-	{ 2, "normal" },
-	{ 3, "special" },
+	{ 0, "AUTO" },
+	{ 1, "CALIBRATE" },
+	{ 2, "NORMAL" },
+	{ 3, "SPECIAL" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fs_pattern_t src)
@@ -615,10 +615,10 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_loss_estimate_mode_t[4] = {
-	{ "accurate", 1 },
-	{ "cladding", 3 },
-	{ "core", 2 },
-	{ "off", 0 },
+	{ "CLAD", 3 },
+	{ "CORE", 2 },
+	{ "FINE", 1 },
+	{ "OFF", 0 },
 };
 
 /// @loss_estimate_mode_t : enum to string
@@ -626,10 +626,10 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_loss_estimate_mode_t[4] = {
-	{ 0, "off" },
-	{ 1, "accurate" },
-	{ 2, "core" },
-	{ 3, "cladding" },
+	{ 0, "OFF" },
+	{ 1, "FINE" },
+	{ 2, "CORE" },
+	{ 3, "CLAD" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum loss_estimate_mode_t src)
@@ -669,11 +669,11 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_align_method_t[5] = {
-	{ "automatic", 0 },
-	{ "clad", 2 },
-	{ "core", 3 },
-	{ "fine", 1 },
-	{ "manual", 4 },
+	{ "AUTO", 0 },
+	{ "CLAD", 1 },
+	{ "CORE", 2 },
+	{ "FINE", 3 },
+	{ "MANUAL", 4 },
 };
 
 /// @align_method_t : enum to string
@@ -681,11 +681,11 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_align_method_t[5] = {
-	{ 0, "automatic" },
-	{ 1, "fine" },
-	{ 2, "clad" },
-	{ 3, "core" },
-	{ 4, "manual" },
+	{ 0, "AUTO" },
+	{ 1, "CLAD" },
+	{ 2, "CORE" },
+	{ 3, "FINE" },
+	{ 4, "MANUAL" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum align_method_t src)

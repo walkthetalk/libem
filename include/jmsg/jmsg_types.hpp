@@ -211,12 +211,12 @@ typedef struct rt_revise_data {
 } rt_revise_data_t;
 
 enum class fiber_t : unsigned {
-	automatic = 0,
-	sm = 1,
-	ds = 2,
-	nz = 3,
-	mm = 4,
-	follow = 5,
+	AUTO = 0,
+	SM = 1,
+	DS = 2,
+	NZ = 3,
+	MM = 4,
+	FOLLOW = 5,
 	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum fiber_t> {
@@ -239,10 +239,10 @@ typedef struct fiber_rec_info {
 } fiber_rec_info_t;
 
 enum class fs_pattern_t : unsigned {
-	automatic = 0,
-	calibrate = 1,
-	normal = 2,
-	special = 3,
+	AUTO = 0,
+	CALIBRATE = 1,
+	NORMAL = 2,
+	SPECIAL = 3,
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum fs_pattern_t> {
@@ -255,10 +255,10 @@ static constexpr unsigned max_fs_pattern = 3;
 static constexpr unsigned rsize_fs_pattern = 4;
 
 enum class loss_estimate_mode_t : unsigned {
-	off = 0,
-	accurate = 1,
-	core = 2,
-	cladding = 3,
+	OFF = 0,
+	FINE = 1,
+	CORE = 2,
+	CLAD = 3,
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum loss_estimate_mode_t> {
@@ -286,11 +286,11 @@ static constexpr unsigned max_shrink_tube = 2;
 static constexpr unsigned rsize_shrink_tube = 3;
 
 enum class align_method_t : unsigned {
-	automatic = 0,
-	fine = 1,
-	clad = 2,
-	core = 3,
-	manual = 4,
+	AUTO = 0,
+	CLAD = 1,
+	CORE = 2,
+	FINE = 3,
+	MANUAL = 4,
 	/// @min : 0, @max : 4
 };
 template<> struct enum_info<enum align_method_t> {
