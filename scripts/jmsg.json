@@ -95,7 +95,7 @@
 {
 	"category"	: "enum",
 	"name"		: "motorId_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"fields"	: {
 		"LZ" : { "comment" : "left motor" },
 		"RZ" : { "comment" : "right motor" },
@@ -107,7 +107,7 @@
 {
 	"category"	: "enum",
 	"name"		: "fs_display_mode_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"X" : {},
@@ -121,7 +121,7 @@
 {
 	"category"	: "enum",
 	"name"		: "fs_err_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"success" : {},
@@ -158,7 +158,7 @@
 {
 	"category"	: "enum",
 	"name"		: "ledId_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"CMOS_X" : {},
@@ -169,7 +169,7 @@
 {
 	"category"	: "enum",
 	"name"		: "cmosId_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"X" : {},
@@ -233,7 +233,7 @@
 {
 	"category"	: "enum",
 	"name"		: "fiber_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"automatic" : {},
@@ -278,7 +278,7 @@
 {
 	"category"	: "enum",
 	"name"		: "fs_pattern_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"automatic" : {},
@@ -291,7 +291,7 @@
 {
 	"category"	: "enum",
 	"name"		: "loss_estimate_mode_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"off" : {},
@@ -304,7 +304,7 @@
 {
 	"category"	: "enum",
 	"name"		: "shrink_tube_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"len_20mm" : {},
@@ -316,7 +316,7 @@
 {
 	"category"	: "enum",
 	"name"		: "align_method_t",
-	"type"		: "uint8_t",
+	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
 		"automatic" : {},
@@ -329,9 +329,9 @@
 
 {
 	"category"	: "struct",
-	"name"		: "fs_base_cfg",
-	"alias"		: "fs_base_cfg_t",
-	"attr"		: "export",
+	"name"		: "fs_param_cfg",
+	"alias"		: "fs_param_cfg_t",
+	"attr"		: [ "export", "pqxx" ],
 	"fields"	: {
 		"fusion_mode" : "fs_pattern_t",
 		"lfti" : "fiber_t",
@@ -385,6 +385,17 @@
 		"syn_bend_co" : "double",
 		"opp_bend_co" : "double",
 		"mfd_mis_co" : { "type" : "double", "range" : "0.0~1.0" }
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "misc_cfg",
+	"alias"		: "misc_cfg_t",
+	"attr"		: "export",
+	"fields"	: {
+		"fsParamIdx" : "int",
+		"heatParamIdx" : "int"
 	}
 },
 
