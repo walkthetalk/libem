@@ -83,3 +83,5 @@ extern filebuf s_outf_id;
 extern filebuf s_outf_converter;
 extern filebuf s_outf_sender;
 extern filebuf s_outf_rcver;
+extern filebuf s_outf_pqxx_hpp;
+extern filebuf s_outf_pqxx_converter;

@@ -34,7 +34,11 @@ int main(int /*argc*/, char * /*argv*/[])
 	generate_converter(d);
 	std::cout << "step 5: generate message" << std::endl;
 	generate_wsmsgs(d);
+	std::cout << "step 6: generate for pqxx" << std::endl;
+	generate_pqxx_converter(d);
 	s_outf_converter.output();
+	s_outf_pqxx_hpp.output();
+	s_outf_pqxx_converter.output();
 	s_outf_sender.output();
 	s_outf_rcver.output();
 

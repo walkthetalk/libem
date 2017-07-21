@@ -1,3 +1,4 @@
+#include <iostream>
 #include "parser.hpp"
 
 static bool is_enum_flag(const rapidjson::Value & val)
@@ -27,7 +28,7 @@ struct cmp_str_as_n {
 
 static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, const std::size_t lvl)
 {
-	filebuf & outf = s_outf_converter;
+	filebuf & outf = s_outf_pqxx_converter;
 
 	RAPIDJSON_ASSERT(val.HasMember("name"));
 	const char * ename = val.FindMember("name")->value.GetString();
@@ -78,7 +79,7 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 
 		outf.pf(lvl, "/// @%s : string to enum\n", ename);
 		outf.pf(lvl, "static const struct {\n");
-		outf.pf(lvl+1, "rapidjson::Value::StringRefType name;\n");
+		outf.pf(lvl+1, "const char * name;\n");
 		outf.pf(lvl+1, "%s val;\n", etype);
 		outf.pf(lvl, "} str2e_%s[%d] = {\n", ename, val_num);
 		for (auto & i : string2int) {
@@ -89,18 +90,18 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		outf.pf(lvl, "/// @%s : enum to string\n", ename);
 		outf.pf(lvl, "static const struct {\n");
 		outf.pf(lvl+1, "%s val;\n", etype);
-		outf.pf(lvl+1, "rapidjson::Value::StringRefType name;\n");
+		outf.pf(lvl+1, "const char * name;\n");
 		outf.pf(lvl, "} e2str_%s[%d] = {\n", ename, val_num);
 		for (auto & i : int2string) {
 			outf.pf(lvl+1, "{ %s, \"%s\" },\n", i.first.c_str(), i.second.c_str());
 		}
 		outf.pf(lvl, "};\n\n");
 
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & jd, const enum %s src)\n", ename);
-		outf.pf(lvl, "{ return e2flag(jd, e2str_%s, (%s)src); }\n\n", ename, etype);
+		outf.pf(lvl, "static inline %s e2pqxx(const enum %s src)\n", etype, ename);
+		outf.pf(lvl, "{ return (%s)src; }\n\n", ename, etype);
 
-		outf.pf(lvl, "static inline void json2c(enum %s & dst, const rapidjson::Value & src)\n", ename);
-		outf.pf(lvl, "{ dst = (enum %s)flag2e(str2e_%s, src); }\n", ename, ename);
+		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const %s & src)\n", ename, etype);
+		outf.pf(lvl, "{ dst = (enum %s)src; }\n", ename, etype);
 	}
 	else {
 		std::map<int, std::string> int2string;
@@ -121,7 +122,7 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 
 		outf.pf(lvl, "/// @%s : string to enum\n", ename);
 		outf.pf(lvl, "static const struct {\n");
-		outf.pf(lvl+1, "rapidjson::Value::StringRefType name;\n");
+		outf.pf(lvl+1, "const char * name;\n");
 		outf.pf(lvl+1, "%s val;\n", etype);
 		outf.pf(lvl, "} str2e_%s[%d] = {\n", ename, (int)string2int.size());
 		for (auto & i : string2int) {
@@ -132,14 +133,14 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		outf.pf(lvl, "/// @%s : enum to string\n", ename);
 		outf.pf(lvl, "static const struct {\n");
 		outf.pf(lvl+1, "%s val;\n", etype);
-		outf.pf(lvl+1, "rapidjson::Value::StringRefType name;\n");
+		outf.pf(lvl+1, "const char * name;\n");
 		outf.pf(lvl, "} e2str_%s[%d] = {\n", ename, val_num);
 		for (auto & i : int2string) {
 			outf.pf(lvl+1, "{ %d, \"%s\" },\n", i.first, i.second.c_str());
 		}
 		outf.pf(lvl, "};\n\n");
 
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum %s src)\n", ename);
+		outf.pf(lvl, "static inline const char * e2pqxx(const enum %s src)\n", ename);
 		if (val_num >= (max_val - min_val + 1)) {
 			if (min_val == 0) {
 				outf.pf(lvl, "{ return search_name_directly(e2str_%s, (%s)src); }\n\n", ename, etype);
@@ -152,73 +153,32 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 			outf.pf(lvl, "{ return search_name_binary(e2str_%s, (%s)src); }\n\n", ename, etype);
 		}
 
-		outf.pf(lvl, "static inline void json2c(enum %s & dst, const rapidjson::Value & src)\n", ename);
+		outf.pf(lvl, "static inline void pqxx2e(enum %s & dst, const char * src)\n", ename);
 		outf.pf(lvl, "{ dst = (enum %s)search_val_binary(str2e_%s, src); }\n", ename, ename);
 	}
 
 	outf.pf(0, "\n");
 }
 
-static void convert_struct_by_name(rapidjson::Document & /*doc*/,
-			   const rapidjson::Value & val,
-			   const std::string & tname,
-			   const std::size_t lvl)
+static const rapidjson::Value * find_dep_type(const rapidjson::Document & doc, const rapidjson::Value & tname)
 {
-	const char * ename = tname.c_str();
-	//bool is_msg = is_as_msg(val);
-	//const char * fn_prefix = is_msg ? "" : "static inline ";
-	const rapidjson::Value & fields = val.FindMember("fields")->value;
-
-	filebuf & outf = s_outf_converter;
-	if (fields.MemberCount() > 0) {
-		outf.pf(lvl, "/// @%s\n", ename);
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & jd, const %s & src)\n", ename);
-		outf.pf(lvl, "{\n");
-
-		outf.pf(lvl+1, "rapidjson::Value v(rapidjson::kObjectType);\n");
-		for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
-			const char * mname = itr->name.GetString();
-			auto & mval = itr->value;
-			if (mval.FindMember("maybenull")->value.GetBool()) {
-				outf.pf(lvl+1, "ENC_MEM_IF(jd, \"%s\", v, src.%s, src.has_%s);\n", mname, mname, mname);
-			}
-			else {
-				outf.pf(lvl+1, "ENC_MEM(jd, \"%s\", v, src.%s);\n", mname, mname);
-			}
+	for (auto & pi : doc.GetArray()) {
+		const rapidjson::Value & myname = pi.FindMember("name")->value;
+		if (myname == tname) {
+			return &pi;
 		}
-		outf.pf(0, "\n");
-		outf.pf(lvl+1, "return v;\n");
-
-		outf.pf(lvl, "}\n");
-
-		outf.pf(lvl, "static inline void json2c(%s & dst, const rapidjson::Value & src)\n", ename);
-		outf.pf(lvl, "{\n");
-		for (rapidjson::Value::ConstMemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
-			const char * mname = itr->name.GetString();
-			auto & mval = itr->value;
-			if (mval.FindMember("maybenull")->value.GetBool()) {
-				outf.pf(lvl+1, "DEC_MEM_IF(\"%s\", src, dst.%s, dst.has_%s);\n", mname, mname, mname);
-			}
-			else {
-				outf.pf(lvl+1, "DEC_MEM(\"%s\", src, dst.%s);\n", mname, mname);
-			}
-		}
-		outf.pf(lvl, "}\n");
-
-		outf.pf(0, "\n");
 	}
-	else {
-		outf.pf(lvl, "static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const %s & /*src*/) {\n", ename);
-		outf.pf(lvl+1, "return rapidjson::Value(rapidjson::kObjectType);\n");
-		outf.pf(lvl, "}\n");
-		outf.pf(lvl, "static inline void json2c(%s & /*dst*/, const rapidjson::Value & /*src*/) {}\n", ename);
-		outf.pf(0, "\n");
-	}
+
+	return nullptr;
 }
 
 static void convert_nested_struct(rapidjson::Document & doc,
 			const rapidjson::Value & val,
-			const std::string prefix,
+			std::vector<std::string> & pqkList,
+			std::vector<std::string> & smnList,
+			std::vector<bool> & isEnumList,
+			const std::string pqkPrefix,
+			const std::string smnPrefix,
 			const std::size_t lvl)
 {
 	const rapidjson::Value & fields = val.FindMember("fields")->value;
@@ -229,48 +189,139 @@ static void convert_nested_struct(rapidjson::Document & doc,
 		const auto & mval = itr->value;
 		const auto & memtype = mval.FindMember("type")->value;
 
-		if (!memtype.IsObject()) {
-			continue;
+		const std::string newpqkPrefix = (pqkPrefix == "" ? mname : (pqkPrefix + "_" + mname));
+		const std::string newsmnPrefix = (smnPrefix == "" ? mname : (smnPrefix + "." + mname));
+
+		const rapidjson::Value * deptype = nullptr;
+		if (memtype.IsString()) {
+			deptype = find_dep_type(doc, memtype);
+		}
+		else if (memtype.IsObject()) {
+			const auto & memtypecate = memtype.FindMember("category")->value;
+			if (std::string(memtypecate.GetString()) == "struct") {
+				deptype = &memtype;
+			}
+		}
+		else {
+			RAPIDJSON_ASSERT("unkown struct member type!");
 		}
 
-		const auto & memtypecate = memtype.FindMember("category")->value;
-		if (std::string(memtypecate.GetString()) != "struct") {
-			continue;
+		if (deptype) {
+			RAPIDJSON_ASSERT(deptype->IsObject());
+			const auto & depcat = deptype->FindMember("category")->value;
+			const std::string catstr = std::string(depcat.GetString());
+			if (catstr == "struct") {
+				convert_nested_struct(doc, *deptype, pqkList, smnList, isEnumList, newpqkPrefix, newsmnPrefix, lvl);
+			}
+			else if (catstr == "enum") {
+				pqkList.push_back(newpqkPrefix);
+				smnList.push_back(newsmnPrefix);
+				isEnumList.push_back(true);
+			}
+			else {
+				RAPIDJSON_ASSERT("unkown struct member type!");
+			}
 		}
-
-		const std::string newprefix = prefix + "::" + std::string(mname);
-
-		convert_nested_struct(doc, memtype, newprefix, lvl);
-
-		convert_struct_by_name(doc, memtype, std::string("decltype(") + newprefix + ")", lvl);
+		else {
+			/// atomic type
+			pqkList.push_back(newpqkPrefix);
+			smnList.push_back(newsmnPrefix);
+			isEnumList.push_back(false);
+		}
 	}
 }
 
 static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, const std::size_t lvl)
 {
 	RAPIDJSON_ASSERT(val.HasMember("name"));
-	const char * ename = val.FindMember("name")->value.GetString();
-	convert_nested_struct(doc, val, std::string(ename), lvl);
-	convert_struct_by_name(doc, val, std::string("struct ") + std::string(ename), lvl);
+
+	std::vector<std::string> pqkList;
+	std::vector<std::string> smnList;
+	std::vector<bool> isEnumList;
+	convert_nested_struct(doc, val, pqkList, smnList, isEnumList, "", "", lvl);
+
+	auto & outf = s_outf_pqxx_converter;
+	auto & hppoutf = s_outf_pqxx_hpp;
+	const char * sname =val.FindMember("name")->value.GetString();
+
+	/// PQKL
+	std::string pqkStr;
+	for (auto & i : pqkList) {
+		if (pqkStr != "") {
+			pqkStr.append(",");
+		}
+		pqkStr.append(i);
+	}
+	hppoutf.pf(lvl, "/// pq key list for %s\n", sname);
+	hppoutf.pf(lvl, "#define PQKL_%s \"%s\"\n", sname, pqkStr.c_str());
+
+	/// PQOL
+	std::string pqoStr;
+	for (size_t i = 0; i < pqkList.size(); ++i) {
+		if (pqoStr != "") {
+			pqoStr.append(",");
+		}
+		pqoStr.append("$" + std::to_string(i+1));
+	}
+	hppoutf.pf(lvl, "/// pq occupy symbol list for %s\n", sname);
+	hppoutf.pf(lvl, "#define PQOL_%s \"%s\"\n", sname, pqoStr.c_str());
+
+	/// SAVE
+	hppoutf.pf(lvl, "template<>\n");
+	hppoutf.pf(lvl, "pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const %s & src);\n", sname);
+	outf.pf(lvl, "template<>\n");
+	outf.pf(lvl, "pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const %s & src)\n", sname);
+	outf.pf(lvl, "{\n");
+	outf.pf(lvl+1, "return (*this)");
+	for (size_t i = 0; i < smnList.size(); ++i) {
+		const char * mn = smnList[i].c_str();
+		bool is_enum = isEnumList[i];
+		if (is_enum) {
+			outf.pf(0, "(e2pqxx(src.%s))", mn);
+		}
+		else {
+			outf.pf(0, "(src.%s)", mn);
+		}
+	}
+	outf.pf(0, ";\n");
+	outf.pf(lvl, "}\n\n");
+
+	///LOAD
+	hppoutf.pf(lvl, "void pqxx2c(%s & dst, pqxx::const_tuple_iterator & src);\n", sname);
+	outf.pf(lvl, "void pqxx2c(%s & dst, pqxx::const_tuple_iterator & src)\n", sname);
+	outf.pf(lvl, "{\n");
+	for (size_t i = 0; i < smnList.size(); ++i) {
+		const char * const mn = smnList[i].c_str();
+		if (isEnumList[i]) {
+			outf.pf(lvl+1, "pqxx2e(dst.%s, src->c_str());", mn);
+		}
+		else {
+			outf.pf(lvl+1, "src->to(dst.%s);", mn);
+		}
+		outf.pf(0, " ++src;\n");
+	}
+	outf.pf(lvl, "}\n\n");
+
+	for (std::size_t i = 0; i < pqkList.size(); ++i) {
+		std::cout << "\t\t" << pqkList[i] << " : " << smnList[i] << std::endl;
+	}
 }
 
 static std::map<
 	const std::string,
 	std::function<void (rapidjson::Document &, rapidjson::Value &, const std::size_t)>
-> func_generator = {
+> func_pqxx_generator = {
 	{"enum", convert_enum},
 	{"struct", convert_struct},
 };
 
-void generate_converter(rapidjson::Document & d)
+void generate_pqxx_converter(rapidjson::Document & d)
 {
-	//for (auto & i : s_type_lists) {
-	for (auto & pi : s_type_order) {
-		//rapidjson::Value &val = *i.second;
+	for (auto & pi : s_pqxx_order) {
 		rapidjson::Value & val = *pi;
 		if (val.HasMember("category")) {
 			rapidjson::Value & cat = val.FindMember("category")->value;
-			func_generator.at(cat.GetString())(d, val, 0);
+			func_pqxx_generator.at(cat.GetString())(d, val, 0);
 		}
 	}
 }

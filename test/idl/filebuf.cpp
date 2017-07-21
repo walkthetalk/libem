@@ -107,6 +107,88 @@ rapidjson::Value e2flag(rapidjson::Document & doc, const T &flist, const V val)
 }
 )convertheader";
 
+
+static const char * s_pqxx_convert_header = R"convertheader(
+#include <stdexcept>
+#include <cstring>
+
+#include "jmsg/jmsg_types.hpp"
+#include "jmsg/pqxxutils.hpp"
+
+template<typename T, typename V>
+const char * search_name_directly(const T &flist, const V val)
+{
+	if (0 <= val && val < std::extent<T>::value) {
+		return flist[val].name;
+	}
+
+	throw std::invalid_argument("enum val error!");
+}
+
+template<typename T, typename V>
+const char * search_name_binary(const T &flist, const V val)
+{
+	std::size_t head = 0;
+	std::size_t tail = std::extent<T>::value - 1;
+
+	while (head < tail) {
+		std::size_t mid = (head + tail) / 2;
+		V cur = flist[mid].val;
+		if (cur == val) {
+			return flist[mid].name;
+		}
+		else if (cur < val) {
+			head = mid;
+		}
+		else {
+			tail = mid;
+		}
+	};
+
+	throw std::invalid_argument("enum val error!");
+}
+
+template<typename T>
+auto search_val_binary(const T & flist, const char * name) -> decltype(flist[0].val)
+{
+	std::size_t head = 0;
+	std::size_t tail = std::extent<T>::value - 1;
+
+	while (head < tail) {
+		std::size_t mid = (head + tail) / 2;
+		int cmp_result = std::strcmp(flist[mid].name, name);
+		if (cmp_result == 0) {
+			return flist[mid].val;
+		}
+		else if (cmp_result < 0) {
+			head = mid;
+		}
+		else {
+			tail = mid;
+		}
+	};
+
+	throw std::invalid_argument("enum name error!");
+}
+
+template<typename T>
+auto search_val_binary(const T & flist, const std::string & name) -> decltype(flist[0].val)
+{
+	search_val_binary(flist, name.c_str());
+}
+
+)convertheader";
+
+
+static const char * s_pqxx_hpp_header = R"convertheader(#pragma once
+
+#include <pqxx/tuple>
+#include <pqxx/prepared_statement>
+
+#include "jmsg_types.hpp"
+
+)convertheader";
+
 static const char * s_jmsg_types_hpp_header = R"jmsgtypes(#pragma once
 #include <cstdint>
 #include <vector>
@@ -140,3 +222,5 @@ filebuf s_outf_converter(0x100000, IDLSRC "jmsg_convert.cpp", s_converter_header
 filebuf s_outf_id(0x100000, IDLINC "jmsg_id.hpp", s_msg_id_header);
 filebuf s_outf_sender(0x100000, IDLINC "jmsg_sender.hpp", s_utils_hpp_header);
 filebuf s_outf_rcver(0x100000, IDLINC "jmsg_rcver.hpp", s_utils_hpp_header);
+filebuf s_outf_pqxx_converter(0x100000, IDLSRC "pqmsg_convert.cpp", s_pqxx_convert_header);
+filebuf s_outf_pqxx_hpp(0x100000, IDLINC "pqxxutils.hpp", s_pqxx_hpp_header);

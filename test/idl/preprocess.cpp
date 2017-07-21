@@ -1,4 +1,5 @@
 #include "parser.hpp"
+#include <iostream>
 
 std::map<
 	const std::string,
@@ -11,6 +12,7 @@ std::map<
 > s_alias_lists;
 
 std::vector<rapidjson::Value *> s_type_order;
+std::vector<rapidjson::Value *> s_pqxx_order;
 
 std::map<
 	const std::string,
@@ -70,6 +72,73 @@ void ensure_has_bool_mem(rapidjson::Value & _val, rapidjson::Value::StringRefTyp
 	RAPIDJSON_ASSERT(_val.FindMember(_name)->value.IsBool());
 }
 
+rapidjson::Value * find_stype(rapidjson::Document & d, rapidjson::Value & name)
+{
+	for (auto & itr : d.GetArray()) {
+		auto & sname = itr.FindMember("name")->value;
+		if (sname == name) {
+			return &itr;
+		}
+	}
+	return nullptr;
+}
+
+static void add_pqxx(rapidjson::Document & d, rapidjson::Value & s, bool force_add)
+{
+	for (auto i : s_pqxx_order) {
+		if (i == &s) {
+			return;
+		}
+	}
+
+	/// @note: if 'force_add', we will add it into list,
+	///        or not, which is used for nested struct member.
+	///        for nesting case, we will expand every struct directly
+	///        when generating related serializing code.
+	if (std::string(s.FindMember("category")->value.GetString()) == "struct"
+	    && s.HasMember("fields")) {
+		rapidjson::Value & fields = s.FindMember("fields")->value;
+		RAPIDJSON_ASSERT(fields.IsObject());
+		for (rapidjson::Value::MemberIterator itr = fields.MemberBegin(); itr != fields.MemberEnd(); ++itr) {
+			//auto & mname = itr->name;
+			auto & mval = itr->value;
+			rapidjson::Value * pFieldType = nullptr;
+			if (mval.IsString()) {
+				pFieldType = find_stype(d, mval);
+			}
+			else if (mval.IsObject()) {
+				if (mval.HasMember("category")) {
+					pFieldType = &mval;
+				}
+				else {
+					auto & tv = mval.FindMember("type")->value;
+					if (tv.IsString()) {
+						pFieldType = find_stype(d, tv);
+					}
+					else if (tv.IsObject()) {
+						pFieldType = &tv;
+					}
+				}
+			}
+			if (pFieldType) {
+				RAPIDJSON_ASSERT(pFieldType->IsObject());
+				RAPIDJSON_ASSERT(pFieldType->HasMember("category"));
+				const auto & cate = pFieldType->FindMember("category")->value;
+				if (cate == rapidjson::Value("struct")) {
+					add_pqxx(d, *pFieldType, false);
+				}
+				else if (cate == rapidjson::Value("enum")) {
+					add_pqxx(d, *pFieldType, true);
+				}
+			}
+		}
+	}
+
+	if (force_add) {
+		s_pqxx_order.push_back(&s);
+	}
+}
+
 void preprocess_types(rapidjson::Document & d)
 {
 	/// pre record types
@@ -101,6 +170,9 @@ void preprocess_types(rapidjson::Document & d)
 			else if (sattr == "export") {
 				s_export_order.push_back(&itr);
 			}
+			else if (sattr == "pqxx") {
+				add_pqxx(d, itr, true);
+			}
 		}
 
 		rapidjson::Value & msgid_val = itr.FindMember("msgid")->value;
@@ -122,5 +194,9 @@ void preprocess_types(rapidjson::Document & d)
 		if (msgid_val.GetArray().Size() == 0) {
 			itr.RemoveMember("msgid");
 		}
+	}
+
+	for (auto i : s_pqxx_order) {
+		std::cout << "\t" << i->FindMember("name")->value.GetString() << std::endl;;
 	}
 }

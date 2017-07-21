@@ -32,6 +32,7 @@ extern std::map<
 > s_msg_lists;
 extern std::vector<rapidjson::Value *> s_msg_order;
 extern std::vector<rapidjson::Value *> s_export_order;
+extern std::vector<rapidjson::Value *> s_pqxx_order;
 
 static const char * const s_mid_under_type = "uint16_t";
 
@@ -43,4 +44,5 @@ void preprocess_types(rapidjson::Document & d);
 void generate_types(rapidjson::Document & d);
 void generate_id(rapidjson::Document & d);
 void generate_converter(rapidjson::Document & d);
+void generate_pqxx_converter(rapidjson::Document & d);
 void generate_wsmsgs(rapidjson::Document & d);
