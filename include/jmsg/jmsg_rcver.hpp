@@ -33,14 +33,21 @@ public:
 			cb(msg);
 		};
 	}
-	void convert(struct fs_base_cfg & dst, const std::string & src);
-	void convert(struct fs_option_cfg & dst, const std::string & src);
-	void convert(struct cmos_spec & dst, const std::string & src);
-	void convert(struct hvb_spec & dst, const std::string & src);
-	void convert(struct ia_spec & dst, const std::string & src);
-	void convert(struct mc_spec & dst, const std::string & src);
-	void convert(struct ar_spec & dst, const std::string & src);
-	void convert(struct rr_spec & dst, const std::string & src);
+
+	template<typename _T>
+	void convert(_T & dst, const std::string & src)
+	{
+		convert(dst, src.c_str());
+	}
+	void convert(struct fs_param_cfg & dst, const char * src);
+	void convert(struct misc_cfg & dst, const char * src);
+	void convert(struct fs_option_cfg & dst, const char * src);
+	void convert(struct cmos_spec & dst, const char * src);
+	void convert(struct hvb_spec & dst, const char * src);
+	void convert(struct ia_spec & dst, const char * src);
+	void convert(struct mc_spec & dst, const char * src);
+	void convert(struct ar_spec & dst, const char * src);
+	void convert(struct rr_spec & dst, const char * src);
 
 private:
 	const char * __mid_to_str(mid_t mid);

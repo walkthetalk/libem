@@ -87,7 +87,7 @@ static constexpr uint16_t min_svc_heat_state = 0;
 static constexpr uint16_t max_svc_heat_state = 7;
 static constexpr uint16_t rsize_svc_heat_state = 8;
 
-enum motorId_t : uint8_t {
+enum motorId_t : unsigned {
 	LZ = 0,	/// left motor
 	RZ = 1,	/// right motor
 	X = 2,
@@ -95,15 +95,15 @@ enum motorId_t : uint8_t {
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum motorId_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 3;
-	static constexpr uint8_t size = 4;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 3;
+	static constexpr unsigned size = 4;
 };
-static constexpr uint8_t min_motorId = 0;
-static constexpr uint8_t max_motorId = 3;
-static constexpr uint8_t rsize_motorId = 4;
+static constexpr unsigned min_motorId = 0;
+static constexpr unsigned max_motorId = 3;
+static constexpr unsigned rsize_motorId = 4;
 
-enum class fs_display_mode_t : uint8_t {
+enum class fs_display_mode_t : unsigned {
 	X = 0,
 	Y = 1,
 	TB = 2,
@@ -112,15 +112,15 @@ enum class fs_display_mode_t : uint8_t {
 	/// @min : 0, @max : 4
 };
 template<> struct enum_info<enum fs_display_mode_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 4;
-	static constexpr uint8_t size = 5;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 4;
+	static constexpr unsigned size = 5;
 };
-static constexpr uint8_t min_fs_display_mode = 0;
-static constexpr uint8_t max_fs_display_mode = 4;
-static constexpr uint8_t rsize_fs_display_mode = 5;
+static constexpr unsigned min_fs_display_mode = 0;
+static constexpr unsigned max_fs_display_mode = 4;
+static constexpr unsigned rsize_fs_display_mode = 5;
 
-enum class fs_err_t : uint8_t {
+enum class fs_err_t : unsigned {
 	success = 0,
 	cover_openned = 1,
 	no_fiber = 2,
@@ -152,41 +152,41 @@ enum class fs_err_t : uint8_t {
 	/// @min : 0, @max : 27
 };
 template<> struct enum_info<enum fs_err_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 27;
-	static constexpr uint8_t size = 28;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 27;
+	static constexpr unsigned size = 28;
 };
-static constexpr uint8_t min_fs_err = 0;
-static constexpr uint8_t max_fs_err = 27;
-static constexpr uint8_t rsize_fs_err = 28;
+static constexpr unsigned min_fs_err = 0;
+static constexpr unsigned max_fs_err = 27;
+static constexpr unsigned rsize_fs_err = 28;
 
-enum class ledId_t : uint8_t {
+enum class ledId_t : unsigned {
 	CMOS_X = 0,
 	CMOS_Y = 1,
 	/// @min : 0, @max : 1
 };
 template<> struct enum_info<enum ledId_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 1;
-	static constexpr uint8_t size = 2;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 1;
+	static constexpr unsigned size = 2;
 };
-static constexpr uint8_t min_ledId = 0;
-static constexpr uint8_t max_ledId = 1;
-static constexpr uint8_t rsize_ledId = 2;
+static constexpr unsigned min_ledId = 0;
+static constexpr unsigned max_ledId = 1;
+static constexpr unsigned rsize_ledId = 2;
 
-enum class cmosId_t : uint8_t {
+enum class cmosId_t : unsigned {
 	X = 0,
 	Y = 1,
 	/// @min : 0, @max : 1
 };
 template<> struct enum_info<enum cmosId_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 1;
-	static constexpr uint8_t size = 2;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 1;
+	static constexpr unsigned size = 2;
 };
-static constexpr uint8_t min_cmosId = 0;
-static constexpr uint8_t max_cmosId = 1;
-static constexpr uint8_t rsize_cmosId = 2;
+static constexpr unsigned min_cmosId = 0;
+static constexpr unsigned max_cmosId = 1;
+static constexpr unsigned rsize_cmosId = 2;
 
 typedef struct mag2shrink {
 	double x;	/// @unit: volt
@@ -210,7 +210,7 @@ typedef struct rt_revise_data {
 	double offset_cal;
 } rt_revise_data_t;
 
-enum class fiber_t : uint8_t {
+enum class fiber_t : unsigned {
 	automatic = 0,
 	sm = 1,
 	ds = 2,
@@ -220,13 +220,13 @@ enum class fiber_t : uint8_t {
 	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum fiber_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 5;
-	static constexpr uint8_t size = 6;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 5;
+	static constexpr unsigned size = 6;
 };
-static constexpr uint8_t min_fiber = 0;
-static constexpr uint8_t max_fiber = 5;
-static constexpr uint8_t rsize_fiber = 6;
+static constexpr unsigned min_fiber = 0;
+static constexpr unsigned max_fiber = 5;
+static constexpr unsigned rsize_fiber = 6;
 
 typedef struct fiber_reco_data {
 	double data[4][5][3];
@@ -238,7 +238,7 @@ typedef struct fiber_rec_info {
 	int core_diameter;	/// @unit: nm
 } fiber_rec_info_t;
 
-enum class fs_pattern_t : uint8_t {
+enum class fs_pattern_t : unsigned {
 	automatic = 0,
 	calibrate = 1,
 	normal = 2,
@@ -246,15 +246,15 @@ enum class fs_pattern_t : uint8_t {
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum fs_pattern_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 3;
-	static constexpr uint8_t size = 4;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 3;
+	static constexpr unsigned size = 4;
 };
-static constexpr uint8_t min_fs_pattern = 0;
-static constexpr uint8_t max_fs_pattern = 3;
-static constexpr uint8_t rsize_fs_pattern = 4;
+static constexpr unsigned min_fs_pattern = 0;
+static constexpr unsigned max_fs_pattern = 3;
+static constexpr unsigned rsize_fs_pattern = 4;
 
-enum class loss_estimate_mode_t : uint8_t {
+enum class loss_estimate_mode_t : unsigned {
 	off = 0,
 	accurate = 1,
 	core = 2,
@@ -262,30 +262,30 @@ enum class loss_estimate_mode_t : uint8_t {
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum loss_estimate_mode_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 3;
-	static constexpr uint8_t size = 4;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 3;
+	static constexpr unsigned size = 4;
 };
-static constexpr uint8_t min_loss_estimate_mode = 0;
-static constexpr uint8_t max_loss_estimate_mode = 3;
-static constexpr uint8_t rsize_loss_estimate_mode = 4;
+static constexpr unsigned min_loss_estimate_mode = 0;
+static constexpr unsigned max_loss_estimate_mode = 3;
+static constexpr unsigned rsize_loss_estimate_mode = 4;
 
-enum class shrink_tube_t : uint8_t {
+enum class shrink_tube_t : unsigned {
 	len_20mm = 0,
 	len_40mm = 1,
 	len_60mm = 2,
 	/// @min : 0, @max : 2
 };
 template<> struct enum_info<enum shrink_tube_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 2;
-	static constexpr uint8_t size = 3;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 2;
+	static constexpr unsigned size = 3;
 };
-static constexpr uint8_t min_shrink_tube = 0;
-static constexpr uint8_t max_shrink_tube = 2;
-static constexpr uint8_t rsize_shrink_tube = 3;
+static constexpr unsigned min_shrink_tube = 0;
+static constexpr unsigned max_shrink_tube = 2;
+static constexpr unsigned rsize_shrink_tube = 3;
 
-enum class align_method_t : uint8_t {
+enum class align_method_t : unsigned {
 	automatic = 0,
 	fine = 1,
 	clad = 2,
@@ -294,15 +294,15 @@ enum class align_method_t : uint8_t {
 	/// @min : 0, @max : 4
 };
 template<> struct enum_info<enum align_method_t> {
-	static constexpr uint8_t min = 0;
-	static constexpr uint8_t max = 4;
-	static constexpr uint8_t size = 5;
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 4;
+	static constexpr unsigned size = 5;
 };
-static constexpr uint8_t min_align_method = 0;
-static constexpr uint8_t max_align_method = 4;
-static constexpr uint8_t rsize_align_method = 5;
+static constexpr unsigned min_align_method = 0;
+static constexpr unsigned max_align_method = 4;
+static constexpr unsigned rsize_align_method = 5;
 
-typedef struct fs_base_cfg {
+typedef struct fs_param_cfg {
 	enum fs_pattern_t fusion_mode;
 	enum fiber_t lfti;
 	enum fiber_t rfti;
@@ -345,7 +345,12 @@ typedef struct fs_base_cfg {
 	double syn_bend_co;
 	double opp_bend_co;
 	double mfd_mis_co;	/// @range: 0.0~1.0
-} fs_base_cfg_t;
+} fs_param_cfg_t;
+
+typedef struct misc_cfg {
+	int fsParamIdx;
+	int heatParamIdx;
+} misc_cfg_t;
 
 typedef struct fs_option_cfg {
 	struct {

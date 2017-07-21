@@ -29,7 +29,8 @@ public:
 		__serialize();
 		f(m_buf, __size());
 	}
-	void convert(std::string & dst, const struct fs_base_cfg & src);
+	void convert(std::string & dst, const struct fs_param_cfg & src);
+	void convert(std::string & dst, const struct misc_cfg & src);
 	void convert(std::string & dst, const struct fs_option_cfg & src);
 	void convert(std::string & dst, const struct cmos_spec & src);
 	void convert(std::string & dst, const struct hvb_spec & src);

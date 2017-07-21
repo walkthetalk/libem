@@ -282,7 +282,7 @@ static inline void json2c(enum svc_heat_state_t & dst, const rapidjson::Value & 
 /// @motorId_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_motorId_t[4] = {
 	{ "LZ", 0 },
 	{ "RZ", 1 },
@@ -292,7 +292,7 @@ static const struct {
 
 /// @motorId_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_motorId_t[4] = {
 	{ 0, "LZ" },
@@ -302,7 +302,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum motorId_t src)
-{ return search_name_directly(e2str_motorId_t, (uint8_t)src); }
+{ return search_name_directly(e2str_motorId_t, (unsigned)src); }
 
 static inline void json2c(enum motorId_t & dst, const rapidjson::Value & src)
 { dst = (enum motorId_t)search_val_binary(str2e_motorId_t, src); }
@@ -310,7 +310,7 @@ static inline void json2c(enum motorId_t & dst, const rapidjson::Value & src)
 /// @fs_display_mode_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_fs_display_mode_t[5] = {
 	{ "LR", 3 },
 	{ "NO", 4 },
@@ -321,7 +321,7 @@ static const struct {
 
 /// @fs_display_mode_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fs_display_mode_t[5] = {
 	{ 0, "X" },
@@ -332,7 +332,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fs_display_mode_t src)
-{ return search_name_directly(e2str_fs_display_mode_t, (uint8_t)src); }
+{ return search_name_directly(e2str_fs_display_mode_t, (unsigned)src); }
 
 static inline void json2c(enum fs_display_mode_t & dst, const rapidjson::Value & src)
 { dst = (enum fs_display_mode_t)search_val_binary(str2e_fs_display_mode_t, src); }
@@ -340,7 +340,7 @@ static inline void json2c(enum fs_display_mode_t & dst, const rapidjson::Value &
 /// @fs_err_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_fs_err_t[28] = {
 	{ "abnormal_arc", 7 },
 	{ "arc_mag_overflow", 27 },
@@ -374,7 +374,7 @@ static const struct {
 
 /// @fs_err_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fs_err_t[28] = {
 	{ 0, "success" },
@@ -408,7 +408,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fs_err_t src)
-{ return search_name_directly(e2str_fs_err_t, (uint8_t)src); }
+{ return search_name_directly(e2str_fs_err_t, (unsigned)src); }
 
 static inline void json2c(enum fs_err_t & dst, const rapidjson::Value & src)
 { dst = (enum fs_err_t)search_val_binary(str2e_fs_err_t, src); }
@@ -416,7 +416,7 @@ static inline void json2c(enum fs_err_t & dst, const rapidjson::Value & src)
 /// @ledId_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_ledId_t[2] = {
 	{ "CMOS_X", 0 },
 	{ "CMOS_Y", 1 },
@@ -424,7 +424,7 @@ static const struct {
 
 /// @ledId_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_ledId_t[2] = {
 	{ 0, "CMOS_X" },
@@ -432,7 +432,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum ledId_t src)
-{ return search_name_directly(e2str_ledId_t, (uint8_t)src); }
+{ return search_name_directly(e2str_ledId_t, (unsigned)src); }
 
 static inline void json2c(enum ledId_t & dst, const rapidjson::Value & src)
 { dst = (enum ledId_t)search_val_binary(str2e_ledId_t, src); }
@@ -440,7 +440,7 @@ static inline void json2c(enum ledId_t & dst, const rapidjson::Value & src)
 /// @cmosId_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_cmosId_t[2] = {
 	{ "X", 0 },
 	{ "Y", 1 },
@@ -448,7 +448,7 @@ static const struct {
 
 /// @cmosId_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_cmosId_t[2] = {
 	{ 0, "X" },
@@ -456,7 +456,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum cmosId_t src)
-{ return search_name_directly(e2str_cmosId_t, (uint8_t)src); }
+{ return search_name_directly(e2str_cmosId_t, (unsigned)src); }
 
 static inline void json2c(enum cmosId_t & dst, const rapidjson::Value & src)
 { dst = (enum cmosId_t)search_val_binary(str2e_cmosId_t, src); }
@@ -523,7 +523,7 @@ static inline void json2c(struct rt_revise_data & dst, const rapidjson::Value & 
 /// @fiber_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_fiber_t[6] = {
 	{ "automatic", 0 },
 	{ "ds", 2 },
@@ -535,7 +535,7 @@ static const struct {
 
 /// @fiber_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fiber_t[6] = {
 	{ 0, "automatic" },
@@ -547,7 +547,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fiber_t src)
-{ return search_name_directly(e2str_fiber_t, (uint8_t)src); }
+{ return search_name_directly(e2str_fiber_t, (unsigned)src); }
 
 static inline void json2c(enum fiber_t & dst, const rapidjson::Value & src)
 { dst = (enum fiber_t)search_val_binary(str2e_fiber_t, src); }
@@ -585,7 +585,7 @@ static inline void json2c(struct fiber_rec_info & dst, const rapidjson::Value & 
 /// @fs_pattern_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_fs_pattern_t[4] = {
 	{ "automatic", 0 },
 	{ "calibrate", 1 },
@@ -595,7 +595,7 @@ static const struct {
 
 /// @fs_pattern_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fs_pattern_t[4] = {
 	{ 0, "automatic" },
@@ -605,7 +605,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fs_pattern_t src)
-{ return search_name_directly(e2str_fs_pattern_t, (uint8_t)src); }
+{ return search_name_directly(e2str_fs_pattern_t, (unsigned)src); }
 
 static inline void json2c(enum fs_pattern_t & dst, const rapidjson::Value & src)
 { dst = (enum fs_pattern_t)search_val_binary(str2e_fs_pattern_t, src); }
@@ -613,7 +613,7 @@ static inline void json2c(enum fs_pattern_t & dst, const rapidjson::Value & src)
 /// @loss_estimate_mode_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_loss_estimate_mode_t[4] = {
 	{ "accurate", 1 },
 	{ "cladding", 3 },
@@ -623,7 +623,7 @@ static const struct {
 
 /// @loss_estimate_mode_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_loss_estimate_mode_t[4] = {
 	{ 0, "off" },
@@ -633,7 +633,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum loss_estimate_mode_t src)
-{ return search_name_directly(e2str_loss_estimate_mode_t, (uint8_t)src); }
+{ return search_name_directly(e2str_loss_estimate_mode_t, (unsigned)src); }
 
 static inline void json2c(enum loss_estimate_mode_t & dst, const rapidjson::Value & src)
 { dst = (enum loss_estimate_mode_t)search_val_binary(str2e_loss_estimate_mode_t, src); }
@@ -641,7 +641,7 @@ static inline void json2c(enum loss_estimate_mode_t & dst, const rapidjson::Valu
 /// @shrink_tube_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_shrink_tube_t[3] = {
 	{ "len_20mm", 0 },
 	{ "len_40mm", 1 },
@@ -650,7 +650,7 @@ static const struct {
 
 /// @shrink_tube_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_shrink_tube_t[3] = {
 	{ 0, "len_20mm" },
@@ -659,7 +659,7 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum shrink_tube_t src)
-{ return search_name_directly(e2str_shrink_tube_t, (uint8_t)src); }
+{ return search_name_directly(e2str_shrink_tube_t, (unsigned)src); }
 
 static inline void json2c(enum shrink_tube_t & dst, const rapidjson::Value & src)
 { dst = (enum shrink_tube_t)search_val_binary(str2e_shrink_tube_t, src); }
@@ -667,7 +667,7 @@ static inline void json2c(enum shrink_tube_t & dst, const rapidjson::Value & src
 /// @align_method_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
-	uint8_t val;
+	unsigned val;
 } str2e_align_method_t[5] = {
 	{ "automatic", 0 },
 	{ "clad", 2 },
@@ -678,7 +678,7 @@ static const struct {
 
 /// @align_method_t : enum to string
 static const struct {
-	uint8_t val;
+	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_align_method_t[5] = {
 	{ 0, "automatic" },
@@ -689,13 +689,13 @@ static const struct {
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum align_method_t src)
-{ return search_name_directly(e2str_align_method_t, (uint8_t)src); }
+{ return search_name_directly(e2str_align_method_t, (unsigned)src); }
 
 static inline void json2c(enum align_method_t & dst, const rapidjson::Value & src)
 { dst = (enum align_method_t)search_val_binary(str2e_align_method_t, src); }
 
-/// @struct fs_base_cfg
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_base_cfg & src)
+/// @struct fs_param_cfg
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_param_cfg & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "fusion_mode", v, src.fusion_mode);
@@ -743,7 +743,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_
 
 	return v;
 }
-static inline void json2c(struct fs_base_cfg & dst, const rapidjson::Value & src)
+static inline void json2c(struct fs_param_cfg & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("fusion_mode", src, dst.fusion_mode);
 	DEC_MEM("lfti", src, dst.lfti);
@@ -787,6 +787,21 @@ static inline void json2c(struct fs_base_cfg & dst, const rapidjson::Value & src
 	DEC_MEM("syn_bend_co", src, dst.syn_bend_co);
 	DEC_MEM("opp_bend_co", src, dst.opp_bend_co);
 	DEC_MEM("mfd_mis_co", src, dst.mfd_mis_co);
+}
+
+/// @struct misc_cfg
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct misc_cfg & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "fsParamIdx", v, src.fsParamIdx);
+	ENC_MEM(jd, "heatParamIdx", v, src.heatParamIdx);
+
+	return v;
+}
+static inline void json2c(struct misc_cfg & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("fsParamIdx", src, dst.fsParamIdx);
+	DEC_MEM("heatParamIdx", src, dst.heatParamIdx);
 }
 
 /// @decltype(fs_option_cfg::operationOptions)
@@ -2000,7 +2015,15 @@ void sender::__serialize()
 }
 
 
-void sender::convert(std::string & dst, const struct fs_base_cfg & src)
+void sender::convert(std::string & dst, const struct fs_param_cfg & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
+void sender::convert(std::string & dst, const struct misc_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
@@ -2350,7 +2373,7 @@ void rcver::process(void * buf, size_t /*len*/)
 	__reset();
 }
 
-void rcver::convert(struct fs_base_cfg & dst, const std::string & src)
+void rcver::convert(struct fs_param_cfg & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2358,7 +2381,7 @@ void rcver::convert(struct fs_base_cfg & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct fs_option_cfg & dst, const std::string & src)
+void rcver::convert(struct misc_cfg & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2366,7 +2389,7 @@ void rcver::convert(struct fs_option_cfg & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct cmos_spec & dst, const std::string & src)
+void rcver::convert(struct fs_option_cfg & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2374,7 +2397,7 @@ void rcver::convert(struct cmos_spec & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct hvb_spec & dst, const std::string & src)
+void rcver::convert(struct cmos_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2382,7 +2405,7 @@ void rcver::convert(struct hvb_spec & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct ia_spec & dst, const std::string & src)
+void rcver::convert(struct hvb_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2390,7 +2413,7 @@ void rcver::convert(struct ia_spec & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct mc_spec & dst, const std::string & src)
+void rcver::convert(struct ia_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2398,7 +2421,7 @@ void rcver::convert(struct mc_spec & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct ar_spec & dst, const std::string & src)
+void rcver::convert(struct mc_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
@@ -2406,7 +2429,15 @@ void rcver::convert(struct ar_spec & dst, const std::string & src)
 	__reset();
 }
 
-void rcver::convert(struct rr_spec & dst, const std::string & src)
+void rcver::convert(struct ar_spec & dst, const char * src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
+void rcver::convert(struct rr_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
