@@ -266,6 +266,10 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 	hppoutf.pf(lvl, "/// pq occupy symbol list for %s\n", sname);
 	hppoutf.pf(lvl, "#define PQOL_%s \"%s\"\n", sname, pqoStr.c_str());
 
+	/// PQMS
+	hppoutf.pf(lvl, "/// pq member size of %s\n", sname);
+	hppoutf.pf(lvl, "#define PQMS_%s \"%d\"\n", sname, (int)smnList.size());
+
 	/// SAVE
 	hppoutf.pf(lvl, "template<>\n");
 	hppoutf.pf(lvl, "pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const %s & src);\n", sname);
@@ -287,19 +291,21 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 	outf.pf(lvl, "}\n\n");
 
 	///LOAD
-	hppoutf.pf(lvl, "void pqxx2c(%s & dst, pqxx::const_tuple_iterator & src);\n", sname);
-	outf.pf(lvl, "void pqxx2c(%s & dst, pqxx::const_tuple_iterator & src)\n", sname);
+	hppoutf.pf(lvl, "pqxx::const_tuple_iterator pqxx2c(%s & dst, const pqxx::const_tuple_iterator & src);\n", sname);
+	outf.pf(lvl, "pqxx::const_tuple_iterator pqxx2c(%s & dst, const pqxx::const_tuple_iterator & src)\n", sname);
 	outf.pf(lvl, "{\n");
+	outf.pf(lvl+1, "pqxx::const_tuple_iterator it = src;\n");
 	for (size_t i = 0; i < smnList.size(); ++i) {
 		const char * const mn = smnList[i].c_str();
 		if (isEnumList[i]) {
-			outf.pf(lvl+1, "pqxx2e(dst.%s, src->c_str());", mn);
+			outf.pf(lvl+1, "pqxx2e(dst.%s, it->c_str());", mn);
 		}
 		else {
-			outf.pf(lvl+1, "src->to(dst.%s);", mn);
+			outf.pf(lvl+1, "it->to(dst.%s);", mn);
 		}
-		outf.pf(0, " ++src;\n");
+		outf.pf(0, " ++it;\n");
 	}
+	outf.pf(lvl+1, "return it;\n");
 	outf.pf(lvl, "}\n\n");
 
 	for (std::size_t i = 0; i < pqkList.size(); ++i) {
