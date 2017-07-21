@@ -33,7 +33,7 @@ rapidjson::Value search_name_binary(const T &flist, const V val)
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		V cur = flist[mid].val;
 		if (cur == val) {
@@ -41,10 +41,10 @@ rapidjson::Value search_name_binary(const T &flist, const V val)
 			return  rapidjson::Value(str);
 		}
 		else if (cur < val) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
@@ -57,7 +57,7 @@ auto search_val_binary(const T & flist, const rapidjson::Value & name) -> declty
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		const rapidjson::Value::StringRefType & cur = flist[mid].name;
 		int cmp_result = std::strcmp(cur.s, name.GetString());
@@ -65,10 +65,10 @@ auto search_val_binary(const T & flist, const rapidjson::Value & name) -> declty
 			return flist[mid].val;
 		}
 		else if (cmp_result < 0) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
@@ -131,17 +131,17 @@ const char * search_name_binary(const T &flist, const V val)
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		V cur = flist[mid].val;
 		if (cur == val) {
 			return flist[mid].name;
 		}
 		else if (cur < val) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
@@ -154,17 +154,17 @@ auto search_val_binary(const T & flist, const char * name) -> decltype(flist[0].
 	std::size_t head = 0;
 	std::size_t tail = std::extent<T>::value - 1;
 
-	while (head < tail) {
+	while (head <= tail) {
 		std::size_t mid = (head + tail) / 2;
 		int cmp_result = std::strcmp(flist[mid].name, name);
 		if (cmp_result == 0) {
 			return flist[mid].val;
 		}
 		else if (cmp_result < 0) {
-			head = mid;
+			head = mid + 1;
 		}
 		else {
-			tail = mid;
+			tail = mid - 1;
 		}
 	};
 
