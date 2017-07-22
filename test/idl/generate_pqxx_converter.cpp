@@ -113,6 +113,12 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 			int rval = itr->value.FindMember("value")->value.GetInt();
 			int2string[rval] = name;
 			string2int[name] = rval;
+			if (itr->value.HasMember("alias")) {
+				const auto & aliasv = itr->value.FindMember("alias")->value;
+				if (aliasv.IsString()) {
+					string2int[aliasv.GetString()] = rval;
+				}
+			}
 		}
 
 		const int min_val = int2string.begin()->first;
@@ -331,4 +337,3 @@ void generate_pqxx_converter(rapidjson::Document & d)
 		}
 	}
 }
-
