@@ -115,6 +115,31 @@ static const char * s_pqxx_convert_header = R"convertheader(
 #include "jmsg/jmsg_types.hpp"
 #include "jmsg/pqxxutils.hpp"
 
+template<>
+pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const std::vector<uint8_t> & src)
+{
+	const pqxx::binarystring bs(src.data(), src.size());
+	return this->operator()(bs);
+}
+
+static inline void pqxx2c(bool & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(float & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(double & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(std::string & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+
+static inline void pqxx2c(std::vector<uint8_t> & dst, const pqxx::field & f)
+{
+	dst.clear();
+	pqxx::binarystring bs(f);
+	dst.insert(dst.end(), &(bs.data()[0]), &(bs.data()[bs.size()]));
+}
+
 template<typename T, typename V>
 const char * search_name_directly(const T &flist, const V val)
 {

@@ -72,12 +72,28 @@ void ensure_has_bool_mem(rapidjson::Value & _val, rapidjson::Value::StringRefTyp
 	RAPIDJSON_ASSERT(_val.FindMember(_name)->value.IsBool());
 }
 
-rapidjson::Value * find_stype(rapidjson::Document & d, rapidjson::Value & name)
+rapidjson::Value * find_stype(rapidjson::Document & d, rapidjson::Value & tname)
 {
-	for (auto & itr : d.GetArray()) {
-		auto & sname = itr.FindMember("name")->value;
-		if (sname == name) {
-			return &itr;
+	for (auto & pi : d.GetArray()) {
+		auto & sname = pi.FindMember("name")->value;
+		if (sname == tname) {
+			return &pi;
+		}
+		if (pi.HasMember("alias")) {
+			const auto & aliasName = pi.FindMember("alias")->value;
+			if (aliasName.IsString()) {
+				if (aliasName == tname) {
+					return &pi;
+				}
+			}
+			else if (aliasName.IsArray()) {
+				for (const auto & ai : aliasName.GetArray()) {
+					RAPIDJSON_ASSERT(ai.IsString());
+					if (ai == tname) {
+						return &pi;
+					}
+				}
+			}
 		}
 	}
 	return nullptr;

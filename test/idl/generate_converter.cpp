@@ -274,4 +274,3 @@ void generate_converter(rapidjson::Document & d)
 		}
 	}
 }
-

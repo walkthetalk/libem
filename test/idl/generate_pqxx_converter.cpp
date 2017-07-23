@@ -99,9 +99,12 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 
 		outf.pf(lvl, "static inline %s e2pqxx(const enum %s src)\n", etype, ename);
 		outf.pf(lvl, "{ return (%s)src; }\n\n", ename, etype);
+		outf.pf(lvl, "template<>\n");
+		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
+		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
 
-		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const %s & src)\n", ename, etype);
-		outf.pf(lvl, "{ dst = (enum %s)src; }\n", ename, etype);
+		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_tuple_iterator & it)\n", ename);
+		outf.pf(lvl, "{ %s v; it->to(v); dst = (enum %s)v; }\n", etype, ename);
 	}
 	else {
 		std::map<int, std::string> int2string;
@@ -158,9 +161,12 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		else {
 			outf.pf(lvl, "{ return search_name_binary(e2str_%s, (%s)src); }\n\n", ename, etype);
 		}
+		outf.pf(lvl, "template<>\n");
+		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
+		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
 
-		outf.pf(lvl, "static inline void pqxx2e(enum %s & dst, const char * src)\n", ename);
-		outf.pf(lvl, "{ dst = (enum %s)search_val_binary(str2e_%s, src); }\n", ename, ename);
+		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_tuple_iterator &it)\n", ename);
+		outf.pf(lvl, "{ dst = (enum %s)search_val_binary(str2e_%s, it->c_str()); }\n", ename, ename);
 	}
 
 	outf.pf(0, "\n");
@@ -172,6 +178,22 @@ static const rapidjson::Value * find_dep_type(const rapidjson::Document & doc, c
 		const rapidjson::Value & myname = pi.FindMember("name")->value;
 		if (myname == tname) {
 			return &pi;
+		}
+		if (pi.HasMember("alias")) {
+			const auto & aliasName = pi.FindMember("alias")->value;
+			if (aliasName.IsString()) {
+				if (aliasName == tname) {
+					return &pi;
+				}
+			}
+			else if (aliasName.IsArray()) {
+				for (const auto & ai : aliasName.GetArray()) {
+					RAPIDJSON_ASSERT(ai.IsString());
+					if (ai == tname) {
+						return &pi;
+					}
+				}
+			}
 		}
 	}
 
@@ -285,13 +307,7 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 	outf.pf(lvl+1, "return (*this)");
 	for (size_t i = 0; i < smnList.size(); ++i) {
 		const char * mn = smnList[i].c_str();
-		bool is_enum = isEnumList[i];
-		if (is_enum) {
-			outf.pf(0, "(e2pqxx(src.%s))", mn);
-		}
-		else {
-			outf.pf(0, "(src.%s)", mn);
-		}
+		outf.pf(0, "(src.%s)", mn);
 	}
 	outf.pf(0, ";\n");
 	outf.pf(lvl, "}\n\n");
@@ -303,13 +319,7 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 	outf.pf(lvl+1, "pqxx::const_tuple_iterator it = src;\n");
 	for (size_t i = 0; i < smnList.size(); ++i) {
 		const char * const mn = smnList[i].c_str();
-		if (isEnumList[i]) {
-			outf.pf(lvl+1, "pqxx2e(dst.%s, it->c_str());", mn);
-		}
-		else {
-			outf.pf(lvl+1, "it->to(dst.%s);", mn);
-		}
-		outf.pf(0, " ++it;\n");
+		outf.pf(lvl+1, "pqxx2c(dst.%s, it); ++it;\n", mn);
 	}
 	outf.pf(lvl+1, "return it;\n");
 	outf.pf(lvl, "}\n\n");
