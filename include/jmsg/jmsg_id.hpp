@@ -25,28 +25,28 @@ enum class mid_t : uint16_t {
 	fsCoverOpenned = 17,
 	fs_cover_state = 18,
 	fs_state = 19,
-	fusionSpliceReset = 20,
-	fusionSpliceResult = 21,
-	fusionSpliceStart = 22,
-	getFiberDefectInfo = 23,
-	goOn = 24,
-	heat_result = 25,
-	heat_start = 26,
-	heat_state = 27,
-	image_move = 28,
-	loss_estimating_result = 29,
-	manual_discharge_counts = 30,
-	motorTestResult = 31,
-	motorTestStart = 32,
-	motor_start = 33,
-	motor_stop = 34,
-	process_progress = 35,
-	queryDevState = 36,
-	queryWaveForm = 37,
-	realtimeReviseResult = 38,
-	realtimeReviseStart = 39,
-	realtime_revise_result = 40,
-	record_offset = 41,
+	fspre_state = 20,
+	fusionSpliceReset = 21,
+	fusionSpliceResult = 22,
+	fusionSpliceStart = 23,
+	getFiberDefectInfo = 24,
+	goOn = 25,
+	heat_result = 26,
+	heat_start = 27,
+	heat_state = 28,
+	image_move = 29,
+	loss_estimating_result = 30,
+	manual_arc_result = 31,
+	motorTestResult = 32,
+	motorTestStart = 33,
+	motor_start = 34,
+	motor_stop = 35,
+	process_progress = 36,
+	queryDevState = 37,
+	queryWaveForm = 38,
+	realtimeReviseResult = 39,
+	realtimeReviseStart = 40,
+	realtime_revise_result = 41,
 	regularTestResult = 42,
 	regularTestStart = 43,
 	report_dev_state = 44,
@@ -166,6 +166,11 @@ struct msg_helper<mid_t::fs_state> final {
 };
 
 template<>
+struct msg_helper<mid_t::fspre_state> final {
+	typedef struct fspre_state value_type;
+};
+
+template<>
 struct msg_helper<mid_t::fusionSpliceReset> final {
 	typedef struct simple_msg value_type;
 };
@@ -216,8 +221,8 @@ struct msg_helper<mid_t::loss_estimating_result> final {
 };
 
 template<>
-struct msg_helper<mid_t::manual_discharge_counts> final {
-	typedef struct manual_discharge_counts value_type;
+struct msg_helper<mid_t::manual_arc_result> final {
+	typedef struct manual_arc_result value_type;
 };
 
 template<>
@@ -268,11 +273,6 @@ struct msg_helper<mid_t::realtimeReviseStart> final {
 template<>
 struct msg_helper<mid_t::realtime_revise_result> final {
 	typedef struct realtime_revise_result value_type;
-};
-
-template<>
-struct msg_helper<mid_t::record_offset> final {
-	typedef struct record_offset value_type;
 };
 
 template<>

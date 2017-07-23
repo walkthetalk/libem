@@ -30,6 +30,7 @@ public:
 		f(m_buf, __size());
 	}
 	void convert(std::string & dst, const struct fs_param_cfg & src);
+	void convert(std::string & dst, const struct heat_param_cfg & src);
 	void convert(std::string & dst, const struct misc_cfg & src);
 	void convert(std::string & dst, const struct fs_option_cfg & src);
 	void convert(std::string & dst, const struct cmos_spec & src);
@@ -40,15 +41,15 @@ public:
 	void convert(std::string & dst, const struct rr_spec & src);
 
 private:
+	void __pack(const struct defect_detect_result & val);
 	void __pack(const struct fs_state & val);
 	void __pack(const struct heat_state & val);
 	void __pack(const struct simple_msg & val);
-	void __pack(const struct record_offset & val);
+	void __pack(const struct fspre_state & val);
 	void __pack(const struct tense_test_result & val);
 	void __pack(const struct loss_estimating_result & val);
-	void __pack(const struct defect_detect_result & val);
 	void __pack(const struct fiber_reco_result & val);
-	void __pack(const struct manual_discharge_counts & val);
+	void __pack(const struct manual_arc_result & val);
 	void __pack(const struct fusion_splice_result & val);
 	void __pack(const struct arc_revise & val);
 	void __pack(const struct fs_da_cfg & val);

@@ -40,6 +40,7 @@ public:
 		convert(dst, src.c_str());
 	}
 	void convert(struct fs_param_cfg & dst, const char * src);
+	void convert(struct heat_param_cfg & dst, const char * src);
 	void convert(struct misc_cfg & dst, const char * src);
 	void convert(struct fs_option_cfg & dst, const char * src);
 	void convert(struct cmos_spec & dst, const char * src);
@@ -51,15 +52,15 @@ public:
 
 private:
 	const char * __mid_to_str(mid_t mid);
+	void __unpack(struct defect_detect_result & dst);
 	void __unpack(struct fs_state & dst);
 	void __unpack(struct heat_state & dst);
 	void __unpack(struct simple_msg & dst);
-	void __unpack(struct record_offset & dst);
+	void __unpack(struct fspre_state & dst);
 	void __unpack(struct tense_test_result & dst);
 	void __unpack(struct loss_estimating_result & dst);
-	void __unpack(struct defect_detect_result & dst);
 	void __unpack(struct fiber_reco_result & dst);
-	void __unpack(struct manual_discharge_counts & dst);
+	void __unpack(struct manual_arc_result & dst);
 	void __unpack(struct fusion_splice_result & dst);
 	void __unpack(struct arc_revise & dst);
 	void __unpack(struct fs_da_cfg & dst);

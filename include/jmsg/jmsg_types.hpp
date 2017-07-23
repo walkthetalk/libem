@@ -11,29 +11,31 @@ enum ifd_t : uint32_t {
 	ifd_end_crude = 0x00000001,
 	ifd_horizontal_angle = 0x00000002,
 	ifd_vertical_angle = 0x00000004,
-	ifd_cant_identify = 0x80000000,
-	ifd_all = 0xFFFFFFFF,
+	ifd_cant_identify = 0x40000000,
+	ifd_all = 0x7FFFFFFF,
 };
 
 typedef struct ifd_line {
 	enum ifd_t dbmp;
-	double h_angle;	/// @unit: degree
-	double v_angle;	/// @unit: degree
-	int32_t wrap_diameter;	/// @unit: pixel
+	double hangle;	/// @unit: degree
+	double vangle;	/// @unit: degree
+	double clad_dm;	/// @unit: um
 } ifd_line_t;
 
-typedef struct img_defects {
+typedef struct defect_detect_result {
 	ifd_line_t yzl;
 	ifd_line_t yzr;
 	ifd_line_t xzl;
 	ifd_line_t xzr;
-	double yz_hangle_intersect;
-	double xz_hangle_intersect;
-	std::string yz_ref_img;
-	std::string xz_ref_img;
-	std::string yz_img;
-	std::string xz_img;
-} img_defects_t;
+	double yz_hangle;	/// @unit: degree
+	double xz_hangle;
+	double lft_vangle;
+	double rt_vangle;
+	std::vector<uint8_t> yz_img;
+	std::vector<uint8_t> xz_img;
+	std::vector<uint8_t> yz_defect_img;
+	std::vector<uint8_t> xz_defect_img;
+} defect_detect_result_t;
 
 enum class svc_fs_state_t : uint16_t {
 	reseting = 0,
@@ -121,44 +123,45 @@ static constexpr unsigned max_fs_display_mode = 4;
 static constexpr unsigned rsize_fs_display_mode = 5;
 
 enum class fs_err_t : unsigned {
-	success = 0,
-	cover_openned = 1,
-	no_fiber = 2,
-	fiber_defect = 3,
-	fiber_cross_over = 4,
-	fiber_off_center = 5,
-	img_brightness = 6,
-	abnormal_arc = 7,
-	tense_test_fail = 8,
-	fiber_broken = 9,
-	quit_midway = 10,
-	push_timeout = 11,
-	calibrate_timeout = 12,
-	reset_timeout = 13,
-	arc_time_zero = 14,
-	ignore = 15,
-	revise1_mag = 16,
-	revise2_mag = 17,
-	focus_x = 18,
-	focus_y = 19,
-	img_process_error = 20,
-	system_error = 21,
-	fiber_offside = 22,	/// user should replace fiber
-	cmos_exposure = 23,
-	loss_estimate = 24,
-	arc_off_center = 25,
-	failed = 26,
-	arc_mag_overflow = 27,
-	/// @min : 0, @max : 27
+	SUCCESS = 0,
+	MEDDIACY = 1,	/// not final result
+	UNKOWN_ERR = 2,
+	COVER_OPENNED = 3,
+	NO_FIBER = 4,
+	FIBER_DEFECT = 5,
+	FIBER_RECO = 6,
+	CROSS_OVER = 7,
+	OFF_CENTER = 8,
+	IMG_LUM = 9,
+	ABNORMAL_ARC = 10,
+	TENSE_TEST_FAIL = 11,
+	FIBER_BROKEN = 12,
+	QUIT_MIDWAY = 13,
+	PUSH_TIMEOUT = 14,
+	CALIBRATE_TIMEOUT = 15,
+	RESET_TIMEOUT = 16,
+	ARC_TIME_ZERO = 17,
+	ARC1_REVISE = 18,
+	ARC2_REVISE = 19,
+	FOCUS_X = 20,
+	FOCUS_Y = 21,
+	IMG_PROCESS = 22,
+	SYSTEM_ERR = 23,
+	FIBER_OFFSIDE = 24,	/// user should replace fiber
+	CMOS_EXP = 25,
+	LOSS_EST = 26,
+	ARC_POS = 27,
+	ARC_OVERFLOW = 28,
+	/// @min : 0, @max : 28
 };
 template<> struct enum_info<enum fs_err_t> {
 	static constexpr unsigned min = 0;
-	static constexpr unsigned max = 27;
-	static constexpr unsigned size = 28;
+	static constexpr unsigned max = 28;
+	static constexpr unsigned size = 29;
 };
 static constexpr unsigned min_fs_err = 0;
-static constexpr unsigned max_fs_err = 27;
-static constexpr unsigned rsize_fs_err = 28;
+static constexpr unsigned max_fs_err = 28;
+static constexpr unsigned rsize_fs_err = 29;
 
 enum class ledId_t : unsigned {
 	CMOS_X = 0,
@@ -234,8 +237,8 @@ typedef struct fiber_reco_data {
 
 typedef struct fiber_rec_info {
 	enum fiber_t ft;
-	int wrap_diameter;	/// @unit: nm
-	int core_diameter;	/// @unit: nm
+	double clad_dm;	/// @unit: um
+	double core_dm;	/// @unit: um
 } fiber_rec_info_t;
 
 enum class fs_pattern_t : unsigned {
@@ -270,21 +273,6 @@ static constexpr unsigned min_loss_estimate_mode = 0;
 static constexpr unsigned max_loss_estimate_mode = 3;
 static constexpr unsigned rsize_loss_estimate_mode = 4;
 
-enum class shrink_tube_t : unsigned {
-	len_20mm = 0,
-	len_40mm = 1,
-	len_60mm = 2,
-	/// @min : 0, @max : 2
-};
-template<> struct enum_info<enum shrink_tube_t> {
-	static constexpr unsigned min = 0;
-	static constexpr unsigned max = 2;
-	static constexpr unsigned size = 3;
-};
-static constexpr unsigned min_shrink_tube = 0;
-static constexpr unsigned max_shrink_tube = 2;
-static constexpr unsigned rsize_shrink_tube = 3;
-
 enum class align_method_t : unsigned {
 	AUTO = 0,
 	CLAD = 1,
@@ -303,6 +291,8 @@ static constexpr unsigned max_align_method = 4;
 static constexpr unsigned rsize_align_method = 5;
 
 typedef struct fs_param_cfg {
+	int seqn;
+	std::string name;
 	enum fs_pattern_t fusion_mode;
 	enum fiber_t lfti;
 	enum fiber_t rfti;
@@ -315,10 +305,10 @@ typedef struct fs_param_cfg {
 	double hangle_limit;	/// @unit: degree
 	double clr_mag;	/// @unit: volt
 	int clr_time;	/// @unit: ms
-	int clr_pos;	/// @unit: um
+	double clr_pos;	/// @unit: um
 	double position;	/// @unit: um
 	double gap;	/// @unit: um
-	int overlap;	/// @unit: um
+	double overlap;	/// @unit: um
 	double pre_mag;	/// @unit: volt
 	int pre_time;	/// @unit: ms
 	double arc1_mag;	/// @unit: volt
@@ -336,7 +326,7 @@ typedef struct fs_param_cfg {
 	int taper_speed;	/// @unit: um/s
 	bool tense_test;
 	int tense_speed;	/// @unit: um/s
-	int tense_length;	/// @unit: um
+	double tense_length;	/// @unit: um
 	enum loss_estimate_mode_t loss_mode;
 	double loss_limit;	/// @unit: db
 	double loss_min;	/// @unit: db
@@ -346,6 +336,51 @@ typedef struct fs_param_cfg {
 	double opp_bend_co;
 	double mfd_mis_co;	/// @range: 0.0~1.0
 } fs_param_cfg_t;
+
+enum heat_material_t : unsigned {
+	STANDARD = 0,
+	MICRO250 = 1,
+	MICRO400 = 2,
+	MICRO900 = 3,
+	CONNECTOR = 4,
+	/// @min : 0, @max : 4
+};
+template<> struct enum_info<enum heat_material_t> {
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 4;
+	static constexpr unsigned size = 5;
+};
+static constexpr unsigned min_heat_material = 0;
+static constexpr unsigned max_heat_material = 4;
+static constexpr unsigned rsize_heat_material = 5;
+
+enum shrinktube_length_t : unsigned {
+	L20MM = 0,
+	L40MM = 1,
+	L60MM = 2,
+	/// @min : 0, @max : 2
+};
+template<> struct enum_info<enum shrinktube_length_t> {
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 2;
+	static constexpr unsigned size = 3;
+};
+static constexpr unsigned min_shrinktube_length = 0;
+static constexpr unsigned max_shrinktube_length = 2;
+static constexpr unsigned rsize_shrinktube_length = 3;
+
+typedef struct heat_param_cfg {
+	int seqn;
+	std::string name;
+	enum heat_material_t material;
+	enum shrinktube_length_t length;
+	bool auto_heat;
+	int heat_time;	/// @unit: s
+	int heat_temp;	/// @unit: degree Celsius
+	int finish_temp;	/// @unit: degree Celsius
+	bool fast_heat;
+	int temp_stay;	/// @unit: degree Celsius
+} heat_param_cfg_t;
 
 typedef struct misc_cfg {
 	int fsParamIdx;
@@ -404,15 +439,16 @@ struct heat_state {
 
 struct simple_msg {};
 
-typedef struct record_offset {
-	double core_diff_pre;	/// @unit: um
-	double cladding_diff_pre;	/// @unit: um
-	double vertex_intersect_angle;	/// @unit: degree
-} record_offset_t;
+typedef struct fspre_state {
+	double core_offset;	/// @unit: um
+	double clad_offset;	/// @unit: um
+	double endface_gap;	/// @unit: um
+	double vertex_angle;	/// @unit: degree
+} fspre_state_t;
 
 struct tense_test_result {
-	bool is_tense_test;
-	bool is_success;
+	bool exed;
+	bool pass;
 };
 
 struct loss_estimating_result {
@@ -420,31 +456,25 @@ struct loss_estimating_result {
 	double loss_data;
 };
 
-struct defect_detect_result {
-	img_defects_t data;
-};
+typedef struct fiber_reco_result {
+	fiber_rec_info_t lft;
+	fiber_rec_info_t rt;
+} fiber_reco_result_t;
 
-struct fiber_reco_result {
-	fiber_rec_info_t lft_rec_info;
-	fiber_rec_info_t rt_rec_info;
-};
-
-struct manual_discharge_counts {
-	int counts;
+struct manual_arc_result {
+	int count;
 };
 
 typedef struct fusion_splice_result {
 	enum fs_err_t code;
-	fiber_rec_info_t lft_rec_info;
-	fiber_rec_info_t rt_rec_info;
-	img_defects_t defect_data;
-	record_offset_t z_record_off_set;
-	double pattern_compensate;	/// @range: 0.0~1.0
-	double loss_db;	/// @unit: db
-	struct tense_test_result z_tense_test_result;
-	struct manual_discharge_counts z_manual_discharge_counts;
-	std::string fs_done_x_img;
-	std::string fs_done_y_img;
+	double loss;	/// @unit: db
+	fiber_reco_result_t recinfo;
+	defect_detect_result_t defect;
+	fspre_state_t prestate;
+	struct tense_test_result tense_test;
+	struct manual_arc_result manual_arc;
+	std::vector<uint8_t> xz_final_img;
+	std::vector<uint8_t> yz_final_img;
 } fusion_splice_result_t;
 
 struct arc_revise {
@@ -458,13 +488,14 @@ typedef struct fs_da_cfg {
 
 typedef struct discharge_adjust_result {
 	enum fs_err_t code;
-	struct fs_da_cfg z_cfg;
-	fiber_rec_info_t rec_info;
-	img_defects_t defect_data;
+	fiber_reco_result_t recinfo;
+	defect_detect_result_t defect;
+	fspre_state_t prestate;
+	struct tense_test_result tense_test;
 	discharge_data_t base;
 	discharge_data_t revise;
-	double suggest1;
-	double suggest2;
+	double suggest1;	/// @unit: volt
+	double suggest2;	/// @unit: volt
 } discharge_adjust_result_t;
 
 struct discharge {
@@ -506,20 +537,11 @@ struct set_fs_display_mode {
 typedef struct dust_check_result {
 	enum fs_err_t code;
 	enum cmosId_t cmosid;
-	std::string ori_img;
-	std::string dust_img;
+	std::vector<uint8_t> ori_img;
+	std::vector<uint8_t> dust_img;
 } dust_check_result_t;
 
-struct heat_start {
-	uint32_t Material;
-	enum shrink_tube_t Fiberlen;
-	bool Heatctl;
-	uint16_t heat_time;	/// @unit: second
-	uint16_t heat_temp;	/// @unit: degree Celsius
-	uint16_t finish_temp;	/// @unit: degree Celsius
-	uint16_t stable_temp;	/// @unit: degree Celsius
-	bool fast_heat;
-};
+struct heat_start {};
 
 struct heat_result {
 	enum fs_err_t code;
@@ -572,21 +594,16 @@ struct statistic_data_t {
 	double max_v;
 	double mid_v;
 	double avg_v;
-	std::string data;
+	std::vector<uint8_t> data;
 };
 
 typedef struct motor_test_result {
 	enum fs_err_t code;
 	struct fs_mt_cfg z_cfg;
-	fiber_rec_info_t rec_info;
-	img_defects_t defect_data;
-	uint32_t motor_tested_times;
-	uint32_t ele_arc_tested_times;
-	uint32_t reset;
-	uint32_t push;
-	uint32_t calibrate;
-	uint32_t ele_arc;
-	uint32_t img;
+	fiber_reco_result_t recinfo;
+	defect_detect_result_t defect;
+	uint32_t base_count;
+	uint32_t arc_count;
 	struct statistic_data_t nm_per_pixel_xz;
 	struct statistic_data_t nm_per_pixel_yz;
 	struct statistic_data_t nm_per_step_lz;
@@ -605,13 +622,10 @@ typedef struct fs_rr_cfg {} fs_rr_cfg_t;
 
 typedef struct realtime_revise_result {
 	enum fs_err_t code;
-	fiber_rec_info_t rec_info;
-	img_defects_t defect_data;
-	record_offset_t z_record_off_set;
-	double pattern_compensate;	/// @range: 0.0~1.0
-	double loss_db;	/// @unit: db
-	struct tense_test_result z_tense_test_result;
-	struct manual_discharge_counts z_manual_discharge_counts;
+	fiber_reco_result_t recinfo;
+	defect_detect_result_t defect;
+	fspre_state_t prestate;
+	double loss;	/// @unit: db
 	rt_revise_data_t RealtimeReviseData;
 } realtime_revise_result_t;
 
@@ -654,8 +668,8 @@ typedef struct fs_ft_cfg {
 typedef struct fiber_train_result {
 	enum fs_err_t code;
 	struct fs_ft_cfg z_cfg;
-	fiber_rec_info_t rec_info;
-	img_defects_t defect_data;
+	fiber_reco_result_t recinfo;
+	defect_detect_result_t defect;
 	uint32_t cnt;
 	uint32_t cnt_limit;
 	double lft_attr[2];
@@ -687,8 +701,8 @@ typedef struct cmos_spec {
 	int win_top;
 	int min_exposure;
 	int max_exposure;
-	int pixel_width;	/// @unit: nm
-	int pixel_height;	/// @unit: nm
+	double pixel_width;	/// @unit: um
+	double pixel_height;	/// @unit: um
 } cmos_spec_t;
 
 typedef struct hvb_spec {
