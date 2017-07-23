@@ -9,8 +9,8 @@
 		"ifd_end_crude" : "0x00000001",
 		"ifd_horizontal_angle"	: "0x00000002",
 		"ifd_vertical_angle"	: "0x00000004",
-		"ifd_cant_identify"	: "0x80000000",
-		"ifd_all"	: "0xFFFFFFFF",
+		"ifd_cant_identify"	: "0x40000000",
+		"ifd_all"	: "0x7FFFFFFF",
 	},
 },
 
@@ -20,29 +20,40 @@
 	"alias"		: "ifd_line_t",
 	"fields"	: {
 		"dbmp" : "ifd_t",
-		"h_angle" : { "type" : "double", "unit" : "degree", },
-		"v_angle" : { "type" : "double", "unit" : "degree", },
-		"wrap_diameter" : { "type" : "int32_t", "unit" : "pixel", },
+		"hangle" : { "type" : "double", "unit" : "degree", },
+		"vangle" : { "type" : "double", "unit" : "degree", },
+		"clad_dm" : {
+			"type" : "double",
+			"unit" : "um",
+			"comment" : "cladding diameter"
+		},
 	},
 },
 
 {
 	"category"	: "struct",
-	"name"		: "img_defects",
-	"alias"		: "img_defects_t",
+	"name"		: "defect_detect_result",
+	"alias"		: "defect_detect_result_t",
+	"attr"		: "msg",
 	"fields"	: {
 		"yzl"	: "ifd_line_t",
 		"yzr"	: "ifd_line_t",
 		"xzl"	: "ifd_line_t",
 		"xzr"	: "ifd_line_t",
 
-		"yz_hangle_intersect" : "double",
-		"xz_hangle_intersect" : "double",
+		"yz_hangle" : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "yz image horizontal intersect angle"
+		},
+		"xz_hangle"  : "double",
+		"lft_vangle" : "double",
+		"rt_vangle"  : "double",
 
-		"yz_ref_img"	: "std::string",
-		"xz_ref_img"	: "std::string",
-		"yz_img"	: "std::string",
-		"xz_img"	: "std::string",
+		"yz_img"	: "std::vector<uint8_t>",
+		"xz_img"	: "std::vector<uint8_t>",
+		"yz_defect_img"	: "std::vector<uint8_t>",
+		"xz_defect_img"	: "std::vector<uint8_t>",
 	},
 },
 
@@ -85,7 +96,7 @@
 	"attr"		: "class",
 	"fields"	: {
 		"heat_idle" : {},
-		"heat_ready" : { "value" : 4, },
+		"heat_ready" : { "value" : 4 },
 		"heat_ascending" : {},
 		"heat_stabling" : {},
 		"heat_descending" : {},
@@ -124,34 +135,35 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"success" : {},
-		"cover_openned" : {},
-		"no_fiber" : {},
-		"fiber_defect" : {},
-		"fiber_cross_over" : {},
-		"fiber_off_center" : {},
-		"img_brightness" : {},
-		"abnormal_arc" : {},
-		"tense_test_fail" : {},
-		"fiber_broken" : {},
-		"quit_midway" : {},
-		"push_timeout" : {},
-		"calibrate_timeout" : {},
-		"reset_timeout" : {},
-		"arc_time_zero" : {},
-		"ignore" : {},
-		"revise1_mag" : {},
-		"revise2_mag" : {},
-		"focus_x" : {},
-		"focus_y" : {},
-		"img_process_error" : {},
-		"system_error" : {},
-		"fiber_offside" : { "comment": "user should replace fiber" },
-		"cmos_exposure" : {},
-		"loss_estimate" : {},
-		"arc_off_center" : {},
-		"failed" : {},
-		"arc_mag_overflow" : {}
+		"SUCCESS" : {},
+		"MEDDIACY" : { "comment": "not final result" },
+		"UNKOWN_ERR" : {},
+		"COVER_OPENNED" : {},
+		"NO_FIBER" : {},
+		"FIBER_DEFECT" : {},
+		"FIBER_RECO" : {},
+		"CROSS_OVER" : {},
+		"OFF_CENTER" : {},
+		"IMG_LUM" : {},
+		"ABNORMAL_ARC" : {},
+		"TENSE_TEST_FAIL" : {},
+		"FIBER_BROKEN" : {},
+		"QUIT_MIDWAY" : {},
+		"PUSH_TIMEOUT" : {},
+		"CALIBRATE_TIMEOUT" : {},
+		"RESET_TIMEOUT" : {},
+		"ARC_TIME_ZERO" : {},
+		"ARC1_REVISE" : {},
+		"ARC2_REVISE" : {},
+		"FOCUS_X" : {},
+		"FOCUS_Y" : {},
+		"IMG_PROCESS" : {},
+		"SYSTEM_ERR" : {},
+		"FIBER_OFFSIDE" : { "comment": "user should replace fiber" },
+		"CMOS_EXP" : {},
+		"LOSS_EST" : {},
+		"ARC_POS" : {},
+		"ARC_OVERFLOW" : {}
 	}
 },
 
@@ -264,13 +276,13 @@
 	"alias"		: "fiber_rec_info_t",
 	"fields"	: {
 		"ft"	: "fiber_t",
-		"wrap_diameter" : {
-			"type" : "int",
-			"unit" : "nm"
+		"clad_dm" : {
+			"type" : "double",
+			"unit" : "um"
 		},
-		"core_diameter" : {
-			"type" : "int",
-			"unit" : "nm"
+		"core_dm" : {
+			"type" : "double",
+			"unit" : "um"
 		},
 	}
 },
@@ -303,18 +315,6 @@
 
 {
 	"category"	: "enum",
-	"name"		: "shrink_tube_t",
-	"type"		: "unsigned",
-	"attr"		: "class",
-	"fields"	: {
-		"len_20mm" : {},
-		"len_40mm" : {},
-		"len_60mm" : {}
-	}
-},
-
-{
-	"category"	: "enum",
 	"name"		: "align_method_t",
 	"type"		: "unsigned",
 	"attr"		: "class",
@@ -333,6 +333,8 @@
 	"alias"		: "fs_param_cfg_t",
 	"attr"		: [ "export", "pqxx" ],
 	"fields"	: {
+		"seqn" : "int",
+		"name" : "std::string",
 		"fusion_mode" : "fs_pattern_t",
 		"lfti" : "fiber_t",
 		"rfti" : "fiber_t",
@@ -346,11 +348,11 @@
 
 		"clr_mag"  : { "type" : "double", "unit" : "volt" },
 		"clr_time" : { "type" : "int", "unit" : "ms" },
-		"clr_pos"  : { "type" : "int", "unit" : "um" },
+		"clr_pos"  : { "type" : "double", "unit" : "um" },
 
 		"position" : { "type" : "double", "unit" : "um" },
 		"gap"      : { "type" : "double", "unit" : "um" },
-		"overlap"  : { "type" : "int", "unit" : "um" },
+		"overlap"  : { "type" : "double", "unit" : "um" },
 
 		"pre_mag"  : { "type" : "double", "unit" : "volt" },
 		"pre_time" : { "type" : "int", "unit" : "ms" },
@@ -375,7 +377,7 @@
 
 		"tense_test"   : "bool",
 		"tense_speed"  : { "type" : "int", "unit" : "um/s" },
-		"tense_length" : { "type" : "int", "unit" : "um" },
+		"tense_length" : { "type" : "double", "unit" : "um" },
 
 		"loss_mode" : "loss_estimate_mode_t",
 		"loss_limit" : { "type" : "double", "unit" : "db" },
@@ -385,6 +387,49 @@
 		"syn_bend_co" : "double",
 		"opp_bend_co" : "double",
 		"mfd_mis_co" : { "type" : "double", "range" : "0.0~1.0" }
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "heat_material_t",
+	"type"		: "unsigned",
+	"fields"	: {
+		"STANDARD" : { "alias" : "Standard" },
+		"MICRO250" : { "alias" : "Micro250" },
+		"MICRO400" : { "alias" : "Micro400" },
+		"MICRO900" : { "alias" : "Micro900" },
+		"CONNECTOR" : { "alias" : "Connector" }
+	}
+},
+
+{
+	"category"	: "enum",
+	"name"		: "shrinktube_length_t",
+	"type"		: "unsigned",
+	"fields"	: {
+		"L20MM" : { "alias" : "20mm" },
+		"L40MM" : { "alias" : "40mm" },
+		"L60MM" : { "alias" : "60mm" }
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "heat_param_cfg",
+	"alias"		: "heat_param_cfg_t",
+	"attr"		: [ "export", "pqxx" ],
+	"fields"	: {
+		"seqn" : "int",
+		"name" : "std::string",
+		"material" : "heat_material_t",
+		"length" : "shrinktube_length_t",
+		"auto_heat" : "bool",
+		"heat_time" : { "type" : "int", "unit" : "s" },
+		"heat_temp" : { "type" : "int", "unit" : "degree Celsius" },
+		"finish_temp" : { "type" : "int", "unit" : "degree Celsius" },
+		"fast_heat" : "bool",
+		"temp_stay" : { "type" : "int", "unit" : "degree Celsius" }
 	}
 },
 
@@ -512,13 +557,14 @@
 
 {
 	"category"	: "struct",
-	"name"		: "record_offset",
-	"alias"		: "record_offset_t",
+	"name"		: "fspre_state",
+	"alias"		: "fspre_state_t",
 	"attr"		: "msg",
 	"fields"	: {
-		"core_diff_pre" : { "type" : "double", "unit" : "um" },
-		"cladding_diff_pre" : { "type" : "double", "unit" : "um" },
-		"vertex_intersect_angle" : { "type" : "double", "unit" : "degree" },
+		"core_offset" : { "type" : "double", "unit" : "um" },
+		"clad_offset" : { "type" : "double", "unit" : "um" },
+		"endface_gap" : { "type" : "double", "unit" : "um" },
+		"vertex_angle" : { "type" : "double", "unit" : "degree" },
 	}
 },
 
@@ -527,8 +573,8 @@
 	"name"		: "tense_test_result",
 	"msgid"		: "tenseTestResult",
 	"fields"	: {
-		"is_tense_test" : { "type" : "bool", "comment" : "if did" },
-		"is_success" : "bool",
+		"exed" : "bool",
+		"pass" : "bool"
 	}
 },
 
@@ -544,29 +590,21 @@
 
 {
 	"category"	: "struct",
-	"name"		: "defect_detect_result",
-	"attr"		: "msg",
-	"fields"	: {
-		"data" : "img_defects_t",
-	}
-},
-
-{
-	"category"	: "struct",
 	"name"		: "fiber_reco_result",
+	"alias"		: "fiber_reco_result_t",
 	"attr"		: "msg",
 	"fields"	: {
-		"lft_rec_info" : "fiber_rec_info_t",
-		"rt_rec_info" : "fiber_rec_info_t",
+		"lft" : "fiber_rec_info_t",
+		"rt" : "fiber_rec_info_t",
 	}
 },
 
 {
 	"category"	: "struct",
-	"name"		: "manual_discharge_counts",
+	"name"		: "manual_arc_result",
 	"attr"		: "msg",
 	"fields"	: {
-		"counts" : "int",
+		"count" : "int",
 	}
 },
 
@@ -575,25 +613,19 @@
 	"name"		: "fusion_splice_result",
 	"alias"		: "fusion_splice_result_t",
 	"msgid"		: "fusionSpliceResult",
+	"attr"		: "pqxx",
 	"fields"	: {
 		"code" : "fs_err_t",
+		"loss" : { "type" : "double", "unit" : "db" },
 
-		"lft_rec_info" : "fiber_rec_info_t",
-		"rt_rec_info" : "fiber_rec_info_t",
+		"recinfo"    : "fiber_reco_result_t",
+		"defect"     : "defect_detect_result_t",
+		"prestate"   : "fspre_state_t",
+		"tense_test" : "tense_test_result",
+		"manual_arc" : "manual_arc_result",
 
-		"defect_data" : "img_defects_t",
-
-		"z_record_off_set" : "record_offset_t",
-
-		"pattern_compensate" : { "type" : "double", "range" : "0.0~1.0" },
-		"loss_db" : { "type" : "double", "unit" : "db" },
-
-		"z_tense_test_result" : "tense_test_result",
-
-		"z_manual_discharge_counts" : "manual_discharge_counts",
-
-		"fs_done_x_img" : "std::string",
-		"fs_done_y_img" : "std::string",
+		"xz_final_img" : "std::vector<uint8_t>",
+		"yz_final_img" : "std::vector<uint8_t>",
 	}
 },
 
@@ -624,13 +656,16 @@
 	"msgid"		: "dischargeAdjustResult",
 	"fields"	: {
 		"code" : "fs_err_t",
-		"z_cfg" : "fs_da_cfg",
-		"rec_info" : "fiber_rec_info_t",
-		"defect_data" : "img_defects_t",
-		"base" : "discharge_data_t",
-		"revise" : "discharge_data_t",
-		"suggest1" : "double",
-		"suggest2" : "double",
+
+		"recinfo"    : "fiber_reco_result_t",
+		"defect"     : "defect_detect_result_t",
+		"prestate"   : "fspre_state_t",
+		"tense_test" : "tense_test_result",
+
+		"base"       : "discharge_data_t",
+		"revise"     : "discharge_data_t",
+		"suggest1"   : { "type" : "double", "unit": "volt" },
+		"suggest2"   : { "type" : "double", "unit": "volt" }
 	}
 },
 
@@ -707,9 +742,9 @@
 	"fields"	: {
 		"code" : "fs_err_t",
 
-		"cmosid" : "cmosId_t",
-		"ori_img" : "std::string",
-		"dust_img" : "std::string",
+		"cmosid"   : "cmosId_t",
+		"ori_img"  : "std::vector<uint8_t>",
+		"dust_img" : "std::vector<uint8_t>",
 	}
 },
 
@@ -718,14 +753,6 @@
 	"name"		: "heat_start",
 	"attr"		: "msg",
 	"fields"	: {
-		"Material" : "uint32_t",
-		"Fiberlen" : "shrink_tube_t",
-		"Heatctl" : "bool",
-		"heat_time" : { "type" : "uint16_t", "unit" : "second" },
-		"heat_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
-		"finish_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
-		"stable_temp" : { "type" : "uint16_t", "unit" : "degree Celsius" },
-		"fast_heat" : "bool",
 	}
 },
 
@@ -829,7 +856,7 @@
 		"max_v" : "double",
 		"mid_v" : "double",
 		"avg_v" : "double",
-		"data" : "std::string",
+		"data" : "std::vector<uint8_t>",
 	}
 },
 
@@ -842,28 +869,20 @@
 		"code" : "fs_err_t",
 		"z_cfg" : "fs_mt_cfg",
 
-		"rec_info" : "fiber_rec_info_t",
+		"recinfo"    : "fiber_reco_result_t",
+		"defect"     : "defect_detect_result_t",
 
-		"defect_data" : "img_defects_t",
-
-		"motor_tested_times" : "uint32_t",
-		"ele_arc_tested_times" : "uint32_t",
-
-
-		"reset" : "uint32_t",
-		"push" : "uint32_t",
-		"calibrate" : "uint32_t",
-		"ele_arc" : "uint32_t",
-		"img" : "uint32_t",
+		"base_count" : "uint32_t",
+		"arc_count" : "uint32_t",
 
 		"nm_per_pixel_xz" : "statistic_data_t",
 		"nm_per_pixel_yz" : "statistic_data_t",
-		"nm_per_step_lz" : "statistic_data_t",
-		"nm_per_step_rz" : "statistic_data_t",
-		"nm_push_lz" : "statistic_data_t",
-		"nm_push_rz" : "statistic_data_t",
-		"arc_mag" : "statistic_data_t",
-		"img_process" : "statistic_data_t",
+		"nm_per_step_lz"  : "statistic_data_t",
+		"nm_per_step_rz"  : "statistic_data_t",
+		"nm_push_lz"      : "statistic_data_t",
+		"nm_push_rz"      : "statistic_data_t",
+		"arc_mag"         : "statistic_data_t",
+		"img_process"     : "statistic_data_t",
 	}
 },
 
@@ -892,15 +911,12 @@
 	"fields"	: {
 		"code" : "fs_err_t",
 
-		"rec_info" : "fiber_rec_info_t",
-		"defect_data" : "img_defects_t",
-		"z_record_off_set" : "record_offset_t",
+		"recinfo"    : "fiber_reco_result_t",
+		"defect"     : "defect_detect_result_t",
+		"prestate"   : "fspre_state_t",
 
-		"pattern_compensate" : { "type" : "double", "range" : "0.0~1.0" },
-		"loss_db" : { "type" : "double", "unit" : "db" },
+		"loss" : { "type" : "double", "unit" : "db" },
 
-		"z_tense_test_result" : "tense_test_result",
-		"z_manual_discharge_counts" : "manual_discharge_counts",
 		"RealtimeReviseData" : "rt_revise_data_t",
 	}
 },
@@ -987,9 +1003,8 @@
 
 		"z_cfg" : "fs_ft_cfg",
 
-		"rec_info" : "fiber_rec_info_t",
-
-		"defect_data" : "img_defects_t",
+		"recinfo"    : "fiber_reco_result_t",
+		"defect"     : "defect_detect_result_t",
 
 		"cnt" : "uint32_t",
 		"cnt_limit" : "uint32_t",
@@ -1058,8 +1073,8 @@
 		"min_exposure" : "int",
 		"max_exposure" : "int",
 
-		"pixel_width"  : { "type" : "int", "unit" : "nm" },
-		"pixel_height" : { "type" : "int", "unit" : "nm" },
+		"pixel_width"  : { "type" : "double", "unit" : "um" },
+		"pixel_height" : { "type" : "double", "unit" : "um" },
 	}
 },
 
