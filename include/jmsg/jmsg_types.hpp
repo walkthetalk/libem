@@ -466,6 +466,7 @@ struct manual_arc_result {
 };
 
 typedef struct fusion_splice_result {
+	int time_consume;
 	enum fs_err_t code;
 	double loss;	/// @unit: db
 	fiber_reco_result_t recinfo;

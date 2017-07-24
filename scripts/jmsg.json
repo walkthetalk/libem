@@ -615,8 +615,9 @@
 	"msgid"		: "fusionSpliceResult",
 	"attr"		: "pqxx",
 	"fields"	: {
-		"code" : "fs_err_t",
-		"loss" : { "type" : "double", "unit" : "db" },
+		"time_consume" : { "type" : "int", "unit" : "ms" },
+		"code"         : "fs_err_t",
+		"loss"         : { "type" : "double", "unit" : "db" },
 
 		"recinfo"    : "fiber_reco_result_t",
 		"defect"     : "defect_detect_result_t",

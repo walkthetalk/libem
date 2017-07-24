@@ -1130,6 +1130,7 @@ static inline void json2c(struct manual_arc_result & dst, const rapidjson::Value
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fusion_splice_result & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "time_consume", v, src.time_consume);
 	ENC_MEM(jd, "code", v, src.code);
 	ENC_MEM(jd, "loss", v, src.loss);
 	ENC_MEM(jd, "recinfo", v, src.recinfo);
@@ -1144,6 +1145,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fus
 }
 static inline void json2c(struct fusion_splice_result & dst, const rapidjson::Value & src)
 {
+	DEC_MEM("time_consume", src, dst.time_consume);
 	DEC_MEM("code", src, dst.code);
 	DEC_MEM("loss", src, dst.loss);
 	DEC_MEM("recinfo", src, dst.recinfo);
