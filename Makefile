@@ -1,5 +1,5 @@
-override CFLAGS += -std=c11 -DRAPIDJSON_HAS_STDSTRING=1
-override CXXFLAGS += -std=c++11 -DRAPIDJSON_HAS_STDSTRING=1
+override CFLAGS += -std=c14 -DRAPIDJSON_HAS_STDSTRING=1
+override CXXFLAGS += -std=c++14 -DRAPIDJSON_HAS_STDSTRING=1
 
 # you can add your own libs need to link.
 override LDLIBS += -lwebsockets \
