@@ -300,6 +300,7 @@ typedef struct fs_param_cfg {
 	bool x_focus;
 	bool y_focus;
 	bool ecf_redress;
+	bool fiber_shift;
 	bool auto_mag;
 	double vangle_limit;	/// @unit: degree
 	double hangle_limit;	/// @unit: degree
@@ -466,7 +467,7 @@ struct manual_arc_result {
 };
 
 typedef struct fusion_splice_result {
-	int time_consume;
+	int time_consume;	/// @unit: ms
 	enum fs_err_t code;
 	double loss;	/// @unit: db
 	fiber_reco_result_t recinfo;
