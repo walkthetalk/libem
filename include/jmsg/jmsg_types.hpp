@@ -300,6 +300,7 @@ typedef struct fs_param_cfg {
 	bool x_focus;
 	bool y_focus;
 	bool ecf_redress;
+	bool fiber_shift;
 	bool auto_mag;
 	double vangle_limit;	/// @unit: degree
 	double hangle_limit;	/// @unit: degree
