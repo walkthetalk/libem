@@ -693,7 +693,6 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_
 	ENC_MEM(jd, "x_focus", v, src.x_focus);
 	ENC_MEM(jd, "y_focus", v, src.y_focus);
 	ENC_MEM(jd, "ecf_redress", v, src.ecf_redress);
-	ENC_MEM(jd, "fiber_shift", v, src.fiber_shift);
 	ENC_MEM(jd, "auto_mag", v, src.auto_mag);
 	ENC_MEM(jd, "vangle_limit", v, src.vangle_limit);
 	ENC_MEM(jd, "hangle_limit", v, src.hangle_limit);
@@ -743,7 +742,6 @@ static inline void json2c(struct fs_param_cfg & dst, const rapidjson::Value & sr
 	DEC_MEM("x_focus", src, dst.x_focus);
 	DEC_MEM("y_focus", src, dst.y_focus);
 	DEC_MEM("ecf_redress", src, dst.ecf_redress);
-	DEC_MEM("fiber_shift", src, dst.fiber_shift);
 	DEC_MEM("auto_mag", src, dst.auto_mag);
 	DEC_MEM("vangle_limit", src, dst.vangle_limit);
 	DEC_MEM("hangle_limit", src, dst.hangle_limit);

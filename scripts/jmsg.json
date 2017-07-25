@@ -348,7 +348,6 @@
 		"x_focus" : "bool",
 		"y_focus" : "bool",
 		"ecf_redress" : "bool",
-		"fiber_shift" : "bool",
 		"auto_mag" : { "type" : "bool", "comment" : "auto adjust arc mag" },
 		"vangle_limit" : { "type" : "double", "unit" : "degree" },
 		"hangle_limit" : { "type" : "double", "unit" : "degree" },
