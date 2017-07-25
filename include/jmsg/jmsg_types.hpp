@@ -20,6 +20,7 @@ typedef struct ifd_line {
 	double hangle;	/// @unit: degree
 	double vangle;	/// @unit: degree
 	double clad_dm;	/// @unit: um
+	double core_dm;	/// @unit: um
 } ifd_line_t;
 
 typedef struct defect_detect_result {
@@ -191,16 +192,18 @@ static constexpr unsigned min_cmosId = 0;
 static constexpr unsigned max_cmosId = 1;
 static constexpr unsigned rsize_cmosId = 2;
 
-typedef struct mag2shrink {
-	double x;	/// @unit: volt
-	double y;	/// @unit: um
-} mag2shrink_t;
+typedef struct arcpinfo {
+	double mag;	/// @unit: volt
+	int time;	/// @unit: ms
+	double len;	/// @unit: um
+} arcpinfo_t;
 
-typedef struct discharge_data {
-	mag2shrink_t p[2];
+typedef struct arcpenvinfo {
+	arcpinfo_t arc1;
+	arcpinfo_t arc2;
 	double temp;	/// @unit: degree centigrade
 	double pressure;	/// @unit: bar
-} discharge_data_t;
+} arcpenvinfo_t;
 
 typedef struct rt_revise_data {
 	int32_t x_exposure;
@@ -319,14 +322,14 @@ typedef struct fs_param_cfg {
 	int arc2_on_time;	/// @unit: ms
 	int arc2_off_time;	/// @unit: ms
 	int arc_man_time;	/// @unit: ms
-	int lft_push_speed;	/// @unit: um/s
-	int rt_push_speed;	/// @unit: um/s
+	double lft_push_speed;	/// @unit: um/s
+	double rt_push_speed;	/// @unit: um/s
 	bool taper_splice;
 	int taper_wait_time;	/// @unit: ms
 	double taper_length;	/// @unit: um
-	int taper_speed;	/// @unit: um/s
+	double taper_speed;	/// @unit: um/s
 	bool tense_test;
-	int tense_speed;	/// @unit: um/s
+	double tense_speed;	/// @unit: um/s
 	double tense_length;	/// @unit: um
 	enum loss_estimate_mode_t loss_mode;
 	double loss_limit;	/// @unit: db
@@ -380,7 +383,7 @@ typedef struct heat_param_cfg {
 	int heat_temp;	/// @unit: degree Celsius
 	int finish_temp;	/// @unit: degree Celsius
 	bool fast_heat;
-	int temp_stay;	/// @unit: degree Celsius
+	int hold_temp;	/// @unit: degree Celsius
 } heat_param_cfg_t;
 
 typedef struct misc_cfg {
@@ -393,7 +396,7 @@ typedef struct fs_option_cfg {
 		bool autoStart;
 		bool pause1;
 		bool pause2;
-	} operationOptions;
+	} operation;
 	struct {
 		bool cleaveAngle;
 		bool axisOffset;
@@ -410,16 +413,16 @@ typedef struct fs_option_cfg {
 	struct {
 		bool pressure;
 		bool temperature;
-		bool RealTimeRevise;
+		bool realTimeRevise;
 	} arcCompensation;
 	struct {
 		enum fs_display_mode_t gapSet;
 		enum fs_display_mode_t pause1;
-		enum fs_display_mode_t alignOption;
+		enum fs_display_mode_t align;
 		enum fs_display_mode_t pause2;
 		enum fs_display_mode_t arc;
-		enum fs_display_mode_t estimateLoss;
-	} fiberImageDisplay;
+		enum fs_display_mode_t estLoss;
+	} fiberDisplay;
 	struct {
 		bool autoFeedFiber;
 		bool badCleavedEndface;
@@ -447,10 +450,10 @@ typedef struct fspre_state {
 	double vertex_angle;	/// @unit: degree
 } fspre_state_t;
 
-struct tense_test_result {
+typedef struct tense_test_result {
 	bool exed;
 	bool pass;
-};
+} tense_test_result_t;
 
 struct loss_estimating_result {
 	bool valid;
@@ -462,9 +465,9 @@ typedef struct fiber_reco_result {
 	fiber_rec_info_t rt;
 } fiber_reco_result_t;
 
-struct manual_arc_result {
+typedef struct manual_arc_result {
 	int count;
-};
+} manual_arc_result_t;
 
 typedef struct fusion_splice_result {
 	int time_consume;	/// @unit: ms
@@ -473,8 +476,8 @@ typedef struct fusion_splice_result {
 	fiber_reco_result_t recinfo;
 	defect_detect_result_t defect;
 	fspre_state_t prestate;
-	struct tense_test_result tense_test;
-	struct manual_arc_result manual_arc;
+	tense_test_result_t tense_test;
+	manual_arc_result_t manual_arc;
 	std::vector<uint8_t> xz_final_img;
 	std::vector<uint8_t> yz_final_img;
 } fusion_splice_result_t;
@@ -494,8 +497,8 @@ typedef struct discharge_adjust_result {
 	defect_detect_result_t defect;
 	fspre_state_t prestate;
 	struct tense_test_result tense_test;
-	discharge_data_t base;
-	discharge_data_t revise;
+	arcpenvinfo_t base;
+	arcpenvinfo_t revise;
 	double suggest1;	/// @unit: volt
 	double suggest2;	/// @unit: volt
 } discharge_adjust_result_t;
@@ -684,8 +687,8 @@ typedef struct count_down {
 
 typedef struct motor_spec {
 	int clock;	/// @unit: HZ
-	int raw_max;
-	int raw_min;
+	int raw_hs;
+	int raw_ls;
 	int backlash;	/// @unit: step
 	int stroke;	/// @unit: step
 	double sfactor;	/// @unit: um
@@ -697,10 +700,6 @@ typedef struct cmos_spec {
 	std::string model;
 	int full_width;
 	int full_height;
-	int win_width;
-	int win_height;
-	int win_left;
-	int win_top;
 	int min_exposure;
 	int max_exposure;
 	double pixel_width;	/// @unit: um
@@ -708,16 +707,29 @@ typedef struct cmos_spec {
 } cmos_spec_t;
 
 typedef struct hvb_spec {
+	double min_volt;	/// @unit: volt
 	double max_volt;	/// @unit: volt
 	double pressure_c0;
 	double pressure_c1;
+	double temp_c0;
+	double temp_c1;
 } hvb_spec_t;
 
 typedef struct ia_spec {
 	double bg_lum;	/// @range: 0.0~1.0
+	double lens_mag;
 	int cap_delay;	/// @unit: ms
 	int cover_delay;	/// @unit: ms
-	double led_lum[2];
+	int winx_width;
+	int winx_height;
+	int winx_left;
+	int winx_top;
+	int winy_width;
+	int winy_height;
+	int winy_left;
+	int winy_top;
+	double ledx_lum;	/// @range: 0.0~1.0
+	double ledy_lum;	/// @range: 0.0~1.0
 	double dc_th0;
 	double dc_th1;
 	int denoise_th;
@@ -731,17 +743,17 @@ typedef struct ia_spec {
 } ia_spec_t;
 
 typedef struct mc_spec {
-	int reset_speed;	/// @unit: um/s
-	int enter_speed;	/// @unit: um/s
-	int push1_speed;	/// @unit: um/s
-	int push2_speed;	/// @unit: um/s
-	int calib_speed;	/// @unit: um/s
-	int manual_speed;	/// @unit: um/s
+	double reset_speed;	/// @unit: um/s
+	double enter_speed;	/// @unit: um/s
+	double push1_speed;	/// @unit: um/s
+	double push2_speed;	/// @unit: um/s
+	double calib_speed;	/// @unit: um/s
+	double manual_speed;	/// @unit: um/s
 } mc_spec_t;
 
 typedef struct ar_spec {
-	discharge_data_t base;
-	discharge_data_t revise;
+	arcpenvinfo_t base;
+	arcpenvinfo_t revise;
 } ar_spec_t;
 
 typedef struct rr_spec {

@@ -141,6 +141,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ifd
 	ENC_MEM(jd, "hangle", v, src.hangle);
 	ENC_MEM(jd, "vangle", v, src.vangle);
 	ENC_MEM(jd, "clad_dm", v, src.clad_dm);
+	ENC_MEM(jd, "core_dm", v, src.core_dm);
 
 	return v;
 }
@@ -150,6 +151,7 @@ static inline void json2c(struct ifd_line & dst, const rapidjson::Value & src)
 	DEC_MEM("hangle", src, dst.hangle);
 	DEC_MEM("vangle", src, dst.vangle);
 	DEC_MEM("clad_dm", src, dst.clad_dm);
+	DEC_MEM("core_dm", src, dst.core_dm);
 }
 
 /// @struct defect_detect_result
@@ -467,34 +469,38 @@ static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum c
 static inline void json2c(enum cmosId_t & dst, const rapidjson::Value & src)
 { dst = (enum cmosId_t)search_val_binary(str2e_cmosId_t, src); }
 
-/// @struct mag2shrink
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mag2shrink & src)
+/// @struct arcpinfo
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct arcpinfo & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "x", v, src.x);
-	ENC_MEM(jd, "y", v, src.y);
+	ENC_MEM(jd, "mag", v, src.mag);
+	ENC_MEM(jd, "time", v, src.time);
+	ENC_MEM(jd, "len", v, src.len);
 
 	return v;
 }
-static inline void json2c(struct mag2shrink & dst, const rapidjson::Value & src)
+static inline void json2c(struct arcpinfo & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("x", src, dst.x);
-	DEC_MEM("y", src, dst.y);
+	DEC_MEM("mag", src, dst.mag);
+	DEC_MEM("time", src, dst.time);
+	DEC_MEM("len", src, dst.len);
 }
 
-/// @struct discharge_data
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct discharge_data & src)
+/// @struct arcpenvinfo
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct arcpenvinfo & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "p", v, src.p);
+	ENC_MEM(jd, "arc1", v, src.arc1);
+	ENC_MEM(jd, "arc2", v, src.arc2);
 	ENC_MEM(jd, "temp", v, src.temp);
 	ENC_MEM(jd, "pressure", v, src.pressure);
 
 	return v;
 }
-static inline void json2c(struct discharge_data & dst, const rapidjson::Value & src)
+static inline void json2c(struct arcpenvinfo & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("p", src, dst.p);
+	DEC_MEM("arc1", src, dst.arc1);
+	DEC_MEM("arc2", src, dst.arc2);
 	DEC_MEM("temp", src, dst.temp);
 	DEC_MEM("pressure", src, dst.pressure);
 }
@@ -844,7 +850,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct hea
 	ENC_MEM(jd, "heat_temp", v, src.heat_temp);
 	ENC_MEM(jd, "finish_temp", v, src.finish_temp);
 	ENC_MEM(jd, "fast_heat", v, src.fast_heat);
-	ENC_MEM(jd, "temp_stay", v, src.temp_stay);
+	ENC_MEM(jd, "hold_temp", v, src.hold_temp);
 
 	return v;
 }
@@ -859,7 +865,7 @@ static inline void json2c(struct heat_param_cfg & dst, const rapidjson::Value & 
 	DEC_MEM("heat_temp", src, dst.heat_temp);
 	DEC_MEM("finish_temp", src, dst.finish_temp);
 	DEC_MEM("fast_heat", src, dst.fast_heat);
-	DEC_MEM("temp_stay", src, dst.temp_stay);
+	DEC_MEM("hold_temp", src, dst.hold_temp);
 }
 
 /// @struct misc_cfg
@@ -877,8 +883,8 @@ static inline void json2c(struct misc_cfg & dst, const rapidjson::Value & src)
 	DEC_MEM("heatParamIdx", src, dst.heatParamIdx);
 }
 
-/// @decltype(fs_option_cfg::operationOptions)
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::operationOptions) & src)
+/// @decltype(fs_option_cfg::operation)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::operation) & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "autoStart", v, src.autoStart);
@@ -887,7 +893,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(f
 
 	return v;
 }
-static inline void json2c(decltype(fs_option_cfg::operationOptions) & dst, const rapidjson::Value & src)
+static inline void json2c(decltype(fs_option_cfg::operation) & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("autoStart", src, dst.autoStart);
 	DEC_MEM("pause1", src, dst.pause1);
@@ -940,7 +946,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(f
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "pressure", v, src.pressure);
 	ENC_MEM(jd, "temperature", v, src.temperature);
-	ENC_MEM(jd, "RealTimeRevise", v, src.RealTimeRevise);
+	ENC_MEM(jd, "realTimeRevise", v, src.realTimeRevise);
 
 	return v;
 }
@@ -948,30 +954,30 @@ static inline void json2c(decltype(fs_option_cfg::arcCompensation) & dst, const 
 {
 	DEC_MEM("pressure", src, dst.pressure);
 	DEC_MEM("temperature", src, dst.temperature);
-	DEC_MEM("RealTimeRevise", src, dst.RealTimeRevise);
+	DEC_MEM("realTimeRevise", src, dst.realTimeRevise);
 }
 
-/// @decltype(fs_option_cfg::fiberImageDisplay)
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::fiberImageDisplay) & src)
+/// @decltype(fs_option_cfg::fiberDisplay)
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const decltype(fs_option_cfg::fiberDisplay) & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "gapSet", v, src.gapSet);
 	ENC_MEM(jd, "pause1", v, src.pause1);
-	ENC_MEM(jd, "alignOption", v, src.alignOption);
+	ENC_MEM(jd, "align", v, src.align);
 	ENC_MEM(jd, "pause2", v, src.pause2);
 	ENC_MEM(jd, "arc", v, src.arc);
-	ENC_MEM(jd, "estimateLoss", v, src.estimateLoss);
+	ENC_MEM(jd, "estLoss", v, src.estLoss);
 
 	return v;
 }
-static inline void json2c(decltype(fs_option_cfg::fiberImageDisplay) & dst, const rapidjson::Value & src)
+static inline void json2c(decltype(fs_option_cfg::fiberDisplay) & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("gapSet", src, dst.gapSet);
 	DEC_MEM("pause1", src, dst.pause1);
-	DEC_MEM("alignOption", src, dst.alignOption);
+	DEC_MEM("align", src, dst.align);
 	DEC_MEM("pause2", src, dst.pause2);
 	DEC_MEM("arc", src, dst.arc);
-	DEC_MEM("estimateLoss", src, dst.estimateLoss);
+	DEC_MEM("estLoss", src, dst.estLoss);
 }
 
 /// @decltype(fs_option_cfg::others)
@@ -1001,22 +1007,22 @@ static inline void json2c(decltype(fs_option_cfg::others) & dst, const rapidjson
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_option_cfg & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "operationOptions", v, src.operationOptions);
+	ENC_MEM(jd, "operation", v, src.operation);
 	ENC_MEM(jd, "dataDisplay", v, src.dataDisplay);
 	ENC_MEM(jd, "ignoreOptions", v, src.ignoreOptions);
 	ENC_MEM(jd, "arcCompensation", v, src.arcCompensation);
-	ENC_MEM(jd, "fiberImageDisplay", v, src.fiberImageDisplay);
+	ENC_MEM(jd, "fiberDisplay", v, src.fiberDisplay);
 	ENC_MEM(jd, "others", v, src.others);
 
 	return v;
 }
 static inline void json2c(struct fs_option_cfg & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("operationOptions", src, dst.operationOptions);
+	DEC_MEM("operation", src, dst.operation);
 	DEC_MEM("dataDisplay", src, dst.dataDisplay);
 	DEC_MEM("ignoreOptions", src, dst.ignoreOptions);
 	DEC_MEM("arcCompensation", src, dst.arcCompensation);
-	DEC_MEM("fiberImageDisplay", src, dst.fiberImageDisplay);
+	DEC_MEM("fiberDisplay", src, dst.fiberDisplay);
 	DEC_MEM("others", src, dst.others);
 }
 
@@ -1722,8 +1728,8 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mot
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "clock", v, src.clock);
-	ENC_MEM(jd, "raw_max", v, src.raw_max);
-	ENC_MEM(jd, "raw_min", v, src.raw_min);
+	ENC_MEM(jd, "raw_hs", v, src.raw_hs);
+	ENC_MEM(jd, "raw_ls", v, src.raw_ls);
 	ENC_MEM(jd, "backlash", v, src.backlash);
 	ENC_MEM(jd, "stroke", v, src.stroke);
 	ENC_MEM(jd, "sfactor", v, src.sfactor);
@@ -1735,8 +1741,8 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mot
 static inline void json2c(struct motor_spec & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("clock", src, dst.clock);
-	DEC_MEM("raw_max", src, dst.raw_max);
-	DEC_MEM("raw_min", src, dst.raw_min);
+	DEC_MEM("raw_hs", src, dst.raw_hs);
+	DEC_MEM("raw_ls", src, dst.raw_ls);
 	DEC_MEM("backlash", src, dst.backlash);
 	DEC_MEM("stroke", src, dst.stroke);
 	DEC_MEM("sfactor", src, dst.sfactor);
@@ -1751,10 +1757,6 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct cmo
 	ENC_MEM(jd, "model", v, src.model);
 	ENC_MEM(jd, "full_width", v, src.full_width);
 	ENC_MEM(jd, "full_height", v, src.full_height);
-	ENC_MEM(jd, "win_width", v, src.win_width);
-	ENC_MEM(jd, "win_height", v, src.win_height);
-	ENC_MEM(jd, "win_left", v, src.win_left);
-	ENC_MEM(jd, "win_top", v, src.win_top);
 	ENC_MEM(jd, "min_exposure", v, src.min_exposure);
 	ENC_MEM(jd, "max_exposure", v, src.max_exposure);
 	ENC_MEM(jd, "pixel_width", v, src.pixel_width);
@@ -1767,10 +1769,6 @@ static inline void json2c(struct cmos_spec & dst, const rapidjson::Value & src)
 	DEC_MEM("model", src, dst.model);
 	DEC_MEM("full_width", src, dst.full_width);
 	DEC_MEM("full_height", src, dst.full_height);
-	DEC_MEM("win_width", src, dst.win_width);
-	DEC_MEM("win_height", src, dst.win_height);
-	DEC_MEM("win_left", src, dst.win_left);
-	DEC_MEM("win_top", src, dst.win_top);
 	DEC_MEM("min_exposure", src, dst.min_exposure);
 	DEC_MEM("max_exposure", src, dst.max_exposure);
 	DEC_MEM("pixel_width", src, dst.pixel_width);
@@ -1781,17 +1779,23 @@ static inline void json2c(struct cmos_spec & dst, const rapidjson::Value & src)
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct hvb_spec & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "min_volt", v, src.min_volt);
 	ENC_MEM(jd, "max_volt", v, src.max_volt);
 	ENC_MEM(jd, "pressure_c0", v, src.pressure_c0);
 	ENC_MEM(jd, "pressure_c1", v, src.pressure_c1);
+	ENC_MEM(jd, "temp_c0", v, src.temp_c0);
+	ENC_MEM(jd, "temp_c1", v, src.temp_c1);
 
 	return v;
 }
 static inline void json2c(struct hvb_spec & dst, const rapidjson::Value & src)
 {
+	DEC_MEM("min_volt", src, dst.min_volt);
 	DEC_MEM("max_volt", src, dst.max_volt);
 	DEC_MEM("pressure_c0", src, dst.pressure_c0);
 	DEC_MEM("pressure_c1", src, dst.pressure_c1);
+	DEC_MEM("temp_c0", src, dst.temp_c0);
+	DEC_MEM("temp_c1", src, dst.temp_c1);
 }
 
 /// @struct ia_spec
@@ -1799,9 +1803,19 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ia_
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "bg_lum", v, src.bg_lum);
+	ENC_MEM(jd, "lens_mag", v, src.lens_mag);
 	ENC_MEM(jd, "cap_delay", v, src.cap_delay);
 	ENC_MEM(jd, "cover_delay", v, src.cover_delay);
-	ENC_MEM(jd, "led_lum", v, src.led_lum);
+	ENC_MEM(jd, "winx_width", v, src.winx_width);
+	ENC_MEM(jd, "winx_height", v, src.winx_height);
+	ENC_MEM(jd, "winx_left", v, src.winx_left);
+	ENC_MEM(jd, "winx_top", v, src.winx_top);
+	ENC_MEM(jd, "winy_width", v, src.winy_width);
+	ENC_MEM(jd, "winy_height", v, src.winy_height);
+	ENC_MEM(jd, "winy_left", v, src.winy_left);
+	ENC_MEM(jd, "winy_top", v, src.winy_top);
+	ENC_MEM(jd, "ledx_lum", v, src.ledx_lum);
+	ENC_MEM(jd, "ledy_lum", v, src.ledy_lum);
 	ENC_MEM(jd, "dc_th0", v, src.dc_th0);
 	ENC_MEM(jd, "dc_th1", v, src.dc_th1);
 	ENC_MEM(jd, "denoise_th", v, src.denoise_th);
@@ -1818,9 +1832,19 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ia_
 static inline void json2c(struct ia_spec & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("bg_lum", src, dst.bg_lum);
+	DEC_MEM("lens_mag", src, dst.lens_mag);
 	DEC_MEM("cap_delay", src, dst.cap_delay);
 	DEC_MEM("cover_delay", src, dst.cover_delay);
-	DEC_MEM("led_lum", src, dst.led_lum);
+	DEC_MEM("winx_width", src, dst.winx_width);
+	DEC_MEM("winx_height", src, dst.winx_height);
+	DEC_MEM("winx_left", src, dst.winx_left);
+	DEC_MEM("winx_top", src, dst.winx_top);
+	DEC_MEM("winy_width", src, dst.winy_width);
+	DEC_MEM("winy_height", src, dst.winy_height);
+	DEC_MEM("winy_left", src, dst.winy_left);
+	DEC_MEM("winy_top", src, dst.winy_top);
+	DEC_MEM("ledx_lum", src, dst.ledx_lum);
+	DEC_MEM("ledy_lum", src, dst.ledy_lum);
 	DEC_MEM("dc_th0", src, dst.dc_th0);
 	DEC_MEM("dc_th1", src, dst.dc_th1);
 	DEC_MEM("denoise_th", src, dst.denoise_th);

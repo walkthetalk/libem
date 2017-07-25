@@ -27,6 +27,11 @@
 			"unit" : "um",
 			"comment" : "cladding diameter"
 		},
+		"core_dm" : {
+			"type" : "double",
+			"unit" : "um",
+			"comment" : "core diameter"
+		}
 	},
 },
 
@@ -191,14 +196,18 @@
 
 {
 	"category"	: "struct",
-	"name"		: "mag2shrink",
-	"alias"		: "mag2shrink_t",
+	"name"		: "arcpinfo",
+	"alias"		: "arcpinfo_t",
 	"fields"	: {
-		"x" : {
+		"mag" : {
 			"type"	: "double",
 			"unit"	: "volt"
 		},
-		"y" : {
+		"time" : {
+			"type"  : "int",
+			"unit"  : "ms"
+		},
+		"len" : {
 			"type"	: "double",
 			"unit"	: "um"
 		}
@@ -207,14 +216,11 @@
 
 {
 	"category"	: "struct",
-	"name"		: "discharge_data",
-	"alias"		: "discharge_data_t",
+	"name"		: "arcpenvinfo",
+	"alias"		: "arcpenvinfo_t",
 	"fields"	: {
-		"p" : {
-			"category": "rawarray",
-			"type"	: "mag2shrink_t",
-			"rank"	: 2
-		},
+		"arc1" : "arcpinfo_t",
+		"arc2" : "arcpinfo_t",
 		"temp" : {
 			"type"	: "double",
 			"unit"	: "degree centigrade"
@@ -368,16 +374,16 @@
 
 		"arc_man_time"  : { "type" : "int", "unit" : "ms" },
 
-		"lft_push_speed" : { "type" : "int", "unit" : "um/s" },
-		"rt_push_speed" : { "type" : "int", "unit" : "um/s" },
+		"lft_push_speed" : { "type" : "double", "unit" : "um/s" },
+		"rt_push_speed" : { "type" : "double", "unit" : "um/s" },
 
 		"taper_splice"    : "bool",
 		"taper_wait_time" : { "type" : "int", "unit" : "ms" },
 		"taper_length"    : { "type" : "double", "unit" : "um" },
-		"taper_speed"     : { "type" : "int", "unit" : "um/s" },
+		"taper_speed"     : { "type" : "double", "unit" : "um/s" },
 
 		"tense_test"   : "bool",
-		"tense_speed"  : { "type" : "int", "unit" : "um/s" },
+		"tense_speed"  : { "type" : "double", "unit" : "um/s" },
 		"tense_length" : { "type" : "double", "unit" : "um" },
 
 		"loss_mode" : "loss_estimate_mode_t",
@@ -430,7 +436,7 @@
 		"heat_temp" : { "type" : "int", "unit" : "degree Celsius" },
 		"finish_temp" : { "type" : "int", "unit" : "degree Celsius" },
 		"fast_heat" : "bool",
-		"temp_stay" : { "type" : "int", "unit" : "degree Celsius" }
+		"hold_temp" : { "type" : "int", "unit" : "degree Celsius" }
 	}
 },
 
@@ -451,7 +457,7 @@
 	"alias"		: "fs_option_cfg_t",
 	"attr"		: "export",
 	"fields"	: {
-		"operationOptions" : {
+		"operation" : {
 			"category" : "struct",
 			"fields" : {
 				"autoStart" : "bool",
@@ -486,19 +492,19 @@
 			"fields" : {
 				"pressure" : "bool",
 				"temperature" : "bool",
-				"RealTimeRevise" : "bool"
+				"realTimeRevise" : "bool"
 			}
 		},
 
-		"fiberImageDisplay" : {
+		"fiberDisplay" : {
 			"category" : "struct",
 			"fields" : {
-				"gapSet" : "fs_display_mode_t",
-				"pause1" : "fs_display_mode_t",
-				"alignOption" : "fs_display_mode_t",
-				"pause2" : "fs_display_mode_t",
-				"arc" : "fs_display_mode_t",
-				"estimateLoss" : "fs_display_mode_t"
+				"gapSet"  : "fs_display_mode_t",
+				"pause1"  : "fs_display_mode_t",
+				"align"   : "fs_display_mode_t",
+				"pause2"  : "fs_display_mode_t",
+				"arc"     : "fs_display_mode_t",
+				"estLoss" : "fs_display_mode_t"
 			}
 		},
 
@@ -572,6 +578,7 @@
 {
 	"category"	: "struct",
 	"name"		: "tense_test_result",
+	"alias"		: "tense_test_result_t",
 	"msgid"		: "tenseTestResult",
 	"fields"	: {
 		"exed" : "bool",
@@ -603,6 +610,7 @@
 {
 	"category"	: "struct",
 	"name"		: "manual_arc_result",
+	"alias"		: "manual_arc_result_t",
 	"attr"		: "msg",
 	"fields"	: {
 		"count" : "int",
@@ -623,8 +631,8 @@
 		"recinfo"    : "fiber_reco_result_t",
 		"defect"     : "defect_detect_result_t",
 		"prestate"   : "fspre_state_t",
-		"tense_test" : "tense_test_result",
-		"manual_arc" : "manual_arc_result",
+		"tense_test" : "tense_test_result_t",
+		"manual_arc" : "manual_arc_result_t",
 
 		"xz_final_img" : "std::vector<uint8_t>",
 		"yz_final_img" : "std::vector<uint8_t>",
@@ -664,8 +672,8 @@
 		"prestate"   : "fspre_state_t",
 		"tense_test" : "tense_test_result",
 
-		"base"       : "discharge_data_t",
-		"revise"     : "discharge_data_t",
+		"base"       : "arcpenvinfo_t",
+		"revise"     : "arcpenvinfo_t",
 		"suggest1"   : { "type" : "double", "unit": "volt" },
 		"suggest2"   : { "type" : "double", "unit": "volt" }
 	}
@@ -1035,13 +1043,13 @@
 			"type" : "int",
 			"unit" : "HZ"
 		},
-		"raw_max" : {
+		"raw_hs" : {
 			"type" : "int",
-			"comment" : "raw value of max speed"
+			"comment" : "raw value of highest speed"
 		},
-		"raw_min" : {
+		"raw_ls" : {
 			"type" : "int",
-			"comment" : "raw value of min speed"
+			"comment" : "raw value of lowest speed"
 		},
 		"backlash" : {
 			"type" : "int",
@@ -1067,10 +1075,6 @@
 
 		"full_width"  : "int",
 		"full_height" : "int",
-		"win_width"   : "int",
-		"win_height"  : "int",
-		"win_left"    : "int",
-		"win_top"     : "int",
 
 		"min_exposure" : "int",
 		"max_exposure" : "int",
@@ -1086,9 +1090,12 @@
 	"alias"		: "hvb_spec_t",
 	"attr"		: "export",
 	"fields"	: {
+		"min_volt" : { "type" : "double", "unit" : "volt" },
 		"max_volt" : { "type" : "double", "unit" : "volt" },
 		"pressure_c0" : { "type" : "double", "comment" : "coefficent 0 for pressure compensate" },
-		"pressure_c1" : { "type" : "double", "comment" : "coefficent 1 for pressure compensate" }
+		"pressure_c1" : { "type" : "double", "comment" : "coefficent 1 for pressure compensate" },
+		"temp_c0" : "double",
+		"temp_c1" : "double"
 	}
 },
 
@@ -1104,6 +1111,7 @@
 			"range" : "0.0~1.0",
 			"comment" : "background luminance"
 		},
+		"lens_mag" : { "type" : "double", "comment" : "optical lens magnification" },
 		"cap_delay" : {
 			"type" : "int",
 			"unit" : "ms",
@@ -1114,10 +1122,26 @@
 			"unit" : "ms",
 			"comment" : "wait for cover stable"
 		},
-		"led_lum" : {
-			"category" : "rawarray",
+
+		"winx_width"   : "int",
+		"winx_height"  : "int",
+		"winx_left"    : "int",
+		"winx_top"     : "int",
+
+		"winy_width"   : "int",
+		"winy_height"  : "int",
+		"winy_left"    : "int",
+		"winy_top"     : "int",
+
+		"ledx_lum" : {
 			"type" : "double",
-			"rank" : [2]
+			"range" : "0.0~1.0",
+			"comment" : "led x luminance"
+		},
+		"ledy_lum" : {
+			"type" : "double",
+			"range" : "0.0~1.0",
+			"comment" : "led y luminance"
 		},
 		"dc_th0" : {
 			"type" : "double",
@@ -1175,12 +1199,12 @@
 	"attr"		: "export",
 	"comment"	: "motor control spec",
 	"fields"	: {
-		"reset_speed" : { "type" : "int", "unit" : "um/s" },
-		"enter_speed" : { "type" : "int", "unit" : "um/s" },
-		"push1_speed" : { "type" : "int", "unit" : "um/s" },
-		"push2_speed" : { "type" : "int", "unit" : "um/s" },
-		"calib_speed" : { "type" : "int", "unit" : "um/s" },
-		"manual_speed" : { "type" : "int", "unit" : "um/s" }
+		"reset_speed" : { "type" : "double", "unit" : "um/s" },
+		"enter_speed" : { "type" : "double", "unit" : "um/s" },
+		"push1_speed" : { "type" : "double", "unit" : "um/s" },
+		"push2_speed" : { "type" : "double", "unit" : "um/s" },
+		"calib_speed" : { "type" : "double", "unit" : "um/s" },
+		"manual_speed" : { "type" : "double", "unit" : "um/s" }
 	}
 },
 
@@ -1191,8 +1215,8 @@
 	"attr"		: "export",
 	"comment"	: "arc revise spec",
 	"fields"	: {
-		"base" : "discharge_data_t",
-		"revise" : "discharge_data_t"
+		"base" : "arcpenvinfo_t",
+		"revise" : "arcpenvinfo_t"
 	}
 },
 

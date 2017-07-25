@@ -352,7 +352,7 @@ static inline void pqxx2c(enum shrinktube_length_t & dst, const pqxx::const_row_
 template<>
 pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const heat_param_cfg & src)
 {
-	return (*this)(src.seqn)(src.name)(src.material)(src.length)(src.auto_heat)(src.heat_time)(src.heat_temp)(src.finish_temp)(src.fast_heat)(src.temp_stay);
+	return (*this)(src.seqn)(src.name)(src.material)(src.length)(src.auto_heat)(src.heat_time)(src.heat_temp)(src.finish_temp)(src.fast_heat)(src.hold_temp);
 }
 
 pqxx::const_row_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_row_iterator & src)
@@ -367,7 +367,7 @@ pqxx::const_row_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_row_iter
 	pqxx2c(dst.heat_temp, it); ++it;
 	pqxx2c(dst.finish_temp, it); ++it;
 	pqxx2c(dst.fast_heat, it); ++it;
-	pqxx2c(dst.temp_stay, it); ++it;
+	pqxx2c(dst.hold_temp, it); ++it;
 	return it;
 }
 
@@ -488,7 +488,7 @@ static inline void pqxx2c(enum ifd_t & dst, const pqxx::const_row_iterator & it)
 template<>
 pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fusion_splice_result & src)
 {
-	return (*this)(src.time_consume)(src.code)(src.loss)(src.recinfo.lft.ft)(src.recinfo.lft.clad_dm)(src.recinfo.lft.core_dm)(src.recinfo.rt.ft)(src.recinfo.rt.clad_dm)(src.recinfo.rt.core_dm)(src.defect.yzl.dbmp)(src.defect.yzl.hangle)(src.defect.yzl.vangle)(src.defect.yzl.clad_dm)(src.defect.yzr.dbmp)(src.defect.yzr.hangle)(src.defect.yzr.vangle)(src.defect.yzr.clad_dm)(src.defect.xzl.dbmp)(src.defect.xzl.hangle)(src.defect.xzl.vangle)(src.defect.xzl.clad_dm)(src.defect.xzr.dbmp)(src.defect.xzr.hangle)(src.defect.xzr.vangle)(src.defect.xzr.clad_dm)(src.defect.yz_hangle)(src.defect.xz_hangle)(src.defect.lft_vangle)(src.defect.rt_vangle)(src.defect.yz_img)(src.defect.xz_img)(src.defect.yz_defect_img)(src.defect.xz_defect_img)(src.prestate.core_offset)(src.prestate.clad_offset)(src.prestate.endface_gap)(src.prestate.vertex_angle)(src.tense_test.exed)(src.tense_test.pass)(src.manual_arc.count)(src.xz_final_img)(src.yz_final_img);
+	return (*this)(src.time_consume)(src.code)(src.loss)(src.recinfo.lft.ft)(src.recinfo.lft.clad_dm)(src.recinfo.lft.core_dm)(src.recinfo.rt.ft)(src.recinfo.rt.clad_dm)(src.recinfo.rt.core_dm)(src.defect.yzl.dbmp)(src.defect.yzl.hangle)(src.defect.yzl.vangle)(src.defect.yzl.clad_dm)(src.defect.yzl.core_dm)(src.defect.yzr.dbmp)(src.defect.yzr.hangle)(src.defect.yzr.vangle)(src.defect.yzr.clad_dm)(src.defect.yzr.core_dm)(src.defect.xzl.dbmp)(src.defect.xzl.hangle)(src.defect.xzl.vangle)(src.defect.xzl.clad_dm)(src.defect.xzl.core_dm)(src.defect.xzr.dbmp)(src.defect.xzr.hangle)(src.defect.xzr.vangle)(src.defect.xzr.clad_dm)(src.defect.xzr.core_dm)(src.defect.yz_hangle)(src.defect.xz_hangle)(src.defect.lft_vangle)(src.defect.rt_vangle)(src.defect.yz_img)(src.defect.xz_img)(src.defect.yz_defect_img)(src.defect.xz_defect_img)(src.prestate.core_offset)(src.prestate.clad_offset)(src.prestate.endface_gap)(src.prestate.vertex_angle)(src.tense_test.exed)(src.tense_test.pass)(src.manual_arc.count)(src.xz_final_img)(src.yz_final_img);
 }
 
 pqxx::const_row_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_row_iterator & src)
@@ -507,18 +507,22 @@ pqxx::const_row_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_ro
 	pqxx2c(dst.defect.yzl.hangle, it); ++it;
 	pqxx2c(dst.defect.yzl.vangle, it); ++it;
 	pqxx2c(dst.defect.yzl.clad_dm, it); ++it;
+	pqxx2c(dst.defect.yzl.core_dm, it); ++it;
 	pqxx2c(dst.defect.yzr.dbmp, it); ++it;
 	pqxx2c(dst.defect.yzr.hangle, it); ++it;
 	pqxx2c(dst.defect.yzr.vangle, it); ++it;
 	pqxx2c(dst.defect.yzr.clad_dm, it); ++it;
+	pqxx2c(dst.defect.yzr.core_dm, it); ++it;
 	pqxx2c(dst.defect.xzl.dbmp, it); ++it;
 	pqxx2c(dst.defect.xzl.hangle, it); ++it;
 	pqxx2c(dst.defect.xzl.vangle, it); ++it;
 	pqxx2c(dst.defect.xzl.clad_dm, it); ++it;
+	pqxx2c(dst.defect.xzl.core_dm, it); ++it;
 	pqxx2c(dst.defect.xzr.dbmp, it); ++it;
 	pqxx2c(dst.defect.xzr.hangle, it); ++it;
 	pqxx2c(dst.defect.xzr.vangle, it); ++it;
 	pqxx2c(dst.defect.xzr.clad_dm, it); ++it;
+	pqxx2c(dst.defect.xzr.core_dm, it); ++it;
 	pqxx2c(dst.defect.yz_hangle, it); ++it;
 	pqxx2c(dst.defect.xz_hangle, it); ++it;
 	pqxx2c(dst.defect.lft_vangle, it); ++it;

@@ -35,7 +35,7 @@ CREATE TYPE EFS_RESULT	AS ENUM (
 CREATE DOMAIN DT_VOLTAGE	AS DECIMAL(5,3);	-- unit: v
 CREATE DOMAIN DT_LENGTH		AS DECIMAL(8,3);	-- unit: um
 CREATE DOMAIN DT_TIME		AS INT4;		-- unit: ms
-CREATE DOMAIN DT_SPEED		AS INT4;		-- unit: um/s (nm/ms)
+CREATE DOMAIN DT_SPEED		AS DECIMAL(8,3);	-- unit: um/s (nm/ms)
 CREATE DOMAIN DT_ANGLE		AS DECIMAL(5,2);	-- unit: degree
 CREATE DOMAIN DT_LOSS		AS DECIMAL(8,3);	-- unit: dB
 
@@ -56,17 +56,18 @@ CREATE TABLE fs_param (
 	, y_focus	BOOL		NOT NULL	DEFAULT TRUE
 	, ecf_redress	BOOL		NOT NULL	DEFAULT TRUE
 	, auto_mag	BOOL		NOT NULL	DEFAULT TRUE
-	, tense_test	BOOL		NOT NULL	DEFAULT FALSE
-	, tense_speed	DT_SPEED	NOT NULL	DEFAULT 200	-- unit: um/s
-	, tense_length	DT_LENGTH	NOT NULL	DEFAULT 100	-- unit: um
+
 	, vangle_limit	DT_ANGLE	NOT NULL	DEFAULT 2.0
 	, hangle_limit  DT_ANGLE	NOT NULL	DEFAULT 1.0
+
 	, clr_mag	DT_VOLTAGE	NOT NULL	DEFAULT 0.3	-- unit: volt
 	, clr_time	DT_TIME		NOT NULL	DEFAULT 300
 	, clr_pos	DT_LENGTH	NOT NULL	DEFAULT 100	-- unit: um
+
 	, position	DT_LENGTH	NOT NULL	DEFAULT 0
 	, gap		DT_LENGTH	NOT NULL	DEFAULT 8
 	, overlap	DT_LENGTH	NOT NULL	DEFAULT 6
+
 	, pre_mag	DT_VOLTAGE	NOT NULL	DEFAULT 0.3	-- unit: volt
 	, pre_time	DT_TIME		NOT NULL	DEFAULT 150
 	, arc1_mag	DT_VOLTAGE	NOT NULL	DEFAULT 0.82
@@ -76,10 +77,20 @@ CREATE TABLE fs_param (
 	, arc2_on_time	DT_TIME		NOT NULL	DEFAULT 180
 	, arc2_off_time	DT_TIME		NOT NULL	DEFAULT 0
 	, arc_man_time	DT_TIME		NOT NULL	DEFAULT 800
+
+	, lft_push_speed	DT_SPEED	NOT NULL	DEFAULT 100	-- unit: um/s
+	, rt_push_speed		DT_SPEED	NOT NULL	DEFAULT 100	-- unit: um/s
+
 	, taper_splice	BOOL		NOT NULL	DEFAULT FALSE
 	, taper_wait_time	DT_TIME	NOT NULL	DEFAULT 400
 	, taper_length	DT_LENGTH	NOT NULL	DEFAULT 10
 	, taper_speed	DT_SPEED	NOT NULL	DEFAULT 200	-- unit: um/s
+
+	, tense_test	BOOL		NOT NULL	DEFAULT FALSE
+	, tense_speed	DT_SPEED	NOT NULL	DEFAULT 200	-- unit: um/s
+	, tense_length	DT_LENGTH	NOT NULL	DEFAULT 100	-- unit: um
+
+
 	, loss_mode	ELOSSEST_MODE	NOT NULL	DEFAULT 'FINE'
 	, loss_limit	DT_LOSS		NOT NULL	DEFAULT 0.20
 	, loss_min	DT_LOSS		NOT NULL	DEFAULT 0.01
@@ -88,8 +99,6 @@ CREATE TABLE fs_param (
 	, syn_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.7
 	, opp_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.3
 	, mfd_mis_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0
-	, lft_push_speed	DT_SPEED	NOT NULL	DEFAULT 100	-- unit: um/s
-	, rt_push_speed		DT_SPEED	NOT NULL	DEFAULT 100	-- unit: um/s
 );
 
 INSERT INTO fs_param (
@@ -194,21 +203,25 @@ CREATE TABLE fs_record (
 	, defect_yzl_hangle	DT_ANGLE	NOT NULL
 	, defect_yzl_vangle	DT_ANGLE	NOT NULL
 	, defect_yzl_clad_dm	DT_LENGTH	NOT NULL
+	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_yzr_dbmp	INT4		NOT NULL
 	, defect_yzr_hangle	DT_ANGLE	NOT NULL
 	, defect_yzr_vangle	DT_ANGLE	NOT NULL
 	, defect_yzr_clad_dm	DT_LENGTH	NOT NULL
+	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_xzl_dbmp	INT4		NOT NULL
 	, defect_xzl_hangle	DT_ANGLE	NOT NULL
 	, defect_xzl_vangle	DT_ANGLE	NOT NULL
 	, defect_xzl_clad_dm	DT_LENGTH	NOT NULL
+	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_xzr_dbmp	INT4		NOT NULL
 	, defect_xzr_hangle	DT_ANGLE	NOT NULL
 	, defect_xzr_vangle	DT_ANGLE	NOT NULL
 	, defect_xzr_clad_dm	DT_LENGTH	NOT NULL
+	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_yz_hangle	DT_ANGLE	NOT NULL
 	, defect_xz_hangle	DT_ANGLE	NOT NULL
