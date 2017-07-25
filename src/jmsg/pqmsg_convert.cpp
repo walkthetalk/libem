@@ -225,7 +225,7 @@ static inline void pqxx2c(enum loss_estimate_mode_t & dst, const pqxx::const_row
 template<>
 pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fs_param_cfg & src)
 {
-	return (*this)(src.seqn)(src.name)(src.fusion_mode)(src.lfti)(src.rfti)(src.align_mode)(src.x_focus)(src.y_focus)(src.ecf_redress)(src.fiber_shift)(src.auto_mag)(src.vangle_limit)(src.hangle_limit)(src.clr_mag)(src.clr_time)(src.clr_pos)(src.position)(src.gap)(src.overlap)(src.pre_mag)(src.pre_time)(src.arc1_mag)(src.arc1_time)(src.arc2_mag)(src.arc2_time)(src.arc2_on_time)(src.arc2_off_time)(src.arc_man_time)(src.lft_push_speed)(src.rt_push_speed)(src.taper_splice)(src.taper_wait_time)(src.taper_length)(src.taper_speed)(src.tense_test)(src.tense_speed)(src.tense_length)(src.loss_mode)(src.loss_limit)(src.loss_min)(src.lft_mfd)(src.rt_mfd)(src.syn_bend_co)(src.opp_bend_co)(src.mfd_mis_co);
+	return (*this)(src.seqn)(src.name)(src.fusion_mode)(src.lfti)(src.rfti)(src.align_mode)(src.x_focus)(src.y_focus)(src.ecf_redress)(src.auto_mag)(src.vangle_limit)(src.hangle_limit)(src.clr_mag)(src.clr_time)(src.clr_pos)(src.position)(src.gap)(src.overlap)(src.pre_mag)(src.pre_time)(src.arc1_mag)(src.arc1_time)(src.arc2_mag)(src.arc2_time)(src.arc2_on_time)(src.arc2_off_time)(src.arc_man_time)(src.lft_push_speed)(src.rt_push_speed)(src.taper_splice)(src.taper_wait_time)(src.taper_length)(src.taper_speed)(src.tense_test)(src.tense_speed)(src.tense_length)(src.loss_mode)(src.loss_limit)(src.loss_min)(src.lft_mfd)(src.rt_mfd)(src.syn_bend_co)(src.opp_bend_co)(src.mfd_mis_co);
 }
 
 pqxx::const_row_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_row_iterator & src)
@@ -240,7 +240,6 @@ pqxx::const_row_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_row_iterat
 	pqxx2c(dst.x_focus, it); ++it;
 	pqxx2c(dst.y_focus, it); ++it;
 	pqxx2c(dst.ecf_redress, it); ++it;
-	pqxx2c(dst.fiber_shift, it); ++it;
 	pqxx2c(dst.auto_mag, it); ++it;
 	pqxx2c(dst.vangle_limit, it); ++it;
 	pqxx2c(dst.hangle_limit, it); ++it;
