@@ -179,9 +179,9 @@ INSERT INTO heat_param_lib (
 
 CREATE TABLE fs_record (
 	  sn		SERIAL		NOT NULL	PRIMARY KEY
-	, exec_date	DATE		NOT NULL
-	, time_consume		INT4	NOT NULL
-	, code	EFS_RESULT	NOT NULL
+	, ts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+	, time_consume	INT4		NOT NULL	--unit: ms
+	, code		EFS_RESULT	NOT NULL
 
 	, recinfo_lft_ft	EFTI_MODE	NOT NULL
 	, recinfo_lft_clad_dm	DT_LENGTH	NOT NULL

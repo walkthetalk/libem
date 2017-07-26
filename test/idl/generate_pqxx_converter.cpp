@@ -103,7 +103,7 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
 		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
 
-		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_tuple_iterator & it)\n", ename);
+		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_row_iterator & it)\n", ename);
 		outf.pf(lvl, "{ %s v; it->to(v); dst = (enum %s)v; }\n", etype, ename);
 	}
 	else {
@@ -165,7 +165,7 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
 		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
 
-		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_tuple_iterator &it)\n", ename);
+		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_row_iterator &it)\n", ename);
 		outf.pf(lvl, "{ dst = (enum %s)search_val_binary(str2e_%s, it->c_str()); }\n", ename, ename);
 	}
 
@@ -313,10 +313,10 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 	outf.pf(lvl, "}\n\n");
 
 	///LOAD
-	hppoutf.pf(lvl, "pqxx::const_tuple_iterator pqxx2c(%s & dst, const pqxx::const_tuple_iterator & src);\n", sname);
-	outf.pf(lvl, "pqxx::const_tuple_iterator pqxx2c(%s & dst, const pqxx::const_tuple_iterator & src)\n", sname);
+	hppoutf.pf(lvl, "pqxx::const_row_iterator pqxx2c(%s & dst, const pqxx::const_row_iterator & src);\n", sname);
+	outf.pf(lvl, "pqxx::const_row_iterator pqxx2c(%s & dst, const pqxx::const_row_iterator & src)\n", sname);
 	outf.pf(lvl, "{\n");
-	outf.pf(lvl+1, "pqxx::const_tuple_iterator it = src;\n");
+	outf.pf(lvl+1, "pqxx::const_row_iterator it = src;\n");
 	for (size_t i = 0; i < smnList.size(); ++i) {
 		const char * const mn = smnList[i].c_str();
 		outf.pf(lvl+1, "pqxx2c(dst.%s, it); ++it;\n", mn);

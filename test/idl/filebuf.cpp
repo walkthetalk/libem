@@ -122,16 +122,16 @@ pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const std::vec
 	return this->operator()(bs);
 }
 
-static inline void pqxx2c(bool & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(float & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(double & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(std::string & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(bool & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int16_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint16_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int32_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint32_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int64_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint64_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(float & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(double & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(std::string & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
 
 static inline void pqxx2c(std::vector<uint8_t> & dst, const pqxx::field & f)
 {
@@ -207,7 +207,7 @@ auto search_val_binary(const T & flist, const std::string & name) -> decltype(fl
 
 static const char * s_pqxx_hpp_header = R"convertheader(#pragma once
 
-#include <pqxx/tuple>
+#include <pqxx/row>
 #include <pqxx/prepared_statement>
 
 #include "jmsg_types.hpp"

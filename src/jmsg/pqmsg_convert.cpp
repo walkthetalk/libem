@@ -12,16 +12,16 @@ pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const std::vec
 	return this->operator()(bs);
 }
 
-static inline void pqxx2c(bool & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint16_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint32_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(int64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(uint64_t & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(float & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(double & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
-static inline void pqxx2c(std::string & dst, const pqxx::const_tuple_iterator & it) { it->to(dst); }
+static inline void pqxx2c(bool & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int16_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint16_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int32_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint32_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(int64_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(uint64_t & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(float & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(double & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
+static inline void pqxx2c(std::string & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
 
 static inline void pqxx2c(std::vector<uint8_t> & dst, const pqxx::field & f)
 {
@@ -120,7 +120,7 @@ static inline const char * e2pqxx(const enum fs_pattern_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fs_pattern_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum fs_pattern_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum fs_pattern_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fs_pattern_t)search_val_binary(str2e_fs_pattern_t, it->c_str()); }
 
 /// @fiber_t : string to enum
@@ -155,7 +155,7 @@ static inline const char * e2pqxx(const enum fiber_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fiber_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum fiber_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum fiber_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fiber_t)search_val_binary(str2e_fiber_t, it->c_str()); }
 
 /// @align_method_t : string to enum
@@ -188,7 +188,7 @@ static inline const char * e2pqxx(const enum align_method_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum align_method_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum align_method_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum align_method_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum align_method_t)search_val_binary(str2e_align_method_t, it->c_str()); }
 
 /// @loss_estimate_mode_t : string to enum
@@ -219,7 +219,7 @@ static inline const char * e2pqxx(const enum loss_estimate_mode_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum loss_estimate_mode_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum loss_estimate_mode_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum loss_estimate_mode_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum loss_estimate_mode_t)search_val_binary(str2e_loss_estimate_mode_t, it->c_str()); }
 
 template<>
@@ -228,9 +228,9 @@ pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fs_param
 	return (*this)(src.seqn)(src.name)(src.fusion_mode)(src.lfti)(src.rfti)(src.align_mode)(src.x_focus)(src.y_focus)(src.ecf_redress)(src.auto_mag)(src.vangle_limit)(src.hangle_limit)(src.clr_mag)(src.clr_time)(src.clr_pos)(src.position)(src.gap)(src.overlap)(src.pre_mag)(src.pre_time)(src.arc1_mag)(src.arc1_time)(src.arc2_mag)(src.arc2_time)(src.arc2_on_time)(src.arc2_off_time)(src.arc_man_time)(src.lft_push_speed)(src.rt_push_speed)(src.taper_splice)(src.taper_wait_time)(src.taper_length)(src.taper_speed)(src.tense_test)(src.tense_speed)(src.tense_length)(src.loss_mode)(src.loss_limit)(src.loss_min)(src.lft_mfd)(src.rt_mfd)(src.syn_bend_co)(src.opp_bend_co)(src.mfd_mis_co);
 }
 
-pqxx::const_tuple_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_tuple_iterator & src)
+pqxx::const_row_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_row_iterator & src)
 {
-	pqxx::const_tuple_iterator it = src;
+	pqxx::const_row_iterator it = src;
 	pqxx2c(dst.seqn, it); ++it;
 	pqxx2c(dst.name, it); ++it;
 	pqxx2c(dst.fusion_mode, it); ++it;
@@ -313,7 +313,7 @@ static inline const char * e2pqxx(const enum heat_material_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum heat_material_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum heat_material_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum heat_material_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum heat_material_t)search_val_binary(str2e_heat_material_t, it->c_str()); }
 
 /// @shrinktube_length_t : string to enum
@@ -345,7 +345,7 @@ static inline const char * e2pqxx(const enum shrinktube_length_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum shrinktube_length_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum shrinktube_length_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum shrinktube_length_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum shrinktube_length_t)search_val_binary(str2e_shrinktube_length_t, it->c_str()); }
 
 template<>
@@ -354,9 +354,9 @@ pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const heat_par
 	return (*this)(src.seqn)(src.name)(src.material)(src.length)(src.auto_heat)(src.heat_time)(src.heat_temp)(src.finish_temp)(src.fast_heat)(src.temp_stay);
 }
 
-pqxx::const_tuple_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_tuple_iterator & src)
+pqxx::const_row_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_row_iterator & src)
 {
-	pqxx::const_tuple_iterator it = src;
+	pqxx::const_row_iterator it = src;
 	pqxx2c(dst.seqn, it); ++it;
 	pqxx2c(dst.name, it); ++it;
 	pqxx2c(dst.material, it); ++it;
@@ -448,7 +448,7 @@ static inline const char * e2pqxx(const enum fs_err_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fs_err_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum fs_err_t & dst, const pqxx::const_tuple_iterator &it)
+static inline void pqxx2c(enum fs_err_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fs_err_t)search_val_binary(str2e_fs_err_t, it->c_str()); }
 
 /// @ifd_t : string to enum
@@ -481,18 +481,19 @@ static inline uint32_t e2pqxx(const enum ifd_t src)
 template<>
 inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum ifd_t & src)
 { return this->operator()(e2pqxx(src)); }
-static inline void pqxx2c(enum ifd_t & dst, const pqxx::const_tuple_iterator & it)
+static inline void pqxx2c(enum ifd_t & dst, const pqxx::const_row_iterator & it)
 { uint32_t v; it->to(v); dst = (enum ifd_t)v; }
 
 template<>
 pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fusion_splice_result & src)
 {
-	return (*this)(src.code)(src.loss)(src.recinfo.lft.ft)(src.recinfo.lft.clad_dm)(src.recinfo.lft.core_dm)(src.recinfo.rt.ft)(src.recinfo.rt.clad_dm)(src.recinfo.rt.core_dm)(src.defect.yzl.dbmp)(src.defect.yzl.hangle)(src.defect.yzl.vangle)(src.defect.yzl.clad_dm)(src.defect.yzr.dbmp)(src.defect.yzr.hangle)(src.defect.yzr.vangle)(src.defect.yzr.clad_dm)(src.defect.xzl.dbmp)(src.defect.xzl.hangle)(src.defect.xzl.vangle)(src.defect.xzl.clad_dm)(src.defect.xzr.dbmp)(src.defect.xzr.hangle)(src.defect.xzr.vangle)(src.defect.xzr.clad_dm)(src.defect.yz_hangle)(src.defect.xz_hangle)(src.defect.lft_vangle)(src.defect.rt_vangle)(src.defect.yz_img)(src.defect.xz_img)(src.defect.yz_defect_img)(src.defect.xz_defect_img)(src.prestate.core_offset)(src.prestate.clad_offset)(src.prestate.endface_gap)(src.prestate.vertex_angle)(src.tense_test.exed)(src.tense_test.pass)(src.manual_arc.count)(src.xz_final_img)(src.yz_final_img);
+	return (*this)(src.time_consume)(src.code)(src.loss)(src.recinfo.lft.ft)(src.recinfo.lft.clad_dm)(src.recinfo.lft.core_dm)(src.recinfo.rt.ft)(src.recinfo.rt.clad_dm)(src.recinfo.rt.core_dm)(src.defect.yzl.dbmp)(src.defect.yzl.hangle)(src.defect.yzl.vangle)(src.defect.yzl.clad_dm)(src.defect.yzr.dbmp)(src.defect.yzr.hangle)(src.defect.yzr.vangle)(src.defect.yzr.clad_dm)(src.defect.xzl.dbmp)(src.defect.xzl.hangle)(src.defect.xzl.vangle)(src.defect.xzl.clad_dm)(src.defect.xzr.dbmp)(src.defect.xzr.hangle)(src.defect.xzr.vangle)(src.defect.xzr.clad_dm)(src.defect.yz_hangle)(src.defect.xz_hangle)(src.defect.lft_vangle)(src.defect.rt_vangle)(src.defect.yz_img)(src.defect.xz_img)(src.defect.yz_defect_img)(src.defect.xz_defect_img)(src.prestate.core_offset)(src.prestate.clad_offset)(src.prestate.endface_gap)(src.prestate.vertex_angle)(src.tense_test.exed)(src.tense_test.pass)(src.manual_arc.count)(src.xz_final_img)(src.yz_final_img);
 }
 
-pqxx::const_tuple_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_tuple_iterator & src)
+pqxx::const_row_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_row_iterator & src)
 {
-	pqxx::const_tuple_iterator it = src;
+	pqxx::const_row_iterator it = src;
+	pqxx2c(dst.time_consume, it); ++it;
 	pqxx2c(dst.code, it); ++it;
 	pqxx2c(dst.loss, it); ++it;
 	pqxx2c(dst.recinfo.lft.ft, it); ++it;
