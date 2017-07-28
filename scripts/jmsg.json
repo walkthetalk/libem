@@ -150,6 +150,7 @@
 		"CROSS_OVER" : {},
 		"OFF_CENTER" : {},
 		"IMG_LUM" : {},
+		"IMG_DUST" : {},
 		"ABNORMAL_ARC" : {},
 		"TENSE_TEST_FAIL" : {},
 		"FIBER_BROKEN" : {},
@@ -549,7 +550,7 @@
 		"dischargeAdjustInit",
 		"stopDischarge",
 		"dustCheckStart",
-		"dustCheckFullStart",
+		"startDustCheckFull",
 		"fsCoverOpenned",
 		"goOn",
 		"skip",
@@ -558,6 +559,8 @@
 		"queryDevState",
 		"queryWaveForm",
 		"fiberTrainInit",
+		"arcTestResult",
+		"heatTestResult"
 	]
 },
 
@@ -666,10 +669,9 @@
 	"fields"	: {
 		"code" : "fs_err_t",
 
+		"z_cfg"      : "fs_da_cfg",
 		"recinfo"    : "fiber_reco_result_t",
 		"defect"     : "defect_detect_result_t",
-		"prestate"   : "fspre_state_t",
-		"tense_test" : "tense_test_result",
 
 		"base"       : "arcpenvinfo_t",
 		"revise"     : "arcpenvinfo_t",
@@ -700,7 +702,6 @@
 {
 	"category"	: "struct",
 	"name"		: "set_fs_display_mode_ext",
-	"attr"		: "msg",
 	"msgid"		: "setFsDisplayModeExt",
 	"fields"	: {
 		"xovery" : "bool",
@@ -779,20 +780,9 @@
 	"name"		: "image_move",
 	"attr"		: "msg",
 	"fields"	: {
-		"is_pos_x" : "bool",
+		"cmosId" : "cmosId_t",
 		"row"	: "int16_t",
 		"column" : "int16_t",
-	}
-},
-
-{
-	"category"	: "struct",
-	"name"		: "set_window",
-	"attr"		: "msg",
-	"fields"	: {
-		"is_pos_x" : "bool",
-		"row"	: "uint16_t",
-		"column" : "uint16_t",
 	}
 },
 
@@ -914,7 +904,6 @@
 {
 	"category"	: "struct",
 	"name"		: "realtime_revise_result",
-	"attr"		: "msg",
 	"msgid"		: "realtimeReviseResult",
 	"alias"		: "realtime_revise_result_t",
 	"fields"	: {
@@ -1246,11 +1235,20 @@
 
 {
 	"category"	: "struct",
+	"name"		: "dustCheckFullStart",
+	"attr"		: "msg",
+	"fields"	: {
+		"cmosId" : "cmosId_t"
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "update_window_position",
 	"alias"		: "update_window_position_t",
 	"msgid"		: "update_window_position",
 	"fields" : {
-		"is_pos_x" : "bool",
+		"cmosId" : "cmosId_t",
 		"row" : "uint32_t",
 		"column" : "uint32_t",
 	}

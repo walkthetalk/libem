@@ -134,35 +134,36 @@ enum class fs_err_t : unsigned {
 	CROSS_OVER = 7,
 	OFF_CENTER = 8,
 	IMG_LUM = 9,
-	ABNORMAL_ARC = 10,
-	TENSE_TEST_FAIL = 11,
-	FIBER_BROKEN = 12,
-	QUIT_MIDWAY = 13,
-	PUSH_TIMEOUT = 14,
-	CALIBRATE_TIMEOUT = 15,
-	RESET_TIMEOUT = 16,
-	ARC_TIME_ZERO = 17,
-	ARC1_REVISE = 18,
-	ARC2_REVISE = 19,
-	FOCUS_X = 20,
-	FOCUS_Y = 21,
-	IMG_PROCESS = 22,
-	SYSTEM_ERR = 23,
-	FIBER_OFFSIDE = 24,	/// user should replace fiber
-	CMOS_EXP = 25,
-	LOSS_EST = 26,
-	ARC_POS = 27,
-	ARC_OVERFLOW = 28,
-	/// @min : 0, @max : 28
+	IMG_DUST = 10,
+	ABNORMAL_ARC = 11,
+	TENSE_TEST_FAIL = 12,
+	FIBER_BROKEN = 13,
+	QUIT_MIDWAY = 14,
+	PUSH_TIMEOUT = 15,
+	CALIBRATE_TIMEOUT = 16,
+	RESET_TIMEOUT = 17,
+	ARC_TIME_ZERO = 18,
+	ARC1_REVISE = 19,
+	ARC2_REVISE = 20,
+	FOCUS_X = 21,
+	FOCUS_Y = 22,
+	IMG_PROCESS = 23,
+	SYSTEM_ERR = 24,
+	FIBER_OFFSIDE = 25,	/// user should replace fiber
+	CMOS_EXP = 26,
+	LOSS_EST = 27,
+	ARC_POS = 28,
+	ARC_OVERFLOW = 29,
+	/// @min : 0, @max : 29
 };
 template<> struct enum_info<enum fs_err_t> {
 	static constexpr unsigned min = 0;
-	static constexpr unsigned max = 28;
-	static constexpr unsigned size = 29;
+	static constexpr unsigned max = 29;
+	static constexpr unsigned size = 30;
 };
 static constexpr unsigned min_fs_err = 0;
-static constexpr unsigned max_fs_err = 28;
-static constexpr unsigned rsize_fs_err = 29;
+static constexpr unsigned max_fs_err = 29;
+static constexpr unsigned rsize_fs_err = 30;
 
 enum class ledId_t : unsigned {
 	CMOS_X = 0,
