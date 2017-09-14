@@ -255,12 +255,12 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"AUTO" : {},
 		"SM" : {},
 		"DS" : {},
 		"NZ" : {},
 		"MM" : {},
-		"FOLLOW" : {}
+		"FOLLOW" : {},
+		"AUTO" : {}
 	}
 },
 
@@ -516,7 +516,7 @@
 				"resetAfterSplice" : { "type" : "int", "unit" : "s" },
 				"cleanAgain" : "bool",
 				"imageZoomIn" : "bool",
-				"manualArcLimit" : "int",
+				"manualArcLimit" : "uint32_t",
 			}
 		}
 	}
@@ -1180,7 +1180,7 @@
 			"comment" : "dust check threshold 1"
 		},
 		"denoise_th" : {
-			"type" : "int",
+			"type" : "uint32_t",
 			"comment" : "image denoise threshold"
 		},
 		"loss_est_factor" : {
