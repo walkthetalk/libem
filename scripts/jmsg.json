@@ -891,6 +891,12 @@
 		"base_count" : "uint32_t",
 		"arc_count" : "uint32_t",
 
+		"reset" : "uint32_t",
+		"push" : "uint32_t",
+		"calibrate" : "uint32_t",
+		"ele_arc" : "uint32_t",
+		"img" : "uint32_t",
+
 		"nm_per_pixel_xz" : "statistic_data_t",
 		"nm_per_pixel_yz" : "statistic_data_t",
 		"nm_per_step_lz"  : "statistic_data_t",
