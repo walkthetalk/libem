@@ -128,12 +128,12 @@ static const struct {
 	const char * name;
 	unsigned val;
 } str2e_fiber_t[6] = {
-	{ "AUTO", 0 },
-	{ "DS", 2 },
-	{ "FOLLOW", 5 },
-	{ "MM", 4 },
-	{ "NZ", 3 },
-	{ "SM", 1 },
+	{ "AUTO", 5 },
+	{ "DS", 1 },
+	{ "FOLLOW", 4 },
+	{ "MM", 3 },
+	{ "NZ", 2 },
+	{ "SM", 0 },
 };
 
 /// @fiber_t : enum to string
@@ -141,12 +141,12 @@ static const struct {
 	unsigned val;
 	const char * name;
 } e2str_fiber_t[6] = {
-	{ 0, "AUTO" },
-	{ 1, "SM" },
-	{ 2, "DS" },
-	{ 3, "NZ" },
-	{ 4, "MM" },
-	{ 5, "FOLLOW" },
+	{ 0, "SM" },
+	{ 1, "DS" },
+	{ 2, "NZ" },
+	{ 3, "MM" },
+	{ 4, "FOLLOW" },
+	{ 5, "AUTO" },
 };
 
 static inline const char * e2pqxx(const enum fiber_t src)
@@ -374,35 +374,36 @@ pqxx::const_row_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_row_iter
 static const struct {
 	const char * name;
 	unsigned val;
-} str2e_fs_err_t[29] = {
-	{ "ABNORMAL_ARC", 10 },
-	{ "ARC1_REVISE", 18 },
-	{ "ARC2_REVISE", 19 },
-	{ "ARC_OVERFLOW", 28 },
-	{ "ARC_POS", 27 },
-	{ "ARC_TIME_ZERO", 17 },
-	{ "CALIBRATE_TIMEOUT", 15 },
-	{ "CMOS_EXP", 25 },
+} str2e_fs_err_t[30] = {
+	{ "ABNORMAL_ARC", 11 },
+	{ "ARC1_REVISE", 19 },
+	{ "ARC2_REVISE", 20 },
+	{ "ARC_OVERFLOW", 29 },
+	{ "ARC_POS", 28 },
+	{ "ARC_TIME_ZERO", 18 },
+	{ "CALIBRATE_TIMEOUT", 16 },
+	{ "CMOS_EXP", 26 },
 	{ "COVER_OPENNED", 3 },
 	{ "CROSS_OVER", 7 },
-	{ "FIBER_BROKEN", 12 },
+	{ "FIBER_BROKEN", 13 },
 	{ "FIBER_DEFECT", 5 },
-	{ "FIBER_OFFSIDE", 24 },
+	{ "FIBER_OFFSIDE", 25 },
 	{ "FIBER_RECO", 6 },
-	{ "FOCUS_X", 20 },
-	{ "FOCUS_Y", 21 },
+	{ "FOCUS_X", 21 },
+	{ "FOCUS_Y", 22 },
+	{ "IMG_DUST", 10 },
 	{ "IMG_LUM", 9 },
-	{ "IMG_PROCESS", 22 },
-	{ "LOSS_EST", 26 },
+	{ "IMG_PROCESS", 23 },
+	{ "LOSS_EST", 27 },
 	{ "MEDDIACY", 1 },
 	{ "NO_FIBER", 4 },
 	{ "OFF_CENTER", 8 },
-	{ "PUSH_TIMEOUT", 14 },
-	{ "QUIT_MIDWAY", 13 },
-	{ "RESET_TIMEOUT", 16 },
+	{ "PUSH_TIMEOUT", 15 },
+	{ "QUIT_MIDWAY", 14 },
+	{ "RESET_TIMEOUT", 17 },
 	{ "SUCCESS", 0 },
-	{ "SYSTEM_ERR", 23 },
-	{ "TENSE_TEST_FAIL", 11 },
+	{ "SYSTEM_ERR", 24 },
+	{ "TENSE_TEST_FAIL", 12 },
 	{ "UNKOWN_ERR", 2 },
 };
 
@@ -410,7 +411,7 @@ static const struct {
 static const struct {
 	unsigned val;
 	const char * name;
-} e2str_fs_err_t[29] = {
+} e2str_fs_err_t[30] = {
 	{ 0, "SUCCESS" },
 	{ 1, "MEDDIACY" },
 	{ 2, "UNKOWN_ERR" },
@@ -421,25 +422,26 @@ static const struct {
 	{ 7, "CROSS_OVER" },
 	{ 8, "OFF_CENTER" },
 	{ 9, "IMG_LUM" },
-	{ 10, "ABNORMAL_ARC" },
-	{ 11, "TENSE_TEST_FAIL" },
-	{ 12, "FIBER_BROKEN" },
-	{ 13, "QUIT_MIDWAY" },
-	{ 14, "PUSH_TIMEOUT" },
-	{ 15, "CALIBRATE_TIMEOUT" },
-	{ 16, "RESET_TIMEOUT" },
-	{ 17, "ARC_TIME_ZERO" },
-	{ 18, "ARC1_REVISE" },
-	{ 19, "ARC2_REVISE" },
-	{ 20, "FOCUS_X" },
-	{ 21, "FOCUS_Y" },
-	{ 22, "IMG_PROCESS" },
-	{ 23, "SYSTEM_ERR" },
-	{ 24, "FIBER_OFFSIDE" },
-	{ 25, "CMOS_EXP" },
-	{ 26, "LOSS_EST" },
-	{ 27, "ARC_POS" },
-	{ 28, "ARC_OVERFLOW" },
+	{ 10, "IMG_DUST" },
+	{ 11, "ABNORMAL_ARC" },
+	{ 12, "TENSE_TEST_FAIL" },
+	{ 13, "FIBER_BROKEN" },
+	{ 14, "QUIT_MIDWAY" },
+	{ 15, "PUSH_TIMEOUT" },
+	{ 16, "CALIBRATE_TIMEOUT" },
+	{ 17, "RESET_TIMEOUT" },
+	{ 18, "ARC_TIME_ZERO" },
+	{ 19, "ARC1_REVISE" },
+	{ 20, "ARC2_REVISE" },
+	{ 21, "FOCUS_X" },
+	{ 22, "FOCUS_Y" },
+	{ 23, "IMG_PROCESS" },
+	{ 24, "SYSTEM_ERR" },
+	{ 25, "FIBER_OFFSIDE" },
+	{ 26, "CMOS_EXP" },
+	{ 27, "LOSS_EST" },
+	{ 28, "ARC_POS" },
+	{ 29, "ARC_OVERFLOW" },
 };
 
 static inline const char * e2pqxx(const enum fs_err_t src)

@@ -63,7 +63,6 @@ private:
 	void __pack(const struct heat_start & val);
 	void __pack(const struct heat_result & val);
 	void __pack(const struct image_move & val);
-	void __pack(const struct set_window & val);
 	void __pack(const struct fs_cover_state & val);
 	void __pack(const struct set_lcd_brightness & val);
 	void __pack(const struct set_led & val);
@@ -82,6 +81,7 @@ private:
 	void __pack(const struct fs_ft_cfg & val);
 	void __pack(const struct fiber_train_result & val);
 	void __pack(const struct count_down & val);
+	void __pack(const struct dustCheckFullStart & val);
 	void __pack(const struct update_window_position & val);
 	void __pack(const struct update_led_brightness & val);
 

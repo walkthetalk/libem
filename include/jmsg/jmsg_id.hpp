@@ -6,61 +6,61 @@
 
 enum class mid_t : uint16_t {
 	nil = 0,	/// occupy symbol, correspond to \em NULL.
-	arc_revise = 1,
-	countDown = 2,
-	defect_detect_result = 3,
-	discharge = 4,
-	dischargeAdjustInit = 5,
-	dischargeAdjustResult = 6,
-	dischargeAdjustStart = 7,
-	discharge_count = 8,
-	dustCheckFullResult = 9,
-	dustCheckFullStart = 10,
-	dustCheckResult = 11,
-	dustCheckStart = 12,
-	fiberTrainInit = 13,
-	fiberTrainResult = 14,
-	fiberTrainStart = 15,
-	fiber_reco_result = 16,
-	fsCoverOpenned = 17,
-	fs_cover_state = 18,
-	fs_state = 19,
-	fspre_state = 20,
-	fusionSpliceReset = 21,
-	fusionSpliceResult = 22,
-	fusionSpliceStart = 23,
-	getFiberDefectInfo = 24,
-	goOn = 25,
-	heat_result = 26,
-	heat_start = 27,
-	heat_state = 28,
-	image_move = 29,
-	loss_estimating_result = 30,
-	manual_arc_result = 31,
-	motorTestResult = 32,
-	motorTestStart = 33,
-	motor_start = 34,
-	motor_stop = 35,
-	process_progress = 36,
-	queryDevState = 37,
-	queryWaveForm = 38,
-	realtimeReviseResult = 39,
-	realtimeReviseStart = 40,
-	realtime_revise_result = 41,
-	regularTestResult = 42,
-	regularTestStart = 43,
-	report_dev_state = 44,
-	report_wave_form = 45,
-	setFsDisplayModeExt = 46,
-	set_fs_display_mode = 47,
-	set_fs_display_mode_ext = 48,
+	arcTestResult = 1,
+	arc_revise = 2,
+	countDown = 3,
+	defect_detect_result = 4,
+	discharge = 5,
+	dischargeAdjustInit = 6,
+	dischargeAdjustResult = 7,
+	dischargeAdjustStart = 8,
+	discharge_count = 9,
+	dustCheckFullResult = 10,
+	dustCheckFullStart = 11,
+	dustCheckResult = 12,
+	dustCheckStart = 13,
+	fiberTrainInit = 14,
+	fiberTrainResult = 15,
+	fiberTrainStart = 16,
+	fiber_reco_result = 17,
+	fsCoverOpenned = 18,
+	fs_cover_state = 19,
+	fs_state = 20,
+	fspre_state = 21,
+	fusionSpliceReset = 22,
+	fusionSpliceResult = 23,
+	fusionSpliceStart = 24,
+	getFiberDefectInfo = 25,
+	goOn = 26,
+	heatTestResult = 27,
+	heat_result = 28,
+	heat_start = 29,
+	heat_state = 30,
+	image_move = 31,
+	loss_estimating_result = 32,
+	manual_arc_result = 33,
+	motorTestResult = 34,
+	motorTestStart = 35,
+	motor_start = 36,
+	motor_stop = 37,
+	process_progress = 38,
+	queryDevState = 39,
+	queryWaveForm = 40,
+	realtimeReviseResult = 41,
+	realtimeReviseStart = 42,
+	regularTestResult = 43,
+	regularTestStart = 44,
+	report_dev_state = 45,
+	report_wave_form = 46,
+	setFsDisplayModeExt = 47,
+	set_fs_display_mode = 48,
 	set_fs_display_zoom_ext = 49,
 	set_lcd_brightness = 50,
 	set_led = 51,
-	set_window = 52,
-	skip = 53,
-	stabilizeElectrodeResult = 54,
-	stabilizeElectrodeStart = 55,
+	skip = 52,
+	stabilizeElectrodeResult = 53,
+	stabilizeElectrodeStart = 54,
+	startDustCheckFull = 55,
 	stop = 56,
 	stopDischarge = 57,
 	tenseTestResult = 58,
@@ -69,6 +69,11 @@ enum class mid_t : uint16_t {
 };
 template<mid_t mid>
 struct msg_helper final {};
+
+template<>
+struct msg_helper<mid_t::arcTestResult> final {
+	typedef struct simple_msg value_type;
+};
 
 template<>
 struct msg_helper<mid_t::arc_revise> final {
@@ -117,7 +122,7 @@ struct msg_helper<mid_t::dustCheckFullResult> final {
 
 template<>
 struct msg_helper<mid_t::dustCheckFullStart> final {
-	typedef struct simple_msg value_type;
+	typedef struct dustCheckFullStart value_type;
 };
 
 template<>
@@ -192,6 +197,11 @@ struct msg_helper<mid_t::getFiberDefectInfo> final {
 
 template<>
 struct msg_helper<mid_t::goOn> final {
+	typedef struct simple_msg value_type;
+};
+
+template<>
+struct msg_helper<mid_t::heatTestResult> final {
 	typedef struct simple_msg value_type;
 };
 
@@ -271,11 +281,6 @@ struct msg_helper<mid_t::realtimeReviseStart> final {
 };
 
 template<>
-struct msg_helper<mid_t::realtime_revise_result> final {
-	typedef struct realtime_revise_result value_type;
-};
-
-template<>
 struct msg_helper<mid_t::regularTestResult> final {
 	typedef struct regular_test_result value_type;
 };
@@ -306,11 +311,6 @@ struct msg_helper<mid_t::set_fs_display_mode> final {
 };
 
 template<>
-struct msg_helper<mid_t::set_fs_display_mode_ext> final {
-	typedef struct set_fs_display_mode_ext value_type;
-};
-
-template<>
 struct msg_helper<mid_t::set_fs_display_zoom_ext> final {
 	typedef struct set_fs_display_zoom_ext value_type;
 };
@@ -326,11 +326,6 @@ struct msg_helper<mid_t::set_led> final {
 };
 
 template<>
-struct msg_helper<mid_t::set_window> final {
-	typedef struct set_window value_type;
-};
-
-template<>
 struct msg_helper<mid_t::skip> final {
 	typedef struct simple_msg value_type;
 };
@@ -343,6 +338,11 @@ struct msg_helper<mid_t::stabilizeElectrodeResult> final {
 template<>
 struct msg_helper<mid_t::stabilizeElectrodeStart> final {
 	typedef struct fs_se_cfg value_type;
+};
+
+template<>
+struct msg_helper<mid_t::startDustCheckFull> final {
+	typedef struct simple_msg value_type;
 };
 
 template<>

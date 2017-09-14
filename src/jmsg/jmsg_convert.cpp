@@ -347,35 +347,36 @@ static inline void json2c(enum fs_display_mode_t & dst, const rapidjson::Value &
 static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
-} str2e_fs_err_t[29] = {
-	{ "ABNORMAL_ARC", 10 },
-	{ "ARC1_REVISE", 18 },
-	{ "ARC2_REVISE", 19 },
-	{ "ARC_OVERFLOW", 28 },
-	{ "ARC_POS", 27 },
-	{ "ARC_TIME_ZERO", 17 },
-	{ "CALIBRATE_TIMEOUT", 15 },
-	{ "CMOS_EXP", 25 },
+} str2e_fs_err_t[30] = {
+	{ "ABNORMAL_ARC", 11 },
+	{ "ARC1_REVISE", 19 },
+	{ "ARC2_REVISE", 20 },
+	{ "ARC_OVERFLOW", 29 },
+	{ "ARC_POS", 28 },
+	{ "ARC_TIME_ZERO", 18 },
+	{ "CALIBRATE_TIMEOUT", 16 },
+	{ "CMOS_EXP", 26 },
 	{ "COVER_OPENNED", 3 },
 	{ "CROSS_OVER", 7 },
-	{ "FIBER_BROKEN", 12 },
+	{ "FIBER_BROKEN", 13 },
 	{ "FIBER_DEFECT", 5 },
-	{ "FIBER_OFFSIDE", 24 },
+	{ "FIBER_OFFSIDE", 25 },
 	{ "FIBER_RECO", 6 },
-	{ "FOCUS_X", 20 },
-	{ "FOCUS_Y", 21 },
+	{ "FOCUS_X", 21 },
+	{ "FOCUS_Y", 22 },
+	{ "IMG_DUST", 10 },
 	{ "IMG_LUM", 9 },
-	{ "IMG_PROCESS", 22 },
-	{ "LOSS_EST", 26 },
+	{ "IMG_PROCESS", 23 },
+	{ "LOSS_EST", 27 },
 	{ "MEDDIACY", 1 },
 	{ "NO_FIBER", 4 },
 	{ "OFF_CENTER", 8 },
-	{ "PUSH_TIMEOUT", 14 },
-	{ "QUIT_MIDWAY", 13 },
-	{ "RESET_TIMEOUT", 16 },
+	{ "PUSH_TIMEOUT", 15 },
+	{ "QUIT_MIDWAY", 14 },
+	{ "RESET_TIMEOUT", 17 },
 	{ "SUCCESS", 0 },
-	{ "SYSTEM_ERR", 23 },
-	{ "TENSE_TEST_FAIL", 11 },
+	{ "SYSTEM_ERR", 24 },
+	{ "TENSE_TEST_FAIL", 12 },
 	{ "UNKOWN_ERR", 2 },
 };
 
@@ -383,7 +384,7 @@ static const struct {
 static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
-} e2str_fs_err_t[29] = {
+} e2str_fs_err_t[30] = {
 	{ 0, "SUCCESS" },
 	{ 1, "MEDDIACY" },
 	{ 2, "UNKOWN_ERR" },
@@ -394,25 +395,26 @@ static const struct {
 	{ 7, "CROSS_OVER" },
 	{ 8, "OFF_CENTER" },
 	{ 9, "IMG_LUM" },
-	{ 10, "ABNORMAL_ARC" },
-	{ 11, "TENSE_TEST_FAIL" },
-	{ 12, "FIBER_BROKEN" },
-	{ 13, "QUIT_MIDWAY" },
-	{ 14, "PUSH_TIMEOUT" },
-	{ 15, "CALIBRATE_TIMEOUT" },
-	{ 16, "RESET_TIMEOUT" },
-	{ 17, "ARC_TIME_ZERO" },
-	{ 18, "ARC1_REVISE" },
-	{ 19, "ARC2_REVISE" },
-	{ 20, "FOCUS_X" },
-	{ 21, "FOCUS_Y" },
-	{ 22, "IMG_PROCESS" },
-	{ 23, "SYSTEM_ERR" },
-	{ 24, "FIBER_OFFSIDE" },
-	{ 25, "CMOS_EXP" },
-	{ 26, "LOSS_EST" },
-	{ 27, "ARC_POS" },
-	{ 28, "ARC_OVERFLOW" },
+	{ 10, "IMG_DUST" },
+	{ 11, "ABNORMAL_ARC" },
+	{ 12, "TENSE_TEST_FAIL" },
+	{ 13, "FIBER_BROKEN" },
+	{ 14, "QUIT_MIDWAY" },
+	{ 15, "PUSH_TIMEOUT" },
+	{ 16, "CALIBRATE_TIMEOUT" },
+	{ 17, "RESET_TIMEOUT" },
+	{ 18, "ARC_TIME_ZERO" },
+	{ 19, "ARC1_REVISE" },
+	{ 20, "ARC2_REVISE" },
+	{ 21, "FOCUS_X" },
+	{ 22, "FOCUS_Y" },
+	{ 23, "IMG_PROCESS" },
+	{ 24, "SYSTEM_ERR" },
+	{ 25, "FIBER_OFFSIDE" },
+	{ 26, "CMOS_EXP" },
+	{ 27, "LOSS_EST" },
+	{ 28, "ARC_POS" },
+	{ 29, "ARC_OVERFLOW" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fs_err_t src)
@@ -537,12 +539,12 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_fiber_t[6] = {
-	{ "AUTO", 0 },
-	{ "DS", 2 },
-	{ "FOLLOW", 5 },
-	{ "MM", 4 },
-	{ "NZ", 3 },
-	{ "SM", 1 },
+	{ "AUTO", 5 },
+	{ "DS", 1 },
+	{ "FOLLOW", 4 },
+	{ "MM", 3 },
+	{ "NZ", 2 },
+	{ "SM", 0 },
 };
 
 /// @fiber_t : enum to string
@@ -550,12 +552,12 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_fiber_t[6] = {
-	{ 0, "AUTO" },
-	{ 1, "SM" },
-	{ 2, "DS" },
-	{ 3, "NZ" },
-	{ 4, "MM" },
-	{ 5, "FOLLOW" },
+	{ 0, "SM" },
+	{ 1, "DS" },
+	{ 2, "NZ" },
+	{ 3, "MM" },
+	{ 4, "FOLLOW" },
+	{ 5, "AUTO" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum fiber_t src)
@@ -1196,10 +1198,9 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct dis
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "code", v, src.code);
+	ENC_MEM(jd, "z_cfg", v, src.z_cfg);
 	ENC_MEM(jd, "recinfo", v, src.recinfo);
 	ENC_MEM(jd, "defect", v, src.defect);
-	ENC_MEM(jd, "prestate", v, src.prestate);
-	ENC_MEM(jd, "tense_test", v, src.tense_test);
 	ENC_MEM(jd, "base", v, src.base);
 	ENC_MEM(jd, "revise", v, src.revise);
 	ENC_MEM(jd, "suggest1", v, src.suggest1);
@@ -1210,14 +1211,40 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct dis
 static inline void json2c(struct discharge_adjust_result & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("code", src, dst.code);
+	DEC_MEM("z_cfg", src, dst.z_cfg);
 	DEC_MEM("recinfo", src, dst.recinfo);
 	DEC_MEM("defect", src, dst.defect);
-	DEC_MEM("prestate", src, dst.prestate);
-	DEC_MEM("tense_test", src, dst.tense_test);
 	DEC_MEM("base", src, dst.base);
 	DEC_MEM("revise", src, dst.revise);
 	DEC_MEM("suggest1", src, dst.suggest1);
 	DEC_MEM("suggest2", src, dst.suggest2);
+}
+
+/// @struct ar_run_data
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ar_run_data & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cnt", v, src.cnt);
+	ENC_MEM(jd, "continuous_success_cnt", v, src.continuous_success_cnt);
+	ENC_MEM(jd, "arc1_min", v, src.arc1_min);
+	ENC_MEM(jd, "arc1_max", v, src.arc1_max);
+	ENC_MEM(jd, "arc2_min", v, src.arc2_min);
+	ENC_MEM(jd, "arc2_max", v, src.arc2_max);
+	ENC_MEM(jd, "d1_seq", v, src.d1_seq);
+	ENC_MEM(jd, "d2_seq", v, src.d2_seq);
+
+	return v;
+}
+static inline void json2c(struct ar_run_data & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cnt", src, dst.cnt);
+	DEC_MEM("continuous_success_cnt", src, dst.continuous_success_cnt);
+	DEC_MEM("arc1_min", src, dst.arc1_min);
+	DEC_MEM("arc1_max", src, dst.arc1_max);
+	DEC_MEM("arc2_min", src, dst.arc2_min);
+	DEC_MEM("arc2_max", src, dst.arc2_max);
+	DEC_MEM("d1_seq", src, dst.d1_seq);
+	DEC_MEM("d2_seq", src, dst.d2_seq);
 }
 
 /// @struct discharge
@@ -1358,7 +1385,7 @@ static inline void json2c(struct heat_result & dst, const rapidjson::Value & src
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct image_move & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "is_pos_x", v, src.is_pos_x);
+	ENC_MEM(jd, "cmosId", v, src.cmosId);
 	ENC_MEM(jd, "row", v, src.row);
 	ENC_MEM(jd, "column", v, src.column);
 
@@ -1366,24 +1393,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ima
 }
 static inline void json2c(struct image_move & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("is_pos_x", src, dst.is_pos_x);
-	DEC_MEM("row", src, dst.row);
-	DEC_MEM("column", src, dst.column);
-}
-
-/// @struct set_window
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_window & src)
-{
-	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "is_pos_x", v, src.is_pos_x);
-	ENC_MEM(jd, "row", v, src.row);
-	ENC_MEM(jd, "column", v, src.column);
-
-	return v;
-}
-static inline void json2c(struct set_window & dst, const rapidjson::Value & src)
-{
-	DEC_MEM("is_pos_x", src, dst.is_pos_x);
+	DEC_MEM("cmosId", src, dst.cmosId);
 	DEC_MEM("row", src, dst.row);
 	DEC_MEM("column", src, dst.column);
 }
@@ -1509,6 +1519,11 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mot
 	ENC_MEM(jd, "defect", v, src.defect);
 	ENC_MEM(jd, "base_count", v, src.base_count);
 	ENC_MEM(jd, "arc_count", v, src.arc_count);
+	ENC_MEM(jd, "reset", v, src.reset);
+	ENC_MEM(jd, "push", v, src.push);
+	ENC_MEM(jd, "calibrate", v, src.calibrate);
+	ENC_MEM(jd, "ele_arc", v, src.ele_arc);
+	ENC_MEM(jd, "img", v, src.img);
 	ENC_MEM(jd, "nm_per_pixel_xz", v, src.nm_per_pixel_xz);
 	ENC_MEM(jd, "nm_per_pixel_yz", v, src.nm_per_pixel_yz);
 	ENC_MEM(jd, "nm_per_step_lz", v, src.nm_per_step_lz);
@@ -1528,6 +1543,11 @@ static inline void json2c(struct motor_test_result & dst, const rapidjson::Value
 	DEC_MEM("defect", src, dst.defect);
 	DEC_MEM("base_count", src, dst.base_count);
 	DEC_MEM("arc_count", src, dst.arc_count);
+	DEC_MEM("reset", src, dst.reset);
+	DEC_MEM("push", src, dst.push);
+	DEC_MEM("calibrate", src, dst.calibrate);
+	DEC_MEM("ele_arc", src, dst.ele_arc);
+	DEC_MEM("img", src, dst.img);
 	DEC_MEM("nm_per_pixel_xz", src, dst.nm_per_pixel_xz);
 	DEC_MEM("nm_per_pixel_yz", src, dst.nm_per_pixel_yz);
 	DEC_MEM("nm_per_step_lz", src, dst.nm_per_step_lz);
@@ -1536,6 +1556,33 @@ static inline void json2c(struct motor_test_result & dst, const rapidjson::Value
 	DEC_MEM("nm_push_rz", src, dst.nm_push_rz);
 	DEC_MEM("arc_mag", src, dst.arc_mag);
 	DEC_MEM("img_process", src, dst.img_process);
+}
+
+/// @struct mt_run_data
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mt_run_data & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "statistic_yz_nm_per_pixel", v, src.statistic_yz_nm_per_pixel);
+	ENC_MEM(jd, "statistic_xz_nm_per_pixel", v, src.statistic_xz_nm_per_pixel);
+	ENC_MEM(jd, "statistic_lz_nm_per_step", v, src.statistic_lz_nm_per_step);
+	ENC_MEM(jd, "statistic_rz_nm_per_step", v, src.statistic_rz_nm_per_step);
+	ENC_MEM(jd, "statistic_lz_push_nm", v, src.statistic_lz_push_nm);
+	ENC_MEM(jd, "statistic_rz_push_nm", v, src.statistic_rz_push_nm);
+	ENC_MEM(jd, "statistic_arc_mag", v, src.statistic_arc_mag);
+	ENC_MEM(jd, "statistic_img_process", v, src.statistic_img_process);
+
+	return v;
+}
+static inline void json2c(struct mt_run_data & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("statistic_yz_nm_per_pixel", src, dst.statistic_yz_nm_per_pixel);
+	DEC_MEM("statistic_xz_nm_per_pixel", src, dst.statistic_xz_nm_per_pixel);
+	DEC_MEM("statistic_lz_nm_per_step", src, dst.statistic_lz_nm_per_step);
+	DEC_MEM("statistic_rz_nm_per_step", src, dst.statistic_rz_nm_per_step);
+	DEC_MEM("statistic_lz_push_nm", src, dst.statistic_lz_push_nm);
+	DEC_MEM("statistic_rz_push_nm", src, dst.statistic_rz_push_nm);
+	DEC_MEM("statistic_arc_mag", src, dst.statistic_arc_mag);
+	DEC_MEM("statistic_img_process", src, dst.statistic_img_process);
 }
 
 /// @struct process_progress
@@ -1918,6 +1965,10 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fr_
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "left", v, src.left);
 	ENC_MEM(jd, "right", v, src.right);
+	ENC_MEM(jd, "winx_left", v, src.winx_left);
+	ENC_MEM(jd, "winx_top", v, src.winx_top);
+	ENC_MEM(jd, "winy_left", v, src.winy_left);
+	ENC_MEM(jd, "winy_top", v, src.winy_top);
 
 	return v;
 }
@@ -1925,13 +1976,30 @@ static inline void json2c(struct fr_spec & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("left", src, dst.left);
 	DEC_MEM("right", src, dst.right);
+	DEC_MEM("winx_left", src, dst.winx_left);
+	DEC_MEM("winx_top", src, dst.winx_top);
+	DEC_MEM("winy_left", src, dst.winy_left);
+	DEC_MEM("winy_top", src, dst.winy_top);
+}
+
+/// @struct dustCheckFullStart
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct dustCheckFullStart & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cmosId", v, src.cmosId);
+
+	return v;
+}
+static inline void json2c(struct dustCheckFullStart & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cmosId", src, dst.cmosId);
 }
 
 /// @struct update_window_position
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct update_window_position & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "is_pos_x", v, src.is_pos_x);
+	ENC_MEM(jd, "cmosId", v, src.cmosId);
 	ENC_MEM(jd, "row", v, src.row);
 	ENC_MEM(jd, "column", v, src.column);
 
@@ -1939,7 +2007,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct upd
 }
 static inline void json2c(struct update_window_position & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("is_pos_x", src, dst.is_pos_x);
+	DEC_MEM("cmosId", src, dst.cmosId);
 	DEC_MEM("row", src, dst.row);
 	DEC_MEM("column", src, dst.column);
 }
@@ -1962,6 +2030,7 @@ static inline void json2c(struct update_led_brightness & dst, const rapidjson::V
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
+	"arcTestResult",
 	"arc_revise",
 	"countDown",
 	"defect_detect_result",
@@ -1987,6 +2056,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"fusionSpliceStart",
 	"getFiberDefectInfo",
 	"goOn",
+	"heatTestResult",
 	"heat_result",
 	"heat_start",
 	"heat_state",
@@ -2002,21 +2072,19 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"queryWaveForm",
 	"realtimeReviseResult",
 	"realtimeReviseStart",
-	"realtime_revise_result",
 	"regularTestResult",
 	"regularTestStart",
 	"report_dev_state",
 	"report_wave_form",
 	"setFsDisplayModeExt",
 	"set_fs_display_mode",
-	"set_fs_display_mode_ext",
 	"set_fs_display_zoom_ext",
 	"set_lcd_brightness",
 	"set_led",
-	"set_window",
 	"skip",
 	"stabilizeElectrodeResult",
 	"stabilizeElectrodeStart",
+	"startDustCheckFull",
 	"stop",
 	"stopDischarge",
 	"tenseTestResult",
@@ -2274,12 +2342,6 @@ void sender::__pack(const struct image_move & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
-void sender::__pack(const struct set_window & val)
-{
-	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
-	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
-}
-
 void sender::__pack(const struct fs_cover_state & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
@@ -2383,6 +2445,12 @@ void sender::__pack(const struct fiber_train_result & val)
 }
 
 void sender::__pack(const struct count_down & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
+void sender::__pack(const struct dustCheckFullStart & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
@@ -2624,11 +2692,6 @@ void rcver::__unpack(struct image_move & dst)
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
 
-void rcver::__unpack(struct set_window & dst)
-{
-	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
-}
-
 void rcver::__unpack(struct fs_cover_state & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
@@ -2715,6 +2778,11 @@ void rcver::__unpack(struct fiber_train_result & dst)
 }
 
 void rcver::__unpack(struct count_down & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct dustCheckFullStart & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

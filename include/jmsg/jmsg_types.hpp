@@ -218,12 +218,12 @@ typedef struct rt_revise_data {
 } rt_revise_data_t;
 
 enum class fiber_t : unsigned {
-	AUTO = 0,
-	SM = 1,
-	DS = 2,
-	NZ = 3,
-	MM = 4,
-	FOLLOW = 5,
+	SM = 0,
+	DS = 1,
+	NZ = 2,
+	MM = 3,
+	FOLLOW = 4,
+	AUTO = 5,
 	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum fiber_t> {
@@ -236,7 +236,7 @@ static constexpr unsigned max_fiber = 5;
 static constexpr unsigned rsize_fiber = 6;
 
 typedef struct fiber_reco_data {
-	double data[4][5][3];
+	double data[4][3][3];
 } fiber_reco_data_t;
 
 typedef struct fiber_rec_info {
@@ -429,7 +429,7 @@ typedef struct fs_option_cfg {
 		int resetAfterSplice;	/// @unit: s
 		bool cleanAgain;
 		bool imageZoomIn;
-		int manualArcLimit;
+		uint32_t manualArcLimit;
 	} others;
 } fs_option_cfg_t;
 
@@ -493,15 +493,25 @@ typedef struct fs_da_cfg {
 
 typedef struct discharge_adjust_result {
 	enum fs_err_t code;
+	struct fs_da_cfg z_cfg;
 	fiber_reco_result_t recinfo;
 	defect_detect_result_t defect;
-	fspre_state_t prestate;
-	struct tense_test_result tense_test;
 	arcpenvinfo_t base;
 	arcpenvinfo_t revise;
 	double suggest1;	/// @unit: volt
 	double suggest2;	/// @unit: volt
 } discharge_adjust_result_t;
+
+typedef struct ar_run_data {
+	int cnt;
+	int continuous_success_cnt;
+	arcpinfo_t arc1_min;
+	arcpinfo_t arc1_max;
+	arcpinfo_t arc2_min;
+	arcpinfo_t arc2_max;
+	std::vector< arcpinfo_t > d1_seq;
+	std::vector< arcpinfo_t > d2_seq;
+} ar_run_data_t;
 
 struct discharge {
 	double magnitude;	/// @unit: volt
@@ -553,15 +563,9 @@ struct heat_result {
 };
 
 struct image_move {
-	bool is_pos_x;
+	enum cmosId_t cmosId;
 	int16_t row;
 	int16_t column;
-};
-
-struct set_window {
-	bool is_pos_x;
-	uint16_t row;
-	uint16_t column;
 };
 
 struct fs_cover_state {
@@ -609,6 +613,11 @@ typedef struct motor_test_result {
 	defect_detect_result_t defect;
 	uint32_t base_count;
 	uint32_t arc_count;
+	uint32_t reset;
+	uint32_t push;
+	uint32_t calibrate;
+	uint32_t ele_arc;
+	uint32_t img;
 	struct statistic_data_t nm_per_pixel_xz;
 	struct statistic_data_t nm_per_pixel_yz;
 	struct statistic_data_t nm_per_step_lz;
@@ -618,6 +627,17 @@ typedef struct motor_test_result {
 	struct statistic_data_t arc_mag;
 	struct statistic_data_t img_process;
 } motor_test_result_t;
+
+typedef struct mt_run_data {
+	std::vector<double> statistic_yz_nm_per_pixel;
+	std::vector<double> statistic_xz_nm_per_pixel;
+	std::vector<double> statistic_lz_nm_per_step;
+	std::vector<double> statistic_rz_nm_per_step;
+	std::vector<double> statistic_lz_push_nm;
+	std::vector<double> statistic_rz_push_nm;
+	std::vector<double> statistic_arc_mag;
+	std::vector<double> statistic_img_process;
+} mt_run_data_t;
 
 struct process_progress {
 	double progress;
@@ -677,8 +697,8 @@ typedef struct fiber_train_result {
 	defect_detect_result_t defect;
 	uint32_t cnt;
 	uint32_t cnt_limit;
-	double lft_attr[2];
-	double rt_attr[2];
+	double lft_attr[3];
+	double rt_attr[3];
 } fiber_train_result_t;
 
 typedef struct count_down {
@@ -732,7 +752,7 @@ typedef struct ia_spec {
 	double ledy_lum;	/// @range: 0.0~1.0
 	double dc_th0;
 	double dc_th1;
-	int denoise_th;
+	uint32_t denoise_th;
 	double loss_est_factor;
 	double vdist_th0;	/// @unit: pixel
 	double vdist_th1;	/// @unit: pixel
@@ -766,10 +786,18 @@ typedef struct rr_spec {
 typedef struct fr_spec {
 	fiber_reco_data_t left;
 	fiber_reco_data_t right;
+	int winx_left;
+	int winx_top;
+	int winy_left;
+	int winy_top;
 } fr_spec_t;
 
+struct dustCheckFullStart {
+	enum cmosId_t cmosId;
+};
+
 typedef struct update_window_position {
-	bool is_pos_x;
+	enum cmosId_t cmosId;
 	uint32_t row;
 	uint32_t column;
 } update_window_position_t;

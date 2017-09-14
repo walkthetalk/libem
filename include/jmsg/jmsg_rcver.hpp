@@ -74,7 +74,6 @@ private:
 	void __unpack(struct heat_start & dst);
 	void __unpack(struct heat_result & dst);
 	void __unpack(struct image_move & dst);
-	void __unpack(struct set_window & dst);
 	void __unpack(struct fs_cover_state & dst);
 	void __unpack(struct set_lcd_brightness & dst);
 	void __unpack(struct set_led & dst);
@@ -93,6 +92,7 @@ private:
 	void __unpack(struct fs_ft_cfg & dst);
 	void __unpack(struct fiber_train_result & dst);
 	void __unpack(struct count_down & dst);
+	void __unpack(struct dustCheckFullStart & dst);
 	void __unpack(struct update_window_position & dst);
 	void __unpack(struct update_led_brightness & dst);
 
