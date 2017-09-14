@@ -1263,7 +1263,11 @@
 	"comment"	: "fiber reco spec",
 	"fields"	: {
 		"left"  : "fiber_reco_data_t",
-		"right" : "fiber_reco_data_t"
+		"right" : "fiber_reco_data_t",
+		"winx_left" : "int",
+		"winx_top" : "int",
+		"winy_left" : "int",
+		"winy_top" : "int",
 	}
 },
 
