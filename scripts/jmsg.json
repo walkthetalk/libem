@@ -887,6 +887,23 @@
 
 {
 	"category"	: "struct",
+	"name"		: "mt_run_data",
+	"alias"		: "mt_run_data_t",
+	"comment"	: "motor test run data",
+	"fields"	: {
+		"statistic_yz_nm_per_pixel" : "std::vector<double>",
+		"statistic_xz_nm_per_pixel" : "std::vector<double>",
+		"statistic_lz_nm_per_step" : "std::vector<double>",
+		"statistic_rz_nm_per_step" : "std::vector<double>",
+		"statistic_lz_push_nm" : "std::vector<double>",
+		"statistic_rz_push_nm" : "std::vector<double>",
+		"statistic_arc_mag" : "std::vector<double>",
+		"statistic_img_process" : "std::vector<double>",
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "process_progress",
 	"attr"		: "msg",
 	"fields"	: {
