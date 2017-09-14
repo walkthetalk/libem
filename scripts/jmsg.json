@@ -1047,8 +1047,8 @@
 		"cnt" : "uint32_t",
 		"cnt_limit" : "uint32_t",
 
-		"lft_attr" : { "category" : "rawarray", "type" : "double", "rank" : [2] },
-		"rt_attr" : { "category" : "rawarray", "type" : "double", "rank" : [2] }
+		"lft_attr" : { "category" : "rawarray", "type" : "double", "rank" : [3] },
+		"rt_attr" : { "category" : "rawarray", "type" : "double", "rank" : [3] }
 	}
 },
 
