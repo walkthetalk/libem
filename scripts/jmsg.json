@@ -272,7 +272,7 @@
 		"data"	: {
 			"category" : "rawarray",
 			"type" : "double",
-			"rank" : [4,5,3]
+			"rank" : [4,3,3]
 		}
 	}
 },
