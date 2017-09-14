@@ -682,6 +682,23 @@
 
 {
 	"category"	: "struct",
+	"name"		: "ar_run_data",
+	"alias"		: "ar_run_data_t",
+	"comment" : "arc revise run data",
+	"fields"	: {
+		"cnt" : "int",
+		"continuous_success_cnt" : "int",
+		"arc1_min" : "arcpinfo_t",
+		"arc1_max" : "arcpinfo_t",
+		"arc2_min" : "arcpinfo_t",
+		"arc2_max" : "arcpinfo_t",
+		"d1_seq" : "std::vector< arcpinfo_t >",
+		"d2_seq" : "std::vector< arcpinfo_t >",
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "discharge",
 	"attr"		: "msg",
 	"fields"	: {
