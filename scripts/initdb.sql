@@ -193,6 +193,7 @@ INSERT INTO heat_param_lib (
 
 CREATE TABLE fs_record (
 	  sn		SERIAL		NOT NULL	PRIMARY KEY
+	, name		TEXT		NOT NULL
 	, fsp_seqn	INT2		NOT NULL
 	, fsp_version	INT2		NOT NULL
 	, ts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
