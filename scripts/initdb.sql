@@ -48,6 +48,7 @@ CREATE DOMAIN DT_LOSS		AS DECIMAL(8,3);	-- unit: dB
 -- time       :        ms
 CREATE TABLE fs_param (
 	  seqn		INT2		NOT NULL	PRIMARY KEY
+	, version	INT2		NOT NULL	DEFAULT 0
 	, name		TEXT		NOT NULL
 	, fusion_mode	EFUSION_MODE	NOT NULL	DEFAULT 'AUTO'
 	, lfti		EFTI_MODE	NOT NULL	DEFAULT 'SM'
@@ -100,6 +101,7 @@ CREATE TABLE fs_param (
 	, syn_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.7
 	, opp_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.3
 	, mfd_mis_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0
+	, bts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO fs_param (
@@ -118,7 +120,10 @@ INSERT INTO fs_param (
 	(11,	'Noraml NZ-NZ',	'NORMAL',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
 	(12,	'Normal MM-MM',	'NORMAL',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1);
 
-
+--	history fs_param
+CREATE TABLE fs_param_history (
+	ets		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+) INHERITS (fs_param);
 
 -- 	fs_param lib
 CREATE TABLE fs_param_lib () INHERITS (fs_param);
@@ -188,6 +193,8 @@ INSERT INTO heat_param_lib (
 
 CREATE TABLE fs_record (
 	  sn		SERIAL		NOT NULL	PRIMARY KEY
+	, fsp_seqn	INT2		NOT NULL
+	, fsp_version	INT2		NOT NULL
 	, ts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, time_consume	INT4		NOT NULL	--unit: ms
 	, code		EFS_RESULT	NOT NULL
@@ -210,19 +217,19 @@ CREATE TABLE fs_record (
 	, defect_yzr_hangle	DT_ANGLE	NOT NULL
 	, defect_yzr_vangle	DT_ANGLE	NOT NULL
 	, defect_yzr_clad_dm	DT_LENGTH	NOT NULL
-	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
+	, defect_yzr_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_xzl_dbmp	INT4		NOT NULL
 	, defect_xzl_hangle	DT_ANGLE	NOT NULL
 	, defect_xzl_vangle	DT_ANGLE	NOT NULL
 	, defect_xzl_clad_dm	DT_LENGTH	NOT NULL
-	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
+	, defect_xzl_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_xzr_dbmp	INT4		NOT NULL
 	, defect_xzr_hangle	DT_ANGLE	NOT NULL
 	, defect_xzr_vangle	DT_ANGLE	NOT NULL
 	, defect_xzr_clad_dm	DT_LENGTH	NOT NULL
-	, defect_yzl_core_dm	DT_LENGTH	NOT NULL
+	, defect_xzr_core_dm	DT_LENGTH	NOT NULL
 
 	, defect_yz_hangle	DT_ANGLE	NOT NULL
 	, defect_xz_hangle	DT_ANGLE	NOT NULL
@@ -248,9 +255,38 @@ CREATE TABLE fs_record (
 
 	, xz_final_img		BYTEA
 	, yz_final_img		BYTEA
-) INHERITS (fs_param);
+);
 
 CREATE TABLE others (
 	  name		TEXT	NOT NULL	PRIMARY KEY
 	, cfg		JSON	NOT NULL
 );
+
+CREATE OR REPLACE FUNCTION back_up() RETURNS TRIGGER AS $$
+	DECLARE max_history_version INTEGER;
+	BEGIN
+	IF TG_OP = 'UPDATE' THEN
+		INSERT INTO fs_param_history SELECT OLD.*;
+		NEW.bts = CURRENT_TIMESTAMP;
+		NEW.version = OLD.version + 1;
+		RETURN NEW;
+	ELSIF TG_OP = 'INSERT' THEN
+		SELECT MAX(version) INTO max_history_version FROM fs_param_history WHERE seqn = NEW.seqn;
+		IF max_history_version IS NULL THEN
+			NEW.bts = CURRENT_TIMESTAMP;
+			RETURN NEW;
+		ELSE
+			NEW.bts = CURRENT_TIMESTAMP;
+			NEW.version = max_history_version + 2;
+			RETURN NEW;
+		END IF;
+	ELSIF TG_OP = 'DELETE' THEN
+		INSERT INTO fs_param_history SELECT OLD.*;
+		RETURN OLD;
+	END IF;
+	END;
+	$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_backup BEFORE UPDATE OR DELETE OR INSERT
+	ON fs_param FOR EACH ROW
+	EXECUTE PROCEDURE back_up();
