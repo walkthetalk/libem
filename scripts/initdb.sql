@@ -48,7 +48,7 @@ CREATE DOMAIN DT_LOSS		AS DECIMAL(8,3);	-- unit: dB
 -- time       :        ms
 CREATE TABLE fs_param (
 	  seqn		INT2		NOT NULL	PRIMARY KEY
-	, version	INT2		NOT NULL	DEFAULT 0
+	, ver		INT2		NOT NULL	DEFAULT 0
 	, name		TEXT		NOT NULL
 	, fusion_mode	EFUSION_MODE	NOT NULL	DEFAULT 'AUTO'
 	, lfti		EFTI_MODE	NOT NULL	DEFAULT 'SM'
@@ -101,7 +101,7 @@ CREATE TABLE fs_param (
 	, syn_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.7
 	, opp_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.3
 	, mfd_mis_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0
-	, bts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+	, eff_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO fs_param (
@@ -122,7 +122,7 @@ INSERT INTO fs_param (
 
 --	history fs_param
 CREATE TABLE fs_param_history (
-	ets		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+	exp_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 ) INHERITS (fs_param);
 
 -- 	fs_param lib
@@ -195,7 +195,7 @@ CREATE TABLE fs_record (
 	  sn		SERIAL		NOT NULL	PRIMARY KEY
 	, name		TEXT		NOT NULL
 	, fsp_seqn	INT2		NOT NULL
-	, fsp_version	INT2		NOT NULL
+	, fsp_ver	INT2		NOT NULL
 	, ts		TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 	, time_consume	INT4		NOT NULL	--unit: ms
 	, code		EFS_RESULT	NOT NULL
@@ -268,17 +268,17 @@ CREATE OR REPLACE FUNCTION back_up() RETURNS TRIGGER AS $$
 	BEGIN
 	IF TG_OP = 'UPDATE' THEN
 		INSERT INTO fs_param_history SELECT OLD.*;
-		NEW.bts = CURRENT_TIMESTAMP;
-		NEW.version = OLD.version + 1;
+		NEW.eff_time = CURRENT_TIMESTAMP;
+		NEW.ver = OLD.ver + 1;
 		RETURN NEW;
 	ELSIF TG_OP = 'INSERT' THEN
-		SELECT MAX(version) INTO max_history_version FROM fs_param_history WHERE seqn = NEW.seqn;
+		SELECT MAX(ver) INTO max_history_version FROM fs_param_history WHERE seqn = NEW.seqn;
 		IF max_history_version IS NULL THEN
-			NEW.bts = CURRENT_TIMESTAMP;
+			NEW.eff_time = CURRENT_TIMESTAMP;
 			RETURN NEW;
 		ELSE
-			NEW.bts = CURRENT_TIMESTAMP;
-			NEW.version = max_history_version + 2;
+			NEW.eff_time = CURRENT_TIMESTAMP;
+			NEW.ver = max_history_version + 2;
 			RETURN NEW;
 		END IF;
 	ELSIF TG_OP = 'DELETE' THEN
