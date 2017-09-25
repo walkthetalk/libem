@@ -46,9 +46,8 @@ CREATE DOMAIN DT_LOSS		AS DECIMAL(8,3);	-- unit: dB
 -- coefficient:  xxx.xx
 -- spped      :   xx.xxx
 -- time       :        ms
-CREATE TABLE fs_param (
+CREATE TABLE fs_param_lib (
 	  seqn		INT2		NOT NULL	PRIMARY KEY
-	, ver		INT2		NOT NULL	DEFAULT 0
 	, name		TEXT		NOT NULL
 	, fusion_mode	EFUSION_MODE	NOT NULL	DEFAULT 'AUTO'
 	, lfti		EFTI_MODE	NOT NULL	DEFAULT 'SM'
@@ -101,8 +100,32 @@ CREATE TABLE fs_param (
 	, syn_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.7
 	, opp_bend_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0.3
 	, mfd_mis_co	DECIMAL(5,2)	NOT NULL	DEFAULT 0
-	, eff_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO fs_param_lib (
+	seqn,	name,	fusion_mode,	lfti,	rfti,	align_mode,	x_focus,	y_focus,	ecf_redress,	auto_mag,	tense_test,	vangle_limit,	hangle_limit,	clr_mag,	clr_time,	position,	gap,		overlap,	pre_mag,	pre_time,	arc1_mag,	arc1_time,	arc2_mag,	arc2_time,	arc2_on_time,	arc2_off_time,	arc_man_time,	taper_splice,	taper_wait_time,	taper_length,	taper_speed,	loss_mode,	loss_limit,	loss_min,	lft_mfd,	rt_mfd,	syn_bend_co,	opp_bend_co,	mfd_mis_co,	lft_push_speed,	rt_push_speed
+) VALUES
+	(1,	'Auto SM',	'AUTO',		'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(2,	'Auto DS',	'AUTO',		'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(3,	'Auto NZ',	'AUTO',		'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(4,	'Auto MM',	'AUTO',		'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1),
+	(5,	'Calibrate SM',	'CALIBRATE',	'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(6,	'Calibrate DS',	'CALIBRATE',	'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(7,	'Calibrate NZ',	'CALIBRATE',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(8,	'Calibrate MM',	'CALIBRATE',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1),
+	(9,	'Normal SM-SM',	'NORMAL',	'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(10,	'Normal DS-DS',	'NORMAL',	'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(11,	'Noraml NZ-NZ',	'NORMAL',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
+	(12,	'Normal MM-MM',	'NORMAL',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1);
+
+-- 	fs_param lib
+CREATE TABLE fs_param (
+	  ver		INT2		NOT NULL	DEFAULT 0
+	, eff_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
+) INHERITS (fs_param_lib);
+
+--	primary key constraint is not heritable
+ALTER TABLE fs_param ADD PRIMARY KEY (seqn);
 
 INSERT INTO fs_param (
 	seqn,	name,	fusion_mode,	lfti,	rfti,	align_mode,	x_focus,	y_focus,	ecf_redress,	auto_mag,	tense_test,	vangle_limit,	hangle_limit,	clr_mag,	clr_time,	position,	gap,		overlap,	pre_mag,	pre_time,	arc1_mag,	arc1_time,	arc2_mag,	arc2_time,	arc2_on_time,	arc2_off_time,	arc_man_time,	taper_splice,	taper_wait_time,	taper_length,	taper_speed,	loss_mode,	loss_limit,	loss_min,	lft_mfd,	rt_mfd,	syn_bend_co,	opp_bend_co,	mfd_mis_co,	lft_push_speed,	rt_push_speed
@@ -124,25 +147,6 @@ INSERT INTO fs_param (
 CREATE TABLE fs_param_history (
 	exp_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 ) INHERITS (fs_param);
-
--- 	fs_param lib
-CREATE TABLE fs_param_lib () INHERITS (fs_param);
-
-INSERT INTO fs_param_lib (
-	seqn,	name,	fusion_mode,	lfti,	rfti,	align_mode,	x_focus,	y_focus,	ecf_redress,	auto_mag,	tense_test,	vangle_limit,	hangle_limit,	clr_mag,	clr_time,	position,	gap,		overlap,	pre_mag,	pre_time,	arc1_mag,	arc1_time,	arc2_mag,	arc2_time,	arc2_on_time,	arc2_off_time,	arc_man_time,	taper_splice,	taper_wait_time,	taper_length,	taper_speed,	loss_mode,	loss_limit,	loss_min,	lft_mfd,	rt_mfd,	syn_bend_co,	opp_bend_co,	mfd_mis_co,	lft_push_speed,	rt_push_speed
-) VALUES
-	(1,	'Auto SM',	'AUTO',		'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(2,	'Auto DS',	'AUTO',		'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(3,	'Auto NZ',	'AUTO',		'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(4,	'Auto MM',	'AUTO',		'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1),
-	(5,	'Calibrate SM',	'CALIBRATE',	'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(6,	'Calibrate DS',	'CALIBRATE',	'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(7,	'Calibrate NZ',	'CALIBRATE',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(8,	'Calibrate MM',	'CALIBRATE',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	TRUE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1),
-	(9,	'Normal SM-SM',	'NORMAL',	'SM',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(10,	'Normal DS-DS',	'NORMAL',	'DS',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.82,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(11,	'Noraml NZ-NZ',	'NORMAL',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
-	(12,	'Normal MM-MM',	'NORMAL',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1);
 
 CREATE TYPE EHEAT_MATERIAL		AS ENUM ('Standard', 'Micro250', 'Micro400', 'Micro900', 'Connector');
 CREATE TYPE EHEAT_LENGTH		AS ENUM ('20mm', '40mm', '60mm');
