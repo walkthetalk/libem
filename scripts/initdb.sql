@@ -161,11 +161,11 @@ CREATE TABLE heat_param (
 	, heat_temp	INT2		NOT NULL	DEFAULT 150
 	, finish_temp	INT2		NOT NULL	DEFAULT 140
 	, fast_heat	BOOL		NOT NULL	DEFAULT FALSE
-	, stay_temp	INT2		NOT NULL	DEFAULT 60
+	, hold_temp	INT2		NOT NULL	DEFAULT 60
 );
 
 INSERT INTO heat_param (
-	seqn,	name,		material,	length,		auto_heat,	heat_time,	heat_temp,	finish_temp,	fast_heat,	stay_temp
+	seqn,	name,		material,	length,		auto_heat,	heat_time,	heat_temp,	finish_temp,	fast_heat,	hold_temp
 ) VALUES
 	(1,	'Standard 60mm',	'Standard',	'60mm',	FALSE,	6,	150,	140,	FALSE,	60),
 	(2,	'Standard 40mm',	'Standard',	'40mm',	FALSE,	6,	150,	140,	FALSE,	80),
@@ -181,7 +181,7 @@ INSERT INTO heat_param (
 CREATE TABLE heat_param_lib () INHERITS (heat_param);
 
 INSERT INTO heat_param_lib (
-	seqn,	name,		material,	length,		auto_heat,	heat_time,	heat_temp,	finish_temp,	fast_heat,	stay_temp
+	seqn,	name,		material,	length,		auto_heat,	heat_time,	heat_temp,	finish_temp,	fast_heat,	hold_temp
 ) VALUES
 	(1,	'Standard 60mm',	'Standard',	'60mm',	FALSE,	6,	150,	140,	FALSE,	60),
 	(2,	'Standard 40mm',	'Standard',	'40mm',	FALSE,	6,	150,	140,	FALSE,	80),
