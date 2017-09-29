@@ -118,14 +118,14 @@ INSERT INTO fs_param_lib (
 	(11,	'Noraml NZ-NZ',	'NORMAL',	'NZ',	'FOLLOW',	'FINE',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.77,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'FINE',	0.2,	0.00,	9.3,	9.3,	0.3,	0.7,	0,	0.1,	0.1),
 	(12,	'Normal MM-MM',	'NORMAL',	'MM',	'FOLLOW',	'CLAD',	FALSE,	FALSE,	TRUE,	FALSE,	FALSE,	2.0,	1.0,	0.30,	300,	0,	8,	6,	0.30,	150,	0.70,	2200,	0.40,	0,	180,	0,	800,	FALSE,	400,	10,	0.20,	'CLAD',	0.2,	0.00,	50.0,	50.0,	0.3,	0.7,	0,	0.1,	0.1);
 
--- 	fs_param lib
+-- 	fs_param
 CREATE TABLE fs_param (
 	  ver		INT2		NOT NULL	DEFAULT 0
 	, eff_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 ) INHERITS (fs_param_lib);
 
 --	primary key constraint is not heritable
-ALTER TABLE fs_param ADD PRIMARY KEY (seqn);
+ALTER TABLE ONLY fs_param ADD PRIMARY KEY (seqn);
 
 INSERT INTO fs_param (
 	seqn,	name,	fusion_mode,	lfti,	rfti,	align_mode,	x_focus,	y_focus,	ecf_redress,	auto_mag,	tense_test,	vangle_limit,	hangle_limit,	clr_mag,	clr_time,	position,	gap,		overlap,	pre_mag,	pre_time,	arc1_mag,	arc1_time,	arc2_mag,	arc2_time,	arc2_on_time,	arc2_off_time,	arc_man_time,	taper_splice,	taper_wait_time,	taper_length,	taper_speed,	loss_mode,	loss_limit,	loss_min,	lft_mfd,	rt_mfd,	syn_bend_co,	opp_bend_co,	mfd_mis_co,	lft_push_speed,	rt_push_speed
@@ -147,6 +147,8 @@ INSERT INTO fs_param (
 CREATE TABLE fs_param_history (
 	exp_time	TIMESTAMPTZ	NOT NULL	DEFAULT CURRENT_TIMESTAMP
 ) INHERITS (fs_param);
+
+ALTER TABLE ONLY fs_param_history ADD UNIQUE (seqn, ver);
 
 CREATE TYPE EHEAT_MATERIAL		AS ENUM ('Standard', 'Micro250', 'Micro400', 'Micro900', 'Connector');
 CREATE TYPE EHEAT_LENGTH		AS ENUM ('20mm', '40mm', '60mm');
@@ -276,12 +278,11 @@ CREATE OR REPLACE FUNCTION back_up() RETURNS TRIGGER AS $$
 		NEW.ver = OLD.ver + 1;
 		RETURN NEW;
 	ELSIF TG_OP = 'INSERT' THEN
-		SELECT MAX(ver) INTO max_history_version FROM fs_param_history WHERE seqn = NEW.seqn;
+		SELECT MAX(ver) INTO max_history_version FROM ONLY fs_param_history WHERE seqn = NEW.seqn;
+		NEW.eff_time = CURRENT_TIMESTAMP;
 		IF max_history_version IS NULL THEN
-			NEW.eff_time = CURRENT_TIMESTAMP;
 			RETURN NEW;
 		ELSE
-			NEW.eff_time = CURRENT_TIMESTAMP;
 			NEW.ver = max_history_version + 2;
 			RETURN NEW;
 		END IF;
