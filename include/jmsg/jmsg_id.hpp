@@ -37,35 +37,36 @@ enum class mid_t : uint16_t {
 	heat_start = 29,
 	heat_state = 30,
 	image_move = 31,
-	loss_estimating_result = 32,
-	manual_arc_result = 33,
-	motorTestResult = 34,
-	motorTestStart = 35,
-	motor_start = 36,
-	motor_stop = 37,
-	process_progress = 38,
-	queryDevState = 39,
-	queryWaveForm = 40,
-	realtimeReviseResult = 41,
-	realtimeReviseStart = 42,
-	regularTestResult = 43,
-	regularTestStart = 44,
-	report_dev_state = 45,
-	report_wave_form = 46,
-	setFsDisplayModeExt = 47,
-	set_fs_display_mode = 48,
-	set_fs_display_zoom_ext = 49,
-	set_lcd_brightness = 50,
-	set_led = 51,
-	skip = 52,
-	stabilizeElectrodeResult = 53,
-	stabilizeElectrodeStart = 54,
-	startDustCheckFull = 55,
-	stop = 56,
-	stopDischarge = 57,
-	tenseTestResult = 58,
-	update_led_brightness = 59,
-	update_window_position = 60,
+	lcd_power_ctl = 32,
+	loss_estimating_result = 33,
+	manual_arc_result = 34,
+	motorTestResult = 35,
+	motorTestStart = 36,
+	motor_start = 37,
+	motor_stop = 38,
+	process_progress = 39,
+	queryDevState = 40,
+	queryWaveForm = 41,
+	realtimeReviseResult = 42,
+	realtimeReviseStart = 43,
+	regularTestResult = 44,
+	regularTestStart = 45,
+	report_dev_state = 46,
+	report_wave_form = 47,
+	setFsDisplayModeExt = 48,
+	set_fs_display_mode = 49,
+	set_fs_display_zoom_ext = 50,
+	set_lcd_brightness = 51,
+	set_led = 52,
+	skip = 53,
+	stabilizeElectrodeResult = 54,
+	stabilizeElectrodeStart = 55,
+	startDustCheckFull = 56,
+	stop = 57,
+	stopDischarge = 58,
+	tenseTestResult = 59,
+	update_led_brightness = 60,
+	update_window_position = 61,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -223,6 +224,11 @@ struct msg_helper<mid_t::heat_state> final {
 template<>
 struct msg_helper<mid_t::image_move> final {
 	typedef struct image_move value_type;
+};
+
+template<>
+struct msg_helper<mid_t::lcd_power_ctl> final {
+	typedef struct lcd_power_ctl value_type;
 };
 
 template<>

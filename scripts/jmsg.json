@@ -823,6 +823,15 @@
 
 {
 	"category"	: "struct",
+	"name"		: "lcd_power_ctl",
+	"attr"		: "msg",
+	"fields"	: {
+		"on" : "bool",
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "set_led",
 	"attr"		: "msg",
 	"fields"	: {

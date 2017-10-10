@@ -576,6 +576,10 @@ struct set_lcd_brightness {
 	double brightness;	/// @range: 0.0~1.0
 };
 
+struct lcd_power_ctl {
+	bool on;
+};
+
 struct set_led {
 	enum ledId_t id;
 	double brightness;	/// @range: 0.0~1.0

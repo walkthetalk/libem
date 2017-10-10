@@ -1424,6 +1424,19 @@ static inline void json2c(struct set_lcd_brightness & dst, const rapidjson::Valu
 	DEC_MEM("brightness", src, dst.brightness);
 }
 
+/// @struct lcd_power_ctl
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct lcd_power_ctl & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "on", v, src.on);
+
+	return v;
+}
+static inline void json2c(struct lcd_power_ctl & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("on", src, dst.on);
+}
+
 /// @struct set_led
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_led & src)
 {
@@ -2061,6 +2074,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"heat_start",
 	"heat_state",
 	"image_move",
+	"lcd_power_ctl",
 	"loss_estimating_result",
 	"manual_arc_result",
 	"motorTestResult",
@@ -2349,6 +2363,12 @@ void sender::__pack(const struct fs_cover_state & val)
 }
 
 void sender::__pack(const struct set_lcd_brightness & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
+void sender::__pack(const struct lcd_power_ctl & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
@@ -2698,6 +2718,11 @@ void rcver::__unpack(struct fs_cover_state & dst)
 }
 
 void rcver::__unpack(struct set_lcd_brightness & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct lcd_power_ctl & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

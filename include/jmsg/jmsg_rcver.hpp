@@ -76,6 +76,7 @@ private:
 	void __unpack(struct image_move & dst);
 	void __unpack(struct fs_cover_state & dst);
 	void __unpack(struct set_lcd_brightness & dst);
+	void __unpack(struct lcd_power_ctl & dst);
 	void __unpack(struct set_led & dst);
 	void __unpack(struct motor_start & dst);
 	void __unpack(struct motor_stop & dst);

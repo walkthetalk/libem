@@ -65,6 +65,7 @@ private:
 	void __pack(const struct image_move & val);
 	void __pack(const struct fs_cover_state & val);
 	void __pack(const struct set_lcd_brightness & val);
+	void __pack(const struct lcd_power_ctl & val);
 	void __pack(const struct set_led & val);
 	void __pack(const struct motor_start & val);
 	void __pack(const struct motor_stop & val);
