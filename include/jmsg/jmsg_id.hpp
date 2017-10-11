@@ -58,15 +58,16 @@ enum class mid_t : uint16_t {
 	set_fs_display_zoom_ext = 50,
 	set_lcd_brightness = 51,
 	set_led = 52,
-	skip = 53,
-	stabilizeElectrodeResult = 54,
-	stabilizeElectrodeStart = 55,
-	startDustCheckFull = 56,
-	stop = 57,
-	stopDischarge = 58,
-	tenseTestResult = 59,
-	update_led_brightness = 60,
-	update_window_position = 61,
+	shutdown = 53,
+	skip = 54,
+	stabilizeElectrodeResult = 55,
+	stabilizeElectrodeStart = 56,
+	startDustCheckFull = 57,
+	stop = 58,
+	stopDischarge = 59,
+	tenseTestResult = 60,
+	update_led_brightness = 61,
+	update_window_position = 62,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -329,6 +330,11 @@ struct msg_helper<mid_t::set_lcd_brightness> final {
 template<>
 struct msg_helper<mid_t::set_led> final {
 	typedef struct set_led value_type;
+};
+
+template<>
+struct msg_helper<mid_t::shutdown> final {
+	typedef struct simple_msg value_type;
 };
 
 template<>

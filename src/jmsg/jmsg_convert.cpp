@@ -2095,6 +2095,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"set_fs_display_zoom_ext",
 	"set_lcd_brightness",
 	"set_led",
+	"shutdown",
 	"skip",
 	"stabilizeElectrodeResult",
 	"stabilizeElectrodeStart",

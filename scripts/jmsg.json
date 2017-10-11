@@ -560,7 +560,8 @@
 		"queryWaveForm",
 		"fiberTrainInit",
 		"arcTestResult",
-		"heatTestResult"
+		"heatTestResult",
+		"shutdown"
 	]
 },
 
