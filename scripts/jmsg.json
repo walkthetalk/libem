@@ -1016,7 +1016,7 @@
 
 		"heat_temp" : "double",
 
-		"bat_voltage" : { "type" : "double", "unit" : "volt" },
+		"bat_percent" : { "type" : "double", "unit" : "%" },
 	}
 },
 

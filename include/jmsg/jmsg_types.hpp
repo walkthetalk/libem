@@ -681,7 +681,7 @@ struct report_dev_state {
 	double env_temp;	/// @unit: degree Celsius
 	double int_temp;
 	double heat_temp;
-	double bat_voltage;	/// @unit: volt
+	double bat_percent;	/// @unit: %
 };
 
 struct report_wave_form {

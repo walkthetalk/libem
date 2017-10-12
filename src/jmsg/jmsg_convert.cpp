@@ -1697,7 +1697,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct rep
 	ENC_MEM(jd, "env_temp", v, src.env_temp);
 	ENC_MEM(jd, "int_temp", v, src.int_temp);
 	ENC_MEM(jd, "heat_temp", v, src.heat_temp);
-	ENC_MEM(jd, "bat_voltage", v, src.bat_voltage);
+	ENC_MEM(jd, "bat_percent", v, src.bat_percent);
 
 	return v;
 }
@@ -1708,7 +1708,7 @@ static inline void json2c(struct report_dev_state & dst, const rapidjson::Value 
 	DEC_MEM("env_temp", src, dst.env_temp);
 	DEC_MEM("int_temp", src, dst.int_temp);
 	DEC_MEM("heat_temp", src, dst.heat_temp);
-	DEC_MEM("bat_voltage", src, dst.bat_voltage);
+	DEC_MEM("bat_percent", src, dst.bat_percent);
 }
 
 /// @struct report_wave_form
