@@ -96,6 +96,7 @@ private:
 	void __unpack(struct dustCheckFullStart & dst);
 	void __unpack(struct update_window_position & dst);
 	void __unpack(struct update_led_brightness & dst);
+	void __unpack(struct bat_state & dst);
 
 private:
 	void __reset();

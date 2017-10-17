@@ -85,6 +85,7 @@ private:
 	void __pack(const struct dustCheckFullStart & val);
 	void __pack(const struct update_window_position & val);
 	void __pack(const struct update_led_brightness & val);
+	void __pack(const struct bat_state & val);
 
 private:
 	void __reset(mid_t mid);

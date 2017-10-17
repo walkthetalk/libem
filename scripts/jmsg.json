@@ -557,6 +557,7 @@
 		"stop",
 		"regularTestStart",
 		"queryDevState",
+		"queryBatState",
 		"queryWaveForm",
 		"fiberTrainInit",
 		"arcTestResult",
@@ -1315,6 +1316,17 @@
 	"fields" : {
 		"id" : "ledId_t",
 		"brightness" : "double",
+	}
+},
+{
+	"category"	: "struct",
+	"name"		: "bat_state",
+	"alias"		: "bat_state_t",
+	"msgid"		: "bat_state",
+	"fields" : {
+		"ac" : "bool",
+		"status" : "uint32_t",
+		"percent" : "int32_t"
 	}
 },
 

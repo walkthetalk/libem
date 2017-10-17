@@ -2040,11 +2040,29 @@ static inline void json2c(struct update_led_brightness & dst, const rapidjson::V
 	DEC_MEM("brightness", src, dst.brightness);
 }
 
+/// @struct bat_state
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct bat_state & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "ac", v, src.ac);
+	ENC_MEM(jd, "status", v, src.status);
+	ENC_MEM(jd, "percent", v, src.percent);
+
+	return v;
+}
+static inline void json2c(struct bat_state & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("ac", src, dst.ac);
+	DEC_MEM("status", src, dst.status);
+	DEC_MEM("percent", src, dst.percent);
+}
+
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
 	"arcTestResult",
 	"arc_revise",
+	"bat_state",
 	"countDown",
 	"defect_detect_result",
 	"discharge",
@@ -2082,6 +2100,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"motor_start",
 	"motor_stop",
 	"process_progress",
+	"queryBatState",
 	"queryDevState",
 	"queryWaveForm",
 	"realtimeReviseResult",
@@ -2489,6 +2508,12 @@ void sender::__pack(const struct update_led_brightness & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
+void sender::__pack(const struct bat_state & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
 
 /// @class rcver : used to receive messages
 rcver::rcver()
@@ -2819,6 +2844,11 @@ void rcver::__unpack(struct update_window_position & dst)
 }
 
 void rcver::__unpack(struct update_led_brightness & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct bat_state & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

@@ -811,3 +811,9 @@ struct update_led_brightness {
 	double brightness;
 };
 
+typedef struct bat_state {
+	bool ac;
+	uint32_t status;
+	int32_t percent;
+} bat_state_t;
+
