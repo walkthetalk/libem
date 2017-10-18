@@ -2040,20 +2040,46 @@ static inline void json2c(struct update_led_brightness & dst, const rapidjson::V
 	DEC_MEM("brightness", src, dst.brightness);
 }
 
+/// @power_t : string to enum
+static const struct {
+	rapidjson::Value::StringRefType name;
+	unsigned val;
+} str2e_power_t[4] = {
+	{ "ADAPTER", 1 },
+	{ "BATTERY", 0 },
+	{ "CHARGING", 2 },
+	{ "UNKOWN", 3 },
+};
+
+/// @power_t : enum to string
+static const struct {
+	unsigned val;
+	rapidjson::Value::StringRefType name;
+} e2str_power_t[4] = {
+	{ 0, "BATTERY" },
+	{ 1, "ADAPTER" },
+	{ 2, "CHARGING" },
+	{ 3, "UNKOWN" },
+};
+
+static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum power_t src)
+{ return search_name_directly(e2str_power_t, (unsigned)src); }
+
+static inline void json2c(enum power_t & dst, const rapidjson::Value & src)
+{ dst = (enum power_t)search_val_binary(str2e_power_t, src); }
+
 /// @struct bat_state
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct bat_state & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "ac", v, src.ac);
-	ENC_MEM(jd, "status", v, src.status);
+	ENC_MEM(jd, "power_mode", v, src.power_mode);
 	ENC_MEM(jd, "percent", v, src.percent);
 
 	return v;
 }
 static inline void json2c(struct bat_state & dst, const rapidjson::Value & src)
 {
-	DEC_MEM("ac", src, dst.ac);
-	DEC_MEM("status", src, dst.status);
+	DEC_MEM("power_mode", src, dst.power_mode);
 	DEC_MEM("percent", src, dst.percent);
 }
 

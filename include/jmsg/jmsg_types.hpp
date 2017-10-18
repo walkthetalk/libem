@@ -811,9 +811,24 @@ struct update_led_brightness {
 	double brightness;
 };
 
+enum power_t : unsigned {
+	BATTERY = 0,	/// only battery
+	ADAPTER = 1,	/// only adapter
+	CHARGING = 2,	/// adapter conncted, chargin
+	UNKOWN = 3,
+	/// @min : 0, @max : 3
+};
+template<> struct enum_info<enum power_t> {
+	static constexpr unsigned min = 0;
+	static constexpr unsigned max = 3;
+	static constexpr unsigned size = 4;
+};
+static constexpr unsigned min_power = 0;
+static constexpr unsigned max_power = 3;
+static constexpr unsigned rsize_power = 4;
+
 typedef struct bat_state {
-	bool ac;
-	uint32_t status;
+	enum power_t power_mode;
 	int32_t percent;
 } bat_state_t;
 

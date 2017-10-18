@@ -1318,14 +1318,26 @@
 		"brightness" : "double",
 	}
 },
+
+{
+	"category"	: "enum",
+	"name"		: "power_t",
+	"type"		: "unsigned",
+	"fields"	: {
+		"BATTERY" : { "comment" : "only battery" },
+		"ADAPTER" : {"comment" : "only adapter"},
+		"CHARGING" : { "comment" : "adapter conncted, charging" },
+		"UNKOWN" :{}
+	}
+},
+
 {
 	"category"	: "struct",
 	"name"		: "bat_state",
 	"alias"		: "bat_state_t",
 	"msgid"		: "bat_state",
 	"fields" : {
-		"ac" : "bool",
-		"status" : "uint32_t",
+		"power_mode" : "power_t",
 		"percent" : "int32_t"
 	}
 },
