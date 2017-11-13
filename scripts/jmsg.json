@@ -1327,7 +1327,7 @@
 		"BATTERY" : { "comment" : "only battery" },
 		"ADAPTER" : {"comment" : "only adapter"},
 		"CHARGING" : { "comment" : "adapter conncted, charging" },
-		"UNKOWN" :{}
+		"UNKNOWN" :{}
 	}
 },
 

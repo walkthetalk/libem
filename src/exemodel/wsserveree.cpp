@@ -51,6 +51,16 @@ int wsserveree::callback_http(
 
 	//printf("callback_http, reason: %d\n", (int)reason);
 	switch (reason) {
+	case LWS_CALLBACK_ESTABLISHED: {
+			svr.__receiveConnectState(wsi, true);
+		}
+		break;
+
+	case LWS_CALLBACK_CLOSED: {
+			svr.__receiveConnectState(wsi, false);
+		}
+		break;
+
 	case LWS_CALLBACK_ADD_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
 			//printf("wsi(%p) fd(%d)\n", (void*)wsi, pa.fd);
@@ -176,6 +186,11 @@ void wsserveree::setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb)
 	m_rxBinaryCallback = binaryMsgCb;
 }
 
+void wsserveree::setStateChangeCallback(std::function<void (cid, bool)> stateChangeCb)
+{
+	m_stateChangeCallback = stateChangeCb;
+}
+
 void wsserveree::__addSp(cid wsi, struct lws_context &context, int fd, uint32_t events)
 {
 	wsee * newSp = new wsee(*wsi, context, fd, events, "");
@@ -216,6 +231,13 @@ void wsserveree::__receiveBinaryMessage(cid wsi, void * data, size_t len)
 	//wsee * pD = m_sps.at(wsi);
 	if (m_rxBinaryCallback) {
 		m_rxBinaryCallback(wsi, data, len);
+	}
+}
+
+void wsserveree::__receiveConnectState(cid wsi, bool isConnecting)
+{
+	if (m_stateChangeCallback) {
+		m_stateChangeCallback(wsi, isConnecting);
 	}
 }
 

@@ -32,6 +32,7 @@ public:
 	void sendBinaryMessage(cid wsi, void * buffer, size_t length);
 
 	void setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb = nullptr);
+	void setStateChangeCallback(std::function<void (cid, bool)> stateChangeCb);
 private:
 	wsserveree(const wsserveree & rhs) = delete;
 	wsserveree & operator = (const wsserveree & rhs) = delete;
@@ -50,12 +51,14 @@ private:
 	void __modSp(cid wsi, int fd, uint32_t events);
 	void __receiveTextMessage(cid wsi, void * data, size_t len);
 	void __receiveBinaryMessage(cid wsi, void * data, size_t len);
+	void __receiveConnectState(cid wsi, bool connectState);
 private:
 	struct lws_context_creation_info m_info;
 	struct lws_context * m_pcontext;
 	std::map<cid, wsee*> m_sps;
 	msg_cb_t m_rxTextCallback;
 	msg_cb_t m_rxBinaryCallback;
+	std::function<void (cid, bool)> m_stateChangeCallback;
 	size_t m_buf_prepadding;
 };
 
