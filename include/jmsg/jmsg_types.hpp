@@ -32,10 +32,10 @@ typedef struct defect_detect_result {
 	double xz_hangle;
 	double lft_vangle;
 	double rt_vangle;
-	std::vector<uint8_t> yz_img;
-	std::vector<uint8_t> xz_img;
-	std::vector<uint8_t> yz_defect_img;
-	std::vector<uint8_t> xz_defect_img;
+	std::string yz_img;
+	std::string xz_img;
+	std::string yz_defect_img;
+	std::string xz_defect_img;
 } defect_detect_result_t;
 
 enum class svc_fs_state_t : uint16_t {
@@ -478,8 +478,8 @@ typedef struct fusion_splice_result {
 	fspre_state_t prestate;
 	tense_test_result_t tense_test;
 	manual_arc_result_t manual_arc;
-	std::vector<uint8_t> xz_final_img;
-	std::vector<uint8_t> yz_final_img;
+	std::string xz_final_img;
+	std::string yz_final_img;
 } fusion_splice_result_t;
 
 struct arc_revise {
@@ -552,8 +552,8 @@ struct set_fs_display_mode {
 typedef struct dust_check_result {
 	enum fs_err_t code;
 	enum cmosId_t cmosid;
-	std::vector<uint8_t> ori_img;
-	std::vector<uint8_t> dust_img;
+	std::string ori_img;
+	std::string dust_img;
 } dust_check_result_t;
 
 struct heat_start {};
@@ -607,7 +607,7 @@ struct statistic_data_t {
 	double max_v;
 	double mid_v;
 	double avg_v;
-	std::vector<uint8_t> data;
+	std::string data;
 };
 
 typedef struct motor_test_result {
@@ -814,8 +814,8 @@ struct update_led_brightness {
 enum power_t : unsigned {
 	BATTERY = 0,	/// only battery
 	ADAPTER = 1,	/// only adapter
-	CHARGING = 2,	/// adapter conncted, chargin
-	UNKOWN = 3,
+	CHARGING = 2,	/// adapter conncted, charging
+	UNKNOWN = 3,
 	/// @min : 0, @max : 3
 };
 template<> struct enum_info<enum power_t> {

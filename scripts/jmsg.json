@@ -55,10 +55,10 @@
 		"lft_vangle" : "double",
 		"rt_vangle"  : "double",
 
-		"yz_img"	: "std::vector<uint8_t>",
-		"xz_img"	: "std::vector<uint8_t>",
-		"yz_defect_img"	: "std::vector<uint8_t>",
-		"xz_defect_img"	: "std::vector<uint8_t>",
+		"yz_img"	: "std::string",
+		"xz_img"	: "std::string",
+		"yz_defect_img"	: "std::string",
+		"xz_defect_img"	: "std::string",
 	},
 },
 
@@ -638,8 +638,8 @@
 		"tense_test" : "tense_test_result_t",
 		"manual_arc" : "manual_arc_result_t",
 
-		"xz_final_img" : "std::vector<uint8_t>",
-		"yz_final_img" : "std::vector<uint8_t>",
+		"xz_final_img" : "std::string",
+		"yz_final_img" : "std::string",
 	}
 },
 
@@ -772,8 +772,8 @@
 		"code" : "fs_err_t",
 
 		"cmosid"   : "cmosId_t",
-		"ori_img"  : "std::vector<uint8_t>",
-		"dust_img" : "std::vector<uint8_t>",
+		"ori_img"  : "std::string",
+		"dust_img" : "std::string",
 	}
 },
 
@@ -883,7 +883,7 @@
 		"max_v" : "double",
 		"mid_v" : "double",
 		"avg_v" : "double",
-		"data" : "std::vector<uint8_t>",
+		"data" : "std::string",
 	}
 },
 

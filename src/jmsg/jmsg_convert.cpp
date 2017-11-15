@@ -2048,7 +2048,7 @@ static const struct {
 	{ "ADAPTER", 1 },
 	{ "BATTERY", 0 },
 	{ "CHARGING", 2 },
-	{ "UNKOWN", 3 },
+	{ "UNKNOWN", 3 },
 };
 
 /// @power_t : enum to string
@@ -2059,7 +2059,7 @@ static const struct {
 	{ 0, "BATTERY" },
 	{ 1, "ADAPTER" },
 	{ 2, "CHARGING" },
-	{ 3, "UNKOWN" },
+	{ 3, "UNKNOWN" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum power_t src)
