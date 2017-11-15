@@ -98,7 +98,7 @@ private:
 private:
 	void __fill_header();
 private:
-	uint8_t m_lbuf[65536];
+	uint8_t m_lbuf[1048576];
 	uint8_t * const m_buf;
 	uint8_t * m_pcur;
 	const uint8_t * const m_pend;
