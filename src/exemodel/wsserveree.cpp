@@ -108,7 +108,7 @@ struct lws_protocols wsserveree::protocols[] = {
 		"http-only",		/* name */
 		wsserveree::callback_http,		/* callback */
 		0,	/* per_session_data_size */
-		64*1024,			/* max frame size / rx buffer */
+		256*1024,			/* max frame size / rx buffer */
 		0,
 		nullptr
 	},
