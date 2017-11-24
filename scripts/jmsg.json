@@ -1100,7 +1100,7 @@
 		},
 		"sfactor" : { "type" : "double", "unit" : "um" },
 		"spow"    : "double",
-		"lps"     : { "type" : "double", "unit" : "nm/step" }
+		"lps"     : { "type" : "double", "unit" : "um/step" }
 	}
 },
 

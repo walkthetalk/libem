@@ -717,7 +717,7 @@ typedef struct motor_spec {
 	int stroke;	/// @unit: step
 	double sfactor;	/// @unit: um
 	double spow;
-	double lps;	/// @unit: nm/step
+	double lps;	/// @unit: um/step
 } motor_spec_t;
 
 typedef struct cmos_spec {
