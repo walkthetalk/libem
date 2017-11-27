@@ -2083,12 +2083,26 @@ static inline void json2c(struct bat_state & dst, const rapidjson::Value & src)
 	DEC_MEM("percent", src, dst.percent);
 }
 
+/// @struct beep
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct beep & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "time", v, src.time);
+
+	return v;
+}
+static inline void json2c(struct beep & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("time", src, dst.time);
+}
+
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
 	"arcTestResult",
 	"arc_revise",
 	"bat_state",
+	"beep",
 	"countDown",
 	"defect_detect_result",
 	"discharge",
@@ -2540,6 +2554,12 @@ void sender::__pack(const struct bat_state & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
+void sender::__pack(const struct beep & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
 
 /// @class rcver : used to receive messages
 rcver::rcver()
@@ -2875,6 +2895,11 @@ void rcver::__unpack(struct update_led_brightness & dst)
 }
 
 void rcver::__unpack(struct bat_state & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct beep & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

@@ -1342,4 +1342,14 @@
 	}
 },
 
+{
+	"category"	: "struct",
+	"name"		: "beep",
+	"attr"		: "msg",
+	"fields"	: {
+		"time": {"type" : "uint32_t", "unit" : "second"}
+	}
+},
+
+
 ]

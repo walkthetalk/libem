@@ -97,6 +97,7 @@ private:
 	void __unpack(struct update_window_position & dst);
 	void __unpack(struct update_led_brightness & dst);
 	void __unpack(struct bat_state & dst);
+	void __unpack(struct beep & dst);
 
 private:
 	void __reset();

@@ -832,3 +832,7 @@ typedef struct bat_state {
 	int32_t percent;
 } bat_state_t;
 
+struct beep {
+	uint32_t time;	/// @unit: second
+};
+
