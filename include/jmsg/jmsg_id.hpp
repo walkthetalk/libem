@@ -27,9 +27,9 @@ enum class mid_t : uint16_t {
 	fiber_reco_result = 19,
 	fsCoverOpenned = 20,
 	fs_cover_state = 21,
-	fs_state = 22,
-	fspre_state = 23,
-	fusionSpliceReset = 24,
+	fs_reset = 22,
+	fs_state = 23,
+	fspre_state = 24,
 	fusionSpliceResult = 25,
 	fusionSpliceStart = 26,
 	getFiberDefectInfo = 27,
@@ -181,6 +181,11 @@ struct msg_helper<mid_t::fs_cover_state> final {
 };
 
 template<>
+struct msg_helper<mid_t::fs_reset> final {
+	typedef struct simple_msg value_type;
+};
+
+template<>
 struct msg_helper<mid_t::fs_state> final {
 	typedef struct fs_state value_type;
 };
@@ -188,11 +193,6 @@ struct msg_helper<mid_t::fs_state> final {
 template<>
 struct msg_helper<mid_t::fspre_state> final {
 	typedef struct fspre_state value_type;
-};
-
-template<>
-struct msg_helper<mid_t::fusionSpliceReset> final {
-	typedef struct simple_msg value_type;
 };
 
 template<>

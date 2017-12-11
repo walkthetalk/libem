@@ -544,7 +544,7 @@
 	"category"	: "struct",
 	"name"		: "simple_msg",
 	"msgid"		: [
-		"fusionSpliceReset",
+		"fs_reset",
 		"fusionSpliceStart",
 		"getFiberDefectInfo",
 		"dischargeAdjustInit",
