@@ -43,12 +43,14 @@ public:
 	void convert(struct heat_param_cfg & dst, const char * src);
 	void convert(struct misc_cfg & dst, const char * src);
 	void convert(struct fs_option_cfg & dst, const char * src);
+	void convert(struct motor_spec & dst, const char * src);
 	void convert(struct cmos_spec & dst, const char * src);
 	void convert(struct hvb_spec & dst, const char * src);
 	void convert(struct ia_spec & dst, const char * src);
 	void convert(struct mc_spec & dst, const char * src);
 	void convert(struct ar_spec & dst, const char * src);
 	void convert(struct rr_spec & dst, const char * src);
+	void convert(struct fr_spec & dst, const char * src);
 
 private:
 	const char * __mid_to_str(mid_t mid);

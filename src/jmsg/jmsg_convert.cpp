@@ -2235,6 +2235,14 @@ void sender::convert(std::string & dst, const struct fs_option_cfg & src)
 	c2json(doc, src).Accept(writer);
 }
 
+void sender::convert(std::string & dst, const struct motor_spec & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
 void sender::convert(std::string & dst, const struct cmos_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
@@ -2276,6 +2284,14 @@ void sender::convert(std::string & dst, const struct ar_spec & src)
 }
 
 void sender::convert(std::string & dst, const struct rr_spec & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
+void sender::convert(std::string & dst, const struct fr_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
@@ -2619,6 +2635,14 @@ void rcver::convert(struct fs_option_cfg & dst, const char * src)
 	__reset();
 }
 
+void rcver::convert(struct motor_spec & dst, const char * src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
 void rcver::convert(struct cmos_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
@@ -2660,6 +2684,14 @@ void rcver::convert(struct ar_spec & dst, const char * src)
 }
 
 void rcver::convert(struct rr_spec & dst, const char * src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
+void rcver::convert(struct fr_spec & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);

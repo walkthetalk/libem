@@ -1077,6 +1077,7 @@
 	"category"	: "struct",
 	"name"		: "motor_spec",
 	"alias"		: "motor_spec_t",
+	"attr"		: "export",
 	"fields"	: {
 		"clock" : {
 			"type" : "int",
@@ -1277,6 +1278,7 @@
 	"category"	: "struct",
 	"name"		: "fr_spec",
 	"alias"		: "fr_spec_t",
+	"attr"		: "export",
 	"comment"	: "fiber reco spec",
 	"fields"	: {
 		"left"  : "fiber_reco_data_t",
