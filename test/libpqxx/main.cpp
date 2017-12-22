@@ -81,7 +81,6 @@ static void test_fsparam()
 	std::cout << "fsparamrightfibertype: " << (int)g_fsparam.rfti << std::endl;
 	//save_fsparam(w, g_misccfg.fsParamIdx, g_fsparam);
 }
-#else
 
 //using namespace PGSTD;
 //using namespace pqxx;
@@ -99,6 +98,8 @@ static void test_fsparam()
 //
 // The tablename argument determines which table the data will be written to.
 // If none is given, it defaults to "pqxxorgevents".
+#else
+
 class receiver : public pqxx::notification_receiver {
 public:
 	receiver(pqxx::connection_base & c, const std::string & channel) :
@@ -158,19 +159,6 @@ void receiver_test_func(const std::string & ch) {
 	rcvr_test rtest(c, ch);
 	rtest.run();
 }
-// void receiver_test(const std::string & ch, const char * payload = NULL) {
-// 	pqxx::connection c("host=127.0.0.1 user=postgres dbname=postgres");
-// 	for(int i = 0; i < 10; ++i) {
-// 		receiver rcvr(c, ch);
-// 		pqxx::nontransaction w(c);
-// 		std::string SQL = "NOTIFY \"" + ch + "\"";
-// 		if (payload) SQL += ", " + w.quote(payload);
-// 		w.exec(SQL);
-// 		w.commit();
-// 		c.await_notification();
-// 		std::cout << "sock: " << c.sock() << std::endl;
-// 	}
-// }
 
 #endif
 
@@ -255,7 +243,7 @@ int main(int argc, char *argv[])
     W.complete();
 
     // Now that our tablewriter is done, it's safe to commit T.
-    T.commit();
+    T.commit();receiver_test
 
 
 	// Query
@@ -301,7 +289,6 @@ int main(int argc, char *argv[])
 	(void)argc;
 	(void )argv[0][0];
 	receiver_test_func("changed");
-// 	receiver_test("changed", "haha");
 #endif
 
   return 0;
