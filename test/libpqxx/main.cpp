@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     W.complete();
 
     // Now that our tablewriter is done, it's safe to commit T.
-    T.commit();receiver_test
+    T.commit();
 
 
 	// Query
