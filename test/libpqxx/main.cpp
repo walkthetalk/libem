@@ -6,10 +6,19 @@
 #include <pqxx/tablewriter>
 #include <pqxx/transaction>
 
+#include <string>
+#include <pqxx/notification>
+
 #include "jmsg/pqxxutils.hpp"
 #include "jmsg/jmsg_rcver.hpp"
 #include "jmsg/jmsg_sender.hpp"
 
+#include "exemodel/poller.hpp"
+#include "exemodel/evt_cb.hpp"
+
+#define NOTIFICATION_TEST
+
+#ifndef NOTIFICATION_TEST
 template< typename _T >
 static bool load_others(pqxx::nontransaction & w,
 			rcver & rcv,
@@ -72,6 +81,7 @@ static void test_fsparam()
 	std::cout << "fsparamrightfibertype: " << (int)g_fsparam.rfti << std::endl;
 	//save_fsparam(w, g_misccfg.fsParamIdx, g_fsparam);
 }
+#else
 
 //using namespace PGSTD;
 //using namespace pqxx;
@@ -89,8 +99,84 @@ static void test_fsparam()
 //
 // The tablename argument determines which table the data will be written to.
 // If none is given, it defaults to "pqxxorgevents".
+class receiver : public pqxx::notification_receiver {
+public:
+	receiver(pqxx::connection_base & c, const std::string & channel) :
+	pqxx::notification_receiver(c, channel),
+	receiver_id(c.backendpid()) {}
+
+	~receiver() {}
+
+	virtual void operator()(const std::string & payload, int backend) {
+		std::cout << "payload: " << payload << std::endl;
+		std::cout << "backend: " << backend << std::endl;
+		std::cout << "backendpid: " << receiver_id << std::endl;
+	}
+private:
+	int receiver_id;
+};
+
+class receiver_test : public exemodel::pollee, public exemodel::evt_cb<exemodel::poller&> {
+public:
+	explicit receiver_test(pqxx::connection_base & c, const std::string & ch) :
+	exemodel::pollee(c.sock(), (uint32_t)(::EPOLLIN), "receiver_test"),
+	m_c(c),
+	m_rcvr(c, ch) {}
+
+	~receiver_test() {}
+
+	virtual void dispose(exemodel::poller & p, uint32_t) {
+		this->exe(p);
+	}
+
+	pqxx::connection_base & mc() { return m_c; }
+private:
+	pqxx::connection_base & m_c;
+	receiver m_rcvr;
+};
+
+class rcvr_test : public exemodel::poller {
+public:
+	explicit rcvr_test(pqxx::connection_base & c, const std::string & ch) :
+	exemodel::poller(),
+	m_rcvr_test(c, ch) {
+		m_rcvr_test.connect([this](exemodel::poller&) {
+			int backend_id = m_rcvr_test.mc().get_notifs();
+			std::cout << "get notifs return value is: " << backend_id << std::endl;
+		});
+		this->add(m_rcvr_test);
+	}
+	~rcvr_test() {
+		this->del(m_rcvr_test);
+	}
+private:
+	receiver_test m_rcvr_test;
+};
+
+void receiver_test_func(const std::string & ch) {
+	pqxx::connection c("host=127.0.0.1 user=postgres dbname=postgres");
+	rcvr_test rtest(c, ch);
+	rtest.run();
+}
+// void receiver_test(const std::string & ch, const char * payload = NULL) {
+// 	pqxx::connection c("host=127.0.0.1 user=postgres dbname=postgres");
+// 	for(int i = 0; i < 10; ++i) {
+// 		receiver rcvr(c, ch);
+// 		pqxx::nontransaction w(c);
+// 		std::string SQL = "NOTIFY \"" + ch + "\"";
+// 		if (payload) SQL += ", " + w.quote(payload);
+// 		w.exec(SQL);
+// 		w.commit();
+// 		c.await_notification();
+// 		std::cout << "sock: " << c.sock() << std::endl;
+// 	}
+// }
+
+#endif
+
 int main(int argc, char *argv[])
 {
+#ifndef NOTIFICATION_TEST
 	test_fsparam();
   try
   {
@@ -211,6 +297,12 @@ int main(int argc, char *argv[])
     std::cerr << "Unhandled exception" << std::endl;
     return 100;
   }
+#else
+	(void)argc;
+	(void )argv[0][0];
+	receiver_test_func("changed");
+// 	receiver_test("changed", "haha");
+#endif
 
   return 0;
 }

@@ -110,9 +110,10 @@ struct lws_protocols wsserveree::protocols[] = {
 		0,	/* per_session_data_size */
 		256*1024,			/* max frame size / rx buffer */
 		0,
-		nullptr
+		nullptr,
+		0
 	},
-	{ nullptr, nullptr, 0, 0, 0, nullptr } /* terminator */
+	{ nullptr, nullptr, 0, 0, 0, nullptr, 0 } /* terminator */
 };
 
 wsserveree::wsserveree(uint16_t port)
