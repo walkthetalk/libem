@@ -113,6 +113,9 @@ public:
 		std::cout << "backend: " << backend << std::endl;
 		std::cout << "backendpid: " << receiver_id << std::endl;
 	}
+
+	pqxx::connection_base & conn_base() const { return this->conn(); }
+
 private:
 	int receiver_id;
 };
@@ -121,7 +124,6 @@ class receiver_test : public exemodel::pollee, public exemodel::evt_cb<exemodel:
 public:
 	explicit receiver_test(pqxx::connection_base & c, const std::string & ch) :
 	exemodel::pollee(c.sock(), (uint32_t)(::EPOLLIN), "receiver_test"),
-	m_c(c),
 	m_rcvr(c, ch) {}
 
 	~receiver_test() {}
@@ -130,9 +132,9 @@ public:
 		this->exe(p);
 	}
 
-	pqxx::connection_base & mc() { return m_c; }
+	const receiver & rcvr() const { return m_rcvr; }
+
 private:
-	pqxx::connection_base & m_c;
 	receiver m_rcvr;
 };
 
@@ -142,7 +144,7 @@ public:
 	exemodel::poller(),
 	m_rcvr_test(c, ch) {
 		m_rcvr_test.connect([this](exemodel::poller&) {
-			int backend_id = m_rcvr_test.mc().get_notifs();
+			int backend_id = m_rcvr_test.rcvr().conn_base().get_notifs();
 			std::cout << "get notifs return value is: " << backend_id << std::endl;
 		});
 		this->add(m_rcvr_test);
