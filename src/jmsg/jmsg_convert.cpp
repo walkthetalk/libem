@@ -2235,6 +2235,14 @@ void sender::convert(std::string & dst, const struct fs_option_cfg & src)
 	c2json(doc, src).Accept(writer);
 }
 
+void sender::convert(std::string & dst, const struct fusion_splice_result & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
 void sender::convert(std::string & dst, const struct motor_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
@@ -2628,6 +2636,14 @@ void rcver::convert(struct misc_cfg & dst, const char * src)
 }
 
 void rcver::convert(struct fs_option_cfg & dst, const char * src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
+void rcver::convert(struct fusion_splice_result & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);

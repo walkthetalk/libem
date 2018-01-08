@@ -43,6 +43,7 @@ public:
 	void convert(struct heat_param_cfg & dst, const char * src);
 	void convert(struct misc_cfg & dst, const char * src);
 	void convert(struct fs_option_cfg & dst, const char * src);
+	void convert(struct fusion_splice_result & dst, const char * src);
 	void convert(struct motor_spec & dst, const char * src);
 	void convert(struct cmos_spec & dst, const char * src);
 	void convert(struct hvb_spec & dst, const char * src);

@@ -626,7 +626,7 @@
 	"name"		: "fusion_splice_result",
 	"alias"		: "fusion_splice_result_t",
 	"msgid"		: "fusionSpliceResult",
-	"attr"		: "pqxx",
+	"attr"		: ["pqxx", "export"],
 	"fields"	: {
 		"time_consume" : { "type" : "int", "unit" : "ms" },
 		"code"         : "fs_err_t",
