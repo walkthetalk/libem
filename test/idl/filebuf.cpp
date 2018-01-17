@@ -207,7 +207,7 @@ auto search_val_binary(const T & flist, const std::string & name) -> decltype(fl
 
 static const char * s_pqxx_hpp_header = R"convertheader(#pragma once
 
-#include <pqxx/row>
+#include <pqxx/result>
 #include <pqxx/prepared_statement>
 
 #include "jmsg_types.hpp"
