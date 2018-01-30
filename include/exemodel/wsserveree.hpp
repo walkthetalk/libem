@@ -5,38 +5,43 @@
  */
 #include <map>
 #include <functional>
+
 #include <libwebsockets.h>
+
 #include "exemodel/poller.hpp"
 
 namespace exemodel {
 
-/**
- * \class wsserveree
- * \brief server pollee, used by \em poller.
- */
 class wsee;
-class wsserveree
-: public poller {
+class wsserveree : public poller {
 public:
 	typedef struct lws * cid;
-	typedef std::function<void (cid, void *, size_t)> msg_cb_t;
+	typedef std::function<int (cid, void *, size_t)> msg_cb_t;
+	typedef std::function<int (cid, bool)> state_cb_t;
 public:
-	/**
-	 * \brief ctor of wsserveree
-	 * \param port	the server will listen on.
-	 */
-	explicit wsserveree(uint16_t port);
+	explicit wsserveree() = default;
 	virtual ~wsserveree();
 public:
-	void sendTextMessage(cid wsi, void * buffer, size_t length);
-	void sendBinaryMessage(cid wsi, void * buffer, size_t length);
+	int init(uint16_t port);
+public:
+	int sendTextMessage(cid wsi, void * buffer, size_t length);
+	int sendBinaryMessage(cid wsi, void * buffer, size_t length);
 
-	void setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb = nullptr);
-	void setStateChangeCallback(std::function<void (cid, bool)> stateChangeCb);
+	void bind4TextMessage(msg_cb_t cb);
+	void bind4BinaryMessage(msg_cb_t cb);
+	void bind4StateChange(state_cb_t cb);
+	void unbind();
 private:
 	wsserveree(const wsserveree & rhs) = delete;
 	wsserveree & operator = (const wsserveree & rhs) = delete;
 
+private:
+	void __addSp(cid wsi, struct lws_context *context, int fd, uint32_t events);
+	void __delSp(cid wsi, int fd);
+	void __modSp(cid wsi, int fd, uint32_t events);
+	int __receiveTextMessage(cid wsi, void * data, size_t len);
+	int __receiveBinaryMessage(cid wsi, void * data, size_t len);
+	int __receiveConnectState(cid wsi, bool connectState);
 private:
 	static struct lws_protocols protocols[];
 
@@ -46,20 +51,12 @@ private:
 		void *user,
 		void *in,
 		size_t len);
-	void __addSp(cid wsi, struct lws_context &context, int fd, uint32_t events);
-	void __delSp(cid wsi, int fd);
-	void __modSp(cid wsi, int fd, uint32_t events);
-	void __receiveTextMessage(cid wsi, void * data, size_t len);
-	void __receiveBinaryMessage(cid wsi, void * data, size_t len);
-	void __receiveConnectState(cid wsi, bool connectState);
 private:
-	struct lws_context_creation_info m_info;
 	struct lws_context * m_pcontext;
 	std::map<cid, wsee*> m_sps;
 	msg_cb_t m_rxTextCallback;
 	msg_cb_t m_rxBinaryCallback;
-	std::function<void (cid, bool)> m_stateChangeCallback;
-	size_t m_buf_prepadding;
+	state_cb_t m_stateChangeCallback;
 };
 
 }

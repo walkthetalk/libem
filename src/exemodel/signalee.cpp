@@ -1,55 +1,63 @@
 #include <sys/signalfd.h>
 
-#include "zlog/zlog.hpp"
-
-#include "exemodel/poll_tools.hpp"
 #include "exemodel/signalee.hpp"
 
 namespace exemodel {
 
-void mask_signal(int signum)
+int mask_signal(int signum)
 {
 	sigset_t mask;
-	sigemptyset(&mask);
-	sigaddset(&mask, signum);
+	int ret = sigemptyset(&mask);
+	if (ret == -1)
+		return ret;
+	ret = sigaddset(&mask, signum);
+	if (ret == -1)
+		return ret;
 
-	int ret = ::sigprocmask(SIG_BLOCK, &mask, NULL);
-	validate_ret(ret, "sigprocmask");
+	ret = ::sigprocmask(SIG_BLOCK, &mask, NULL);
+	if (ret == -1)
+		return ret;
+
+	return 0;
 }
 
-static int gen_signalfd(int signum)
+int signalee::init(int signum)
 {
+	int ret = 0;
+
+	ret = mask_signal(signum);
+	if (ret == -1)
+		return ret;
+
 	sigset_t mask;
-	sigemptyset(&mask);
-	sigaddset(&mask, signum);
+	ret = sigemptyset(&mask);
+	if (ret == -1)
+		return ret;
+	ret = sigaddset(&mask, signum);
+	if (ret == -1)
+		return ret;
 
-	int sfd = ::signalfd(-1, &mask, 0);
-	validate_fd(sfd, "generate signal fd");
+	ret = ::signalfd(-1, &mask, (SFD_NONBLOCK | SFD_CLOEXEC));
+	if (ret == -1)
+		return ret;
 
-	return sfd;
+	this->savefd(ret);
+	this->saveevts(EPOLLIN);
+
+	return 0;
 }
 
-signalee::signalee(int signum)
-: pollee(gen_signalfd(signum),
-	 (uint32_t)(::EPOLLIN),
-	 "signalee")
+int signalee::dispose(poller &, uint32_t evts)
 {
-}
-
-signalee::~signalee()
-{
-	/// \todo need deblock signum
-}
-
-void signalee::dispose(poller &, uint32_t evts)
-{
-	if ((evts & ::EPOLLIN)) {
+	if ((evts & EPOLLIN)) {
 		struct signalfd_siginfo fdsi;
 		ssize_t ret = this->read(&fdsi, sizeof(fdsi));
 		if (ret == sizeof(fdsi)) {
-			this->exe();
+			return m_processor();
 		}
 	}
+
+	return 0;
 }
 
 }

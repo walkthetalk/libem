@@ -1,14 +1,12 @@
-
 #include "zlog/zlog.hpp"
 
-#include "exemodel/poll_tools.hpp"
 #include "exemodel/poller.hpp"
 #include "exemodel/pollee.hpp"
 
 namespace exemodel {
 
 poller::poller()
-: pollee(::epoll_create1(EPOLL_CLOEXEC), uint32_t(::EPOLLIN | ::EPOLLOUT | ::EPOLLPRI), "poller")
+: pollee()
 {
 }
 
@@ -16,54 +14,64 @@ poller::~poller()
 {
 }
 
-void poller::add(pollee & obj) const
+int poller::init(void)
 {
-	struct epoll_event evt;
-	evt.events = obj._evts();
-	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_ADD, obj.fd(), &evt);
-	validate_ret(ret, "epoll add fd");
+	int ret = ::epoll_create1(EPOLL_CLOEXEC);
+	if (ret == -1) {
+		return ret;
+	}
+
+	savefd(ret);
+
+	const uint32_t evts = (EPOLLIN | EPOLLOUT | EPOLLPRI);
+	saveevts(evts);
+
+	return 0;
 }
 
-void poller::del(pollee & obj) const
+int poller::add(pollee & obj) const
 {
-	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_DEL, obj.fd(), NULL);
-	validate_ret(ret, "epoll del fd");
+		zlog_debug("%s %d, fd(%d) (%d)", __FILE__, __LINE__, this->fd(), obj.fd());
+	struct epoll_event evt;
+	evt.events = obj.evts();
+	evt.data.ptr = &obj;
+	return ::epoll_ctl(this->fd(), EPOLL_CTL_ADD, obj.fd(), &evt);
 }
 
-void poller::mod(pollee & obj) const
+int poller::del(pollee & obj) const
+{
+	return ::epoll_ctl(this->fd(), EPOLL_CTL_DEL, obj.fd(), NULL);
+}
+
+int poller::mod(pollee & obj) const
 {
 	struct epoll_event evt;
-	evt.events = obj._evts();
+	evt.events = obj.evts();
 	evt.data.ptr = &obj;
-	int ret = ::epoll_ctl(this->fd(), EPOLL_CTL_MOD, obj.fd(), &evt);
-	validate_ret(ret, "epoll mod fd");
+	return ::epoll_ctl(this->fd(), EPOLL_CTL_MOD, obj.fd(), &evt);
 }
 
 void poller::run()
 {
-	try {
-		struct epoll_event evt;
-		do {
-			int ret = epoll_wait(this->fd(), &evt, 1, -1);
-			if (ret <= 0) {
-				// TODO: log
-				continue;
-			}
+	struct epoll_event evt;
+	do {
+		int ret = epoll_wait(this->fd(), &evt, 1, -1);
+		if (ret <= 0) {
+			// TODO: log
+			continue;
+		}
 
-			((pollee *)evt.data.ptr)->dispose(*this, evt.events);
-		} while(true);
-	}
-	catch (const exec_stop & e) {
-		zlog::zlog_info(e.what());
-	}
+		pollee * p = (pollee *)evt.data.ptr;
+		zlog_debug("poller::run: %d", p->fd());
+		ret = p->dispose(*this, evt.events);
+		if (ret) {
+			return;
+		}
+	} while(true);
 }
 
-void poller::dispose(poller & mgr, uint32_t evts)
+int poller::dispose(poller & /*mgr*/, uint32_t /*evts*/)
 {
-	(void)mgr;
-	(void)evts;
-
 	struct epoll_event evt;
 	do {
 		int ret = epoll_wait(this->fd(), &evt, 1, 0);
@@ -72,8 +80,13 @@ void poller::dispose(poller & mgr, uint32_t evts)
 			break;
 		}
 
-		((pollee *)evt.data.ptr)->dispose(*this, evt.events);
+		ret = ((pollee *)evt.data.ptr)->dispose(*this, evt.events);
+		if (ret) {
+			return ret;
+		}
 	} while(true);
+
+	return 0;
 }
 
 }

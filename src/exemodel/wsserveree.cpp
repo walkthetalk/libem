@@ -1,42 +1,48 @@
+#include <cstring>	/// for memset
+
 #include "zlog/zlog.hpp"
 
 #include "exemodel/wsserveree.hpp"
-#include <cstring>
-#include <system_error>
 
 namespace exemodel {
 
-class wsee : public pollee {
+class wsee final : public pollee {
 public:
-	wsee(struct lws & wsi, struct lws_context & context, int fd, uint32_t evts, const char * info)
-	: pollee(fd, evts, info)
-	, m_wsi(wsi)
-	, m_context(context)
+	wsee() = default;
+	~wsee() = default;
+
+	int init(struct lws * wsi, struct lws_context * context, int fd, uint32_t evts)
 	{
+		savefd(fd);
+		saveevts(evts);
+		m_wsi = wsi;
+		m_context = context;
+		return 0;
 	}
 
-	virtual void dispose(poller & /*mgr*/, uint32_t evts)
+	virtual int dispose(poller & /*mgr*/, uint32_t evts)
 	{
 		struct pollfd i = {
 			this->fd(),
-			(short)this->_evts(),
+			(short)this->evts(),
 			(short)evts
 		};
-		lws_service_fd(&m_context, &i);
+		lws_service_fd(m_context, &i);
+		return 0;
 	}
 
 	int sendTextMessage(void *buf, size_t len)
 	{
-		return lws_write(&m_wsi, (unsigned char *)buf, len, LWS_WRITE_TEXT);
+		return lws_write(m_wsi, (unsigned char *)buf, len, LWS_WRITE_TEXT);
 	}
 
 	int sendBinaryMessage(void *buf, size_t len)
 	{
-		return lws_write(&m_wsi, (unsigned char *)buf, len, LWS_WRITE_BINARY);
+		return lws_write(m_wsi, (unsigned char *)buf, len, LWS_WRITE_BINARY);
 	}
 private:
-	struct lws & m_wsi;
-	struct lws_context & m_context;
+	struct lws * m_wsi;
+	struct lws_context * m_context;
 };
 
 int wsserveree::callback_http(
@@ -46,37 +52,37 @@ int wsserveree::callback_http(
 	void *in,
 	size_t len)
 {
-	struct lws_context & context = *lws_get_context(wsi);
-	wsserveree & svr = *(wsserveree *)lws_context_user(&context);
+	struct lws_context * context = lws_get_context(wsi);
+	wsserveree * svr = (wsserveree *)lws_context_user(context);
 
-	//printf("callback_http, reason: %d\n", (int)reason);
+	int ret = 0;
 	switch (reason) {
-	case LWS_CALLBACK_ESTABLISHED: {
-			svr.__receiveConnectState(wsi, true);
-		}
+	case LWS_CALLBACK_ESTABLISHED:
+		ret = svr->__receiveConnectState(wsi, true);
 		break;
 
-	case LWS_CALLBACK_CLOSED: {
-			svr.__receiveConnectState(wsi, false);
-		}
+	case LWS_CALLBACK_CLOSED:
+		ret = svr->__receiveConnectState(wsi, false);
 		break;
 
 	case LWS_CALLBACK_ADD_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
 			//printf("wsi(%p) fd(%d)\n", (void*)wsi, pa.fd);
-			svr.__addSp(wsi, context, pa.fd, pa.events);
+			zlog_debug("add poll fd: %#x %d", (unsigned long)wsi, pa.fd);
+			svr->__addSp(wsi, context, pa.fd, pa.events);
 		}
 		break;
 
 	case LWS_CALLBACK_DEL_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
-			svr.__delSp(wsi, pa.fd);
+			zlog_debug("del poll fd: %#x %d", (unsigned long)wsi, pa.fd);
+			svr->__delSp(wsi, pa.fd);
 		}
 		break;
 
 	case LWS_CALLBACK_CHANGE_MODE_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
-			svr.__modSp(wsi, pa.fd, pa.events);
+			svr->__modSp(wsi, pa.fd, pa.events);
 		}
 		break;
 
@@ -88,10 +94,10 @@ int wsserveree::callback_http(
 				//printf("receive from %s\n", lws_get_peer_simple(wsi, namebuf, sizeof(namebuf)));
 				const bool is_binary = lws_frame_is_binary(wsi);
 				if (is_binary) {
-					svr.__receiveBinaryMessage(wsi, in, len);
+					svr->__receiveBinaryMessage(wsi, in, len);
 				}
 				else {
-					svr.__receiveTextMessage(wsi, in, len);
+					svr->__receiveTextMessage(wsi, in, len);
 				}
 			}
 		}
@@ -100,7 +106,7 @@ int wsserveree::callback_http(
 		break;
 	}
 
-	return 0;
+	return ret;
 }
 
 struct lws_protocols wsserveree::protocols[] = {
@@ -116,15 +122,17 @@ struct lws_protocols wsserveree::protocols[] = {
 	{ nullptr, nullptr, 0, 0, 0, nullptr, 0 } /* terminator */
 };
 
-wsserveree::wsserveree(uint16_t port)
-: poller()
-, m_buf_prepadding(LWS_PRE)
+int wsserveree::init(uint16_t port)
 {
-	auto & info = m_info;
+	int ret = 0;
+	ret = poller::init();
+	if (ret == -1)
+		return ret;
+
+	struct lws_context_creation_info info;
 	std::memset(&info, 0, sizeof(info));
 
 	info.port = port;
-
 	info.gid = -1;
 	info.uid = -1;
 	info.max_http_header_pool = 16;
@@ -135,8 +143,10 @@ wsserveree::wsserveree(uint16_t port)
 
 	m_pcontext = lws_create_context(&info);
 	if (!m_pcontext) {
-		throw std::runtime_error("init websocket server error!");
+		return -1;
 	}
+
+	return 0;
 }
 
 wsserveree::~wsserveree()
@@ -147,54 +157,42 @@ wsserveree::~wsserveree()
 	}
 }
 
-void wsserveree::sendTextMessage(cid wsi, void * buffer, size_t length)
+int wsserveree::sendTextMessage(cid wsi, void * buffer, size_t length)
 {
-	try {
-		wsee * pD = m_sps.at(wsi);
-		int ret = pD->sendTextMessage(buffer, length);
-		if (ret < 0) {
-			throw std::system_error(std::make_error_code(std::errc::network_unreachable));
-		}
-		else if ((size_t)ret < length) {
-			throw std::system_error(std::make_error_code(std::errc::device_or_resource_busy));
-		}
-	}
-	catch (const std::out_of_range & e) {
-		throw std::system_error(std::make_error_code(std::errc::network_down));
-	}
+	wsee * pD = m_sps.at(wsi);
+	return pD->sendTextMessage(buffer, length);
 }
 
-void wsserveree::sendBinaryMessage(cid wsi, void * buffer, size_t length)
+int wsserveree::sendBinaryMessage(cid wsi, void * buffer, size_t length)
 {
-	try {
-		wsee * pD = m_sps.at(wsi);
-		int ret = pD->sendBinaryMessage(buffer, length);
-		if (ret < 0) {
-			throw std::system_error(std::make_error_code(std::errc::network_unreachable));
-		}
-		else if ((size_t)ret < length) {
-			throw std::system_error(std::make_error_code(std::errc::device_or_resource_busy));
-		}
+	wsee * pD = m_sps.at(wsi);
+	return pD->sendBinaryMessage(buffer, length);
+}
+
+void wsserveree::bind4TextMessage(msg_cb_t cb)
+{
+	m_rxTextCallback = cb;
+}
+
+void wsserveree::bind4BinaryMessage(msg_cb_t cb)
+{
+	m_rxBinaryCallback = cb;
+}
+
+void wsserveree::bind4StateChange(state_cb_t cb)
+{
+	m_stateChangeCallback = cb;
+}
+
+void wsserveree::__addSp(cid wsi, struct lws_context *context, int fd, uint32_t events)
+{
+	wsee * newSp = new wsee();
+	int ret = newSp->init(wsi, context, fd, events);
+	if (ret < 0) {
+		delete newSp;
+		return;
 	}
-	catch (const std::out_of_range & e) {
-		throw std::system_error(std::make_error_code(std::errc::network_down));
-	}
-}
 
-void wsserveree::setMessageCallback(msg_cb_t textMsgCb, msg_cb_t binaryMsgCb)
-{
-	m_rxTextCallback = textMsgCb;
-	m_rxBinaryCallback = binaryMsgCb;
-}
-
-void wsserveree::setStateChangeCallback(std::function<void (cid, bool)> stateChangeCb)
-{
-	m_stateChangeCallback = stateChangeCb;
-}
-
-void wsserveree::__addSp(cid wsi, struct lws_context &context, int fd, uint32_t events)
-{
-	wsee * newSp = new wsee(*wsi, context, fd, events, "");
 	m_sps.insert(std::make_pair(wsi, newSp));
 	this->add(*newSp);
 }
@@ -203,7 +201,7 @@ void wsserveree::__delSp(cid wsi, int fd)
 {
 	wsee * pD = m_sps.at(wsi);
 	if (fd != pD->fd()) {
-		zlog::zlog_err("wsserveree: error fd(%d) for delete", fd);
+		zlog_err("wsserveree: error fd(%d) for delete", fd);
 	}
 	this->del(*pD);
 	m_sps.erase(wsi);
@@ -214,32 +212,43 @@ void wsserveree::__modSp(cid wsi, int fd, uint32_t events)
 {
 	wsee * pD = m_sps.at(wsi);
 	if (fd != pD->fd()) {
-		zlog::zlog_err("wsserveree: error fd(%d) for modify", fd);
+		zlog_err("wsserveree: error fd(%d) for modify", fd);
 	}
-	pD->mod(*this, events);
+
+	pD->saveevts(events);
+	this->mod(*pD);
 }
 
-void wsserveree::__receiveTextMessage(cid wsi, void * data, size_t len)
+int wsserveree::__receiveTextMessage(cid wsi, void * data, size_t len)
 {
 	//wsee * pD = m_sps.at(wsi);
 	if (m_rxTextCallback) {
-		m_rxTextCallback(wsi, data, len);
+		return m_rxTextCallback(wsi, data, len);
 	}
+	return 0;
 }
 
-void wsserveree::__receiveBinaryMessage(cid wsi, void * data, size_t len)
+int wsserveree::__receiveBinaryMessage(cid wsi, void * data, size_t len)
 {
-	//wsee * pD = m_sps.at(wsi);
 	if (m_rxBinaryCallback) {
-		m_rxBinaryCallback(wsi, data, len);
+		return m_rxBinaryCallback(wsi, data, len);
 	}
+	return 0;
 }
 
-void wsserveree::__receiveConnectState(cid wsi, bool isConnecting)
+int wsserveree::__receiveConnectState(cid wsi, bool isConnecting)
 {
 	if (m_stateChangeCallback) {
-		m_stateChangeCallback(wsi, isConnecting);
+		return m_stateChangeCallback(wsi, isConnecting);
 	}
+	return 0;
+}
+
+void wsserveree::unbind()
+{
+	m_rxTextCallback = nullptr;
+	m_rxBinaryCallback = nullptr;
+	m_stateChangeCallback = nullptr;
 }
 
 }

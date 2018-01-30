@@ -6,39 +6,36 @@
 
 #include <signal.h>
 
-#include <stdint.h>
-#include <vector>
+#include <functional>
 
 #include "exemodel/pollee.hpp"
-#include "exemodel/evt_cb.hpp"
 
-/**
- *\class fifo
- *\brief device pollee,used by \em poller
- */
 namespace exemodel{
-class poller;
 
-class signalee
-: public pollee
-, public evt_cb< void > {
+class signalee : public pollee {
 public:
-	/**
-	 * \brief ctor of signalee
-	 * \param path	point to a pathname to open.
-	 */
-	explicit signalee(int signum);
-	virtual ~signalee();
+	explicit signalee() = default;
+	virtual ~signalee() = default;
 public:
-	/**
-	 * \brief used for disposing the event caught by the \em poller attached.
-	 */
-	virtual void dispose(poller &, uint32_t evts);
+	int init(int signum);
+
+	void bind(std::function<int (void)> cb)
+	{
+		m_processor = cb;
+	}
+	void unbind()
+	{
+		m_processor = nullptr;
+	}
+public:
+	virtual int dispose(poller &, uint32_t evts);
 private:
 	signalee(const signalee &rhs ) = delete;
 	signalee &operator = (signalee & rhs) = delete;
+
+	std::function<int (void)> m_processor;
 };
 
-void mask_signal(int signum);
+int mask_signal(int signum);
 
 }
