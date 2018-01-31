@@ -16,11 +16,11 @@ int soft_pwm::init()
 	if (ret == -1)
 		return ret;
 
-	ret = m_t1.init(CLOCK_MONOTONIC);
+	ret = m_t1.init_mono();
 	if (ret == -1)
 		return ret;
 
-	ret = m_t2.init(CLOCK_MONOTONIC);
+	ret = m_t2.init_mono();
 	if (ret == -1)
 		return ret;
 
