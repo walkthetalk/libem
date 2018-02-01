@@ -3,8 +3,6 @@
  * \file	exemodel/fifo.hpp
  * \author	Yi Qingliang<niqingliang2003@gmail.com>
  */
-#include <string>
-
 #include <functional>
 
 #include "exemodel/pollee.hpp"
@@ -13,11 +11,13 @@ namespace exemodel{
 
 class fifo_readee : public pollee {
 public:
+	typedef std::function<int (char * buf, size_t len)> cb_t;
+public:
 	explicit fifo_readee() = default;
 	virtual ~fifo_readee() = default;
 public:
 	int init(const char *path);
-	void bind(std::function<int (const std::string &)> cb)
+	void bind(cb_t cb)
 	{
 		m_processor = cb;
 	}
@@ -31,16 +31,18 @@ private:
 	fifo_readee(const fifo_readee &rhs ) = delete;
 	fifo_readee &operator = (fifo_readee & rhs) = delete;
 private:
-	std::function<int (const std::string &)> m_processor;
+	cb_t m_processor;
 };
 
 class fifo_writee : public pollee {
+public:
+	typedef std::function<int (void)> cb_t;
 public:
 	explicit fifo_writee() = default;
 	virtual ~fifo_writee() = default;
 public:
 	int init(const char *path);
-	void bind(std::function<int (std::string &)> cb)
+	void bind(cb_t cb)
 	{
 		m_processor = cb;
 	}
@@ -54,7 +56,7 @@ private:
 	fifo_writee(const fifo_writee &rhs ) = delete;
 	fifo_writee &operator = (fifo_writee & rhs) = delete;
 private:
-	std::function<int (std::string &)> m_processor;
+	cb_t m_processor;
 };
 
 }

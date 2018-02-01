@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <vector>
+
 #include "exemodel/fifo.hpp"
 
 namespace exemodel {
@@ -34,7 +36,7 @@ int fifo_readee::init(const char *path)
 int fifo_readee::dispose(poller &, uint32_t evts)
 {
 	if (evts & EPOLLIN) {
-		std::string tmpdata;
+		std::vector<char> tmp;
 
 		char buf;
 		do {
@@ -43,11 +45,11 @@ int fifo_readee::dispose(poller &, uint32_t evts)
 				break;
 			}
 
-			tmpdata.push_back(buf);
+			tmp.push_back(buf);
 		} while (true);
 
-		if (tmpdata.size()) {
-			int ret = m_processor(tmpdata);
+		if (tmp.size()) {
+			int ret = m_processor(tmp.data(), tmp.size());
 			if (ret)
 				return ret;
 		}
@@ -74,12 +76,7 @@ int fifo_writee::init(const char *path)
 int fifo_writee::dispose(poller &, uint32_t evts)
 {
 	if (evts & EPOLLOUT) {
-		std::string tmpdata;
-		int ret = m_processor(tmpdata);
-		if (ret)
-			return ret;
-
-		this->write(tmpdata.data(), tmpdata.size());
+		return m_processor();
 	}
 
 	return 0;
