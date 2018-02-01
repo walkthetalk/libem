@@ -12,25 +12,25 @@ public:
 	rcver();
 	~rcver();
 public:
-	void process(void *, size_t);
+	int process(void *, size_t);
 
 	template<mid_t mid, template<mid_t> class T>
-	void register_callback(std::function<void(T<mid> &)> cb)
+	void register_callback(std::function<int(T<mid> &)> cb)
 	{
-		m_cbs[__mid_to_str(mid)] = [this, cb](void) -> void {
+		m_cbs[__mid_to_str(mid)] = [this, cb](void) -> int {
 			T<mid> tmp;
 			__unpack((typename msg_helper<mid>::value_type &)tmp);
-			cb(tmp);
+			return cb(tmp);
 		};
 	}
 
 	template<mid_t mid>
-	void register_callback(std::function<void(typename msg_helper<mid>::value_type &)> cb)
+	void register_callback(std::function<int(typename msg_helper<mid>::value_type &)> cb)
 	{
-		m_cbs[__mid_to_str(mid)] = [this, cb](void) -> void {
+		m_cbs[__mid_to_str(mid)] = [this, cb](void) -> int {
 			typename msg_helper<mid>::value_type msg;
 			__unpack(msg);
-			cb(msg);
+			return cb(msg);
 		};
 	}
 
@@ -105,7 +105,7 @@ private:
 	void __reset();
 private:
 	void * m_doc;
-	std::map<std::string, std::function<void(void)>> m_cbs;
+	std::map<std::string, std::function<int(void)>> m_cbs;
 };
 
 

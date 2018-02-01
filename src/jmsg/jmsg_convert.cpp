@@ -2592,15 +2592,18 @@ void rcver::__reset()
 	((rapidjson::Document*)m_doc)->SetNull();
 }
 
-void rcver::process(void * buf, size_t /*len*/)
+int rcver::process(void * buf, size_t /*len*/)
 {
 	/// process
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.ParseInsitu((char *)buf);
 	auto & cb = m_cbs[doc.FindMember(s_id)->value.GetString()];
-	if (cb) { cb(); }
+
+	int ret = 0;
+	if (cb) { ret = cb(); }
 
 	__reset();
+	return ret;
 }
 
 void rcver::convert(struct fs_param_cfg & dst, const char * src)
