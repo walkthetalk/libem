@@ -31,7 +31,6 @@ int poller::init(void)
 
 int poller::add(pollee & obj) const
 {
-		zlog_debug("%s %d, fd(%d) (%d)", __FILE__, __LINE__, this->fd(), obj.fd());
 	struct epoll_event evt;
 	evt.events = obj.evts();
 	evt.data.ptr = &obj;
