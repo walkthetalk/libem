@@ -26,7 +26,7 @@
 
     Some RapidJSON features are configurable to adapt the library to a wide
     variety of platforms, environments and usage scenarios.  Most of the
-    features can be configured in terms of overriden or predefined
+    features can be configured in terms of overridden or predefined
     preprocessor macros at compile-time.
 
     Some additional customization is available in the \ref RAPIDJSON_ERRORS APIs.
@@ -219,7 +219,7 @@
 #    elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #      define RAPIDJSON_ENDIAN RAPIDJSON_BIGENDIAN
 #    else
-#      error Unknown machine endianess detected. User needs to define RAPIDJSON_ENDIAN.
+#      error Unknown machine endianness detected. User needs to define RAPIDJSON_ENDIAN.
 #    endif // __BYTE_ORDER__
 // Detect with GLIBC's endian.h
 #  elif defined(__GLIBC__)
@@ -229,7 +229,7 @@
 #    elif (__BYTE_ORDER == __BIG_ENDIAN)
 #      define RAPIDJSON_ENDIAN RAPIDJSON_BIGENDIAN
 #    else
-#      error Unknown machine endianess detected. User needs to define RAPIDJSON_ENDIAN.
+#      error Unknown machine endianness detected. User needs to define RAPIDJSON_ENDIAN.
 #   endif // __GLIBC__
 // Detect with _LITTLE_ENDIAN and _BIG_ENDIAN macro
 #  elif defined(_LITTLE_ENDIAN) && !defined(_BIG_ENDIAN)
@@ -241,12 +241,12 @@
 #    define RAPIDJSON_ENDIAN RAPIDJSON_BIGENDIAN
 #  elif defined(__i386__) || defined(__alpha__) || defined(__ia64) || defined(__ia64__) || defined(_M_IX86) || defined(_M_IA64) || defined(_M_ALPHA) || defined(__amd64) || defined(__amd64__) || defined(_M_AMD64) || defined(__x86_64) || defined(__x86_64__) || defined(_M_X64) || defined(__bfin__)
 #    define RAPIDJSON_ENDIAN RAPIDJSON_LITTLEENDIAN
-#  elif defined(_MSC_VER) && defined(_M_ARM)
+#  elif defined(_MSC_VER) && (defined(_M_ARM) || defined(_M_ARM64))
 #    define RAPIDJSON_ENDIAN RAPIDJSON_LITTLEENDIAN
 #  elif defined(RAPIDJSON_DOXYGEN_RUNNING)
 #    define RAPIDJSON_ENDIAN
 #  else
-#    error Unknown machine endianess detected. User needs to define RAPIDJSON_ENDIAN.   
+#    error Unknown machine endianness detected. User needs to define RAPIDJSON_ENDIAN.   
 #  endif
 #endif // RAPIDJSON_ENDIAN
 

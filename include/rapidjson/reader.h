@@ -544,7 +544,8 @@ public:
     /*! \param stackAllocator Optional allocator for allocating stack memory. (Only use for non-destructive parsing)
         \param stackCapacity stack capacity in bytes for storing a single decoded string.  (Only use for non-destructive parsing)
     */
-    GenericReader(StackAllocator* stackAllocator = 0, size_t stackCapacity = kDefaultStackCapacity) : stack_(stackAllocator, stackCapacity), parseResult_() {}
+    GenericReader(StackAllocator* stackAllocator = 0, size_t stackCapacity = kDefaultStackCapacity) :
+        stack_(stackAllocator, stackCapacity), parseResult_(), state_(IterativeParsingStartState) {}
 
     //! Parse JSON text.
     /*! \tparam parseFlags Combination of \ref ParseFlag.
@@ -677,7 +678,7 @@ public:
         return IsIterativeParsingCompleteState(state_);
     }
 
-    //! Whether a parse error has occured in the last parsing.
+    //! Whether a parse error has occurred in the last parsing.
     bool HasParseError() const { return parseResult_.IsError(); }
 
     //! Get the \ref ParseErrorCode of last parsing.
@@ -900,7 +901,7 @@ private:
             return false;
     }
 
-    // Helper function to parse four hexidecimal digits in \uXXXX in ParseString().
+    // Helper function to parse four hexadecimal digits in \uXXXX in ParseString().
     template<typename InputStream>
     unsigned ParseHex4(InputStream& is, size_t escapeOffset) {
         unsigned codepoint = 0;
@@ -1007,7 +1008,7 @@ private:
 
             Ch c = is.Peek();
             if (RAPIDJSON_UNLIKELY(c == '\\')) {    // Escape
-                size_t escapeOffset = is.Tell();    // For invalid escaping, report the inital '\\' as error offset
+                size_t escapeOffset = is.Tell();    // For invalid escaping, report the initial '\\' as error offset
                 is.Take();
                 Ch e = is.Peek();
                 if ((sizeof(Ch) == 1 || unsigned(e) < 256) && RAPIDJSON_LIKELY(escape[static_cast<unsigned char>(e)])) {
