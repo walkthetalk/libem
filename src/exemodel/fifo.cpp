@@ -47,6 +47,7 @@ int fifo_readee::dispose(poller &, uint32_t evts)
 
 			tmp.push_back(buf);
 		} while (true);
+		tmp.push_back('\0');
 
 		if (tmp.size()) {
 			int ret = m_processor(tmp.data(), tmp.size());
