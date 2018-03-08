@@ -6,12 +6,14 @@ static const char * s_converter_header = R"convertheader(
 
 #include "libwebsockets.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/error/en.h"
 
 #include "c2json.hpp"
 #include "json2c.hpp"
 
 #include "in_out_wrapper.hpp"
 
+#include "zlog/zlog.hpp"
 #include "jmsg/jmsg_types.hpp"
 #include "jmsg/jmsg_sender.hpp"
 #include "jmsg/jmsg_rcver.hpp"

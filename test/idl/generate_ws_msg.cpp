@@ -181,6 +181,16 @@ public:
 		};
 	}
 
+	template<mid_t mid, typename T>
+	void register_memfn(int (T::*cb)(typename msg_helper<mid>::value_type &), T * p0)
+	{
+		m_cbs[__mid_to_str(mid)] = [this, p0, cb](void) -> int {
+			typename msg_helper<mid>::value_type msg;
+			__unpack(msg);
+			return (p0->*cb)(msg);
+		};
+	}
+
 	template<typename _T>
 	void convert(_T & dst, const std::string & src)
 	{
@@ -249,6 +259,13 @@ int rcver::process(void * buf, size_t /*len*/)
 	/// process
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.ParseInsitu((char *)buf);
+	if (doc.HasParseError()) {
+		zlog_err("\njmsg parse error(offset %u): %s\n",
+			(unsigned)doc.GetErrorOffset(),
+			GetParseError_En(doc.GetParseError()));
+		return 0;
+	}
+
 	auto & cb = m_cbs[doc.FindMember(s_id)->value.GetString()];
 
 	int ret = 0;
