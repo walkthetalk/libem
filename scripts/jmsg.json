@@ -756,6 +756,38 @@
 
 {
 	"category"	: "struct",
+	"name"		: "sstream_display_info",
+	"alias"         : "sstream_display_info_t",
+	"msgid"         : "set_single_stream",
+	"fields"	: {
+		"sid"        : "cmosId_t",
+		"layerid"    : "int",
+
+		"width"      : "uint16_t",
+		"height"     : "uint16_t",
+		"win_left"   : "uint16_t",
+		"win_top"    : "uint16_t",
+		"win_width"  : "uint16_t",
+		"win_height" : "uint16_t",
+		"dst_left"   : "uint16_t",
+		"dst_top"    : "uint16_t",
+		"dst_width"  : "uint16_t",
+		"dst_height" : "uint16_t",
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "mstream_display_info",
+	"alias"         : "mstream_display_info_t",
+	"msgid"		: "set_multi_stream",
+	"fields"	: {
+		"data"  : "std::vector<sstream_display_info_t>",
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "set_fs_display_mode",
 	"attr"		: "msg",
 	"fields"	: {
