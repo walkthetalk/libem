@@ -742,14 +742,14 @@
 	"name"		: "set_fs_display_zoom_ext",
 	"attr"		: "msg",
 	"fields"	: {
-		"x_left" : "uint16_t",
-		"x_up" : "uint16_t",
-		"x_width" : "uint16_t",
+		"x_left"   : "uint16_t",
+		"x_top"    : "uint16_t",
+		"x_width"  : "uint16_t",
 		"x_height" : "uint16_t",
 
-		"y_left" : "uint16_t",
-		"y_up" : "uint16_t",
-		"y_width" : "uint16_t",
+		"y_left"   : "uint16_t",
+		"y_top"    : "uint16_t",
+		"y_width"  : "uint16_t",
 		"y_height" : "uint16_t",
 	}
 },
