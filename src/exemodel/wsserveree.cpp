@@ -68,14 +68,14 @@ int wsserveree::callback_http(
 	case LWS_CALLBACK_ADD_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
 			//printf("wsi(%p) fd(%d)\n", (void*)wsi, pa.fd);
-			zlog_debug("add poll fd: %#x %d", (unsigned long)wsi, pa.fd);
+			zlog_debug("add poll fd: %#lx %d", (unsigned long)wsi, pa.fd);
 			svr->__addSp(wsi, context, pa.fd, pa.events);
 		}
 		break;
 
 	case LWS_CALLBACK_DEL_POLL_FD: {
 			struct lws_pollargs & pa = *(struct lws_pollargs *)in;
-			zlog_debug("del poll fd: %#x %d", (unsigned long)wsi, pa.fd);
+			zlog_debug("del poll fd: %#lx %d", (unsigned long)wsi, pa.fd);
 			svr->__delSp(wsi, pa.fd);
 		}
 		break;
