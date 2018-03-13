@@ -1389,5 +1389,18 @@
 	}
 },
 
+{
+	"category"	: "struct",
+	"name"		: "motor_speed_info",
+	"alias"         : "motor_speed_info_t",
+	"msgid"         : "set_motor_speed",
+	"fields"	: {
+		"brIdx"    : { "type" : "int", "comment" : "block ram index" },
+		"stepn"    : { "type" : "int", "comment": "step number" },
+		"minspeed" : { "type" : "double", "unit": "um/s" },
+		"maxspeed" : { "type" : "double", "unit": "um/s" },
+	}
+},
+
 
 ]
