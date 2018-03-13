@@ -34,6 +34,16 @@ public:
 		};
 	}
 
+	template<mid_t mid, typename T>
+	void register_memfn(int (T::*cb)(typename msg_helper<mid>::value_type &), T * p0)
+	{
+		m_cbs[__mid_to_str(mid)] = [this, p0, cb](void) -> int {
+			typename msg_helper<mid>::value_type msg;
+			__unpack(msg);
+			return (p0->*cb)(msg);
+		};
+	}
+
 	template<typename _T>
 	void convert(_T & dst, const std::string & src)
 	{
@@ -71,6 +81,8 @@ private:
 	void __unpack(struct discharge_count & dst);
 	void __unpack(struct set_fs_display_mode_ext & dst);
 	void __unpack(struct set_fs_display_zoom_ext & dst);
+	void __unpack(struct sstream_display_info & dst);
+	void __unpack(struct mstream_display_info & dst);
 	void __unpack(struct set_fs_display_mode & dst);
 	void __unpack(struct dust_check_result & dst);
 	void __unpack(struct heat_start & dst);
@@ -80,8 +92,8 @@ private:
 	void __unpack(struct set_lcd_brightness & dst);
 	void __unpack(struct lcd_power_ctl & dst);
 	void __unpack(struct set_led & dst);
-	void __unpack(struct motor_start & dst);
-	void __unpack(struct motor_stop & dst);
+	void __unpack(struct motor_start_info & dst);
+	void __unpack(struct motor_stop_info & dst);
 	void __unpack(struct fs_mt_cfg & dst);
 	void __unpack(struct motor_test_result & dst);
 	void __unpack(struct process_progress & dst);
@@ -100,6 +112,7 @@ private:
 	void __unpack(struct update_led_brightness & dst);
 	void __unpack(struct bat_state & dst);
 	void __unpack(struct beep & dst);
+	void __unpack(struct motor_speed_info & dst);
 
 private:
 	void __reset();

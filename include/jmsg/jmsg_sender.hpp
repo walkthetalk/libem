@@ -60,6 +60,8 @@ private:
 	void __pack(const struct discharge_count & val);
 	void __pack(const struct set_fs_display_mode_ext & val);
 	void __pack(const struct set_fs_display_zoom_ext & val);
+	void __pack(const struct sstream_display_info & val);
+	void __pack(const struct mstream_display_info & val);
 	void __pack(const struct set_fs_display_mode & val);
 	void __pack(const struct dust_check_result & val);
 	void __pack(const struct heat_start & val);
@@ -69,8 +71,8 @@ private:
 	void __pack(const struct set_lcd_brightness & val);
 	void __pack(const struct lcd_power_ctl & val);
 	void __pack(const struct set_led & val);
-	void __pack(const struct motor_start & val);
-	void __pack(const struct motor_stop & val);
+	void __pack(const struct motor_start_info & val);
+	void __pack(const struct motor_stop_info & val);
 	void __pack(const struct fs_mt_cfg & val);
 	void __pack(const struct motor_test_result & val);
 	void __pack(const struct process_progress & val);
@@ -89,6 +91,7 @@ private:
 	void __pack(const struct update_led_brightness & val);
 	void __pack(const struct bat_state & val);
 	void __pack(const struct beep & val);
+	void __pack(const struct motor_speed_info & val);
 
 private:
 	void __reset(mid_t mid);

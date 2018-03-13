@@ -44,33 +44,36 @@ enum class mid_t : uint16_t {
 	manual_arc_result = 36,
 	motorTestResult = 37,
 	motorTestStart = 38,
-	motor_start = 39,
-	motor_stop = 40,
-	process_progress = 41,
-	queryBatState = 42,
-	queryDevState = 43,
-	queryWaveForm = 44,
-	realtimeReviseResult = 45,
-	realtimeReviseStart = 46,
-	regularTestResult = 47,
-	regularTestStart = 48,
-	report_dev_state = 49,
-	report_wave_form = 50,
-	setFsDisplayModeExt = 51,
-	set_fs_display_mode = 52,
-	set_fs_display_zoom_ext = 53,
-	set_lcd_brightness = 54,
-	set_led = 55,
-	shutdown = 56,
-	skip = 57,
-	stabilizeElectrodeResult = 58,
-	stabilizeElectrodeStart = 59,
-	startDustCheckFull = 60,
-	stop = 61,
-	stopDischarge = 62,
-	tenseTestResult = 63,
-	update_led_brightness = 64,
-	update_window_position = 65,
+	process_progress = 39,
+	queryBatState = 40,
+	queryDevState = 41,
+	queryWaveForm = 42,
+	realtimeReviseResult = 43,
+	realtimeReviseStart = 44,
+	regularTestResult = 45,
+	regularTestStart = 46,
+	report_dev_state = 47,
+	report_wave_form = 48,
+	setFsDisplayModeExt = 49,
+	set_fs_display_mode = 50,
+	set_fs_display_zoom_ext = 51,
+	set_lcd_brightness = 52,
+	set_led = 53,
+	set_motor_speed = 54,
+	set_multi_stream = 55,
+	set_single_stream = 56,
+	shutdown = 57,
+	skip = 58,
+	stabilizeElectrodeResult = 59,
+	stabilizeElectrodeStart = 60,
+	startDustCheckFull = 61,
+	start_motor = 62,
+	stop = 63,
+	stopDischarge = 64,
+	stop_motor = 65,
+	tenseTestResult = 66,
+	update_led_brightness = 67,
+	update_window_position = 68,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -266,16 +269,6 @@ struct msg_helper<mid_t::motorTestStart> final {
 };
 
 template<>
-struct msg_helper<mid_t::motor_start> final {
-	typedef struct motor_start value_type;
-};
-
-template<>
-struct msg_helper<mid_t::motor_stop> final {
-	typedef struct motor_stop value_type;
-};
-
-template<>
 struct msg_helper<mid_t::process_progress> final {
 	typedef struct process_progress value_type;
 };
@@ -351,6 +344,21 @@ struct msg_helper<mid_t::set_led> final {
 };
 
 template<>
+struct msg_helper<mid_t::set_motor_speed> final {
+	typedef struct motor_speed_info value_type;
+};
+
+template<>
+struct msg_helper<mid_t::set_multi_stream> final {
+	typedef struct mstream_display_info value_type;
+};
+
+template<>
+struct msg_helper<mid_t::set_single_stream> final {
+	typedef struct sstream_display_info value_type;
+};
+
+template<>
 struct msg_helper<mid_t::shutdown> final {
 	typedef struct simple_msg value_type;
 };
@@ -376,6 +384,11 @@ struct msg_helper<mid_t::startDustCheckFull> final {
 };
 
 template<>
+struct msg_helper<mid_t::start_motor> final {
+	typedef struct motor_start_info value_type;
+};
+
+template<>
 struct msg_helper<mid_t::stop> final {
 	typedef struct simple_msg value_type;
 };
@@ -383,6 +396,11 @@ struct msg_helper<mid_t::stop> final {
 template<>
 struct msg_helper<mid_t::stopDischarge> final {
 	typedef struct simple_msg value_type;
+};
+
+template<>
+struct msg_helper<mid_t::stop_motor> final {
+	typedef struct motor_stop_info value_type;
 };
 
 template<>

@@ -536,14 +536,33 @@ struct set_fs_display_mode_ext {
 
 struct set_fs_display_zoom_ext {
 	uint16_t x_left;
-	uint16_t x_up;
+	uint16_t x_top;
 	uint16_t x_width;
 	uint16_t x_height;
 	uint16_t y_left;
-	uint16_t y_up;
+	uint16_t y_top;
 	uint16_t y_width;
 	uint16_t y_height;
 };
+
+typedef struct sstream_display_info {
+	enum cmosId_t sid;
+	int layerid;
+	uint16_t width;
+	uint16_t height;
+	uint16_t win_left;
+	uint16_t win_top;
+	uint16_t win_width;
+	uint16_t win_height;
+	uint16_t dst_left;
+	uint16_t dst_top;
+	uint16_t dst_width;
+	uint16_t dst_height;
+} sstream_display_info_t;
+
+typedef struct mstream_display_info {
+	std::vector<sstream_display_info_t> data;
+} mstream_display_info_t;
 
 struct set_fs_display_mode {
 	enum fs_display_mode_t mode;
@@ -585,14 +604,16 @@ struct set_led {
 	double brightness;	/// @range: 0.0~1.0
 };
 
-struct motor_start {
+typedef struct motor_start_info {
 	enum motorId_t id;
-	bool m_forward_dir;
-};
+	bool forward;
+	double speed;	/// @unit: um/s
+	int distance;	/// @unit: nm
+} motor_start_info_t;
 
-struct motor_stop {
+typedef struct motor_stop_info {
 	enum motorId_t id;
-};
+} motor_stop_info_t;
 
 typedef struct fs_mt_cfg {
 	uint32_t MotorTestTimes;
@@ -835,4 +856,11 @@ typedef struct bat_state {
 struct beep {
 	uint32_t time;	/// @unit: second
 };
+
+typedef struct motor_speed_info {
+	int brIdx;
+	int stepn;
+	double minspeed;	/// @unit: um/s
+	double maxspeed;	/// @unit: um/s
+} motor_speed_info_t;
 
