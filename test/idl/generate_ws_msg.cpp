@@ -260,7 +260,7 @@ int rcver::process(void * buf, size_t /*len*/)
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.ParseInsitu((char *)buf);
 	if (doc.HasParseError()) {
-		zlog_err("\njmsg parse error(offset %u): %s\n",
+		zlog_err("\njmsg parse error(offset %%u): %%s\n",
 			(unsigned)doc.GetErrorOffset(),
 			GetParseError_En(doc.GetParseError()));
 		return 0;
