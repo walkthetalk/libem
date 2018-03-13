@@ -876,18 +876,22 @@
 
 {
 	"category"	: "struct",
-	"name"		: "motor_start",
-	"attr"		: "msg",
+	"name"		: "motor_start_info",
+	"alias"         : "motor_start_info_t",
+	"msgid"		: "start_motor",
 	"fields"	: {
-		"id"	: "motorId_t",
-		"m_forward_dir" : "bool",
+		"id"	  : "motorId_t",
+		"forward" : "bool",
+		"speed"   : { "type" : "double", "unit" : "um/s" },
+		"distance": { "type" : "int", "unit" : "nm" },
 	}
 },
 
 {
 	"category"	: "struct",
-	"name"		: "motor_stop",
-	"attr"		: "msg",
+	"name"		: "motor_stop_info",
+	"alias"         : "motor_stop_info_t",
+	"msgid"         : "stop_motor",
 	"fields"	: {
 		"id"	: "motorId_t",
 	}
