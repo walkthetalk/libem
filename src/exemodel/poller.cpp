@@ -61,7 +61,6 @@ void poller::run()
 		}
 
 		pollee * p = (pollee *)evt.data.ptr;
-		zlog_debug("poller::run: %d", p->fd());
 		ret = p->dispose(*this, evt.events);
 		if (ret) {
 			return;
