@@ -342,6 +342,7 @@
 	"fields"	: {
 		"seqn" : "int",
 		"name" : "std::string",
+		"ver" : "int",
 		"fusion_mode" : "fs_pattern_t",
 		"lfti" : "fiber_t",
 		"rfti" : "fiber_t",
@@ -628,6 +629,9 @@
 	"msgid"		: "fusionSpliceResult",
 	"attr"		: ["pqxx", "export"],
 	"fields"	: {
+		"name" : "std::string",
+		"fsp_seqn" : "int",
+		"fsp_ver" : "int",
 		"time_consume" : { "type" : "int", "unit" : "ms" },
 		"code"         : "fs_err_t",
 		"loss"         : { "type" : "double", "unit" : "db" },
