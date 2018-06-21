@@ -1717,7 +1717,7 @@ public:
         ValueIterator pos = Begin() + (first - Begin());
         for (ValueIterator itr = pos; itr != last; ++itr)
             itr->~GenericValue();       
-        std::memmove(pos, last, static_cast<size_t>(End() - last) * sizeof(GenericValue));
+        std::memmove((void*)pos, (const void*)last, static_cast<size_t>(End() - last) * sizeof(GenericValue));
         data_.a.size -= static_cast<SizeType>(last - first);
         return pos;
     }
