@@ -864,3 +864,11 @@ typedef struct motor_speed_info {
 	double maxspeed;	/// @unit: um/s
 } motor_speed_info_t;
 
+typedef struct llvl_request {
+	uint32_t cmd;
+	uint32_t par0;
+	uint32_t par1;
+	uint32_t par2;
+	uint32_t par3;
+} llvl_request_t;
+

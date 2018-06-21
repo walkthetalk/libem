@@ -2169,6 +2169,27 @@ static inline void json2c(struct motor_speed_info & dst, const rapidjson::Value 
 	DEC_MEM("maxspeed", src, dst.maxspeed);
 }
 
+/// @struct llvl_request
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct llvl_request & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cmd", v, src.cmd);
+	ENC_MEM(jd, "par0", v, src.par0);
+	ENC_MEM(jd, "par1", v, src.par1);
+	ENC_MEM(jd, "par2", v, src.par2);
+	ENC_MEM(jd, "par3", v, src.par3);
+
+	return v;
+}
+static inline void json2c(struct llvl_request & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cmd", src, dst.cmd);
+	DEC_MEM("par0", src, dst.par0);
+	DEC_MEM("par1", src, dst.par1);
+	DEC_MEM("par2", src, dst.par2);
+	DEC_MEM("par3", src, dst.par3);
+}
+
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
@@ -2206,6 +2227,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"heat_state",
 	"image_move",
 	"lcd_power_ctl",
+	"llvl_request",
 	"loss_estimating_result",
 	"manual_arc_result",
 	"motorTestResult",
@@ -2670,6 +2692,12 @@ void sender::__pack(const struct motor_speed_info & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
+void sender::__pack(const struct llvl_request & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
 
 /// @class rcver : used to receive messages
 rcver::rcver()
@@ -3051,6 +3079,11 @@ void rcver::__unpack(struct beep & dst)
 }
 
 void rcver::__unpack(struct motor_speed_info & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct llvl_request & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

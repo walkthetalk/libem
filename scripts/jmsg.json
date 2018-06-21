@@ -1402,5 +1402,19 @@
 	}
 },
 
+{
+	"category"	: "struct",
+	"name"		: "llvl_request",
+	"alias"         : "llvl_request_t",
+	"msgid"         : "llvl_request",
+	"fields"	: {
+		"cmd"	: { "type" : "uint32_t", "comment" : "command" },
+		"par0"	: "uint32_t",
+		"par1"	: "uint32_t",
+		"par2"	: "uint32_t",
+		"par3"	: "uint32_t",
+	}
+},
+
 
 ]

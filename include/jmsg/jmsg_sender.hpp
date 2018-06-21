@@ -92,6 +92,7 @@ private:
 	void __pack(const struct bat_state & val);
 	void __pack(const struct beep & val);
 	void __pack(const struct motor_speed_info & val);
+	void __pack(const struct llvl_request & val);
 
 private:
 	void __reset(mid_t mid);

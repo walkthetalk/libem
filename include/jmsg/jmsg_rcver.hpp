@@ -113,6 +113,7 @@ private:
 	void __unpack(struct bat_state & dst);
 	void __unpack(struct beep & dst);
 	void __unpack(struct motor_speed_info & dst);
+	void __unpack(struct llvl_request & dst);
 
 private:
 	void __reset();
