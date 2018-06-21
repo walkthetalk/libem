@@ -297,6 +297,7 @@ static constexpr unsigned rsize_align_method = 5;
 typedef struct fs_param_cfg {
 	int seqn;
 	std::string name;
+	int ver;
 	enum fs_pattern_t fusion_mode;
 	enum fiber_t lfti;
 	enum fiber_t rfti;
@@ -470,6 +471,9 @@ typedef struct manual_arc_result {
 } manual_arc_result_t;
 
 typedef struct fusion_splice_result {
+	std::string name;
+	int fsp_seqn;
+	int fsp_ver;
 	int time_consume;	/// @unit: ms
 	enum fs_err_t code;
 	double loss;	/// @unit: db

@@ -690,6 +690,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "seqn", v, src.seqn);
 	ENC_MEM(jd, "name", v, src.name);
+	ENC_MEM(jd, "ver", v, src.ver);
 	ENC_MEM(jd, "fusion_mode", v, src.fusion_mode);
 	ENC_MEM(jd, "lfti", v, src.lfti);
 	ENC_MEM(jd, "rfti", v, src.rfti);
@@ -739,6 +740,7 @@ static inline void json2c(struct fs_param_cfg & dst, const rapidjson::Value & sr
 {
 	DEC_MEM("seqn", src, dst.seqn);
 	DEC_MEM("name", src, dst.name);
+	DEC_MEM("ver", src, dst.ver);
 	DEC_MEM("fusion_mode", src, dst.fusion_mode);
 	DEC_MEM("lfti", src, dst.lfti);
 	DEC_MEM("rfti", src, dst.rfti);
@@ -1140,6 +1142,9 @@ static inline void json2c(struct manual_arc_result & dst, const rapidjson::Value
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fusion_splice_result & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "name", v, src.name);
+	ENC_MEM(jd, "fsp_seqn", v, src.fsp_seqn);
+	ENC_MEM(jd, "fsp_ver", v, src.fsp_ver);
 	ENC_MEM(jd, "time_consume", v, src.time_consume);
 	ENC_MEM(jd, "code", v, src.code);
 	ENC_MEM(jd, "loss", v, src.loss);
@@ -1155,6 +1160,9 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fus
 }
 static inline void json2c(struct fusion_splice_result & dst, const rapidjson::Value & src)
 {
+	DEC_MEM("name", src, dst.name);
+	DEC_MEM("fsp_seqn", src, dst.fsp_seqn);
+	DEC_MEM("fsp_ver", src, dst.fsp_ver);
 	DEC_MEM("time_consume", src, dst.time_consume);
 	DEC_MEM("code", src, dst.code);
 	DEC_MEM("loss", src, dst.loss);
@@ -2333,6 +2341,14 @@ void sender::convert(std::string & dst, const struct fs_option_cfg & src)
 	c2json(doc, src).Accept(writer);
 }
 
+void sender::convert(std::string & dst, const struct fusion_splice_result & src)
+{
+	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
+	out_string_wrapper buf(dst);
+	rapidjson::Writer<out_string_wrapper> writer(buf);
+	c2json(doc, src).Accept(writer);
+}
+
 void sender::convert(std::string & dst, const struct motor_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
@@ -2760,6 +2776,14 @@ void rcver::convert(struct misc_cfg & dst, const char * src)
 }
 
 void rcver::convert(struct fs_option_cfg & dst, const char * src)
+{
+	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
+	doc.Parse(src);
+	json2c(dst, doc);
+	__reset();
+}
+
+void rcver::convert(struct fusion_splice_result & dst, const char * src)
 {
 	rapidjson::Document & doc = *((rapidjson::Document*)m_doc);
 	doc.Parse(src);
