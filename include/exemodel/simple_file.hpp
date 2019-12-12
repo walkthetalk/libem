@@ -4,8 +4,8 @@
  * \author	Yi Qingliang <niqingliang2003@tom.com>
  */
 #include <unistd.h>
-#include <stropts.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
 #include <sys/stat.h>
 
 #include <cstdint>
