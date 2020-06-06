@@ -13,7 +13,7 @@ output_dir := ${dir_self}/output
 # the main name of this program
 main_name := exemodel
 # include directories, use `:' as seperator
-inc_dir_set := ${dir_self}/include
+inc_dir_set := ${dir_self}/../rapidjson/include:${dir_self}/include
 # recursive directory, will compile files in it, and in it's subdirectories.
 src_recdir_set:=${dir_self}/src
 # solo directory, will only compile the files under it directly, no recursive.
