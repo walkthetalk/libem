@@ -1,8 +1,7 @@
 
 #include <linux/i2c-dev.h>
 #include <linux/i2c.h>
-
-#include <sys/ioctl.h>	/// ioctl
+#include <sys/ioctl.h>
 
 #include "exemodel/dev_i2c.hpp"
 
@@ -199,26 +198,78 @@ static int i2c_smbus_write_word_data(int file, uint8_t command, uint16_t value)
 				I2C_SMBUS_WORD_DATA, &data);
 }
 
-int dev_i2c::read8(uint8_t addr)
+int dev_i2c::smbus_read8(uint8_t addr)
 {
 	return i2c_smbus_read_byte_data(fd(), addr);
 }
 
-int dev_i2c::write8(uint8_t addr, uint8_t val)
+int dev_i2c::smbus_write8(uint8_t addr, uint8_t val)
 {
 	return i2c_smbus_write_byte_data(fd(), addr, val);
 }
 
-int dev_i2c::read16(uint8_t addr)
+int dev_i2c::smbus_read16(uint8_t addr)
 {
 	return i2c_smbus_read_word_data(fd(), addr);
 }
 
-int dev_i2c::write16(uint8_t addr, uint16_t val)
+int dev_i2c::smbus_write16(uint8_t addr, uint16_t val)
 {
 	return i2c_smbus_write_word_data(fd(), addr, val);
 }
 
+#if 0
+
+int dev_i2c::read(uint16_t addr, uint16_t reg, uint8_t & val)
+{
+	uint8_t buf[2] = {
+	        (uint8_t)(reg >> 8),
+	        (uint8_t)(reg & 0xFF),
+	};
+
+	const uint16_t flags = 0x0;
+	struct i2c_msg msg[2] = {
+	        { addr, flags, sizeof(buf), buf },
+	        { addr, (flags | I2C_M_RD), 1, buf },
+        };
+
+	struct i2c_rdwr_ioctl_data rdwr = { &msg[0], 2 };
+	const int ret = ::ioctl(fd(), I2C_RDWR, &rdwr);
+	if (ret < 0) {
+		return ret;
+	}
+
+	val = buf[0];
+	return 0;
+}
+
+int dev_i2c::write(uint16_t addr, uint16_t reg, uint8_t val)
+{
+	uint8_t buf[3] = {
+	        (uint8_t)(reg >> 8),
+	        (uint8_t)(reg & 0xFF),
+	        val,
+	};
+
+	struct i2c_msg msg = {
+		addr,
+		0,	// flags
+		3,	// buffer length
+		buf,
+	};
+
+	struct i2c_rdwr_ioctl_data rdwr = { &msg, 1 };
+	const int ret = ::ioctl(fd(), I2C_RDWR, &rdwr);
+	if (ret < 0) {
+		return ret;
+	}
+
+	if (ret != 1) {
+		return -1;
+	}
+	return 0;
+}
+#endif
 
 int dev_i2c::read8(uint16_t addr, uint16_t reg)
 {
@@ -241,6 +292,7 @@ int dev_i2c::read8(uint16_t addr, uint16_t reg)
 
 	return buf[0];
 }
+
 int dev_i2c::write8(uint16_t addr, uint16_t reg, uint8_t val)
 {
 	struct i2c_msg msg;
