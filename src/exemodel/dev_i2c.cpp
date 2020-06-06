@@ -2,7 +2,7 @@
 #include <linux/i2c-dev.h>
 #include <linux/i2c.h>
 
-#include <stropts.h>	/// ioctl
+#include <sys/ioctl.h>	/// ioctl
 
 #include "exemodel/dev_i2c.hpp"
 
@@ -33,12 +33,13 @@ static int i2c_smbus_access(int file, char read_write, uint8_t command,
 	return ::ioctl(file, I2C_SMBUS, &args);
 }
 
-int i2c_smbus_write_quick(int file, uint8_t value)
+#if 0
+static int i2c_smbus_write_quick(int file, uint8_t value)
 {
 	return i2c_smbus_access(file, value, 0, I2C_SMBUS_QUICK, nullptr);
 }
 
-int i2c_smbus_read_byte(int file)
+static int i2c_smbus_read_byte(int file)
 {
 	union i2c_smbus_data data;
 	int err = i2c_smbus_access(file, I2C_SMBUS_READ, 0, I2C_SMBUS_BYTE, &data);
@@ -48,51 +49,13 @@ int i2c_smbus_read_byte(int file)
 	return data.byte;
 }
 
-int i2c_smbus_write_byte(int file, uint8_t value)
+static int i2c_smbus_write_byte(int file, uint8_t value)
 {
 	return i2c_smbus_access(file, I2C_SMBUS_WRITE, value,
 				I2C_SMBUS_BYTE, NULL);
 }
 
-int i2c_smbus_read_byte_data(int file, uint8_t command)
-{
-	union i2c_smbus_data data;
-	int err = i2c_smbus_access(file, I2C_SMBUS_READ, command,
-			       I2C_SMBUS_BYTE_DATA, &data);
-	if (err < 0)
-		return err;
-
-	return data.byte;
-}
-
-int i2c_smbus_write_byte_data(int file, uint8_t command, uint8_t value)
-{
-	union i2c_smbus_data data;
-	data.byte = value;
-	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
-				I2C_SMBUS_BYTE_DATA, &data);
-}
-
-int i2c_smbus_read_word_data(int file, uint8_t command)
-{
-	union i2c_smbus_data data;
-	int err = i2c_smbus_access(file, I2C_SMBUS_READ, command,
-			       I2C_SMBUS_WORD_DATA, &data);
-	if (err < 0)
-		return err;
-
-	return data.word;
-}
-
-int i2c_smbus_write_word_data(int file, uint8_t command, uint16_t value)
-{
-	union i2c_smbus_data data;
-	data.word = value;
-	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
-				I2C_SMBUS_WORD_DATA, &data);
-}
-
-int i2c_smbus_process_call(int file, uint8_t command, uint16_t value)
+static int i2c_smbus_process_call(int file, uint8_t command, uint16_t value)
 {
 	union i2c_smbus_data data;
 	data.word = value;
@@ -104,7 +67,7 @@ int i2c_smbus_process_call(int file, uint8_t command, uint16_t value)
 }
 
 /* Returns the number of read bytes */
-int i2c_smbus_read_block_data(int file, uint8_t command, uint8_t *values)
+static int i2c_smbus_read_block_data(int file, uint8_t command, uint8_t *values)
 {
 	union i2c_smbus_data data;
 	int err = i2c_smbus_access(file, I2C_SMBUS_READ, command,
@@ -119,7 +82,7 @@ int i2c_smbus_read_block_data(int file, uint8_t command, uint8_t *values)
 	return num;
 }
 
-int i2c_smbus_write_block_data(int file, uint8_t command, uint8_t length,
+static int i2c_smbus_write_block_data(int file, uint8_t command, uint8_t length,
 				 const uint8_t *values)
 {
 	if (length > I2C_SMBUS_BLOCK_MAX)
@@ -138,7 +101,7 @@ int i2c_smbus_write_block_data(int file, uint8_t command, uint8_t length,
 /* Until kernel 2.6.22, the length is hardcoded to 32 bytes. If you
    ask for less than 32 bytes, your code will only work with kernels
    2.6.23 and later. */
-int i2c_smbus_read_i2c_block_data(int file, uint8_t command, uint8_t length,
+static int i2c_smbus_read_i2c_block_data(int file, uint8_t command, uint8_t length,
 				    uint8_t *values)
 {
 	if (length > I2C_SMBUS_BLOCK_MAX)
@@ -160,7 +123,7 @@ int i2c_smbus_read_i2c_block_data(int file, uint8_t command, uint8_t length,
 	return num;
 }
 
-int i2c_smbus_write_i2c_block_data(int file, uint8_t command, uint8_t length,
+static int i2c_smbus_write_i2c_block_data(int file, uint8_t command, uint8_t length,
 				     const uint8_t *values)
 {
 	if (length > I2C_SMBUS_BLOCK_MAX)
@@ -176,7 +139,7 @@ int i2c_smbus_write_i2c_block_data(int file, uint8_t command, uint8_t length,
 }
 
 /* Returns the number of read bytes */
-int i2c_smbus_block_process_call(int file, uint8_t command, uint8_t length,
+static int i2c_smbus_block_process_call(int file, uint8_t command, uint8_t length,
 				   uint8_t *values)
 {
 	if (length > I2C_SMBUS_BLOCK_MAX)
@@ -195,6 +158,45 @@ int i2c_smbus_block_process_call(int file, uint8_t command, uint8_t length,
 	for (int i = 1; i <= data.block[0]; i++)
 		values[i-1] = data.block[i];
 	return data.block[0];
+}
+#endif
+
+static int i2c_smbus_read_byte_data(int file, uint8_t command)
+{
+	union i2c_smbus_data data;
+	int err = i2c_smbus_access(file, I2C_SMBUS_READ, command,
+			       I2C_SMBUS_BYTE_DATA, &data);
+	if (err < 0)
+		return err;
+
+	return data.byte;
+}
+
+static int i2c_smbus_write_byte_data(int file, uint8_t command, uint8_t value)
+{
+	union i2c_smbus_data data;
+	data.byte = value;
+	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
+				I2C_SMBUS_BYTE_DATA, &data);
+}
+
+static int i2c_smbus_read_word_data(int file, uint8_t command)
+{
+	union i2c_smbus_data data;
+	int err = i2c_smbus_access(file, I2C_SMBUS_READ, command,
+			       I2C_SMBUS_WORD_DATA, &data);
+	if (err < 0)
+		return err;
+
+	return data.word;
+}
+
+static int i2c_smbus_write_word_data(int file, uint8_t command, uint16_t value)
+{
+	union i2c_smbus_data data;
+	data.word = value;
+	return i2c_smbus_access(file, I2C_SMBUS_WRITE, command,
+				I2C_SMBUS_WORD_DATA, &data);
 }
 
 int dev_i2c::read8(uint8_t addr)
@@ -217,4 +219,87 @@ int dev_i2c::write16(uint8_t addr, uint16_t val)
 	return i2c_smbus_write_word_data(fd(), addr, val);
 }
 
+
+int dev_i2c::read8(uint16_t addr, uint16_t reg)
+{
+	struct i2c_msg msg;
+	uint8_t buf[2];
+	buf[0] = (uint8_t)(reg >> 8);
+	buf[1] = (uint8_t)(reg & 0xFF);
+
+	msg.addr = addr;
+	msg.flags = I2C_M_RD;
+	msg.buf = buf;
+	msg.len = sizeof(buf);
+
+	struct i2c_rdwr_ioctl_data args;
+	args.msgs = &msg;
+	args.nmsgs = 1;
+
+	const int ret = ::ioctl(fd(), I2C_RDWR, &args);
+	if (ret < 0) return ret;
+
+	return buf[0];
 }
+int dev_i2c::write8(uint16_t addr, uint16_t reg, uint8_t val)
+{
+	struct i2c_msg msg;
+	uint8_t buf[3];
+	buf[0] = (uint8_t)(reg >> 8);
+	buf[1] = (uint8_t)(reg & 0xFF);
+	buf[2] = val;
+
+	msg.addr = addr;
+	msg.flags = 0;
+	msg.buf = buf;
+	msg.len = sizeof(buf);
+
+	struct i2c_rdwr_ioctl_data args;
+	args.msgs = &msg;
+	args.nmsgs = 1;
+
+	return ::ioctl(fd(), I2C_RDWR, &args);
+}
+int dev_i2c::read16(uint16_t addr, uint16_t reg)
+{
+	struct i2c_msg msg;
+	uint8_t buf[2];
+	buf[0] = (uint8_t)(reg >> 8);
+	buf[1] = (uint8_t)(reg & 0xFF);
+
+	msg.addr = addr;
+	msg.flags = I2C_M_RD;
+	msg.buf = buf;
+	msg.len = sizeof(buf);
+
+	struct i2c_rdwr_ioctl_data args;
+	args.msgs = &msg;
+	args.nmsgs = 1;
+
+	const int ret = ::ioctl(fd(), I2C_RDWR, &args);
+	if (ret < 0) return ret;
+
+	return ((buf[0] << 8) | buf[1]);
+}
+int dev_i2c::write16(uint16_t addr, uint16_t reg, uint16_t val)
+{
+	struct i2c_msg msg;
+	uint8_t buf[4];
+	buf[0] = (uint8_t)(reg >> 8);
+	buf[1] = (uint8_t)(reg & 0xFF);
+	buf[2] = (uint8_t)(val >> 8);
+	buf[3] = (uint8_t)(val & 0xFF);
+
+	msg.addr = addr;
+	msg.flags = 0;
+	msg.buf = buf;
+	msg.len = sizeof(buf);
+
+	struct i2c_rdwr_ioctl_data args;
+	args.msgs = &msg;
+	args.nmsgs = 1;
+
+	return ::ioctl(fd(), I2C_RDWR, &args);
+}
+
+} /* namespace exemodel */

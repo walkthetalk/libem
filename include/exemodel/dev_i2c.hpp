@@ -19,6 +19,11 @@ public:
 	int write8(uint8_t addr, uint8_t val);
 	int read16(uint8_t addr);
 	int write16(uint8_t addr, uint16_t val);
+
+	int read8(uint16_t addr, uint16_t reg);
+	int write8(uint16_t addr, uint16_t reg, uint8_t val);
+	int read16(uint16_t addr, uint16_t reg);
+	int write16(uint16_t addr, uint16_t reg, uint16_t val);
 private:
 	dev_i2c(const dev_i2c & rhs) = delete;
 	dev_i2c & operator = (const dev_i2c & rhs) = delete;
