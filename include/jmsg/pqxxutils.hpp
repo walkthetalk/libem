@@ -1,6 +1,6 @@
 #pragma once
 
-#include <pqxx/row>
+#include <pqxx/result>
 #include <pqxx/prepared_statement>
 
 #include "jmsg_types.hpp"
