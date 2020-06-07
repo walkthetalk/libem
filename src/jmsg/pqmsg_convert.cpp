@@ -6,10 +6,10 @@
 #include "jmsg/pqxxutils.hpp"
 
 template<>
-pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const std::vector<uint8_t> & src)
+void pqxx::internal::params::add_field(const std::vector<uint8_t> & src)
 {
 	const pqxx::binarystring bs(src.data(), src.size());
-	return this->operator()(bs);
+        add_field(bs);
 }
 
 static inline void pqxx2c(bool & dst, const pqxx::const_row_iterator & it) { it->to(dst); }
@@ -118,8 +118,8 @@ static inline const char * e2pqxx(const enum fs_pattern_t src)
 { return search_name_directly(e2str_fs_pattern_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fs_pattern_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum fs_pattern_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum fs_pattern_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fs_pattern_t)search_val_binary(str2e_fs_pattern_t, it->c_str()); }
 
@@ -153,8 +153,8 @@ static inline const char * e2pqxx(const enum fiber_t src)
 { return search_name_directly(e2str_fiber_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fiber_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum fiber_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum fiber_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fiber_t)search_val_binary(str2e_fiber_t, it->c_str()); }
 
@@ -186,8 +186,8 @@ static inline const char * e2pqxx(const enum align_method_t src)
 { return search_name_directly(e2str_align_method_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum align_method_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum align_method_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum align_method_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum align_method_t)search_val_binary(str2e_align_method_t, it->c_str()); }
 
@@ -217,15 +217,59 @@ static inline const char * e2pqxx(const enum loss_estimate_mode_t src)
 { return search_name_directly(e2str_loss_estimate_mode_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum loss_estimate_mode_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum loss_estimate_mode_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum loss_estimate_mode_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum loss_estimate_mode_t)search_val_binary(str2e_loss_estimate_mode_t, it->c_str()); }
 
 template<>
-pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fs_param_cfg & src)
+void pqxx::internal::params::add_field(const fs_param_cfg & src)
 {
-	return (*this)(src.seqn)(src.name)(src.ver)(src.fusion_mode)(src.lfti)(src.rfti)(src.align_mode)(src.x_focus)(src.y_focus)(src.ecf_redress)(src.auto_mag)(src.vangle_limit)(src.hangle_limit)(src.clr_mag)(src.clr_time)(src.clr_pos)(src.position)(src.gap)(src.overlap)(src.pre_mag)(src.pre_time)(src.arc1_mag)(src.arc1_time)(src.arc2_mag)(src.arc2_time)(src.arc2_on_time)(src.arc2_off_time)(src.arc_man_time)(src.lft_push_speed)(src.rt_push_speed)(src.taper_splice)(src.taper_wait_time)(src.taper_length)(src.taper_speed)(src.tense_test)(src.tense_speed)(src.tense_length)(src.loss_mode)(src.loss_limit)(src.loss_min)(src.lft_mfd)(src.rt_mfd)(src.syn_bend_co)(src.opp_bend_co)(src.mfd_mis_co);
+	add_field(src.seqn);
+	add_field(src.name);
+	add_field(src.ver);
+	add_field(src.fusion_mode);
+	add_field(src.lfti);
+	add_field(src.rfti);
+	add_field(src.align_mode);
+	add_field(src.x_focus);
+	add_field(src.y_focus);
+	add_field(src.ecf_redress);
+	add_field(src.auto_mag);
+	add_field(src.vangle_limit);
+	add_field(src.hangle_limit);
+	add_field(src.clr_mag);
+	add_field(src.clr_time);
+	add_field(src.clr_pos);
+	add_field(src.position);
+	add_field(src.gap);
+	add_field(src.overlap);
+	add_field(src.pre_mag);
+	add_field(src.pre_time);
+	add_field(src.arc1_mag);
+	add_field(src.arc1_time);
+	add_field(src.arc2_mag);
+	add_field(src.arc2_time);
+	add_field(src.arc2_on_time);
+	add_field(src.arc2_off_time);
+	add_field(src.arc_man_time);
+	add_field(src.lft_push_speed);
+	add_field(src.rt_push_speed);
+	add_field(src.taper_splice);
+	add_field(src.taper_wait_time);
+	add_field(src.taper_length);
+	add_field(src.taper_speed);
+	add_field(src.tense_test);
+	add_field(src.tense_speed);
+	add_field(src.tense_length);
+	add_field(src.loss_mode);
+	add_field(src.loss_limit);
+	add_field(src.loss_min);
+	add_field(src.lft_mfd);
+	add_field(src.rt_mfd);
+	add_field(src.syn_bend_co);
+	add_field(src.opp_bend_co);
+	add_field(src.mfd_mis_co);
 }
 
 pqxx::const_row_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_row_iterator & src)
@@ -312,8 +356,8 @@ static inline const char * e2pqxx(const enum heat_material_t src)
 { return search_name_directly(e2str_heat_material_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum heat_material_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum heat_material_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum heat_material_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum heat_material_t)search_val_binary(str2e_heat_material_t, it->c_str()); }
 
@@ -344,15 +388,24 @@ static inline const char * e2pqxx(const enum shrinktube_length_t src)
 { return search_name_directly(e2str_shrinktube_length_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum shrinktube_length_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum shrinktube_length_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum shrinktube_length_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum shrinktube_length_t)search_val_binary(str2e_shrinktube_length_t, it->c_str()); }
 
 template<>
-pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const heat_param_cfg & src)
+void pqxx::internal::params::add_field(const heat_param_cfg & src)
 {
-	return (*this)(src.seqn)(src.name)(src.material)(src.length)(src.auto_heat)(src.heat_time)(src.heat_temp)(src.finish_temp)(src.fast_heat)(src.hold_temp);
+	add_field(src.seqn);
+	add_field(src.name);
+	add_field(src.material);
+	add_field(src.length);
+	add_field(src.auto_heat);
+	add_field(src.heat_time);
+	add_field(src.heat_temp);
+	add_field(src.finish_temp);
+	add_field(src.fast_heat);
+	add_field(src.hold_temp);
 }
 
 pqxx::const_row_iterator pqxx2c(heat_param_cfg & dst, const pqxx::const_row_iterator & src)
@@ -449,8 +502,8 @@ static inline const char * e2pqxx(const enum fs_err_t src)
 { return search_name_directly(e2str_fs_err_t, (unsigned)src); }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum fs_err_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum fs_err_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum fs_err_t & dst, const pqxx::const_row_iterator &it)
 { dst = (enum fs_err_t)search_val_binary(str2e_fs_err_t, it->c_str()); }
 
@@ -482,15 +535,63 @@ static inline uint32_t e2pqxx(const enum ifd_t src)
 { return (ifd_t)src; }
 
 template<>
-inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum ifd_t & src)
-{ return this->operator()(e2pqxx(src)); }
+inline void pqxx::internal::params::add_field(const enum ifd_t & src)
+{ add_field(e2pqxx(src)); }
 static inline void pqxx2c(enum ifd_t & dst, const pqxx::const_row_iterator & it)
 { uint32_t v; it->to(v); dst = (enum ifd_t)v; }
 
 template<>
-pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const fusion_splice_result & src)
+void pqxx::internal::params::add_field(const fusion_splice_result & src)
 {
-	return (*this)(src.name)(src.fsp_seqn)(src.fsp_ver)(src.time_consume)(src.code)(src.loss)(src.recinfo.lft.ft)(src.recinfo.lft.clad_dm)(src.recinfo.lft.core_dm)(src.recinfo.rt.ft)(src.recinfo.rt.clad_dm)(src.recinfo.rt.core_dm)(src.defect.yzl.dbmp)(src.defect.yzl.hangle)(src.defect.yzl.vangle)(src.defect.yzl.clad_dm)(src.defect.yzl.core_dm)(src.defect.yzr.dbmp)(src.defect.yzr.hangle)(src.defect.yzr.vangle)(src.defect.yzr.clad_dm)(src.defect.yzr.core_dm)(src.defect.xzl.dbmp)(src.defect.xzl.hangle)(src.defect.xzl.vangle)(src.defect.xzl.clad_dm)(src.defect.xzl.core_dm)(src.defect.xzr.dbmp)(src.defect.xzr.hangle)(src.defect.xzr.vangle)(src.defect.xzr.clad_dm)(src.defect.xzr.core_dm)(src.defect.yz_hangle)(src.defect.xz_hangle)(src.defect.lft_vangle)(src.defect.rt_vangle)(src.defect.yz_img)(src.defect.xz_img)(src.defect.yz_defect_img)(src.defect.xz_defect_img)(src.prestate.core_offset)(src.prestate.clad_offset)(src.prestate.endface_gap)(src.prestate.vertex_angle)(src.tense_test.exed)(src.tense_test.pass)(src.manual_arc.count)(src.xz_final_img)(src.yz_final_img);
+	add_field(src.name);
+	add_field(src.fsp_seqn);
+	add_field(src.fsp_ver);
+	add_field(src.time_consume);
+	add_field(src.code);
+	add_field(src.loss);
+	add_field(src.recinfo.lft.ft);
+	add_field(src.recinfo.lft.clad_dm);
+	add_field(src.recinfo.lft.core_dm);
+	add_field(src.recinfo.rt.ft);
+	add_field(src.recinfo.rt.clad_dm);
+	add_field(src.recinfo.rt.core_dm);
+	add_field(src.defect.yzl.dbmp);
+	add_field(src.defect.yzl.hangle);
+	add_field(src.defect.yzl.vangle);
+	add_field(src.defect.yzl.clad_dm);
+	add_field(src.defect.yzl.core_dm);
+	add_field(src.defect.yzr.dbmp);
+	add_field(src.defect.yzr.hangle);
+	add_field(src.defect.yzr.vangle);
+	add_field(src.defect.yzr.clad_dm);
+	add_field(src.defect.yzr.core_dm);
+	add_field(src.defect.xzl.dbmp);
+	add_field(src.defect.xzl.hangle);
+	add_field(src.defect.xzl.vangle);
+	add_field(src.defect.xzl.clad_dm);
+	add_field(src.defect.xzl.core_dm);
+	add_field(src.defect.xzr.dbmp);
+	add_field(src.defect.xzr.hangle);
+	add_field(src.defect.xzr.vangle);
+	add_field(src.defect.xzr.clad_dm);
+	add_field(src.defect.xzr.core_dm);
+	add_field(src.defect.yz_hangle);
+	add_field(src.defect.xz_hangle);
+	add_field(src.defect.lft_vangle);
+	add_field(src.defect.rt_vangle);
+	add_field(src.defect.yz_img);
+	add_field(src.defect.xz_img);
+	add_field(src.defect.yz_defect_img);
+	add_field(src.defect.xz_defect_img);
+	add_field(src.prestate.core_offset);
+	add_field(src.prestate.clad_offset);
+	add_field(src.prestate.endface_gap);
+	add_field(src.prestate.vertex_angle);
+	add_field(src.tense_test.exed);
+	add_field(src.tense_test.pass);
+	add_field(src.manual_arc.count);
+	add_field(src.xz_final_img);
+	add_field(src.yz_final_img);
 }
 
 pqxx::const_row_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_row_iterator & src)

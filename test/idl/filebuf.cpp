@@ -118,10 +118,10 @@ static const char * s_pqxx_convert_header = R"convertheader(
 #include "jmsg/pqxxutils.hpp"
 
 template<>
-pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const std::vector<uint8_t> & src)
+void pqxx::internal::params::add_field(const std::vector<uint8_t> & src)
 {
 	const pqxx::binarystring bs(src.data(), src.size());
-	return this->operator()(bs);
+        add_field(bs);
 }
 
 static inline void pqxx2c(bool & dst, const pqxx::const_row_iterator & it) { it->to(dst); }

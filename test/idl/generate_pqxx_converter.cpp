@@ -100,8 +100,8 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 		outf.pf(lvl, "static inline %s e2pqxx(const enum %s src)\n", etype, ename);
 		outf.pf(lvl, "{ return (%s)src; }\n\n", ename, etype);
 		outf.pf(lvl, "template<>\n");
-		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
-		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
+		outf.pf(lvl, "inline void pqxx::internal::params::add_field(const enum %s & src)\n", ename);
+		outf.pf(lvl, "{ add_field(e2pqxx(src)); }\n");
 
 		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_row_iterator & it)\n", ename);
 		outf.pf(lvl, "{ %s v; it->to(v); dst = (enum %s)v; }\n", etype, ename);
@@ -162,8 +162,8 @@ static void convert_enum(rapidjson::Document & /*doc*/, rapidjson::Value & val, 
 			outf.pf(lvl, "{ return search_name_binary(e2str_%s, (%s)src); }\n\n", ename, etype);
 		}
 		outf.pf(lvl, "template<>\n");
-		outf.pf(lvl, "inline pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const enum %s & src)\n", ename);
-		outf.pf(lvl, "{ return this->operator()(e2pqxx(src)); }\n");
+		outf.pf(lvl, "inline void pqxx::internal::params::add_field(const enum %s & src)\n", ename);
+		outf.pf(lvl, "{ add_field(e2pqxx(src)); }\n");
 
 		outf.pf(lvl, "static inline void pqxx2c(enum %s & dst, const pqxx::const_row_iterator &it)\n", ename);
 		outf.pf(lvl, "{ dst = (enum %s)search_val_binary(str2e_%s, it->c_str()); }\n", ename, ename);
@@ -300,16 +300,14 @@ static void convert_struct(rapidjson::Document & doc, rapidjson::Value & val, co
 
 	/// SAVE
 	hppoutf.pf(lvl, "template<>\n");
-	hppoutf.pf(lvl, "pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const %s & src);\n", sname);
+	hppoutf.pf(lvl, "void pqxx::internal::params::add_field(const %s & src);\n", sname);
 	outf.pf(lvl, "template<>\n");
-	outf.pf(lvl, "pqxx::prepare::invocation & pqxx::prepare::invocation::operator()(const %s & src)\n", sname);
+	outf.pf(lvl, "void pqxx::internal::params::add_field(const %s & src)\n", sname);
 	outf.pf(lvl, "{\n");
-	outf.pf(lvl+1, "return (*this)");
 	for (size_t i = 0; i < smnList.size(); ++i) {
 		const char * mn = smnList[i].c_str();
-		outf.pf(0, "(src.%s)", mn);
+		outf.pf(lvl+1, "add_field(src.%s);\n", mn);
 	}
-	outf.pf(0, ";\n");
 	outf.pf(lvl, "}\n\n");
 
 	///LOAD
