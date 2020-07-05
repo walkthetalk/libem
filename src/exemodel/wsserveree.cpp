@@ -221,6 +221,7 @@ void wsserveree::__modSp(cid wsi, int fd, uint32_t events)
 
 int wsserveree::__receiveTextMessage(cid wsi, void * data, size_t len)
 {
+	((char *)data)[len] = '\0';
 	//wsee * pD = m_sps.at(wsi);
 	if (m_rxTextCallback) {
 		return m_rxTextCallback(wsi, data, len);
