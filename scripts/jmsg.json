@@ -51,9 +51,32 @@
 			"unit" : "degree",
 			"comment" : "yz image horizontal intersect angle"
 		},
-		"xz_hangle"  : "double",
-		"lft_vangle" : "double",
-		"rt_vangle"  : "double",
+		"xz_hangle"  : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "xz image horizontal intersect angle"
+		},
+		"lft_vangle" : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "left fiber vertical angle"
+		},
+		"rt_vangle"  : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "right fiber vertical angle"
+		},
+
+		"lft_vertex" : {
+			"type" : "double",
+			"unit" : "um",
+			"comment" : "left fiber vertex position"
+		},
+		"rt_vertex"  : {
+			"type" : "double",
+			"unit" : "um",
+			"comment" : "right fiber vertex position"
+		},
 
 		"yz_img"	: "std::string",
 		"xz_img"	: "std::string",
@@ -113,10 +136,12 @@
 	"name"		: "motorId_t",
 	"type"		: "unsigned",
 	"fields"	: {
-		"LZ" : { "comment" : "left motor" },
-		"RZ" : { "comment" : "right motor" },
-		"X" : {},
-		"Y" : {},
+		"LZ" : { "comment" : "left push motor" },
+		"RZ" : { "comment" : "right push motor" },
+		"X"  : { "comment" : "cmos x align motor" },
+		"Y"  : { "comment" : "cmos y align motor" },
+		"LR" : { "comment" : "left rotate motor" },
+		"RR" : { "comment" : "right rotate motor" },
 	}
 },
 

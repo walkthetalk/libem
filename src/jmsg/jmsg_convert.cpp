@@ -168,6 +168,8 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct def
 	ENC_MEM(jd, "xz_hangle", v, src.xz_hangle);
 	ENC_MEM(jd, "lft_vangle", v, src.lft_vangle);
 	ENC_MEM(jd, "rt_vangle", v, src.rt_vangle);
+	ENC_MEM(jd, "lft_vertex", v, src.lft_vertex);
+	ENC_MEM(jd, "rt_vertex", v, src.rt_vertex);
 	ENC_MEM(jd, "yz_img", v, src.yz_img);
 	ENC_MEM(jd, "xz_img", v, src.xz_img);
 	ENC_MEM(jd, "yz_defect_img", v, src.yz_defect_img);
@@ -185,6 +187,8 @@ static inline void json2c(struct defect_detect_result & dst, const rapidjson::Va
 	DEC_MEM("xz_hangle", src, dst.xz_hangle);
 	DEC_MEM("lft_vangle", src, dst.lft_vangle);
 	DEC_MEM("rt_vangle", src, dst.rt_vangle);
+	DEC_MEM("lft_vertex", src, dst.lft_vertex);
+	DEC_MEM("rt_vertex", src, dst.rt_vertex);
 	DEC_MEM("yz_img", src, dst.yz_img);
 	DEC_MEM("xz_img", src, dst.xz_img);
 	DEC_MEM("yz_defect_img", src, dst.yz_defect_img);
@@ -291,8 +295,10 @@ static inline void json2c(enum svc_heat_state_t & dst, const rapidjson::Value & 
 static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
-} str2e_motorId_t[4] = {
+} str2e_motorId_t[6] = {
+	{ "LR", 4 },
 	{ "LZ", 0 },
+	{ "RR", 5 },
 	{ "RZ", 1 },
 	{ "X", 2 },
 	{ "Y", 3 },
@@ -302,11 +308,13 @@ static const struct {
 static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
-} e2str_motorId_t[4] = {
+} e2str_motorId_t[6] = {
 	{ 0, "LZ" },
 	{ 1, "RZ" },
 	{ 2, "X" },
 	{ 3, "Y" },
+	{ 4, "LR" },
+	{ 5, "RR" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum motorId_t src)

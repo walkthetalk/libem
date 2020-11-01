@@ -29,9 +29,11 @@ typedef struct defect_detect_result {
 	ifd_line_t xzl;
 	ifd_line_t xzr;
 	double yz_hangle;	/// @unit: degree
-	double xz_hangle;
-	double lft_vangle;
-	double rt_vangle;
+	double xz_hangle;	/// @unit: degree
+	double lft_vangle;	/// @unit: degree
+	double rt_vangle;	/// @unit: degree
+	double lft_vertex;	/// @unit: um
+	double rt_vertex;	/// @unit: um
 	std::string yz_img;
 	std::string xz_img;
 	std::string yz_defect_img;
@@ -91,20 +93,22 @@ static constexpr uint16_t max_svc_heat_state = 7;
 static constexpr uint16_t rsize_svc_heat_state = 8;
 
 enum motorId_t : unsigned {
-	LZ = 0,	/// left motor
-	RZ = 1,	/// right motor
-	X = 2,
-	Y = 3,
-	/// @min : 0, @max : 3
+	LZ = 0,	/// left push motor
+	RZ = 1,	/// right push motor
+	X = 2,	/// cmos x align motor
+	Y = 3,	/// cmos y align motor
+	LR = 4,	/// left rotate motor
+	RR = 5,	/// right rotate motor
+	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum motorId_t> {
 	static constexpr unsigned min = 0;
-	static constexpr unsigned max = 3;
-	static constexpr unsigned size = 4;
+	static constexpr unsigned max = 5;
+	static constexpr unsigned size = 6;
 };
 static constexpr unsigned min_motorId = 0;
-static constexpr unsigned max_motorId = 3;
-static constexpr unsigned rsize_motorId = 4;
+static constexpr unsigned max_motorId = 5;
+static constexpr unsigned rsize_motorId = 6;
 
 enum class fs_display_mode_t : unsigned {
 	X = 0,

@@ -579,6 +579,8 @@ void pqxx::internal::params::add_field(const fusion_splice_result & src)
 	add_field(src.defect.xz_hangle);
 	add_field(src.defect.lft_vangle);
 	add_field(src.defect.rt_vangle);
+	add_field(src.defect.lft_vertex);
+	add_field(src.defect.rt_vertex);
 	add_field(src.defect.yz_img);
 	add_field(src.defect.xz_img);
 	add_field(src.defect.yz_defect_img);
@@ -633,6 +635,8 @@ pqxx::const_row_iterator pqxx2c(fusion_splice_result & dst, const pqxx::const_ro
 	pqxx2c(dst.defect.xz_hangle, it); ++it;
 	pqxx2c(dst.defect.lft_vangle, it); ++it;
 	pqxx2c(dst.defect.rt_vangle, it); ++it;
+	pqxx2c(dst.defect.lft_vertex, it); ++it;
+	pqxx2c(dst.defect.rt_vertex, it); ++it;
 	pqxx2c(dst.defect.yz_img, it); ++it;
 	pqxx2c(dst.defect.xz_img, it); ++it;
 	pqxx2c(dst.defect.yz_defect_img, it); ++it;

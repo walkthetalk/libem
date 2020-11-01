@@ -8,10 +8,10 @@ gen_bin="$main_dir/test/output/idl/debug/bin/jmsg_generator"
 
 inc_dir="$main_dir/include/jmsg"
 src_dir="$main_dir/src/jmsg"
-if not [ -d $inc_dir ]; then
+if ! [ -d $inc_dir ]; then
 	mkdir $inc_dir
 fi
-if not [ -d $src_dir ]; then
+if ! [ -d $src_dir ]; then
 	mkdir $src_dir
 fi
 
