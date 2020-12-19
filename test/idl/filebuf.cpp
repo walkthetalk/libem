@@ -85,7 +85,9 @@ auto flag2e(const T & flist, const rapidjson::Value & name_array) -> decltype(fl
 
 	for (const auto & name : name_array.GetArray()) {
 		for (const auto & i : flist) {
-			if (name == i.name) {
+			/// @note for c++20, name==(i.name) will result in error,
+			///       here call operator== directly.
+			if (name.operator==(i.name)) {
 				ret |= i.val;
 				break;
 			}

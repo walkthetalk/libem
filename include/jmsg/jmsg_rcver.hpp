@@ -79,6 +79,7 @@ private:
 	void __unpack(struct fs_da_cfg & dst);
 	void __unpack(struct discharge_adjust_result & dst);
 	void __unpack(struct discharge & dst);
+	void __unpack(struct discharge_v2 & dst);
 	void __unpack(struct discharge_count & dst);
 	void __unpack(struct set_fs_display_mode_ext & dst);
 	void __unpack(struct set_fs_display_zoom_ext & dst);
@@ -93,6 +94,7 @@ private:
 	void __unpack(struct set_lcd_brightness & dst);
 	void __unpack(struct lcd_power_ctl & dst);
 	void __unpack(struct set_led & dst);
+	void __unpack(struct set_exposure & dst);
 	void __unpack(struct motor_start_info & dst);
 	void __unpack(struct motor_stop_info & dst);
 	void __unpack(struct fs_mt_cfg & dst);

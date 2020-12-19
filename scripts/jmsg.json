@@ -67,17 +67,6 @@
 			"comment" : "right fiber vertical angle"
 		},
 
-		"lft_vertex" : {
-			"type" : "double",
-			"unit" : "um",
-			"comment" : "left fiber vertex position"
-		},
-		"rt_vertex"  : {
-			"type" : "double",
-			"unit" : "um",
-			"comment" : "right fiber vertex position"
-		},
-
 		"yz_img"	: "std::string",
 		"xz_img"	: "std::string",
 		"yz_defect_img"	: "std::string",
@@ -740,6 +729,20 @@
 
 {
 	"category"	: "struct",
+	"name"		: "discharge_v2",
+	"alias"         : "discharge_v2_t",
+	"attr"		: "msg",
+	"fields"	: {
+		"mag0" : { "type" : "double", "unit" : "volt" },
+		"time0": { "type" : "double", "unit" : "ms"   },
+		"mag1" : { "type" : "double", "unit" : "volt" },
+		"time1": { "type" : "double", "unit" : "ms"   },
+		"inc_time" : { "type" : "double", "unit" : "ms" },
+	}
+},
+
+{
+	"category"	: "struct",
 	"name"		: "discharge_count",
 	"attr"		: "msg",
 	"fields"	: {
@@ -900,6 +903,17 @@
 	"fields"	: {
 		"id"	: "ledId_t",
 		"brightness" : { "type" : "double", "range" : "0.0~1.0" },
+	}
+},
+
+{
+	"category"	: "struct",
+	"name"		: "set_exposure",
+	"alias"         : "set_exposure_t",
+	"attr"		: "msg",
+	"fields"	: {
+		"cmosId" : "cmosId_t",
+		"exposure" : "uint32_t",
 	}
 },
 

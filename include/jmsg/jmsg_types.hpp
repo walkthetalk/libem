@@ -32,8 +32,6 @@ typedef struct defect_detect_result {
 	double xz_hangle;	/// @unit: degree
 	double lft_vangle;	/// @unit: degree
 	double rt_vangle;	/// @unit: degree
-	double lft_vertex;	/// @unit: um
-	double rt_vertex;	/// @unit: um
 	std::string yz_img;
 	std::string xz_img;
 	std::string yz_defect_img;
@@ -526,6 +524,14 @@ struct discharge {
 	uint16_t time;	/// @unit: ms
 };
 
+typedef struct discharge_v2 {
+	double mag0;	/// @unit: volt
+	double time0;	/// @unit: ms
+	double mag1;	/// @unit: volt
+	double time1;	/// @unit: ms
+	double inc_time;	/// @unit: ms
+} discharge_v2_t;
+
 struct discharge_count {
 	uint32_t discharge_count;
 };
@@ -611,6 +617,11 @@ struct set_led {
 	enum ledId_t id;
 	double brightness;	/// @range: 0.0~1.0
 };
+
+typedef struct set_exposure {
+	enum cmosId_t cmosId;
+	uint32_t exposure;
+} set_exposure_t;
 
 typedef struct motor_start_info {
 	enum motorId_t id;

@@ -83,7 +83,9 @@ auto flag2e(const T & flist, const rapidjson::Value & name_array) -> decltype(fl
 
 	for (const auto & name : name_array.GetArray()) {
 		for (const auto & i : flist) {
-			if (name == i.name) {
+			/// @note for c++20, name==(i.name) will result in error,
+			///       here call operator== directly.
+			if (name.operator==(i.name)) {
 				ret |= i.val;
 				break;
 			}
@@ -168,8 +170,6 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct def
 	ENC_MEM(jd, "xz_hangle", v, src.xz_hangle);
 	ENC_MEM(jd, "lft_vangle", v, src.lft_vangle);
 	ENC_MEM(jd, "rt_vangle", v, src.rt_vangle);
-	ENC_MEM(jd, "lft_vertex", v, src.lft_vertex);
-	ENC_MEM(jd, "rt_vertex", v, src.rt_vertex);
 	ENC_MEM(jd, "yz_img", v, src.yz_img);
 	ENC_MEM(jd, "xz_img", v, src.xz_img);
 	ENC_MEM(jd, "yz_defect_img", v, src.yz_defect_img);
@@ -187,8 +187,6 @@ static inline void json2c(struct defect_detect_result & dst, const rapidjson::Va
 	DEC_MEM("xz_hangle", src, dst.xz_hangle);
 	DEC_MEM("lft_vangle", src, dst.lft_vangle);
 	DEC_MEM("rt_vangle", src, dst.rt_vangle);
-	DEC_MEM("lft_vertex", src, dst.lft_vertex);
-	DEC_MEM("rt_vertex", src, dst.rt_vertex);
 	DEC_MEM("yz_img", src, dst.yz_img);
 	DEC_MEM("xz_img", src, dst.xz_img);
 	DEC_MEM("yz_defect_img", src, dst.yz_defect_img);
@@ -1280,6 +1278,27 @@ static inline void json2c(struct discharge & dst, const rapidjson::Value & src)
 	DEC_MEM("time", src, dst.time);
 }
 
+/// @struct discharge_v2
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct discharge_v2 & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "mag0", v, src.mag0);
+	ENC_MEM(jd, "time0", v, src.time0);
+	ENC_MEM(jd, "mag1", v, src.mag1);
+	ENC_MEM(jd, "time1", v, src.time1);
+	ENC_MEM(jd, "inc_time", v, src.inc_time);
+
+	return v;
+}
+static inline void json2c(struct discharge_v2 & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("mag0", src, dst.mag0);
+	DEC_MEM("time0", src, dst.time0);
+	DEC_MEM("mag1", src, dst.mag1);
+	DEC_MEM("time1", src, dst.time1);
+	DEC_MEM("inc_time", src, dst.inc_time);
+}
+
 /// @struct discharge_count
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct discharge_count & src)
 {
@@ -1516,6 +1535,21 @@ static inline void json2c(struct set_led & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("id", src, dst.id);
 	DEC_MEM("brightness", src, dst.brightness);
+}
+
+/// @struct set_exposure
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_exposure & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "cmosId", v, src.cmosId);
+	ENC_MEM(jd, "exposure", v, src.exposure);
+
+	return v;
+}
+static inline void json2c(struct set_exposure & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("cmosId", src, dst.cmosId);
+	DEC_MEM("exposure", src, dst.exposure);
 }
 
 /// @struct motor_start_info
@@ -2220,6 +2254,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"dischargeAdjustResult",
 	"dischargeAdjustStart",
 	"discharge_count",
+	"discharge_v2",
 	"dustCheckFullResult",
 	"dustCheckFullStart",
 	"dustCheckResult",
@@ -2259,6 +2294,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"report_dev_state",
 	"report_wave_form",
 	"setFsDisplayModeExt",
+	"set_exposure",
 	"set_fs_display_mode",
 	"set_fs_display_zoom_ext",
 	"set_lcd_brightness",
@@ -2506,6 +2542,12 @@ void sender::__pack(const struct discharge & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
+void sender::__pack(const struct discharge_v2 & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
 void sender::__pack(const struct discharge_count & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
@@ -2585,6 +2627,12 @@ void sender::__pack(const struct lcd_power_ctl & val)
 }
 
 void sender::__pack(const struct set_led & val)
+{
+	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
+	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
+}
+
+void sender::__pack(const struct set_exposure & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
@@ -2940,6 +2988,11 @@ void rcver::__unpack(struct discharge & dst)
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
 
+void rcver::__unpack(struct discharge_v2 & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
 void rcver::__unpack(struct discharge_count & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
@@ -3006,6 +3059,11 @@ void rcver::__unpack(struct lcd_power_ctl & dst)
 }
 
 void rcver::__unpack(struct set_led & dst)
+{
+	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
+}
+
+void rcver::__unpack(struct set_exposure & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
