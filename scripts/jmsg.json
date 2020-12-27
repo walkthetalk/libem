@@ -46,15 +46,34 @@
 		"xzl"	: "ifd_line_t",
 		"xzr"	: "ifd_line_t",
 
-		"yz_hangle" : {
+		"yzl_hangle" : {
 			"type" : "double",
 			"unit" : "degree",
-			"comment" : "yz image horizontal intersect angle"
+			"comment" : "yz image left fiber horizontal angle"
 		},
-		"xz_hangle"  : {
+
+		"yzr_hangle" : {
 			"type" : "double",
 			"unit" : "degree",
-			"comment" : "xz image horizontal intersect angle"
+			"comment" : "yz image right fiber horizontal angle"
+		},
+
+		"xzl_hangle" : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "xz image left fiber horizontal angle"
+		},
+
+		"xzr_hangle" : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "xz image right fiber horizontal angle"
+		},
+
+		"intersect_hangle" : {
+			"type" : "double",
+			"unit" : "degree",
+			"comment" : "horizontal intersect angle"
 		},
 		"lft_vangle" : {
 			"type" : "double",
@@ -194,7 +213,8 @@
 	"attr"		: "class",
 	"fields"	: {
 		"CMOS_X" : {},
-		"CMOS_Y" : {}
+		"CMOS_Y" : {},
+		"LCD"    : {}
 	}
 },
 
@@ -558,6 +578,7 @@
 {
 	"category"	: "struct",
 	"name"		: "simple_msg",
+	"alias"		: "simple_msg_t",
 	"msgid"		: [
 		"fs_reset",
 		"fusionSpliceStart",
@@ -577,7 +598,9 @@
 		"fiberTrainInit",
 		"arcTestResult",
 		"heatTestResult",
-		"shutdown"
+		"shutdown",
+		"load_cfg",
+		"save_cfg"
 	]
 },
 
@@ -791,16 +814,19 @@
 	"name"		: "sstream_display_info",
 	"alias"         : "sstream_display_info_t",
 	"msgid"         : "set_single_stream",
+	"comment"	: "every part is valid only when width/height are all bigger than 0",
 	"fields"	: {
 		"sid"        : "cmosId_t",
 		"layerid"    : "int",
 
 		"width"      : "uint16_t",
 		"height"     : "uint16_t",
+
 		"win_left"   : "uint16_t",
 		"win_top"    : "uint16_t",
 		"win_width"  : "uint16_t",
 		"win_height" : "uint16_t",
+
 		"dst_left"   : "uint16_t",
 		"dst_top"    : "uint16_t",
 		"dst_width"  : "uint16_t",
@@ -1262,6 +1288,17 @@
 			"range" : "0.0~1.0",
 			"comment" : "led y luminance"
 		},
+
+		"cmosx_exposure" : {
+			"type": "uint32_t",
+			"comment" : "cmos x exposure"
+		},
+
+		"cmosy_exposure" : {
+			"type": "uint32_t",
+			"comment" : "cmos y exposure"
+		},
+
 		"dc_th0" : {
 			"type" : "double",
 			"comment" : "dust check threshold 0"
@@ -1393,10 +1430,12 @@
 {
 	"category"	: "struct",
 	"name"		: "update_led_brightness",
+	"alias"		: "update_led_brightness_t",
 	"msgid"		: "update_led_brightness",
 	"fields" : {
 		"id" : "ledId_t",
-		"brightness" : "double",
+		"denominator": "uint32_t",
+		"numerator": "uint32_t"
 	}
 },
 
@@ -1458,6 +1497,20 @@
 		"par3"	: "uint32_t",
 	}
 },
+
+{
+	"category"	: "struct",
+	"name"		: "sys_cfg",
+	"alias"		: "sys_cfg_t",
+	"msgid"		: "sys_cfg",
+	"attr"		: [ "export", "pqxx" ],
+	"fields"	: {
+		"iaparam"	: "ia_spec_t",
+		"fsparam"	: "fs_param_cfg_t",
+		"fsoption"	: "fs_option_cfg_t",
+		"heatparam"	: "heat_param_cfg_t",
+	}
+}
 
 
 ]

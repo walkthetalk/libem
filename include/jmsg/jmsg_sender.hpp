@@ -42,6 +42,7 @@ public:
 	void convert(std::string & dst, const struct ar_spec & src);
 	void convert(std::string & dst, const struct rr_spec & src);
 	void convert(std::string & dst, const struct fr_spec & src);
+	void convert(std::string & dst, const struct sys_cfg & src);
 
 private:
 	void __pack(const struct defect_detect_result & val);
@@ -96,6 +97,7 @@ private:
 	void __pack(const struct beep & val);
 	void __pack(const struct motor_speed_info & val);
 	void __pack(const struct llvl_request & val);
+	void __pack(const struct sys_cfg & val);
 
 private:
 	void __reset(mid_t mid);

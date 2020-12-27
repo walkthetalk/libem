@@ -28,8 +28,11 @@ typedef struct defect_detect_result {
 	ifd_line_t yzr;
 	ifd_line_t xzl;
 	ifd_line_t xzr;
-	double yz_hangle;	/// @unit: degree
-	double xz_hangle;	/// @unit: degree
+	double yzl_hangle;	/// @unit: degree
+	double yzr_hangle;	/// @unit: degree
+	double xzl_hangle;	/// @unit: degree
+	double xzr_hangle;	/// @unit: degree
+	double intersect_hangle;	/// @unit: degree
 	double lft_vangle;	/// @unit: degree
 	double rt_vangle;	/// @unit: degree
 	std::string yz_img;
@@ -170,16 +173,17 @@ static constexpr unsigned rsize_fs_err = 30;
 enum class ledId_t : unsigned {
 	CMOS_X = 0,
 	CMOS_Y = 1,
-	/// @min : 0, @max : 1
+	LCD = 2,
+	/// @min : 0, @max : 2
 };
 template<> struct enum_info<enum ledId_t> {
 	static constexpr unsigned min = 0;
-	static constexpr unsigned max = 1;
-	static constexpr unsigned size = 2;
+	static constexpr unsigned max = 2;
+	static constexpr unsigned size = 3;
 };
 static constexpr unsigned min_ledId = 0;
-static constexpr unsigned max_ledId = 1;
-static constexpr unsigned rsize_ledId = 2;
+static constexpr unsigned max_ledId = 2;
+static constexpr unsigned rsize_ledId = 3;
 
 enum class cmosId_t : unsigned {
 	X = 0,
@@ -444,7 +448,7 @@ struct heat_state {
 	enum svc_heat_state_t sstate;
 };
 
-struct simple_msg {};
+typedef struct simple_msg {} simple_msg_t;
 
 typedef struct fspre_state {
 	double core_offset;	/// @unit: um
@@ -794,6 +798,8 @@ typedef struct ia_spec {
 	int winy_top;
 	double ledx_lum;	/// @range: 0.0~1.0
 	double ledy_lum;	/// @range: 0.0~1.0
+	uint32_t cmosx_exposure;
+	uint32_t cmosy_exposure;
 	double dc_th0;
 	double dc_th1;
 	uint32_t denoise_th;
@@ -846,10 +852,11 @@ typedef struct update_window_position {
 	uint32_t column;
 } update_window_position_t;
 
-struct update_led_brightness {
+typedef struct update_led_brightness {
 	enum ledId_t id;
-	double brightness;
-};
+	uint32_t denominator;
+	uint32_t numerator;
+} update_led_brightness_t;
 
 enum power_t : unsigned {
 	BATTERY = 0,	/// only battery
@@ -890,4 +897,11 @@ typedef struct llvl_request {
 	uint32_t par2;
 	uint32_t par3;
 } llvl_request_t;
+
+typedef struct sys_cfg {
+	ia_spec_t iaparam;
+	fs_param_cfg_t fsparam;
+	fs_option_cfg_t fsoption;
+	heat_param_cfg_t heatparam;
+} sys_cfg_t;
 

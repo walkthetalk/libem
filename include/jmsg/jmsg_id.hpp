@@ -42,41 +42,44 @@ enum class mid_t : uint16_t {
 	image_move = 34,
 	lcd_power_ctl = 35,
 	llvl_request = 36,
-	loss_estimating_result = 37,
-	manual_arc_result = 38,
-	motorTestResult = 39,
-	motorTestStart = 40,
-	process_progress = 41,
-	queryBatState = 42,
-	queryDevState = 43,
-	queryWaveForm = 44,
-	realtimeReviseResult = 45,
-	realtimeReviseStart = 46,
-	regularTestResult = 47,
-	regularTestStart = 48,
-	report_dev_state = 49,
-	report_wave_form = 50,
-	setFsDisplayModeExt = 51,
-	set_exposure = 52,
-	set_fs_display_mode = 53,
-	set_fs_display_zoom_ext = 54,
-	set_lcd_brightness = 55,
-	set_led = 56,
-	set_motor_speed = 57,
-	set_multi_stream = 58,
-	set_single_stream = 59,
-	shutdown = 60,
-	skip = 61,
-	stabilizeElectrodeResult = 62,
-	stabilizeElectrodeStart = 63,
-	startDustCheckFull = 64,
-	start_motor = 65,
-	stop = 66,
-	stopDischarge = 67,
-	stop_motor = 68,
-	tenseTestResult = 69,
-	update_led_brightness = 70,
-	update_window_position = 71,
+	load_cfg = 37,
+	loss_estimating_result = 38,
+	manual_arc_result = 39,
+	motorTestResult = 40,
+	motorTestStart = 41,
+	process_progress = 42,
+	queryBatState = 43,
+	queryDevState = 44,
+	queryWaveForm = 45,
+	realtimeReviseResult = 46,
+	realtimeReviseStart = 47,
+	regularTestResult = 48,
+	regularTestStart = 49,
+	report_dev_state = 50,
+	report_wave_form = 51,
+	save_cfg = 52,
+	setFsDisplayModeExt = 53,
+	set_exposure = 54,
+	set_fs_display_mode = 55,
+	set_fs_display_zoom_ext = 56,
+	set_lcd_brightness = 57,
+	set_led = 58,
+	set_motor_speed = 59,
+	set_multi_stream = 60,
+	set_single_stream = 61,
+	shutdown = 62,
+	skip = 63,
+	stabilizeElectrodeResult = 64,
+	stabilizeElectrodeStart = 65,
+	startDustCheckFull = 66,
+	start_motor = 67,
+	stop = 68,
+	stopDischarge = 69,
+	stop_motor = 70,
+	sys_cfg = 71,
+	tenseTestResult = 72,
+	update_led_brightness = 73,
+	update_window_position = 74,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -262,6 +265,11 @@ struct msg_helper<mid_t::llvl_request> final {
 };
 
 template<>
+struct msg_helper<mid_t::load_cfg> final {
+	typedef struct simple_msg value_type;
+};
+
+template<>
 struct msg_helper<mid_t::loss_estimating_result> final {
 	typedef struct loss_estimating_result value_type;
 };
@@ -329,6 +337,11 @@ struct msg_helper<mid_t::report_dev_state> final {
 template<>
 struct msg_helper<mid_t::report_wave_form> final {
 	typedef struct report_wave_form value_type;
+};
+
+template<>
+struct msg_helper<mid_t::save_cfg> final {
+	typedef struct simple_msg value_type;
 };
 
 template<>
@@ -419,6 +432,11 @@ struct msg_helper<mid_t::stopDischarge> final {
 template<>
 struct msg_helper<mid_t::stop_motor> final {
 	typedef struct motor_stop_info value_type;
+};
+
+template<>
+struct msg_helper<mid_t::sys_cfg> final {
+	typedef struct sys_cfg value_type;
 };
 
 template<>

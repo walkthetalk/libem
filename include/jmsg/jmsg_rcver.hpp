@@ -62,6 +62,7 @@ public:
 	void convert(struct ar_spec & dst, const char * src);
 	void convert(struct rr_spec & dst, const char * src);
 	void convert(struct fr_spec & dst, const char * src);
+	void convert(struct sys_cfg & dst, const char * src);
 
 private:
 	const char * __mid_to_str(mid_t mid);
@@ -117,6 +118,7 @@ private:
 	void __unpack(struct beep & dst);
 	void __unpack(struct motor_speed_info & dst);
 	void __unpack(struct llvl_request & dst);
+	void __unpack(struct sys_cfg & dst);
 
 private:
 	void __reset();
