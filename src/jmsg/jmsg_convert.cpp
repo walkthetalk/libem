@@ -4,6 +4,7 @@
 
 #include "libwebsockets.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 #include "rapidjson/error/en.h"
 
 #include "c2json.hpp"
@@ -715,6 +716,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fs_
 	ENC_MEM(jd, "auto_mag", v, src.auto_mag);
 	ENC_MEM(jd, "vangle_limit", v, src.vangle_limit);
 	ENC_MEM(jd, "hangle_limit", v, src.hangle_limit);
+	ENC_MEM(jd, "push1_speed", v, src.push1_speed);
 	ENC_MEM(jd, "clr_mag", v, src.clr_mag);
 	ENC_MEM(jd, "clr_time", v, src.clr_time);
 	ENC_MEM(jd, "clr_pos", v, src.clr_pos);
@@ -765,6 +767,7 @@ static inline void json2c(struct fs_param_cfg & dst, const rapidjson::Value & sr
 	DEC_MEM("auto_mag", src, dst.auto_mag);
 	DEC_MEM("vangle_limit", src, dst.vangle_limit);
 	DEC_MEM("hangle_limit", src, dst.hangle_limit);
+	DEC_MEM("push1_speed", src, dst.push1_speed);
 	DEC_MEM("clr_mag", src, dst.clr_mag);
 	DEC_MEM("clr_time", src, dst.clr_time);
 	DEC_MEM("clr_pos", src, dst.clr_pos);
@@ -2393,7 +2396,7 @@ void sender::convert(std::string & dst, const struct fs_param_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2401,7 +2404,7 @@ void sender::convert(std::string & dst, const struct heat_param_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2409,7 +2412,7 @@ void sender::convert(std::string & dst, const struct misc_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2417,7 +2420,7 @@ void sender::convert(std::string & dst, const struct fs_option_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2425,7 +2428,7 @@ void sender::convert(std::string & dst, const struct fusion_splice_result & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2433,7 +2436,7 @@ void sender::convert(std::string & dst, const struct motor_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2441,7 +2444,7 @@ void sender::convert(std::string & dst, const struct cmos_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2449,7 +2452,7 @@ void sender::convert(std::string & dst, const struct hvb_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2457,7 +2460,7 @@ void sender::convert(std::string & dst, const struct ia_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2465,7 +2468,7 @@ void sender::convert(std::string & dst, const struct mc_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2473,7 +2476,7 @@ void sender::convert(std::string & dst, const struct ar_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2481,7 +2484,7 @@ void sender::convert(std::string & dst, const struct rr_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2489,7 +2492,7 @@ void sender::convert(std::string & dst, const struct fr_spec & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 
@@ -2497,7 +2500,7 @@ void sender::convert(std::string & dst, const struct sys_cfg & src)
 {
 	rapidjson::Document & doc = *(rapidjson::Document*)m_doc;
 	out_string_wrapper buf(dst);
-	rapidjson::Writer<out_string_wrapper> writer(buf);
+	rapidjson::PrettyWriter<out_string_wrapper> writer(buf);
 	c2json(doc, src).Accept(writer);
 }
 

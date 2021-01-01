@@ -314,6 +314,7 @@ typedef struct fs_param_cfg {
 	bool auto_mag;
 	double vangle_limit;	/// @unit: degree
 	double hangle_limit;	/// @unit: degree
+	double push1_speed;	/// @unit: um/s
 	double clr_mag;	/// @unit: volt
 	int clr_time;	/// @unit: ms
 	double clr_pos;	/// @unit: um

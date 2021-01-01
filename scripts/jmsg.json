@@ -388,6 +388,8 @@
 		"vangle_limit" : { "type" : "double", "unit" : "degree" },
 		"hangle_limit" : { "type" : "double", "unit" : "degree" },
 
+		"push1_speed" : { "type" : "double", "unit" : "um/s" },
+
 		"clr_mag"  : { "type" : "double", "unit" : "volt" },
 		"clr_time" : { "type" : "int", "unit" : "ms" },
 		"clr_pos"  : { "type" : "double", "unit" : "um" },

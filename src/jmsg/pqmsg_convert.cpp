@@ -238,6 +238,7 @@ void pqxx::internal::params::add_field(const fs_param_cfg & src)
 	add_field(src.auto_mag);
 	add_field(src.vangle_limit);
 	add_field(src.hangle_limit);
+	add_field(src.push1_speed);
 	add_field(src.clr_mag);
 	add_field(src.clr_time);
 	add_field(src.clr_pos);
@@ -288,6 +289,7 @@ pqxx::const_row_iterator pqxx2c(fs_param_cfg & dst, const pqxx::const_row_iterat
 	pqxx2c(dst.auto_mag, it); ++it;
 	pqxx2c(dst.vangle_limit, it); ++it;
 	pqxx2c(dst.hangle_limit, it); ++it;
+	pqxx2c(dst.push1_speed, it); ++it;
 	pqxx2c(dst.clr_mag, it); ++it;
 	pqxx2c(dst.clr_time, it); ++it;
 	pqxx2c(dst.clr_pos, it); ++it;
@@ -730,6 +732,7 @@ void pqxx::internal::params::add_field(const sys_cfg & src)
 	add_field(src.fsparam.auto_mag);
 	add_field(src.fsparam.vangle_limit);
 	add_field(src.fsparam.hangle_limit);
+	add_field(src.fsparam.push1_speed);
 	add_field(src.fsparam.clr_mag);
 	add_field(src.fsparam.clr_time);
 	add_field(src.fsparam.clr_pos);
@@ -843,6 +846,7 @@ pqxx::const_row_iterator pqxx2c(sys_cfg & dst, const pqxx::const_row_iterator & 
 	pqxx2c(dst.fsparam.auto_mag, it); ++it;
 	pqxx2c(dst.fsparam.vangle_limit, it); ++it;
 	pqxx2c(dst.fsparam.hangle_limit, it); ++it;
+	pqxx2c(dst.fsparam.push1_speed, it); ++it;
 	pqxx2c(dst.fsparam.clr_mag, it); ++it;
 	pqxx2c(dst.fsparam.clr_time, it); ++it;
 	pqxx2c(dst.fsparam.clr_pos, it); ++it;

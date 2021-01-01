@@ -6,6 +6,7 @@ static const char * s_converter_header = R"convertheader(
 
 #include "libwebsockets.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 #include "rapidjson/error/en.h"
 
 #include "c2json.hpp"

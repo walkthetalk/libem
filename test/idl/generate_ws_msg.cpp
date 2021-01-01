@@ -132,7 +132,7 @@ void sender::__serialize()
 		s_outf_converter.pf(lvl, "{\n");
 		s_outf_converter.pf(lvl+1, "rapidjson::Document & doc = *(rapidjson::Document*)m_doc;\n");
 		s_outf_converter.pf(lvl+1, "out_string_wrapper buf(dst);\n");
-		s_outf_converter.pf(lvl+1, "rapidjson::Writer<out_string_wrapper> writer(buf);\n");
+		s_outf_converter.pf(lvl+1, "rapidjson::PrettyWriter<out_string_wrapper> writer(buf);\n");
 		s_outf_converter.pf(lvl+1, "c2json(doc, src).Accept(writer);\n");
 		s_outf_converter.pf(lvl, "}\n\n");
 	}
