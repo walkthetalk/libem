@@ -204,7 +204,7 @@ static inline void json2c(struct defect_detect_result & dst, const rapidjson::Va
 static const struct {
 	rapidjson::Value::StringRefType name;
 	uint16_t val;
-} str2e_svc_fs_state_t[23] = {
+} str2e_svc_fs_state_t[24] = {
 	{ "calibrating", 5 },
 	{ "clring", 7 },
 	{ "defect_detecting", 9 },
@@ -224,6 +224,7 @@ static const struct {
 	{ "push1", 4 },
 	{ "push2", 11 },
 	{ "ready", 2 },
+	{ "regular_test", 23 },
 	{ "reseting", 0 },
 	{ "tension_testing", 20 },
 	{ "wait_reset", 22 },
@@ -234,7 +235,7 @@ static const struct {
 static const struct {
 	uint16_t val;
 	rapidjson::Value::StringRefType name;
-} e2str_svc_fs_state_t[23] = {
+} e2str_svc_fs_state_t[24] = {
 	{ 0, "reseting" },
 	{ 1, "idle" },
 	{ 2, "ready" },
@@ -258,6 +259,7 @@ static const struct {
 	{ 20, "tension_testing" },
 	{ 21, "finished" },
 	{ 22, "wait_reset" },
+	{ 23, "regular_test" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum svc_fs_state_t src)
@@ -301,12 +303,12 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_motorId_t[6] = {
-	{ "LR", 4 },
-	{ "LZ", 0 },
-	{ "RR", 5 },
-	{ "RZ", 1 },
-	{ "X", 2 },
-	{ "Y", 3 },
+	{ "ax", 2 },
+	{ "ay", 3 },
+	{ "lp", 0 },
+	{ "lr", 4 },
+	{ "rp", 1 },
+	{ "rr", 5 },
 };
 
 /// @motorId_t : enum to string
@@ -314,12 +316,12 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_motorId_t[6] = {
-	{ 0, "LZ" },
-	{ 1, "RZ" },
-	{ 2, "X" },
-	{ 3, "Y" },
-	{ 4, "LR" },
-	{ 5, "RR" },
+	{ 0, "lp" },
+	{ 1, "rp" },
+	{ 2, "ax" },
+	{ 3, "ay" },
+	{ 4, "lr" },
+	{ 5, "rr" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum motorId_t src)
@@ -2276,6 +2278,30 @@ static inline void json2c(struct sys_cfg & dst, const rapidjson::Value & src)
 	DEC_MEM("heatparam", src, dst.heatparam);
 }
 
+/// @svc_fs_type_t : string to enum
+static const struct {
+	rapidjson::Value::StringRefType name;
+	uint32_t val;
+} str2e_svc_fs_type_t[2] = {
+	{ "fusion_splice", 0 },
+	{ "regular_test", 1 },
+};
+
+/// @svc_fs_type_t : enum to string
+static const struct {
+	uint32_t val;
+	rapidjson::Value::StringRefType name;
+} e2str_svc_fs_type_t[2] = {
+	{ 0, "fusion_splice" },
+	{ 1, "regular_test" },
+};
+
+static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum svc_fs_type_t src)
+{ return search_name_directly(e2str_svc_fs_type_t, (uint32_t)src); }
+
+static inline void json2c(enum svc_fs_type_t & dst, const rapidjson::Value & src)
+{ dst = (enum svc_fs_type_t)search_val_binary(str2e_svc_fs_type_t, src); }
+
 /// mid to string
 static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"nil",
@@ -2305,7 +2331,6 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"fs_state",
 	"fspre_state",
 	"fusionSpliceResult",
-	"fusionSpliceStart",
 	"getFiberDefectInfo",
 	"goOn",
 	"heatTestResult",
@@ -2327,9 +2352,10 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"realtimeReviseResult",
 	"realtimeReviseStart",
 	"regularTestResult",
-	"regularTestStart",
 	"report_dev_state",
 	"report_wave_form",
+	"rt_start_motor",
+	"rt_stop_motor",
 	"save_cfg",
 	"setFsDisplayModeExt",
 	"set_exposure",
@@ -2345,6 +2371,8 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"stabilizeElectrodeResult",
 	"stabilizeElectrodeStart",
 	"startDustCheckFull",
+	"startFusionSplice",
+	"startRegularTest",
 	"start_motor",
 	"stop",
 	"stopDischarge",

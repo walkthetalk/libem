@@ -32,31 +32,31 @@ enum class mid_t : uint16_t {
 	fs_state = 24,
 	fspre_state = 25,
 	fusionSpliceResult = 26,
-	fusionSpliceStart = 27,
-	getFiberDefectInfo = 28,
-	goOn = 29,
-	heatTestResult = 30,
-	heat_result = 31,
-	heat_start = 32,
-	heat_state = 33,
-	image_move = 34,
-	lcd_power_ctl = 35,
-	llvl_request = 36,
-	load_cfg = 37,
-	loss_estimating_result = 38,
-	manual_arc_result = 39,
-	motorTestResult = 40,
-	motorTestStart = 41,
-	process_progress = 42,
-	queryBatState = 43,
-	queryDevState = 44,
-	queryWaveForm = 45,
-	realtimeReviseResult = 46,
-	realtimeReviseStart = 47,
-	regularTestResult = 48,
-	regularTestStart = 49,
-	report_dev_state = 50,
-	report_wave_form = 51,
+	getFiberDefectInfo = 27,
+	goOn = 28,
+	heatTestResult = 29,
+	heat_result = 30,
+	heat_start = 31,
+	heat_state = 32,
+	image_move = 33,
+	lcd_power_ctl = 34,
+	llvl_request = 35,
+	load_cfg = 36,
+	loss_estimating_result = 37,
+	manual_arc_result = 38,
+	motorTestResult = 39,
+	motorTestStart = 40,
+	process_progress = 41,
+	queryBatState = 42,
+	queryDevState = 43,
+	queryWaveForm = 44,
+	realtimeReviseResult = 45,
+	realtimeReviseStart = 46,
+	regularTestResult = 47,
+	report_dev_state = 48,
+	report_wave_form = 49,
+	rt_start_motor = 50,
+	rt_stop_motor = 51,
 	save_cfg = 52,
 	setFsDisplayModeExt = 53,
 	set_exposure = 54,
@@ -72,14 +72,16 @@ enum class mid_t : uint16_t {
 	stabilizeElectrodeResult = 64,
 	stabilizeElectrodeStart = 65,
 	startDustCheckFull = 66,
-	start_motor = 67,
-	stop = 68,
-	stopDischarge = 69,
-	stop_motor = 70,
-	sys_cfg = 71,
-	tenseTestResult = 72,
-	update_led_brightness = 73,
-	update_window_position = 74,
+	startFusionSplice = 67,
+	startRegularTest = 68,
+	start_motor = 69,
+	stop = 70,
+	stopDischarge = 71,
+	stop_motor = 72,
+	sys_cfg = 73,
+	tenseTestResult = 74,
+	update_led_brightness = 75,
+	update_window_position = 76,
 };
 template<mid_t mid>
 struct msg_helper final {};
@@ -215,11 +217,6 @@ struct msg_helper<mid_t::fusionSpliceResult> final {
 };
 
 template<>
-struct msg_helper<mid_t::fusionSpliceStart> final {
-	typedef struct simple_msg value_type;
-};
-
-template<>
 struct msg_helper<mid_t::getFiberDefectInfo> final {
 	typedef struct simple_msg value_type;
 };
@@ -325,11 +322,6 @@ struct msg_helper<mid_t::regularTestResult> final {
 };
 
 template<>
-struct msg_helper<mid_t::regularTestStart> final {
-	typedef struct simple_msg value_type;
-};
-
-template<>
 struct msg_helper<mid_t::report_dev_state> final {
 	typedef struct report_dev_state value_type;
 };
@@ -337,6 +329,16 @@ struct msg_helper<mid_t::report_dev_state> final {
 template<>
 struct msg_helper<mid_t::report_wave_form> final {
 	typedef struct report_wave_form value_type;
+};
+
+template<>
+struct msg_helper<mid_t::rt_start_motor> final {
+	typedef struct motor_start_info value_type;
+};
+
+template<>
+struct msg_helper<mid_t::rt_stop_motor> final {
+	typedef struct motor_stop_info value_type;
 };
 
 template<>
@@ -411,6 +413,16 @@ struct msg_helper<mid_t::stabilizeElectrodeStart> final {
 
 template<>
 struct msg_helper<mid_t::startDustCheckFull> final {
+	typedef struct simple_msg value_type;
+};
+
+template<>
+struct msg_helper<mid_t::startFusionSplice> final {
+	typedef struct simple_msg value_type;
+};
+
+template<>
+struct msg_helper<mid_t::startRegularTest> final {
 	typedef struct simple_msg value_type;
 };
 

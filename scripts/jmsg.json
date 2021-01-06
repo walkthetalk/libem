@@ -122,6 +122,7 @@
 		"tension_testing" : {},
 		"finished" : {},
 		"wait_reset" : {},
+		"regular_test" : {},
 	},
 },
 
@@ -144,12 +145,12 @@
 	"name"		: "motorId_t",
 	"type"		: "unsigned",
 	"fields"	: {
-		"LZ" : { "comment" : "left push motor" },
-		"RZ" : { "comment" : "right push motor" },
-		"X"  : { "comment" : "cmos x align motor" },
-		"Y"  : { "comment" : "cmos y align motor" },
-		"LR" : { "comment" : "left rotate motor" },
-		"RR" : { "comment" : "right rotate motor" },
+		"lp" : { "comment" : "left push motor" },
+		"rp" : { "comment" : "right push motor" },
+		"ax"  : { "comment" : "cmos x align motor" },
+		"ay"  : { "comment" : "cmos y align motor" },
+		"lr" : { "comment" : "left rotate motor" },
+		"rr" : { "comment" : "right rotate motor" },
 	}
 },
 
@@ -583,7 +584,7 @@
 	"alias"		: "simple_msg_t",
 	"msgid"		: [
 		"fs_reset",
-		"fusionSpliceStart",
+		"startFusionSplice",
 		"getFiberDefectInfo",
 		"dischargeAdjustInit",
 		"stopDischarge",
@@ -593,7 +594,7 @@
 		"goOn",
 		"skip",
 		"stop",
-		"regularTestStart",
+		"startRegularTest",
 		"queryDevState",
 		"queryBatState",
 		"queryWaveForm",
@@ -949,7 +950,10 @@
 	"category"	: "struct",
 	"name"		: "motor_start_info",
 	"alias"         : "motor_start_info_t",
-	"msgid"		: "start_motor",
+	"msgid"		: [
+		"start_motor",
+		"rt_start_motor",
+	],
 	"fields"	: {
 		"id"	  : "motorId_t",
 		"forward" : "bool",
@@ -962,7 +966,10 @@
 	"category"	: "struct",
 	"name"		: "motor_stop_info",
 	"alias"         : "motor_stop_info_t",
-	"msgid"         : "stop_motor",
+	"msgid"         : [
+		"stop_motor",
+		"rt_stop_motor",
+	],
 	"fields"	: {
 		"id"	: "motorId_t",
 	}
@@ -1512,7 +1519,16 @@
 		"fsoption"	: "fs_option_cfg_t",
 		"heatparam"	: "heat_param_cfg_t",
 	}
-}
+},
 
+{
+	"category"	: "enum",
+	"name"		: "svc_fs_type_t",
+	"type"		: "uint32_t",
+	"fields"	: {
+		"fusion_splice" : {},
+		"regular_test" : {}
+	},
+}
 
 ]

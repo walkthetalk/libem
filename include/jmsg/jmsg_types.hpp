@@ -65,16 +65,17 @@ enum class svc_fs_state_t : uint16_t {
 	tension_testing = 20,
 	finished = 21,
 	wait_reset = 22,
-	/// @min : 0, @max : 22
+	regular_test = 23,
+	/// @min : 0, @max : 23
 };
 template<> struct enum_info<enum svc_fs_state_t> {
 	static constexpr uint16_t min = 0;
-	static constexpr uint16_t max = 22;
-	static constexpr uint16_t size = 23;
+	static constexpr uint16_t max = 23;
+	static constexpr uint16_t size = 24;
 };
 static constexpr uint16_t min_svc_fs_state = 0;
-static constexpr uint16_t max_svc_fs_state = 22;
-static constexpr uint16_t rsize_svc_fs_state = 23;
+static constexpr uint16_t max_svc_fs_state = 23;
+static constexpr uint16_t rsize_svc_fs_state = 24;
 
 enum class svc_heat_state_t : uint16_t {
 	heat_idle = 0,
@@ -94,12 +95,12 @@ static constexpr uint16_t max_svc_heat_state = 7;
 static constexpr uint16_t rsize_svc_heat_state = 8;
 
 enum motorId_t : unsigned {
-	LZ = 0,	/// left push motor
-	RZ = 1,	/// right push motor
-	X = 2,	/// cmos x align motor
-	Y = 3,	/// cmos y align motor
-	LR = 4,	/// left rotate motor
-	RR = 5,	/// right rotate motor
+	lp = 0,	/// left push motor
+	rp = 1,	/// right push motor
+	ax = 2,	/// cmos x align motor
+	ay = 3,	/// cmos y align motor
+	lr = 4,	/// left rotate motor
+	rr = 5,	/// right rotate motor
 	/// @min : 0, @max : 5
 };
 template<> struct enum_info<enum motorId_t> {
@@ -905,4 +906,18 @@ typedef struct sys_cfg {
 	fs_option_cfg_t fsoption;
 	heat_param_cfg_t heatparam;
 } sys_cfg_t;
+
+enum svc_fs_type_t : uint32_t {
+	fusion_splice = 0,
+	regular_test = 1,
+	/// @min : 0, @max : 1
+};
+template<> struct enum_info<enum svc_fs_type_t> {
+	static constexpr uint32_t min = 0;
+	static constexpr uint32_t max = 1;
+	static constexpr uint32_t size = 2;
+};
+static constexpr uint32_t min_svc_fs_type = 0;
+static constexpr uint32_t max_svc_fs_type = 1;
+static constexpr uint32_t rsize_svc_fs_type = 2;
 
