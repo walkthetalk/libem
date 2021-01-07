@@ -108,6 +108,25 @@ rapidjson::Value e2flag(rapidjson::Document & doc, const T &flist, const V val)
 	}
 	return ret;
 }
+/// @struct region
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct region & src)
+{
+	rapidjson::Value v(rapidjson::kObjectType);
+	ENC_MEM(jd, "left", v, src.left);
+	ENC_MEM(jd, "top", v, src.top);
+	ENC_MEM(jd, "width", v, src.width);
+	ENC_MEM(jd, "height", v, src.height);
+
+	return v;
+}
+static inline void json2c(struct region & dst, const rapidjson::Value & src)
+{
+	DEC_MEM("left", src, dst.left);
+	DEC_MEM("top", src, dst.top);
+	DEC_MEM("width", src, dst.width);
+	DEC_MEM("height", src, dst.height);
+}
+
 /// @ifd_t : string to enum
 static const struct {
 	rapidjson::Value::StringRefType name;
@@ -471,8 +490,8 @@ static const struct {
 	rapidjson::Value::StringRefType name;
 	unsigned val;
 } str2e_cmosId_t[2] = {
-	{ "X", 0 },
-	{ "Y", 1 },
+	{ "x", 0 },
+	{ "y", 1 },
 };
 
 /// @cmosId_t : enum to string
@@ -480,8 +499,8 @@ static const struct {
 	unsigned val;
 	rapidjson::Value::StringRefType name;
 } e2str_cmosId_t[2] = {
-	{ 0, "X" },
-	{ 1, "Y" },
+	{ 0, "x" },
+	{ 1, "y" },
 };
 
 static inline rapidjson::Value c2json(rapidjson::Document & /*jd*/, const enum cmosId_t src)
@@ -1325,62 +1344,6 @@ static inline void json2c(struct discharge_count & dst, const rapidjson::Value &
 	DEC_MEM("discharge_count", src, dst.discharge_count);
 }
 
-/// @struct set_fs_display_mode_ext
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_fs_display_mode_ext & src)
-{
-	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "xovery", v, src.xovery);
-	ENC_MEM(jd, "x_left", v, src.x_left);
-	ENC_MEM(jd, "x_top", v, src.x_top);
-	ENC_MEM(jd, "x_width", v, src.x_width);
-	ENC_MEM(jd, "x_height", v, src.x_height);
-	ENC_MEM(jd, "y_left", v, src.y_left);
-	ENC_MEM(jd, "y_top", v, src.y_top);
-	ENC_MEM(jd, "y_width", v, src.y_width);
-	ENC_MEM(jd, "y_height", v, src.y_height);
-
-	return v;
-}
-static inline void json2c(struct set_fs_display_mode_ext & dst, const rapidjson::Value & src)
-{
-	DEC_MEM("xovery", src, dst.xovery);
-	DEC_MEM("x_left", src, dst.x_left);
-	DEC_MEM("x_top", src, dst.x_top);
-	DEC_MEM("x_width", src, dst.x_width);
-	DEC_MEM("x_height", src, dst.x_height);
-	DEC_MEM("y_left", src, dst.y_left);
-	DEC_MEM("y_top", src, dst.y_top);
-	DEC_MEM("y_width", src, dst.y_width);
-	DEC_MEM("y_height", src, dst.y_height);
-}
-
-/// @struct set_fs_display_zoom_ext
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_fs_display_zoom_ext & src)
-{
-	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "x_left", v, src.x_left);
-	ENC_MEM(jd, "x_top", v, src.x_top);
-	ENC_MEM(jd, "x_width", v, src.x_width);
-	ENC_MEM(jd, "x_height", v, src.x_height);
-	ENC_MEM(jd, "y_left", v, src.y_left);
-	ENC_MEM(jd, "y_top", v, src.y_top);
-	ENC_MEM(jd, "y_width", v, src.y_width);
-	ENC_MEM(jd, "y_height", v, src.y_height);
-
-	return v;
-}
-static inline void json2c(struct set_fs_display_zoom_ext & dst, const rapidjson::Value & src)
-{
-	DEC_MEM("x_left", src, dst.x_left);
-	DEC_MEM("x_top", src, dst.x_top);
-	DEC_MEM("x_width", src, dst.x_width);
-	DEC_MEM("x_height", src, dst.x_height);
-	DEC_MEM("y_left", src, dst.y_left);
-	DEC_MEM("y_top", src, dst.y_top);
-	DEC_MEM("y_width", src, dst.y_width);
-	DEC_MEM("y_height", src, dst.y_height);
-}
-
 /// @struct sstream_display_info
 static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct sstream_display_info & src)
 {
@@ -1389,14 +1352,8 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct sst
 	ENC_MEM(jd, "layerid", v, src.layerid);
 	ENC_MEM(jd, "width", v, src.width);
 	ENC_MEM(jd, "height", v, src.height);
-	ENC_MEM(jd, "win_left", v, src.win_left);
-	ENC_MEM(jd, "win_top", v, src.win_top);
-	ENC_MEM(jd, "win_width", v, src.win_width);
-	ENC_MEM(jd, "win_height", v, src.win_height);
-	ENC_MEM(jd, "dst_left", v, src.dst_left);
-	ENC_MEM(jd, "dst_top", v, src.dst_top);
-	ENC_MEM(jd, "dst_width", v, src.dst_width);
-	ENC_MEM(jd, "dst_height", v, src.dst_height);
+	ENC_MEM(jd, "src", v, src.src);
+	ENC_MEM(jd, "dst", v, src.dst);
 
 	return v;
 }
@@ -1406,14 +1363,8 @@ static inline void json2c(struct sstream_display_info & dst, const rapidjson::Va
 	DEC_MEM("layerid", src, dst.layerid);
 	DEC_MEM("width", src, dst.width);
 	DEC_MEM("height", src, dst.height);
-	DEC_MEM("win_left", src, dst.win_left);
-	DEC_MEM("win_top", src, dst.win_top);
-	DEC_MEM("win_width", src, dst.win_width);
-	DEC_MEM("win_height", src, dst.win_height);
-	DEC_MEM("dst_left", src, dst.dst_left);
-	DEC_MEM("dst_top", src, dst.dst_top);
-	DEC_MEM("dst_width", src, dst.dst_width);
-	DEC_MEM("dst_height", src, dst.dst_height);
+	DEC_MEM("src", src, dst.src);
+	DEC_MEM("dst", src, dst.dst);
 }
 
 /// @struct mstream_display_info
@@ -1427,19 +1378,6 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct mst
 static inline void json2c(struct mstream_display_info & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("data", src, dst.data);
-}
-
-/// @struct set_fs_display_mode
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct set_fs_display_mode & src)
-{
-	rapidjson::Value v(rapidjson::kObjectType);
-	ENC_MEM(jd, "mode", v, src.mode);
-
-	return v;
-}
-static inline void json2c(struct set_fs_display_mode & dst, const rapidjson::Value & src)
-{
-	DEC_MEM("mode", src, dst.mode);
 }
 
 /// @struct dust_check_result
@@ -1479,8 +1417,8 @@ static inline void json2c(struct heat_result & dst, const rapidjson::Value & src
 	DEC_MEM("code", src, dst.code);
 }
 
-/// @struct image_move
-static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct image_move & src)
+/// @struct move_image
+static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct move_image & src)
 {
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "cmosId", v, src.cmosId);
@@ -1489,7 +1427,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ima
 
 	return v;
 }
-static inline void json2c(struct image_move & dst, const rapidjson::Value & src)
+static inline void json2c(struct move_image & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("cmosId", src, dst.cmosId);
 	DEC_MEM("row", src, dst.row);
@@ -1981,14 +1919,10 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct ia_
 	ENC_MEM(jd, "lens_mag", v, src.lens_mag);
 	ENC_MEM(jd, "cap_delay", v, src.cap_delay);
 	ENC_MEM(jd, "cover_delay", v, src.cover_delay);
-	ENC_MEM(jd, "winx_width", v, src.winx_width);
-	ENC_MEM(jd, "winx_height", v, src.winx_height);
-	ENC_MEM(jd, "winx_left", v, src.winx_left);
-	ENC_MEM(jd, "winx_top", v, src.winx_top);
-	ENC_MEM(jd, "winy_width", v, src.winy_width);
-	ENC_MEM(jd, "winy_height", v, src.winy_height);
-	ENC_MEM(jd, "winy_left", v, src.winy_left);
-	ENC_MEM(jd, "winy_top", v, src.winy_top);
+	ENC_MEM(jd, "fullx", v, src.fullx);
+	ENC_MEM(jd, "winx", v, src.winx);
+	ENC_MEM(jd, "fully", v, src.fully);
+	ENC_MEM(jd, "winy", v, src.winy);
 	ENC_MEM(jd, "ledx_lum", v, src.ledx_lum);
 	ENC_MEM(jd, "ledy_lum", v, src.ledy_lum);
 	ENC_MEM(jd, "cmosx_exposure", v, src.cmosx_exposure);
@@ -2012,14 +1946,10 @@ static inline void json2c(struct ia_spec & dst, const rapidjson::Value & src)
 	DEC_MEM("lens_mag", src, dst.lens_mag);
 	DEC_MEM("cap_delay", src, dst.cap_delay);
 	DEC_MEM("cover_delay", src, dst.cover_delay);
-	DEC_MEM("winx_width", src, dst.winx_width);
-	DEC_MEM("winx_height", src, dst.winx_height);
-	DEC_MEM("winx_left", src, dst.winx_left);
-	DEC_MEM("winx_top", src, dst.winx_top);
-	DEC_MEM("winy_width", src, dst.winy_width);
-	DEC_MEM("winy_height", src, dst.winy_height);
-	DEC_MEM("winy_left", src, dst.winy_left);
-	DEC_MEM("winy_top", src, dst.winy_top);
+	DEC_MEM("fullx", src, dst.fullx);
+	DEC_MEM("winx", src, dst.winx);
+	DEC_MEM("fully", src, dst.fully);
+	DEC_MEM("winy", src, dst.winy);
 	DEC_MEM("ledx_lum", src, dst.ledx_lum);
 	DEC_MEM("ledy_lum", src, dst.ledy_lum);
 	DEC_MEM("cmosx_exposure", src, dst.cmosx_exposure);
@@ -2099,10 +2029,7 @@ static inline rapidjson::Value c2json(rapidjson::Document & jd, const struct fr_
 	rapidjson::Value v(rapidjson::kObjectType);
 	ENC_MEM(jd, "left", v, src.left);
 	ENC_MEM(jd, "right", v, src.right);
-	ENC_MEM(jd, "winx_left", v, src.winx_left);
-	ENC_MEM(jd, "winx_top", v, src.winx_top);
-	ENC_MEM(jd, "winy_left", v, src.winy_left);
-	ENC_MEM(jd, "winy_top", v, src.winy_top);
+	ENC_MEM(jd, "winx", v, src.winx);
 
 	return v;
 }
@@ -2110,10 +2037,7 @@ static inline void json2c(struct fr_spec & dst, const rapidjson::Value & src)
 {
 	DEC_MEM("left", src, dst.left);
 	DEC_MEM("right", src, dst.right);
-	DEC_MEM("winx_left", src, dst.winx_left);
-	DEC_MEM("winx_top", src, dst.winx_top);
-	DEC_MEM("winy_left", src, dst.winy_left);
-	DEC_MEM("winy_top", src, dst.winy_top);
+	DEC_MEM("winx", src, dst.winx);
 }
 
 /// @struct dustCheckFullStart
@@ -2310,6 +2234,8 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"bat_state",
 	"beep",
 	"countDown",
+	"dbg_start_motor",
+	"dbg_stop_motor",
 	"defect_detect_result",
 	"discharge",
 	"dischargeAdjustInit",
@@ -2337,7 +2263,6 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"heat_result",
 	"heat_start",
 	"heat_state",
-	"image_move",
 	"lcd_power_ctl",
 	"llvl_request",
 	"load_cfg",
@@ -2345,6 +2270,7 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"manual_arc_result",
 	"motorTestResult",
 	"motorTestStart",
+	"move_image",
 	"process_progress",
 	"queryBatState",
 	"queryDevState",
@@ -2354,13 +2280,8 @@ static rapidjson::Value::StringRefType const s_mid_to_str[] = {
 	"regularTestResult",
 	"report_dev_state",
 	"report_wave_form",
-	"rt_start_motor",
-	"rt_stop_motor",
 	"save_cfg",
-	"setFsDisplayModeExt",
 	"set_exposure",
-	"set_fs_display_mode",
-	"set_fs_display_zoom_ext",
 	"set_lcd_brightness",
 	"set_led",
 	"set_motor_speed",
@@ -2629,18 +2550,6 @@ void sender::__pack(const struct discharge_count & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
-void sender::__pack(const struct set_fs_display_mode_ext & val)
-{
-	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
-	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
-}
-
-void sender::__pack(const struct set_fs_display_zoom_ext & val)
-{
-	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
-	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
-}
-
 void sender::__pack(const struct sstream_display_info & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
@@ -2648,12 +2557,6 @@ void sender::__pack(const struct sstream_display_info & val)
 }
 
 void sender::__pack(const struct mstream_display_info & val)
-{
-	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
-	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
-}
-
-void sender::__pack(const struct set_fs_display_mode & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
@@ -2677,7 +2580,7 @@ void sender::__pack(const struct heat_result & val)
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
 }
 
-void sender::__pack(const struct image_move & val)
+void sender::__pack(const struct move_image & val)
 {
 	rapidjson::Document & doc = *(rapidjson::Document *)m_doc;
 	doc.AddMember(s_data, c2json(doc, val), doc.GetAllocator());
@@ -3087,27 +2990,12 @@ void rcver::__unpack(struct discharge_count & dst)
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
 
-void rcver::__unpack(struct set_fs_display_mode_ext & dst)
-{
-	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
-}
-
-void rcver::__unpack(struct set_fs_display_zoom_ext & dst)
-{
-	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
-}
-
 void rcver::__unpack(struct sstream_display_info & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
 
 void rcver::__unpack(struct mstream_display_info & dst)
-{
-	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
-}
-
-void rcver::__unpack(struct set_fs_display_mode & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
@@ -3127,7 +3015,7 @@ void rcver::__unpack(struct heat_result & dst)
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }
 
-void rcver::__unpack(struct image_move & dst)
+void rcver::__unpack(struct move_image & dst)
 {
 	json2c(dst, ((rapidjson::Document*)m_doc)->FindMember(s_data)->value);
 }

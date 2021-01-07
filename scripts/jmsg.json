@@ -1,6 +1,18 @@
 [
 
 {
+	"category"	: "struct",
+	"name"		: "region",
+	"alias"		: "region_t",
+	"fields"	: {
+		"left"	: "int",
+		"top"	: "int",
+		"width"	: "int",
+		"height": "int",
+	}
+},
+
+{
 	"category"	: "enum",
 	"name"		: "ifd_t",
 	"attr"		: "flag",
@@ -225,8 +237,8 @@
 	"type"		: "unsigned",
 	"attr"		: "class",
 	"fields"	: {
-		"X" : {},
-		"Y" : {}
+		"x" : {},
+		"y" : {}
 	}
 },
 
@@ -778,42 +790,6 @@
 
 {
 	"category"	: "struct",
-	"name"		: "set_fs_display_mode_ext",
-	"msgid"		: "setFsDisplayModeExt",
-	"fields"	: {
-		"xovery" : "bool",
-
-		"x_left" : "uint16_t",
-		"x_top" : "uint16_t",
-		"x_width" : "uint16_t",
-		"x_height" : "uint16_t",
-
-		"y_left" : "uint16_t",
-		"y_top" : "uint16_t",
-		"y_width" : "uint16_t",
-		"y_height" : "uint16_t",
-	}
-},
-
-{
-	"category"	: "struct",
-	"name"		: "set_fs_display_zoom_ext",
-	"attr"		: "msg",
-	"fields"	: {
-		"x_left"   : "uint16_t",
-		"x_top"    : "uint16_t",
-		"x_width"  : "uint16_t",
-		"x_height" : "uint16_t",
-
-		"y_left"   : "uint16_t",
-		"y_top"    : "uint16_t",
-		"y_width"  : "uint16_t",
-		"y_height" : "uint16_t",
-	}
-},
-
-{
-	"category"	: "struct",
 	"name"		: "sstream_display_info",
 	"alias"         : "sstream_display_info_t",
 	"msgid"         : "set_single_stream",
@@ -825,15 +801,8 @@
 		"width"      : "uint16_t",
 		"height"     : "uint16_t",
 
-		"win_left"   : "uint16_t",
-		"win_top"    : "uint16_t",
-		"win_width"  : "uint16_t",
-		"win_height" : "uint16_t",
-
-		"dst_left"   : "uint16_t",
-		"dst_top"    : "uint16_t",
-		"dst_width"  : "uint16_t",
-		"dst_height" : "uint16_t",
+		"src"        : "region_t",
+		"dst"        : "region_t",
 	}
 },
 
@@ -844,15 +813,6 @@
 	"msgid"		: "set_multi_stream",
 	"fields"	: {
 		"data"  : "std::vector<sstream_display_info_t>",
-	}
-},
-
-{
-	"category"	: "struct",
-	"name"		: "set_fs_display_mode",
-	"attr"		: "msg",
-	"fields"	: {
-		"mode"	: "fs_display_mode_t",
 	}
 },
 
@@ -889,7 +849,8 @@
 
 {
 	"category"	: "struct",
-	"name"		: "image_move",
+	"name"		: "move_image",
+	"alias"		: "move_image_t",
 	"attr"		: "msg",
 	"fields"	: {
 		"cmosId" : "cmosId_t",
@@ -952,7 +913,7 @@
 	"alias"         : "motor_start_info_t",
 	"msgid"		: [
 		"start_motor",
-		"rt_start_motor",
+		"dbg_start_motor",
 	],
 	"fields"	: {
 		"id"	  : "motorId_t",
@@ -968,7 +929,7 @@
 	"alias"         : "motor_stop_info_t",
 	"msgid"         : [
 		"stop_motor",
-		"rt_stop_motor",
+		"dbg_stop_motor",
 	],
 	"fields"	: {
 		"id"	: "motorId_t",
@@ -1277,15 +1238,10 @@
 			"comment" : "wait for cover stable"
 		},
 
-		"winx_width"   : "int",
-		"winx_height"  : "int",
-		"winx_left"    : "int",
-		"winx_top"     : "int",
-
-		"winy_width"   : "int",
-		"winy_height"  : "int",
-		"winy_left"    : "int",
-		"winy_top"     : "int",
+		"fullx"        : "region_t",
+		"winx"         : "region_t",
+		"fully"        : "region_t",
+		"winy"         : "region_t",
 
 		"ledx_lum" : {
 			"type" : "double",
@@ -1408,10 +1364,7 @@
 	"fields"	: {
 		"left"  : "fiber_reco_data_t",
 		"right" : "fiber_reco_data_t",
-		"winx_left" : "int",
-		"winx_top" : "int",
-		"winy_left" : "int",
-		"winy_top" : "int",
+		"winx"  : "region_t",
 	}
 },
 

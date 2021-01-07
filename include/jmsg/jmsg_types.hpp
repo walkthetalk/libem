@@ -7,6 +7,13 @@
 template<typename T>
 struct enum_info { };
 
+typedef struct region {
+	int left;
+	int top;
+	int width;
+	int height;
+} region_t;
+
 enum ifd_t : uint32_t {
 	ifd_end_crude = 0x00000001,
 	ifd_horizontal_angle = 0x00000002,
@@ -187,8 +194,8 @@ static constexpr unsigned max_ledId = 2;
 static constexpr unsigned rsize_ledId = 3;
 
 enum class cmosId_t : unsigned {
-	X = 0,
-	Y = 1,
+	x = 0,
+	y = 1,
 	/// @min : 0, @max : 1
 };
 template<> struct enum_info<enum cmosId_t> {
@@ -542,51 +549,18 @@ struct discharge_count {
 	uint32_t discharge_count;
 };
 
-struct set_fs_display_mode_ext {
-	bool xovery;
-	uint16_t x_left;
-	uint16_t x_top;
-	uint16_t x_width;
-	uint16_t x_height;
-	uint16_t y_left;
-	uint16_t y_top;
-	uint16_t y_width;
-	uint16_t y_height;
-};
-
-struct set_fs_display_zoom_ext {
-	uint16_t x_left;
-	uint16_t x_top;
-	uint16_t x_width;
-	uint16_t x_height;
-	uint16_t y_left;
-	uint16_t y_top;
-	uint16_t y_width;
-	uint16_t y_height;
-};
-
 typedef struct sstream_display_info {
 	enum cmosId_t sid;
 	int layerid;
 	uint16_t width;
 	uint16_t height;
-	uint16_t win_left;
-	uint16_t win_top;
-	uint16_t win_width;
-	uint16_t win_height;
-	uint16_t dst_left;
-	uint16_t dst_top;
-	uint16_t dst_width;
-	uint16_t dst_height;
+	region_t src;
+	region_t dst;
 } sstream_display_info_t;
 
 typedef struct mstream_display_info {
 	std::vector<sstream_display_info_t> data;
 } mstream_display_info_t;
-
-struct set_fs_display_mode {
-	enum fs_display_mode_t mode;
-};
 
 typedef struct dust_check_result {
 	enum fs_err_t code;
@@ -601,11 +575,11 @@ struct heat_result {
 	enum fs_err_t code;
 };
 
-struct image_move {
+typedef struct move_image {
 	enum cmosId_t cmosId;
 	int16_t row;
 	int16_t column;
-};
+} move_image_t;
 
 struct fs_cover_state {
 	bool is_openned;
@@ -790,14 +764,10 @@ typedef struct ia_spec {
 	double lens_mag;
 	int cap_delay;	/// @unit: ms
 	int cover_delay;	/// @unit: ms
-	int winx_width;
-	int winx_height;
-	int winx_left;
-	int winx_top;
-	int winy_width;
-	int winy_height;
-	int winy_left;
-	int winy_top;
+	region_t fullx;
+	region_t winx;
+	region_t fully;
+	region_t winy;
 	double ledx_lum;	/// @range: 0.0~1.0
 	double ledy_lum;	/// @range: 0.0~1.0
 	uint32_t cmosx_exposure;
@@ -838,10 +808,7 @@ typedef struct rr_spec {
 typedef struct fr_spec {
 	fiber_reco_data_t left;
 	fiber_reco_data_t right;
-	int winx_left;
-	int winx_top;
-	int winy_left;
-	int winy_top;
+	region_t winx;
 } fr_spec_t;
 
 struct dustCheckFullStart {

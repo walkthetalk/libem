@@ -61,15 +61,12 @@ private:
 	void __pack(const struct discharge & val);
 	void __pack(const struct discharge_v2 & val);
 	void __pack(const struct discharge_count & val);
-	void __pack(const struct set_fs_display_mode_ext & val);
-	void __pack(const struct set_fs_display_zoom_ext & val);
 	void __pack(const struct sstream_display_info & val);
 	void __pack(const struct mstream_display_info & val);
-	void __pack(const struct set_fs_display_mode & val);
 	void __pack(const struct dust_check_result & val);
 	void __pack(const struct heat_start & val);
 	void __pack(const struct heat_result & val);
-	void __pack(const struct image_move & val);
+	void __pack(const struct move_image & val);
 	void __pack(const struct fs_cover_state & val);
 	void __pack(const struct set_lcd_brightness & val);
 	void __pack(const struct lcd_power_ctl & val);

@@ -82,15 +82,12 @@ private:
 	void __unpack(struct discharge & dst);
 	void __unpack(struct discharge_v2 & dst);
 	void __unpack(struct discharge_count & dst);
-	void __unpack(struct set_fs_display_mode_ext & dst);
-	void __unpack(struct set_fs_display_zoom_ext & dst);
 	void __unpack(struct sstream_display_info & dst);
 	void __unpack(struct mstream_display_info & dst);
-	void __unpack(struct set_fs_display_mode & dst);
 	void __unpack(struct dust_check_result & dst);
 	void __unpack(struct heat_start & dst);
 	void __unpack(struct heat_result & dst);
-	void __unpack(struct image_move & dst);
+	void __unpack(struct move_image & dst);
 	void __unpack(struct fs_cover_state & dst);
 	void __unpack(struct set_lcd_brightness & dst);
 	void __unpack(struct lcd_power_ctl & dst);
